@@ -1,14 +1,7 @@
 import { useState, useCallback, useMemo } from 'react'
 import { useMutation, useQuery } from 'convex/react'
 import { useAuthContext } from '../contexts/AuthContext'
-
-// Try to import Convex API - will fail gracefully if not configured
-let api: typeof import('../../convex/_generated/api').api | null = null
-try {
-  api = require('../../convex/_generated/api').api
-} catch {
-  // Convex not configured
-}
+import { api } from '../../convex/_generated/api'
 
 export interface GameState {
   xp: number
@@ -40,23 +33,17 @@ const initialState: GameState = {
 export function useGameState() {
   const { isAuthenticated, userId } = useAuthContext()
 
-  // Convex queries/mutations (only used when authenticated and API is available)
+  // Convex queries/mutations (only used when authenticated)
   const convexGameState = useQuery(
-    api?.gameState?.getGameState ?? 'skip',
-    userId && api ? { userId } : 'skip'
+    api.gameState.getGameState,
+    userId ? { userId } : 'skip'
   )
-  const convexAddXp = useMutation(api?.gameState?.addXp ?? 'skip')
-  const convexAddCoins = useMutation(api?.gameState?.addCoins ?? 'skip')
-  const convexUpdateCombo = useMutation(api?.gameState?.updateCombo ?? 'skip')
-  const convexUpdatePerfectStreak = useMutation(
-    api?.gameState?.updatePerfectStreak ?? 'skip'
-  )
-  const convexUnlockAchievement = useMutation(
-    api?.gameState?.unlockAchievement ?? 'skip'
-  )
-  const convexSetHighScore = useMutation(
-    api?.gameState?.setHighScore ?? 'skip'
-  )
+  const convexAddXp = useMutation(api.gameState.addXp)
+  const convexAddCoins = useMutation(api.gameState.addCoins)
+  const convexUpdateCombo = useMutation(api.gameState.updateCombo)
+  const convexUpdatePerfectStreak = useMutation(api.gameState.updatePerfectStreak)
+  const convexUnlockAchievement = useMutation(api.gameState.unlockAchievement)
+  const convexSetHighScore = useMutation(api.gameState.setHighScore)
 
   // Local state for guests (session-only, no persistence)
   const [guestState, setGuestState] = useState<GameState>(initialState)
@@ -82,7 +69,7 @@ export function useGameState() {
   // Add XP with combo bonus
   const addXp = useCallback(
     async (baseXp: number) => {
-      if (isAuthenticated && userId && api) {
+      if (isAuthenticated && userId) {
         await convexAddXp({ userId, baseXp })
       } else {
         setGuestState((prev) => {
@@ -129,7 +116,7 @@ export function useGameState() {
   // Add coins
   const addCoins = useCallback(
     async (amount: number) => {
-      if (isAuthenticated && userId && api) {
+      if (isAuthenticated && userId) {
         await convexAddCoins({ userId, amount })
       } else {
         setGuestState((prev) => ({ ...prev, coins: prev.coins + amount }))
@@ -141,7 +128,7 @@ export function useGameState() {
   // Unlock achievement
   const unlockAchievement = useCallback(
     async (achievementId: string) => {
-      if (isAuthenticated && userId && api) {
+      if (isAuthenticated && userId) {
         await convexUnlockAchievement({ userId, achievementId })
       } else {
         setGuestState((prev) => {
@@ -156,7 +143,7 @@ export function useGameState() {
   // Set high score
   const setHighScore = useCallback(
     async (lessonId: number, score: number) => {
-      if (isAuthenticated && userId && api) {
+      if (isAuthenticated && userId) {
         await convexSetHighScore({ userId, lessonId, score })
       } else {
         setGuestState((prev) => {

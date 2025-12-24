@@ -8,13 +8,7 @@ import type { KeyboardLayoutType } from '../data/keyboardLayouts';
 import { getLessonKeysForLayout } from '../data/keyboardLayouts';
 import { useAuthContext } from '../contexts/AuthContext';
 
-// Try to import Convex API
-let api: typeof import('../../convex/_generated/api').api | null = null;
-try {
-  api = require('../../convex/_generated/api').api;
-} catch {
-  // Convex not configured
-}
+import { api } from '../../convex/_generated/api';
 
 interface LessonViewProps {
   lesson: Lesson;
@@ -36,7 +30,7 @@ export function LessonView({ lesson, onComplete, onQuizComplete, onBack, keyboar
 
   // Auth and leaderboard
   const { isAuthenticated, userId } = useAuthContext();
-  const submitScore = useMutation(api?.leaderboard?.submitScore ?? 'skip');
+  const submitScore = useMutation(api.leaderboard.submitScore);
 
   // Transform lesson content for the selected keyboard layout
   const layoutKeys = useMemo(
@@ -94,7 +88,7 @@ export function LessonView({ lesson, onComplete, onQuizComplete, onBack, keyboar
     onQuizComplete(passed, stats);
 
     // Submit to leaderboard if authenticated and quiz passed
-    if (passed && isAuthenticated && userId && api) {
+    if (passed && isAuthenticated && userId) {
       try {
         await submitScore({
           userId,

@@ -11,14 +11,7 @@ import {
   type KeyboardLayoutType,
 } from '../data/keyboardLayouts'
 import { useAuthContext } from '../contexts/AuthContext'
-
-// Try to import Convex API - will fail gracefully if not configured
-let api: typeof import('../../convex/_generated/api').api | null = null
-try {
-  api = require('../../convex/_generated/api').api
-} catch {
-  // Convex not configured
-}
+import { api } from '../../convex/_generated/api'
 
 // Default settings
 const DEFAULT_SETTINGS: UserSettings = {
@@ -62,16 +55,12 @@ export function useSettings(): UseSettingsResult {
 
   // Convex queries/mutations (only used when authenticated)
   const convexSettings = useQuery(
-    api?.settings?.getSettings ?? 'skip',
-    userId && api ? { userId } : 'skip'
+    api.settings.getSettings,
+    userId ? { userId } : 'skip'
   )
-  const convexUpsertSettings = useMutation(
-    api?.settings?.upsertSettings ?? 'skip'
-  )
-  const convexUpdateSetting = useMutation(
-    api?.settings?.updateSetting ?? 'skip'
-  )
-  const convexToggleTheme = useMutation(api?.settings?.toggleTheme ?? 'skip')
+  const convexUpsertSettings = useMutation(api.settings.upsertSettings)
+  const convexUpdateSetting = useMutation(api.settings.updateSetting)
+  const convexToggleTheme = useMutation(api.settings.toggleTheme)
 
   // Local state for guests (session-only, starts with defaults)
   const [guestSettings, setGuestSettings] =
@@ -102,7 +91,7 @@ export function useSettings(): UseSettingsResult {
   // Update multiple settings at once
   const updateSettings = useCallback(
     async (updates: Partial<UserSettings>) => {
-      if (isAuthenticated && userId && api) {
+      if (isAuthenticated && userId) {
         await convexUpsertSettings({
           userId,
           ...settings,
@@ -118,7 +107,7 @@ export function useSettings(): UseSettingsResult {
   // Individual setters
   const setKeyboardLayout = useCallback(
     async (layout: string) => {
-      if (isAuthenticated && userId && api) {
+      if (isAuthenticated && userId) {
         await convexUpdateSetting({ userId, key: 'keyboardLayout', value: layout })
       } else {
         setGuestSettings((prev) => ({ ...prev, keyboardLayout: layout }))
@@ -129,7 +118,7 @@ export function useSettings(): UseSettingsResult {
 
   const setLanguage = useCallback(
     async (language: LanguageCode) => {
-      if (isAuthenticated && userId && api) {
+      if (isAuthenticated && userId) {
         await convexUpdateSetting({ userId, key: 'language', value: language })
       } else {
         setGuestSettings((prev) => ({ ...prev, language }))
@@ -140,7 +129,7 @@ export function useSettings(): UseSettingsResult {
 
   const setWordLanguage = useCallback(
     async (language: LanguageCode | undefined) => {
-      if (isAuthenticated && userId && api) {
+      if (isAuthenticated && userId) {
         await convexUpdateSetting({ userId, key: 'wordLanguage', value: language })
       } else {
         setGuestSettings((prev) => ({ ...prev, wordLanguage: language }))
@@ -151,7 +140,7 @@ export function useSettings(): UseSettingsResult {
 
   const setMixEnglishWords = useCallback(
     async (mix: boolean) => {
-      if (isAuthenticated && userId && api) {
+      if (isAuthenticated && userId) {
         await convexUpdateSetting({ userId, key: 'mixEnglishWords', value: mix })
       } else {
         setGuestSettings((prev) => ({ ...prev, mixEnglishWords: mix }))
@@ -163,7 +152,7 @@ export function useSettings(): UseSettingsResult {
   const setEnglishMixRatio = useCallback(
     async (ratio: number) => {
       const clampedRatio = Math.max(0, Math.min(1, ratio))
-      if (isAuthenticated && userId && api) {
+      if (isAuthenticated && userId) {
         await convexUpdateSetting({
           userId,
           key: 'englishMixRatio',
@@ -178,7 +167,7 @@ export function useSettings(): UseSettingsResult {
 
   const setActiveThemes = useCallback(
     async (themes: ThemeId[]) => {
-      if (isAuthenticated && userId && api) {
+      if (isAuthenticated && userId) {
         await convexUpdateSetting({ userId, key: 'activeThemes', value: themes })
       } else {
         setGuestSettings((prev) => ({ ...prev, activeThemes: themes }))
@@ -189,7 +178,7 @@ export function useSettings(): UseSettingsResult {
 
   const toggleTheme = useCallback(
     async (themeId: ThemeId) => {
-      if (isAuthenticated && userId && api) {
+      if (isAuthenticated && userId) {
         await convexToggleTheme({ userId, themeId })
       } else {
         setGuestSettings((prev) => {
@@ -209,7 +198,7 @@ export function useSettings(): UseSettingsResult {
   const setThemeMixRatio = useCallback(
     async (ratio: number) => {
       const clampedRatio = Math.max(0, Math.min(1, ratio))
-      if (isAuthenticated && userId && api) {
+      if (isAuthenticated && userId) {
         await convexUpdateSetting({
           userId,
           key: 'themeMixRatio',

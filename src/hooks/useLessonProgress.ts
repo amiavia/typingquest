@@ -2,14 +2,7 @@ import { useState, useCallback, useMemo } from 'react'
 import { useMutation, useQuery } from 'convex/react'
 import { useAuthContext } from '../contexts/AuthContext'
 import type { LessonProgress } from '../types'
-
-// Try to import Convex API - will fail gracefully if not configured
-let api: typeof import('../../convex/_generated/api').api | null = null
-try {
-  api = require('../../convex/_generated/api').api
-} catch {
-  // Convex not configured
-}
+import { api } from '../../convex/_generated/api'
 
 export interface UseLessonProgressResult {
   progress: Record<number, LessonProgress>
@@ -24,12 +17,10 @@ export function useLessonProgress(): UseLessonProgressResult {
 
   // Convex queries/mutations
   const convexProgress = useQuery(
-    api?.lessonProgress?.getAllProgress ?? 'skip',
-    userId && api ? { userId } : 'skip'
+    api.lessonProgress.getAllProgress,
+    userId ? { userId } : 'skip'
   )
-  const convexUpdateProgress = useMutation(
-    api?.lessonProgress?.updateLessonProgress ?? 'skip'
-  )
+  const convexUpdateProgress = useMutation(api.lessonProgress.updateLessonProgress)
 
   // Local state for guests (session-only)
   const [guestProgress, setGuestProgress] = useState<
@@ -65,7 +56,7 @@ export function useLessonProgress(): UseLessonProgressResult {
         quizPassed: data.quizPassed ?? existing.quizPassed,
       }
 
-      if (isAuthenticated && userId && api) {
+      if (isAuthenticated && userId) {
         await convexUpdateProgress({
           userId,
           ...updated,
