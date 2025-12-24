@@ -59,7 +59,7 @@ function Impressum() {
       <Section title="TRADE REGISTER ENTRY">
         <p>Registered Company: Steininger AG</p>
         <p>Commercial Register Office: Zug</p>
-        <p>UID: CHE-xxx.xxx.xxx</p>
+        <p>UID: CHE-457.951.283</p>
       </Section>
 
       {/* Copyright */}
