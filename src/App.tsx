@@ -161,7 +161,7 @@ function App() {
             </div>
             <div>
               <h1 style={{ fontFamily: "'Press Start 2P'", fontSize: '14px', color: '#ffd93d' }} className="text-glow-yellow">
-                TYPE QUEST
+                TYPEBIT8
               </h1>
               <p style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: '#3bceac' }}>
                 MASTER THE KEYBOARD
@@ -356,7 +356,7 @@ function App() {
       {/* Footer */}
       <footer className="p-8 text-center">
         <p style={{ fontFamily: "'Press Start 2P'", fontSize: '8px', color: '#4a4a6e' }}>
-          TYPE QUEST © 2024
+          TYPEBIT8 © 2024
         </p>
         <p style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: '#4a4a6e', marginTop: '8px' }}>
           PRACTICE DAILY FOR BEST RESULTS
