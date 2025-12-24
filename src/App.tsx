@@ -10,13 +10,24 @@ import { GuestBanner } from './components/GuestBanner';
 import { MigrationModal } from './components/MigrationModal';
 import { Leaderboard } from './components/Leaderboard';
 import { LegalPage } from './components/LegalPage';
+import { DailyChallengeSection } from './components/DailyChallengeSection';
+import { StreakSection } from './components/StreakSection';
+import { Shop } from './components/Shop';
+import { PremiumPage } from './components/PremiumPage';
+import { CoinBalance } from './components/CoinBalance';
+import { StreakDisplay } from './components/StreakDisplay';
+import { PremiumBadge } from './components/PremiumBadge';
 import { useGameState } from './hooks/useGameState';
 import { useLessonProgress } from './hooks/useLessonProgress';
 import type { KeyboardLayoutType } from './data/keyboardLayouts';
 import { getHomeRowKeys, getLayoutFamily } from './data/keyboardLayouts';
 import { generateLayoutLessons, generateLayoutLessonsSync } from './data/layoutLessons';
+import { LEVEL_TIERS, type LevelTier } from './data/levels';
+import { useQuery } from 'convex/react';
+import { api } from '../convex/_generated/api';
+import { useAuth } from '@clerk/clerk-react';
 
-type View = 'home' | 'lesson' | 'legal';
+type View = 'home' | 'lesson' | 'legal' | 'shop' | 'premium';
 type LegalPageType = 'impressum' | 'privacy' | 'terms';
 
 function App() {
@@ -25,12 +36,28 @@ function App() {
   const [selectedLegalPage, setSelectedLegalPage] = useState<LegalPageType>('impressum');
   const [showLayoutSelector, setShowLayoutSelector] = useState(false);
   const [showLayoutDetector, setShowLayoutDetector] = useState(false);
+  const [selectedTier, setSelectedTier] = useState<number | 'all'>('all');
   const [keyboardLayout, setKeyboardLayout] = useState<KeyboardLayoutType>(() => {
     const saved = localStorage.getItem('typingQuestLayout');
     return (saved as KeyboardLayoutType) || 'qwerty-us';
   });
 
+  const { userId } = useAuth();
   const gameState = useGameState();
+
+  // Convex queries for new features
+  const coinBalance = useQuery(
+    api.coins.getCoinBalance,
+    userId ? { clerkId: userId } : "skip"
+  );
+  const streak = useQuery(
+    api.streaks.getStreak,
+    userId ? { clerkId: userId } : "skip"
+  );
+  const isPremium = useQuery(
+    api.premium.isPremium,
+    userId ? { clerkId: userId } : "skip"
+  );
   const { progress, updateProgress, getCompletedCount, isLessonUnlocked } = useLessonProgress();
 
   // Generate lessons based on keyboard layout
@@ -114,6 +141,38 @@ function App() {
   const totalCompleted = getCompletedCount();
   const homeRowKeys = getHomeRowKeys(keyboardLayout);
 
+  // Filter lessons by tier
+  const filteredLessons = selectedTier === 'all'
+    ? lessons
+    : lessons.filter(lesson => {
+        const tier = LEVEL_TIERS.find(t => t.levels.includes(lesson.id));
+        return tier?.id === selectedTier;
+      });
+
+  // Check if a tier is unlocked
+  const isTierUnlocked = (tier: LevelTier): boolean => {
+    if (!tier.unlockRequirement) return true;
+    const { level, quizPassed } = tier.unlockRequirement;
+    if (quizPassed && !progress[level]?.quizPassed) return false;
+    return progress[level]?.completed ?? false;
+  };
+
+  // Shop and Premium views
+  if (view === 'shop') {
+    return (
+      <Shop
+        onClose={() => setView('home')}
+        onUpgrade={() => setView('premium')}
+      />
+    );
+  }
+
+  if (view === 'premium') {
+    return (
+      <PremiumPage onClose={() => setView('home')} />
+    );
+  }
+
   if (view === 'legal') {
     return (
       <LegalPage
@@ -184,22 +243,41 @@ function App() {
                 MASTER THE KEYBOARD
               </p>
             </div>
+            {/* Premium Badge */}
+            {isPremium && <PremiumBadge />}
           </div>
 
           {/* Player Stats */}
           <div className="flex items-center gap-4 md:gap-6">
-            {/* User Button */}
-            <UserButton />
+            {/* Streak Display */}
+            {userId && streak && (
+              <StreakDisplay
+                streak={streak.currentStreak}
+                freezeCount={streak.streakFreezeCount}
+                longestStreak={streak.longestStreak}
+                showDetails={true}
+              />
+            )}
 
-            {/* Settings Button */}
+            {/* Coins with Shop Link */}
             <button
-              onClick={() => setShowLayoutSelector(true)}
-              className="pixel-btn"
-              style={{ fontSize: '12px', padding: '8px 12px' }}
-              title="Keyboard Layout"
+              onClick={() => setView('shop')}
+              className="flex items-center gap-2 hover:scale-105 transition-transform cursor-pointer"
+              title="Open Shop"
             >
-              ⚙
+              <CoinBalance balance={coinBalance ?? gameState.coins} size="lg" />
             </button>
+
+            {/* Premium/Upgrade Button */}
+            {!isPremium && (
+              <button
+                onClick={() => setView('premium')}
+                className="px-3 py-2 border-2 border-[#ffd93d] hover:bg-[#ffd93d] hover:text-[#1a1a2e] transition-colors"
+                style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: '#ffd93d' }}
+              >
+                👑 PREMIUM
+              </button>
+            )}
 
             {/* Level */}
             <div className="text-center">
@@ -225,13 +303,18 @@ function App() {
               </div>
             </div>
 
-            {/* Coins */}
-            <div className="flex items-center gap-2">
-              <span style={{ fontSize: '16px' }}>🪙</span>
-              <span style={{ fontFamily: "'Press Start 2P'", fontSize: '12px', color: '#ffd93d' }}>
-                {gameState.coins}
-              </span>
-            </div>
+            {/* User Button */}
+            <UserButton />
+
+            {/* Settings Button */}
+            <button
+              onClick={() => setShowLayoutSelector(true)}
+              className="pixel-btn"
+              style={{ fontSize: '12px', padding: '8px 12px' }}
+              title="Keyboard Layout"
+            >
+              ⚙
+            </button>
           </div>
         </div>
       </header>
@@ -344,10 +427,18 @@ function App() {
         </div>
       </section>
 
+      {/* Daily Challenge & Streak Section */}
+      <section className="p-4 md:p-8">
+        <div className="max-w-4xl mx-auto grid md:grid-cols-2 gap-6">
+          <DailyChallengeSection onStartChallenge={() => {}} />
+          {userId && <StreakSection />}
+        </div>
+      </section>
+
       {/* Level Select */}
       <section className="p-4 md:p-8">
         <div className="max-w-6xl mx-auto">
-          <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center justify-between mb-6 flex-wrap gap-4">
             <h3 style={{ fontFamily: "'Press Start 2P'", fontSize: '14px', color: '#ffd93d' }}>
               SELECT LEVEL
             </h3>
@@ -356,8 +447,74 @@ function App() {
             </span>
           </div>
 
+          {/* Tier Tabs */}
+          <div className="flex flex-wrap gap-2 mb-6">
+            <button
+              onClick={() => setSelectedTier('all')}
+              className={`px-3 py-2 border-2 transition-colors ${
+                selectedTier === 'all'
+                  ? 'border-[#3bceac] bg-[#3bceac] text-[#1a1a2e]'
+                  : 'border-[#4a4a6e] hover:border-[#3bceac]'
+              }`}
+              style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: selectedTier === 'all' ? '#1a1a2e' : '#eef5db' }}
+            >
+              ALL TIERS
+            </button>
+            {LEVEL_TIERS.map(tier => {
+              const unlocked = isTierUnlocked(tier);
+              return (
+                <button
+                  key={tier.id}
+                  onClick={() => unlocked && setSelectedTier(tier.id)}
+                  disabled={!unlocked}
+                  className={`px-3 py-2 border-2 transition-colors ${
+                    !unlocked
+                      ? 'border-[#2a2a3e] opacity-50 cursor-not-allowed'
+                      : selectedTier === tier.id
+                        ? 'bg-opacity-100'
+                        : 'hover:brightness-125'
+                  }`}
+                  style={{
+                    fontFamily: "'Press Start 2P'",
+                    fontSize: '6px',
+                    borderColor: unlocked ? tier.color : '#2a2a3e',
+                    backgroundColor: selectedTier === tier.id ? tier.color : 'transparent',
+                    color: selectedTier === tier.id ? '#1a1a2e' : (unlocked ? tier.color : '#4a4a6e'),
+                  }}
+                >
+                  {!unlocked && '🔒 '}{tier.name}
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Selected Tier Info */}
+          {selectedTier !== 'all' && (
+            <div
+              className="mb-6 p-4 border-2"
+              style={{
+                borderColor: LEVEL_TIERS.find(t => t.id === selectedTier)?.color ?? '#4a4a6e',
+                backgroundColor: 'rgba(26, 26, 46, 0.8)',
+              }}
+            >
+              <h4
+                style={{
+                  fontFamily: "'Press Start 2P'",
+                  fontSize: '10px',
+                  color: LEVEL_TIERS.find(t => t.id === selectedTier)?.color ?? '#eef5db',
+                  marginBottom: '8px',
+                }}
+              >
+                TIER {selectedTier}: {LEVEL_TIERS.find(t => t.id === selectedTier)?.name}
+              </h4>
+              <p style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: '#3bceac' }}>
+                {LEVEL_TIERS.find(t => t.id === selectedTier)?.description.toUpperCase()}
+              </p>
+            </div>
+          )}
+
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {lessons.map(lesson => (
+            {filteredLessons.map(lesson => (
               <LessonCard
                 key={lesson.id}
                 lesson={lesson}
