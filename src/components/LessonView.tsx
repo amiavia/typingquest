@@ -1,9 +1,10 @@
 import { useState, useEffect, useMemo } from 'react';
-import { useMutation } from 'convex/react';
+import { useMutation, useQuery } from 'convex/react';
 import type { Lesson, TypingStats } from '../types';
 import { TypingArea } from './TypingArea';
 import { Keyboard } from './Keyboard';
 import { Quiz } from './Quiz';
+import { RewardPopup } from './RewardPopup';
 import type { KeyboardLayoutType } from '../data/keyboardLayouts';
 import { getLessonKeysForLayout } from '../data/keyboardLayouts';
 import { useAuthContext } from '../contexts/AuthContext';
@@ -31,6 +32,21 @@ export function LessonView({ lesson, onComplete, onQuizComplete, onBack, keyboar
   // Auth and leaderboard
   const { isAuthenticated, userId } = useAuthContext();
   const submitScore = useMutation(api.leaderboard.submitScore);
+
+  // Coin and streak integration
+  const awardCoins = useMutation(api.coins.awardCoins);
+  const recordActivity = useMutation(api.streaks.recordActivity);
+  const isPremium = useQuery(
+    api.premium.isPremium,
+    userId ? { clerkId: userId } : "skip"
+  );
+
+  // Reward popup state
+  const [showReward, setShowReward] = useState(false);
+  const [rewardData, setRewardData] = useState<{ coins: number; xp: number; streak?: number }>({
+    coins: 0,
+    xp: 0,
+  });
 
   // Transform lesson content for the selected keyboard layout
   const layoutKeys = useMemo(
@@ -98,6 +114,35 @@ export function LessonView({ lesson, onComplete, onQuizComplete, onBack, keyboar
         });
       } catch (error) {
         console.error('Failed to submit score to leaderboard:', error);
+      }
+
+      // Award coins for quiz completion
+      try {
+        // Base: 50 coins, Perfect: +25, Speed bonus: +25, Premium: 2x
+        let coins = 50;
+        if (stats.accuracy >= 100) coins += 25;
+        if (stats.wpm >= lesson.minWPM * 1.2) coins += 25;
+        if (isPremium) coins *= 2;
+
+        await awardCoins({
+          clerkId: userId,
+          amount: coins,
+          source: "quiz_complete",
+          metadata: { lessonId: lesson.id, wpm: stats.wpm, accuracy: stats.accuracy },
+        });
+
+        // Record activity for streak
+        const streakResult = await recordActivity({ clerkId: userId });
+
+        // Show reward popup
+        setRewardData({
+          coins,
+          xp: 100, // Quiz XP bonus
+          streak: streakResult?.streak,
+        });
+        setShowReward(true);
+      } catch (error) {
+        console.error('Failed to award coins or record activity:', error);
       }
     }
 
@@ -246,6 +291,16 @@ export function LessonView({ lesson, onComplete, onQuizComplete, onBack, keyboar
 
     return (
       <div className="max-w-2xl mx-auto text-center space-y-8">
+        {/* Reward Popup */}
+        {showReward && (
+          <RewardPopup
+            coins={rewardData.coins}
+            xp={rewardData.xp}
+            streak={rewardData.streak}
+            onClose={() => setShowReward(false)}
+          />
+        )}
+
         <div
           className="pixel-box pixel-box-green p-8"
           style={{ fontFamily: "'Press Start 2P'" }}
@@ -257,6 +312,11 @@ export function LessonView({ lesson, onComplete, onQuizComplete, onBack, keyboar
           <p style={{ fontSize: '10px', color: '#eef5db' }}>
             +{avgStats.wpm * 10} XP EARNED
           </p>
+          {rewardData.coins > 0 && (
+            <p style={{ fontSize: '10px', color: '#ffd93d', marginTop: '8px' }}>
+              +{rewardData.coins} COINS
+            </p>
+          )}
         </div>
 
         <div className="grid grid-cols-2 gap-4">
