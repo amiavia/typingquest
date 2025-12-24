@@ -1,6 +1,5 @@
 import { v } from "convex/values";
-import { mutation, query, action } from "./_generated/server";
-import { api } from "./_generated/api";
+import { mutation, query } from "./_generated/server";
 
 // Premium subscription plans
 export const PLANS = {
@@ -9,14 +8,14 @@ export const PLANS = {
     name: "Monthly Premium",
     price: 4.99,
     interval: "month",
-    stripePriceId: process.env.STRIPE_MONTHLY_PRICE_ID ?? "",
+    stripePriceId: "", // Set via environment
   },
   yearly: {
     id: "yearly",
     name: "Yearly Premium",
     price: 39.99,
     interval: "year",
-    stripePriceId: process.env.STRIPE_YEARLY_PRICE_ID ?? "",
+    stripePriceId: "", // Set via environment
     savings: "33%",
   },
 };

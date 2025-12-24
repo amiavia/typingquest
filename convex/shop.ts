@@ -16,15 +16,15 @@ export const getShopItems = query({
         .query("shopItems")
         .withIndex("by_featured", (q) => q.eq("isFeatured", true))
         .collect();
-    } else if (args.category) {
+    } else if (args.category !== undefined) {
       items = await ctx.db
         .query("shopItems")
-        .withIndex("by_category", (q) => q.eq("category", args.category))
+        .withIndex("by_category", (q) => q.eq("category", args.category as string))
         .collect();
-    } else if (args.rarity) {
+    } else if (args.rarity !== undefined) {
       items = await ctx.db
         .query("shopItems")
-        .withIndex("by_rarity", (q) => q.eq("rarity", args.rarity))
+        .withIndex("by_rarity", (q) => q.eq("rarity", args.rarity as string))
         .collect();
     } else {
       items = await ctx.db.query("shopItems").collect();

@@ -89,7 +89,7 @@ export const recordActivity = mutation({
 
     // First time user
     if (!streak) {
-      const newStreak = await ctx.db.insert("streaks", {
+      await ctx.db.insert("streaks", {
         clerkId: args.clerkId,
         currentStreak: 1,
         longestStreak: 1,
@@ -117,16 +117,16 @@ export const recordActivity = mutation({
       };
     }
 
-    let newStreak = streak.currentStreak;
+    let newStreakValue = streak.currentStreak;
     let milestoneReached: number | null = null;
 
     if (streak.lastActivityDate === yesterday) {
       // Continue streak
-      newStreak = streak.currentStreak + 1;
+      newStreakValue = streak.currentStreak + 1;
 
       // Check for milestones
-      if (newStreak === 7 || newStreak === 30 || newStreak === 100 || newStreak === 365) {
-        milestoneReached = newStreak;
+      if (newStreakValue === 7 || newStreakValue === 30 || newStreakValue === 100 || newStreakValue === 365) {
+        milestoneReached = newStreakValue;
       }
     } else {
       // Gap in activity - check if we have a freeze
@@ -143,25 +143,25 @@ export const recordActivity = mutation({
           streakFreezeCount: streak.streakFreezeCount - 1,
           streakFreezeUsedDates: [...streak.streakFreezeUsedDates, yesterdayStr],
         });
-        newStreak = streak.currentStreak + 1;
+        newStreakValue = streak.currentStreak + 1;
       } else {
         // Streak broken - reset
-        newStreak = 1;
+        newStreakValue = 1;
       }
     }
 
-    const newLongest = Math.max(streak.longestStreak, newStreak);
-    const coinsEarned = getStreakCoins(newStreak);
+    const newLongest = Math.max(streak.longestStreak, newStreakValue);
+    const coinsEarned = getStreakCoins(newStreakValue);
 
     await ctx.db.patch(streak._id, {
-      currentStreak: newStreak,
+      currentStreak: newStreakValue,
       longestStreak: newLongest,
       lastActivityDate: today,
       totalDaysActive: streak.totalDaysActive + 1,
     });
 
     return {
-      streak: newStreak,
+      streak: newStreakValue,
       isNewDay: true,
       coinsEarned,
       milestoneReached,

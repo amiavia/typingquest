@@ -198,7 +198,11 @@ export const submitChallengeAttempt = mutation({
     if (!challenge) {
       const challengeData = generateChallengeForDate(today);
       const challengeId = await ctx.db.insert("dailyChallenges", challengeData);
-      challenge = { _id: challengeId, ...challengeData };
+      challenge = await ctx.db.get(challengeId);
+    }
+
+    if (!challenge) {
+      throw new Error("Failed to create or get challenge");
     }
 
     // Get or create progress

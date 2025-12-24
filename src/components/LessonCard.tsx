@@ -1,15 +1,21 @@
 import type { Lesson, LessonProgress } from '../types';
+import { getTierForLevel } from '../data/levels';
 
 interface LessonCardProps {
   lesson: Lesson;
   progress?: LessonProgress;
   isLocked?: boolean;
+  isNew?: boolean;
   onClick: () => void;
 }
 
-export function LessonCard({ lesson, progress, isLocked = false, onClick }: LessonCardProps) {
+export function LessonCard({ lesson, progress, isLocked = false, isNew = false, onClick }: LessonCardProps) {
   const isCompleted = progress?.completed && progress?.quizPassed;
   const isStarted = progress && !isCompleted;
+
+  // Get tier info for this lesson
+  const tier = getTierForLevel(lesson.id);
+  const tierColor = tier?.color ?? '#3bceac';
 
   // Calculate stars based on performance
   const getStars = () => {
@@ -49,10 +55,15 @@ export function LessonCard({ lesson, progress, isLocked = false, onClick }: Less
                 ? 'border-[#0ead69] bg-[#0ead69] text-[#0f0f1b]'
                 : isLocked
                   ? 'border-[#4a4a6e] bg-[#16213e] text-[#4a4a6e]'
-                  : 'border-[#3bceac] bg-[#1a1a2e] text-[#3bceac]'
+                  : 'bg-[#1a1a2e]'
               }
             `}
-            style={{ fontSize: '14px', boxShadow: isCompleted ? '0 0 15px #0ead69' : 'none' }}
+            style={{
+              fontSize: '14px',
+              boxShadow: isCompleted ? '0 0 15px #0ead69' : 'none',
+              borderColor: isCompleted ? '#0ead69' : isLocked ? '#4a4a6e' : tierColor,
+              color: isCompleted ? '#0f0f1b' : isLocked ? '#4a4a6e' : tierColor,
+            }}
           >
             {isCompleted ? '★' : isLocked ? '🔒' : lesson.id}
           </div>
@@ -66,26 +77,54 @@ export function LessonCard({ lesson, progress, isLocked = false, onClick }: Less
             >
               LVL {lesson.id}
             </h3>
+            {/* Tier badge */}
+            {tier && (
+              <span
+                style={{
+                  fontSize: '6px',
+                  color: isLocked ? '#4a4a6e' : tierColor,
+                }}
+              >
+                {tier.name}
+              </span>
+            )}
           </div>
         </div>
 
-        {/* Star rating */}
-        {isCompleted && (
-          <div className="flex gap-1">
-            {[1, 2, 3].map(i => (
-              <span
-                key={i}
-                style={{
-                  fontSize: '12px',
-                  color: i <= stars ? '#ffd93d' : '#4a4a6e',
-                  textShadow: i <= stars ? '0 0 10px #ffd93d' : 'none',
-                }}
-              >
-                ★
-              </span>
-            ))}
-          </div>
-        )}
+        <div className="flex flex-col items-end gap-1">
+          {/* NEW badge */}
+          {isNew && !isCompleted && !isLocked && (
+            <span
+              className="px-2 py-0.5"
+              style={{
+                fontSize: '6px',
+                backgroundColor: '#ff6b9d',
+                color: '#1a1a2e',
+                animation: 'pulse 1s infinite',
+              }}
+            >
+              NEW
+            </span>
+          )}
+
+          {/* Star rating */}
+          {isCompleted && (
+            <div className="flex gap-1">
+              {[1, 2, 3].map(i => (
+                <span
+                  key={i}
+                  style={{
+                    fontSize: '12px',
+                    color: i <= stars ? '#ffd93d' : '#4a4a6e',
+                    textShadow: i <= stars ? '0 0 10px #ffd93d' : 'none',
+                  }}
+                >
+                  ★
+                </span>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
 
       <p

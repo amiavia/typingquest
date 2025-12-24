@@ -53,7 +53,6 @@ export const awardCoins = mutation({
       .first();
 
     const currentBalance = gameState?.coins ?? 0;
-    const newBalance = currentBalance + args.amount;
 
     // Check if user is premium for 2x bonus
     const isPremium = user.isPremium === true;
