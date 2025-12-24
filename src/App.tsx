@@ -20,9 +20,8 @@ import { PremiumBadge } from './components/PremiumBadge';
 import { useGameState } from './hooks/useGameState';
 import { useLessonProgress } from './hooks/useLessonProgress';
 import type { KeyboardLayoutType } from './data/keyboardLayouts';
-import { getHomeRowKeys, getLayoutFamily } from './data/keyboardLayouts';
-import { generateLayoutLessons, generateLayoutLessonsSync } from './data/layoutLessons';
-import { LEVEL_TIERS, type LevelTier } from './data/levels';
+import { getHomeRowKeys } from './data/keyboardLayouts';
+import { LEVEL_TIERS, levels, type LevelTier } from './data/levels';
 import { useQuery } from 'convex/react';
 import { api } from '../convex/_generated/api';
 import { useAuth } from '@clerk/clerk-react';
@@ -60,21 +59,8 @@ function App() {
   );
   const { progress, updateProgress, getCompletedCount, isLessonUnlocked } = useLessonProgress();
 
-  // Generate lessons based on keyboard layout
-  const layoutFamily = getLayoutFamily(keyboardLayout);
-  const [lessons, setLessons] = useState<Lesson[]>(() =>
-    generateLayoutLessonsSync(layoutFamily)
-  );
-
-  // Regenerate lessons when layout changes (async with word database)
-  useEffect(() => {
-    const family = getLayoutFamily(keyboardLayout);
-    // First, set sync lessons for immediate display
-    setLessons(generateLayoutLessonsSync(family));
-
-    // Then load async lessons with real words
-    generateLayoutLessons(family, 'en').then(setLessons).catch(console.error);
-  }, [keyboardLayout]);
+  // Use static 30 levels from levels.ts (PRP-027)
+  const lessons = levels;
 
   // Show layout detector on first launch if no layout was previously set
   useEffect(() => {
