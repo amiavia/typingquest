@@ -74,7 +74,7 @@ export function Leaderboard({
       {/* Scores table */}
       {scores && scores.length > 0 ? (
         <div className="space-y-2">
-          {scores.map((entry: any, index: number) => (
+          {scores.map((entry: any) => (
             <LeaderboardEntry
               key={`${entry.userId}-${entry.lessonId || 'global'}`}
               rank={entry.rank}
