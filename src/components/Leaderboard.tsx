@@ -1,13 +1,6 @@
 import { useQuery } from 'convex/react'
 import { useAuthContext } from '../contexts/AuthContext'
-
-// Try to import Convex API
-let api: typeof import('../../convex/_generated/api').api | null = null
-try {
-  api = require('../../convex/_generated/api').api
-} catch {
-  // Convex not configured
-}
+import { api } from '../../convex/_generated/api'
 
 interface LeaderboardProps {
   lessonId?: number
@@ -24,60 +17,26 @@ export function Leaderboard({
 
   // Get leaderboard data
   const globalScores = useQuery(
-    api?.leaderboard?.getGlobalTopScores ?? 'skip',
-    api && showGlobal ? { limit } : 'skip'
+    api.leaderboard.getGlobalTopScores,
+    showGlobal ? { limit } : 'skip'
   )
 
   const lessonScores = useQuery(
-    api?.leaderboard?.getTopScores ?? 'skip',
-    api && lessonId ? { lessonId, limit } : 'skip'
+    api.leaderboard.getTopScores,
+    lessonId ? { lessonId, limit } : 'skip'
   )
 
   const userRank = useQuery(
-    api?.leaderboard?.getUserRank ?? 'skip',
-    api && userId && lessonId ? { userId, lessonId } : 'skip'
+    api.leaderboard.getUserRank,
+    userId && lessonId ? { userId, lessonId } : 'skip'
   )
 
   const leaderboardStats = useQuery(
-    api?.leaderboard?.getLeaderboardStats ?? 'skip',
-    api && showGlobal ? {} : 'skip'
+    api.leaderboard.getLeaderboardStats,
+    showGlobal ? {} : 'skip'
   )
 
   const scores = lessonId ? lessonScores : globalScores
-
-  // If Convex not configured, show placeholder
-  if (!api) {
-    return (
-      <div
-        className="pixel-box p-6 text-center"
-        style={{
-          background: 'rgba(59, 206, 172, 0.05)',
-          border: '3px solid rgba(59, 206, 172, 0.2)',
-        }}
-      >
-        <div className="text-3xl mb-4">🏆</div>
-        <p
-          style={{
-            fontFamily: "'Press Start 2P', monospace",
-            fontSize: '10px',
-            color: '#9a9ab0',
-          }}
-        >
-          LEADERBOARD COMING SOON
-        </p>
-        <p
-          style={{
-            fontFamily: "'Press Start 2P', monospace",
-            fontSize: '7px',
-            color: '#6a6a7a',
-            marginTop: '8px',
-          }}
-        >
-          SIGN IN TO COMPETE
-        </p>
-      </div>
-    )
-  }
 
   return (
     <div

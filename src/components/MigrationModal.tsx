@@ -6,7 +6,6 @@ export function MigrationModal() {
     migrateLocalData,
     migrationStatus,
     isAuthenticated,
-    clearMigrationStatus,
   } = useAuthContext()
 
   // Only show on first login with existing local data
