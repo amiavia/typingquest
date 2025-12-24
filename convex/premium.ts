@@ -1,5 +1,5 @@
 import { v } from "convex/values";
-import { mutation, query } from "./_generated/server";
+import { mutation, query, internalMutation } from "./_generated/server";
 
 // Premium subscription plans
 export const PLANS = {
@@ -308,5 +308,185 @@ export const getCoinMultiplier = query({
     }
 
     return user.isPremium === true ? 2 : 1;
+  },
+});
+
+// ═══════════════════════════════════════════════════════════════════
+// INTERNAL MUTATIONS (called by webhook handler)
+// ═══════════════════════════════════════════════════════════════════
+
+// Handle checkout.session.completed
+export const handleCheckoutComplete = internalMutation({
+  args: {
+    clerkId: v.string(),
+    stripeCustomerId: v.string(),
+    stripeSubscriptionId: v.string(),
+    plan: v.string(),
+  },
+  handler: async (ctx, args) => {
+    // Update user premium status
+    const user = await ctx.db
+      .query("users")
+      .withIndex("by_clerk_id", (q) => q.eq("clerkId", args.clerkId))
+      .first();
+
+    if (!user) {
+      throw new Error(`User not found: ${args.clerkId}`);
+    }
+
+    // Set premium expiry based on plan
+    const now = Date.now();
+    const expiresAt =
+      args.plan === "yearly"
+        ? now + 365 * 24 * 60 * 60 * 1000
+        : now + 30 * 24 * 60 * 60 * 1000;
+
+    await ctx.db.patch(user._id, {
+      isPremium: true,
+      premiumExpiresAt: expiresAt,
+      stripeCustomerId: args.stripeCustomerId,
+    });
+
+    // Create subscription record
+    await ctx.db.insert("subscriptions", {
+      clerkId: args.clerkId,
+      stripeSubscriptionId: args.stripeSubscriptionId,
+      stripeCustomerId: args.stripeCustomerId,
+      status: "active",
+      plan: args.plan,
+      currentPeriodStart: now,
+      currentPeriodEnd: expiresAt,
+      cancelAtPeriodEnd: false,
+      createdAt: now,
+    });
+
+    // Grant monthly premium benefits (streak freezes)
+    const MONTHLY_FREE_FREEZES = 3;
+    let streak = await ctx.db
+      .query("streaks")
+      .withIndex("by_clerk_id", (q) => q.eq("clerkId", args.clerkId))
+      .first();
+
+    if (streak) {
+      await ctx.db.patch(streak._id, {
+        streakFreezeCount: streak.streakFreezeCount + MONTHLY_FREE_FREEZES,
+      });
+    }
+
+    return { success: true };
+  },
+});
+
+// Handle customer.subscription.updated
+export const handleSubscriptionUpdate = internalMutation({
+  args: {
+    stripeSubscriptionId: v.string(),
+    status: v.string(),
+    currentPeriodStart: v.number(),
+    currentPeriodEnd: v.number(),
+    cancelAtPeriodEnd: v.boolean(),
+  },
+  handler: async (ctx, args) => {
+    const subscription = await ctx.db
+      .query("subscriptions")
+      .withIndex("by_stripe_subscription", (q) =>
+        q.eq("stripeSubscriptionId", args.stripeSubscriptionId)
+      )
+      .first();
+
+    if (!subscription) {
+      console.error(`Subscription not found: ${args.stripeSubscriptionId}`);
+      return { success: false };
+    }
+
+    // Update subscription record
+    await ctx.db.patch(subscription._id, {
+      status: args.status,
+      currentPeriodStart: args.currentPeriodStart,
+      currentPeriodEnd: args.currentPeriodEnd,
+      cancelAtPeriodEnd: args.cancelAtPeriodEnd,
+    });
+
+    // Update user premium status
+    const user = await ctx.db
+      .query("users")
+      .withIndex("by_clerk_id", (q) => q.eq("clerkId", subscription.clerkId))
+      .first();
+
+    if (user) {
+      const isPremiumActive = args.status === "active";
+      await ctx.db.patch(user._id, {
+        isPremium: isPremiumActive,
+        premiumExpiresAt: isPremiumActive ? args.currentPeriodEnd : user.premiumExpiresAt,
+      });
+    }
+
+    return { success: true };
+  },
+});
+
+// Handle customer.subscription.deleted
+export const handleSubscriptionCanceled = internalMutation({
+  args: {
+    stripeSubscriptionId: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const subscription = await ctx.db
+      .query("subscriptions")
+      .withIndex("by_stripe_subscription", (q) =>
+        q.eq("stripeSubscriptionId", args.stripeSubscriptionId)
+      )
+      .first();
+
+    if (!subscription) {
+      console.error(`Subscription not found: ${args.stripeSubscriptionId}`);
+      return { success: false };
+    }
+
+    // Update subscription status
+    await ctx.db.patch(subscription._id, {
+      status: "canceled",
+    });
+
+    // Update user premium status
+    const user = await ctx.db
+      .query("users")
+      .withIndex("by_clerk_id", (q) => q.eq("clerkId", subscription.clerkId))
+      .first();
+
+    if (user) {
+      await ctx.db.patch(user._id, {
+        isPremium: false,
+      });
+    }
+
+    return { success: true };
+  },
+});
+
+// Handle invoice.payment_failed
+export const handlePaymentFailed = internalMutation({
+  args: {
+    stripeSubscriptionId: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const subscription = await ctx.db
+      .query("subscriptions")
+      .withIndex("by_stripe_subscription", (q) =>
+        q.eq("stripeSubscriptionId", args.stripeSubscriptionId)
+      )
+      .first();
+
+    if (!subscription) {
+      console.error(`Subscription not found: ${args.stripeSubscriptionId}`);
+      return { success: false };
+    }
+
+    // Update subscription status to past_due
+    await ctx.db.patch(subscription._id, {
+      status: "past_due",
+    });
+
+    return { success: true };
   },
 });

@@ -11,6 +11,7 @@
 import type * as coins from "../coins.js";
 import type * as dailyChallenges from "../dailyChallenges.js";
 import type * as gameState from "../gameState.js";
+import type * as http from "../http.js";
 import type * as leaderboard from "../leaderboard.js";
 import type * as lessonProgress from "../lessonProgress.js";
 import type * as migrations from "../migrations.js";
@@ -31,6 +32,7 @@ declare const fullApi: ApiFromModules<{
   coins: typeof coins;
   dailyChallenges: typeof dailyChallenges;
   gameState: typeof gameState;
+  http: typeof http;
   leaderboard: typeof leaderboard;
   lessonProgress: typeof lessonProgress;
   migrations: typeof migrations;
