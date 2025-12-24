@@ -2,15 +2,25 @@ import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
 
 export default defineSchema({
+  // ═══════════════════════════════════════════════════════════════════
+  // EXISTING TABLES (preserved for backward compatibility)
+  // ═══════════════════════════════════════════════════════════════════
+
   // Users table - links Clerk user to Convex
   users: defineTable({
     clerkId: v.string(),
     username: v.optional(v.string()),
     email: v.optional(v.string()),
     imageUrl: v.optional(v.string()),
+    avatarId: v.optional(v.string()), // PRP-003/026
+    isPremium: v.optional(v.boolean()), // PRP-025
+    premiumExpiresAt: v.optional(v.number()), // PRP-025
+    stripeCustomerId: v.optional(v.string()), // PRP-025
     createdAt: v.number(),
     lastLoginAt: v.number(),
-  }).index("by_clerk_id", ["clerkId"]),
+  })
+    .index("by_clerk_id", ["clerkId"])
+    .index("by_stripe_customer", ["stripeCustomerId"]),
 
   // Game state - mirrors useGameState hook structure
   gameState: defineTable({
@@ -24,6 +34,8 @@ export default defineSchema({
     coins: v.number(),
     achievements: v.array(v.string()),
     highScores: v.any(), // Record<number, number> - lessonId to WPM
+    totalWordsTyped: v.optional(v.number()), // NEW: for stats
+    totalTimeSpent: v.optional(v.number()), // NEW: for stats (in seconds)
     updatedAt: v.number(),
   }).index("by_user", ["userId"]),
 
@@ -36,6 +48,7 @@ export default defineSchema({
     bestAccuracy: v.number(),
     attempts: v.number(),
     quizPassed: v.boolean(),
+    firstCompletedAt: v.optional(v.number()), // NEW: for first-time bonus
     updatedAt: v.number(),
   })
     .index("by_user", ["userId"])
@@ -67,4 +80,120 @@ export default defineSchema({
     .index("by_lesson_score", ["lessonId", "score"])
     .index("by_user", ["userId"])
     .index("by_user_and_lesson", ["userId", "lessonId"]),
+
+  // ═══════════════════════════════════════════════════════════════════
+  // PRP-008: DAILY CHALLENGES
+  // ═══════════════════════════════════════════════════════════════════
+
+  dailyChallenges: defineTable({
+    date: v.string(), // YYYY-MM-DD
+    challengeType: v.string(), // "speed" | "accuracy" | "endurance" | "keys"
+    title: v.string(),
+    description: v.string(),
+    targetValue: v.number(), // WPM target, accuracy %, etc.
+    targetKeys: v.optional(v.array(v.string())), // For key-specific challenges
+    lessonId: v.optional(v.number()), // Optional specific lesson
+    rewards: v.object({
+      bronze: v.number(), // Coins for bronze
+      silver: v.number(), // Coins for silver
+      gold: v.number(), // Coins for gold
+      xp: v.number(),
+    }),
+    createdAt: v.number(),
+  }).index("by_date", ["date"]),
+
+  dailyChallengeProgress: defineTable({
+    clerkId: v.string(),
+    challengeId: v.id("dailyChallenges"),
+    date: v.string(),
+    status: v.string(), // "pending" | "bronze" | "silver" | "gold"
+    bestValue: v.number(), // Best attempt value
+    attempts: v.number(),
+    completedAt: v.optional(v.number()),
+    rewardsClaimed: v.boolean(),
+  })
+    .index("by_clerk_date", ["clerkId", "date"])
+    .index("by_challenge", ["challengeId"]),
+
+  // ═══════════════════════════════════════════════════════════════════
+  // PRP-009: STREAK SYSTEM
+  // ═══════════════════════════════════════════════════════════════════
+
+  streaks: defineTable({
+    clerkId: v.string(),
+    currentStreak: v.number(),
+    longestStreak: v.number(),
+    lastActivityDate: v.string(), // YYYY-MM-DD
+    streakFreezeCount: v.number(), // Available freezes
+    streakFreezeUsedDates: v.array(v.string()), // Dates where freeze was used
+    totalDaysActive: v.number(),
+  }).index("by_clerk_id", ["clerkId"]),
+
+  // ═══════════════════════════════════════════════════════════════════
+  // PRP-025: PREMIUM SUBSCRIPTION
+  // ═══════════════════════════════════════════════════════════════════
+
+  subscriptions: defineTable({
+    clerkId: v.string(),
+    stripeSubscriptionId: v.string(),
+    stripeCustomerId: v.string(),
+    status: v.string(), // "active" | "canceled" | "past_due"
+    plan: v.string(), // "monthly" | "yearly"
+    currentPeriodStart: v.number(),
+    currentPeriodEnd: v.number(),
+    cancelAtPeriodEnd: v.boolean(),
+    createdAt: v.number(),
+  })
+    .index("by_clerk_id", ["clerkId"])
+    .index("by_stripe_subscription", ["stripeSubscriptionId"]),
+
+  // ═══════════════════════════════════════════════════════════════════
+  // PRP-026: COIN SHOP
+  // ═══════════════════════════════════════════════════════════════════
+
+  shopItems: defineTable({
+    itemId: v.string(),
+    name: v.string(),
+    description: v.string(),
+    category: v.string(), // "avatar" | "theme" | "keyboard-skin" | "power-up"
+    rarity: v.string(), // "common" | "rare" | "epic" | "legendary"
+    price: v.number(),
+    imageUrl: v.string(),
+    previewUrl: v.optional(v.string()),
+    isConsumable: v.boolean(),
+    isPremiumOnly: v.boolean(), // PRP-025 integration
+    isFeatured: v.boolean(),
+    isOnSale: v.boolean(),
+    salePrice: v.optional(v.number()),
+    requiredLevel: v.optional(v.number()),
+    seasonalTag: v.optional(v.string()),
+    createdAt: v.number(),
+  })
+    .index("by_category", ["category"])
+    .index("by_featured", ["isFeatured"])
+    .index("by_rarity", ["rarity"]),
+
+  inventory: defineTable({
+    clerkId: v.string(),
+    itemId: v.string(),
+    quantity: v.number(),
+    purchasedAt: v.number(),
+    isEquipped: v.boolean(),
+  })
+    .index("by_clerk_id", ["clerkId"])
+    .index("by_clerk_item", ["clerkId", "itemId"]),
+
+  transactions: defineTable({
+    clerkId: v.string(),
+    type: v.string(), // "earn" | "spend" | "purchase" | "premium_bonus"
+    amount: v.number(),
+    source: v.string(),
+    itemId: v.optional(v.string()),
+    metadata: v.optional(v.any()),
+    balanceBefore: v.number(),
+    balanceAfter: v.number(),
+    timestamp: v.number(),
+  })
+    .index("by_clerk_id", ["clerkId"])
+    .index("by_timestamp", ["timestamp"]),
 });
