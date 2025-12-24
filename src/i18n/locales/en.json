@@ -1,0 +1,238 @@
+{
+  "app": {
+    "title": "Type Quest",
+    "subtitle": "Master touch typing with retro flair",
+    "tagline": "Level up your typing skills!"
+  },
+  "nav": {
+    "home": "Home",
+    "lessons": "Lessons",
+    "practice": "Practice",
+    "settings": "Settings",
+    "progress": "Progress"
+  },
+  "settings": {
+    "title": "Settings",
+    "language": "Language",
+    "wordLanguage": "Practice Words",
+    "keyboardLayout": "Keyboard Layout",
+    "mixEnglishWords": "Mix English Words",
+    "englishMixRatio": "English Mix Ratio",
+    "themes": "Word Themes",
+    "themeMixRatio": "Theme Mix Ratio",
+    "save": "Save Settings",
+    "reset": "Reset to Defaults"
+  },
+  "languages": {
+    "en": "English",
+    "de": "German",
+    "fr": "French",
+    "es": "Spanish",
+    "pt": "Portuguese",
+    "it": "Italian",
+    "nl": "Dutch",
+    "sv": "Swedish",
+    "pl": "Polish",
+    "tr": "Turkish"
+  },
+  "layouts": {
+    "qwerty-us": "QWERTY (US)",
+    "qwerty-uk": "QWERTY (UK)",
+    "qwertz-de": "QWERTZ (German)",
+    "qwertz-ch": "QWERTZ (Swiss)",
+    "azerty-fr": "AZERTY (French)",
+    "azerty-be": "AZERTY (Belgian)",
+    "dvorak": "Dvorak",
+    "colemak": "Colemak"
+  },
+  "lesson": {
+    "title": "Lesson {{number}}",
+    "start": "Start Lesson",
+    "continue": "Continue",
+    "retry": "Try Again",
+    "next": "Next Lesson",
+    "complete": "Complete!",
+    "locked": "Locked",
+    "unlocked": "Unlocked",
+    "newKeys": "New Keys",
+    "targetWPM": "Target WPM",
+    "targetAccuracy": "Target Accuracy",
+    "home_row_basic": {
+      "title": "Home Row Basics",
+      "description": "Learn the foundation keys under your fingers",
+      "concept": "Place your fingers on the home row keys. Your left hand covers A, S, D, F and your right hand covers J, K, L, ;. The small bumps on F and J help you find these keys without looking."
+    },
+    "home_row_extended": {
+      "title": "Home Row Extended",
+      "description": "Add G and H to complete the home row",
+      "concept": "The G and H keys are typed with your index fingers by moving them inward from F and J. Practice smooth transitions between these keys."
+    },
+    "top_row_vowels": {
+      "title": "Top Row Vowels",
+      "description": "Learn E and I - essential vowels",
+      "concept": "E is typed with your left middle finger moving up from D. I is typed with your right middle finger moving up from K. These are among the most common letters."
+    },
+    "top_row_index": {
+      "title": "Top Row Index",
+      "description": "Add R and U with your index fingers",
+      "concept": "R and U are typed by reaching up with your index fingers. R from F position, U from J position. Keep your other fingers on the home row."
+    },
+    "top_row_ring": {
+      "title": "Top Row Ring",
+      "description": "Learn W and O with ring fingers",
+      "concept": "W and O require your ring fingers to reach up from S and L. This movement takes practice - focus on returning to home position."
+    },
+    "top_row_pinky": {
+      "title": "Top Row Pinky",
+      "description": "Challenge your pinkies with Q and P",
+      "concept": "Q and P are pinky stretches. Q from A position, P from ; position. Pinkies are weaker, so take your time building strength and accuracy."
+    },
+    "top_row_complete": {
+      "title": "Top Row Complete",
+      "description": "Master T and Y to complete the top row",
+      "concept": "T and Y are central keys typed with index fingers. T reaches up-right from F, Y reaches up-left from J. You now know the entire top row!"
+    },
+    "bottom_row_middle_index": {
+      "title": "Bottom Row Start",
+      "description": "Begin the bottom row with C and M",
+      "concept": "C and M introduce the bottom row. C is typed with your left middle finger reaching down from D. M is typed with your right index finger reaching down from J."
+    },
+    "bottom_row_index": {
+      "title": "Bottom Row Index",
+      "description": "Add V and N with index fingers",
+      "concept": "V and N are typed with index fingers reaching down. V from F position, N from J position. The bottom row requires a downward curl of your fingers."
+    },
+    "bottom_row_ring": {
+      "title": "Bottom Row Ring",
+      "description": "Learn X and comma with ring fingers",
+      "concept": "X and the comma key use your ring fingers. These require a longer reach down from S and L. Practice smooth, controlled movements."
+    },
+    "bottom_row_pinky": {
+      "title": "Bottom Row Pinky",
+      "description": "Complete with Z and period",
+      "concept": "Z and period are the final regular keys. Z is the ultimate pinky stretch. Period ends sentences - get comfortable with this punctuation."
+    },
+    "complete_keyboard": {
+      "title": "Complete Keyboard",
+      "description": "Add B and master the spacebar",
+      "concept": "B is typed with your left index finger reaching down and right. The spacebar should be typed with your thumb. You now have access to the full keyboard!"
+    },
+    "full_practice": {
+      "title": "Full Practice",
+      "description": "Practice with all keys together",
+      "concept": "Time to put it all together. Practice typing real words and sentences using every key you've learned. Focus on smooth, rhythmic typing."
+    },
+    "speed_building": {
+      "title": "Speed Building",
+      "description": "Increase your typing speed",
+      "concept": "Now that accuracy is solid, let's build speed. Try to type faster while maintaining at least 95% accuracy. Speed will come naturally with practice."
+    },
+    "mastery": {
+      "title": "Mastery",
+      "description": "Achieve typing mastery",
+      "concept": "You've learned all the keys. Continue practicing to build muscle memory. The goal is to type without thinking about key positions."
+    }
+  },
+  "quiz": {
+    "title": "Quick Quiz",
+    "instruction": "Type the words below",
+    "correct": "Correct!",
+    "incorrect": "Try again",
+    "complete": "Quiz Complete!",
+    "score": "Score",
+    "accuracy": "Accuracy",
+    "wpm": "WPM"
+  },
+  "typing": {
+    "start": "Click here or press any key to start",
+    "placeholder": "Type the text above...",
+    "wpm": "WPM",
+    "accuracy": "Accuracy",
+    "time": "Time",
+    "errors": "Errors",
+    "progress": "Progress"
+  },
+  "results": {
+    "title": "Results",
+    "wpm": "Words Per Minute",
+    "accuracy": "Accuracy",
+    "time": "Time",
+    "errors": "Errors",
+    "xpEarned": "XP Earned",
+    "newRecord": "New Record!",
+    "passed": "Lesson Passed!",
+    "failed": "Keep Practicing",
+    "requirements": "Requirements"
+  },
+  "progress": {
+    "title": "Your Progress",
+    "level": "Level",
+    "xp": "XP",
+    "totalLessons": "Lessons Completed",
+    "totalTime": "Total Practice Time",
+    "averageWPM": "Average WPM",
+    "averageAccuracy": "Average Accuracy"
+  },
+  "themes": {
+    "christmas": {
+      "name": "Christmas",
+      "description": "Holiday cheer with festive words"
+    },
+    "easter": {
+      "name": "Easter",
+      "description": "Spring celebration vocabulary"
+    },
+    "halloween": {
+      "name": "Halloween",
+      "description": "Spooky season words"
+    },
+    "summer": {
+      "name": "Summer",
+      "description": "Beach and vacation vibes"
+    },
+    "vibe-coding": {
+      "name": "Vibe Coding",
+      "description": "Developer and programming terms"
+    },
+    "gaming": {
+      "name": "Gaming",
+      "description": "Video game vocabulary"
+    },
+    "science": {
+      "name": "Science",
+      "description": "STEM and scientific terms"
+    },
+    "nature": {
+      "name": "Nature",
+      "description": "Outdoors and wildlife words"
+    },
+    "food": {
+      "name": "Food",
+      "description": "Culinary vocabulary"
+    },
+    "sports": {
+      "name": "Sports",
+      "description": "Athletic terminology"
+    },
+    "music": {
+      "name": "Music",
+      "description": "Musical terms and instruments"
+    },
+    "travel": {
+      "name": "Travel",
+      "description": "Adventure and exploration words"
+    }
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "retry": "Retry",
+    "back": "Back",
+    "next": "Next",
+    "save": "Save",
+    "cancel": "Cancel",
+    "close": "Close",
+    "yes": "Yes",
+    "no": "No"
+  }
+}

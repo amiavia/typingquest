@@ -1,0 +1,238 @@
+{
+  "app": {
+    "title": "Type Quest",
+    "subtitle": "Maîtrisez la dactylo avec un style rétro",
+    "tagline": "Améliorez vos compétences en frappe!"
+  },
+  "nav": {
+    "home": "Accueil",
+    "lessons": "Leçons",
+    "practice": "Pratique",
+    "settings": "Paramètres",
+    "progress": "Progression"
+  },
+  "settings": {
+    "title": "Paramètres",
+    "language": "Langue",
+    "wordLanguage": "Mots de pratique",
+    "keyboardLayout": "Disposition du clavier",
+    "mixEnglishWords": "Mélanger des mots anglais",
+    "englishMixRatio": "Ratio anglais",
+    "themes": "Thèmes de mots",
+    "themeMixRatio": "Ratio de thèmes",
+    "save": "Enregistrer",
+    "reset": "Réinitialiser"
+  },
+  "languages": {
+    "en": "Anglais",
+    "de": "Allemand",
+    "fr": "Français",
+    "es": "Espagnol",
+    "pt": "Portugais",
+    "it": "Italien",
+    "nl": "Néerlandais",
+    "sv": "Suédois",
+    "pl": "Polonais",
+    "tr": "Turc"
+  },
+  "layouts": {
+    "qwerty-us": "QWERTY (US)",
+    "qwerty-uk": "QWERTY (UK)",
+    "qwertz-de": "QWERTZ (Allemand)",
+    "qwertz-ch": "QWERTZ (Suisse)",
+    "azerty-fr": "AZERTY (Français)",
+    "azerty-be": "AZERTY (Belge)",
+    "dvorak": "Dvorak",
+    "colemak": "Colemak"
+  },
+  "lesson": {
+    "title": "Leçon {{number}}",
+    "start": "Commencer",
+    "continue": "Continuer",
+    "retry": "Réessayer",
+    "next": "Leçon suivante",
+    "complete": "Terminé!",
+    "locked": "Verrouillé",
+    "unlocked": "Déverrouillé",
+    "newKeys": "Nouvelles touches",
+    "targetWPM": "Objectif MPM",
+    "targetAccuracy": "Objectif précision",
+    "home_row_basic": {
+      "title": "Rangée de base",
+      "description": "Apprenez les touches fondamentales sous vos doigts",
+      "concept": "Placez vos doigts sur la rangée de base. Votre main gauche couvre Q, S, D, F et votre main droite J, K, L, M. Les petits repères sur F et J vous aident à trouver ces touches."
+    },
+    "home_row_extended": {
+      "title": "Rangée de base étendue",
+      "description": "Ajoutez G et H",
+      "concept": "Les touches G et H sont tapées avec vos index en les déplaçant vers l'intérieur depuis F et J."
+    },
+    "top_row_vowels": {
+      "title": "Rangée supérieure voyelles",
+      "description": "Apprenez E et I - voyelles essentielles",
+      "concept": "E est tapé avec le majeur gauche en montant depuis D. I avec le majeur droit depuis K. Ce sont des lettres très courantes."
+    },
+    "top_row_index": {
+      "title": "Rangée supérieure index",
+      "description": "Ajoutez R et U",
+      "concept": "R et U sont tapés en atteignant vers le haut avec vos index. R depuis F, U depuis J."
+    },
+    "top_row_ring": {
+      "title": "Rangée supérieure annulaires",
+      "description": "Apprenez Z et O",
+      "concept": "Z et O nécessitent que vos annulaires atteignent vers le haut depuis S et L."
+    },
+    "top_row_pinky": {
+      "title": "Rangée supérieure auriculaires",
+      "description": "Défiez vos auriculaires avec A et P",
+      "concept": "A et P sont des étirements pour les auriculaires. A depuis Q, P depuis M."
+    },
+    "top_row_complete": {
+      "title": "Rangée supérieure complète",
+      "description": "Maîtrisez T et Y",
+      "concept": "T et Y sont des touches centrales. T atteint vers le haut-droite depuis F, Y vers le haut-gauche depuis J."
+    },
+    "bottom_row_middle_index": {
+      "title": "Rangée inférieure début",
+      "description": "Commencez avec C et virgule",
+      "concept": "C et la virgule introduisent la rangée inférieure. C est tapé avec le majeur gauche depuis D."
+    },
+    "bottom_row_index": {
+      "title": "Rangée inférieure index",
+      "description": "Ajoutez V et N",
+      "concept": "V et N sont tapés avec les index vers le bas. V depuis F, N depuis J."
+    },
+    "bottom_row_ring": {
+      "title": "Rangée inférieure annulaires",
+      "description": "Apprenez X et point-virgule",
+      "concept": "X et le point-virgule utilisent vos annulaires pour une plus longue portée vers le bas."
+    },
+    "bottom_row_pinky": {
+      "title": "Rangée inférieure auriculaires",
+      "description": "Complétez avec W et deux-points",
+      "concept": "W et les deux-points sont les dernières touches régulières."
+    },
+    "complete_keyboard": {
+      "title": "Clavier complet",
+      "description": "Ajoutez B et maîtrisez la barre d'espace",
+      "concept": "B est tapé avec l'index gauche vers le bas-droite. La barre d'espace doit être tapée avec le pouce."
+    },
+    "full_practice": {
+      "title": "Pratique complète",
+      "description": "Pratiquez avec toutes les touches",
+      "concept": "Le moment de tout assembler. Pratiquez des mots et phrases réels avec chaque touche apprise."
+    },
+    "speed_building": {
+      "title": "Développer la vitesse",
+      "description": "Augmentez votre vitesse de frappe",
+      "concept": "Maintenant que la précision est solide, développons la vitesse. Essayez de taper plus vite tout en maintenant 95% de précision."
+    },
+    "mastery": {
+      "title": "Maîtrise",
+      "description": "Atteignez la maîtrise de la frappe",
+      "concept": "Vous avez appris toutes les touches. Continuez à pratiquer pour développer la mémoire musculaire."
+    }
+  },
+  "quiz": {
+    "title": "Quiz rapide",
+    "instruction": "Tapez les mots ci-dessous",
+    "correct": "Correct!",
+    "incorrect": "Réessayez",
+    "complete": "Quiz terminé!",
+    "score": "Score",
+    "accuracy": "Précision",
+    "wpm": "MPM"
+  },
+  "typing": {
+    "start": "Cliquez ici ou appuyez sur une touche pour commencer",
+    "placeholder": "Tapez le texte ci-dessus...",
+    "wpm": "MPM",
+    "accuracy": "Précision",
+    "time": "Temps",
+    "errors": "Erreurs",
+    "progress": "Progression"
+  },
+  "results": {
+    "title": "Résultats",
+    "wpm": "Mots par minute",
+    "accuracy": "Précision",
+    "time": "Temps",
+    "errors": "Erreurs",
+    "xpEarned": "XP gagnés",
+    "newRecord": "Nouveau record!",
+    "passed": "Leçon réussie!",
+    "failed": "Continuez à pratiquer",
+    "requirements": "Exigences"
+  },
+  "progress": {
+    "title": "Votre progression",
+    "level": "Niveau",
+    "xp": "XP",
+    "totalLessons": "Leçons terminées",
+    "totalTime": "Temps total de pratique",
+    "averageWPM": "MPM moyen",
+    "averageAccuracy": "Précision moyenne"
+  },
+  "themes": {
+    "christmas": {
+      "name": "Noël",
+      "description": "Vocabulaire festif des fêtes"
+    },
+    "easter": {
+      "name": "Pâques",
+      "description": "Vocabulaire de célébration printanière"
+    },
+    "halloween": {
+      "name": "Halloween",
+      "description": "Mots effrayants"
+    },
+    "summer": {
+      "name": "Été",
+      "description": "Ambiance plage et vacances"
+    },
+    "vibe-coding": {
+      "name": "Vibe Coding",
+      "description": "Termes de développeur et programmation"
+    },
+    "gaming": {
+      "name": "Gaming",
+      "description": "Vocabulaire de jeux vidéo"
+    },
+    "science": {
+      "name": "Science",
+      "description": "Termes STEM et scientifiques"
+    },
+    "nature": {
+      "name": "Nature",
+      "description": "Mots de plein air et faune"
+    },
+    "food": {
+      "name": "Cuisine",
+      "description": "Vocabulaire culinaire"
+    },
+    "sports": {
+      "name": "Sports",
+      "description": "Terminologie athlétique"
+    },
+    "music": {
+      "name": "Musique",
+      "description": "Termes musicaux et instruments"
+    },
+    "travel": {
+      "name": "Voyage",
+      "description": "Mots d'aventure et exploration"
+    }
+  },
+  "common": {
+    "loading": "Chargement...",
+    "error": "Une erreur s'est produite",
+    "retry": "Réessayer",
+    "back": "Retour",
+    "next": "Suivant",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "close": "Fermer",
+    "yes": "Oui",
+    "no": "Non"
+  }
+}

@@ -1,0 +1,211 @@
+import type { WordDatabase } from './types';
+import { createWordEntries, w } from './types';
+
+// French word database with frequency ratings (1-10, 10 = most common)
+// AZERTY layout: Home row is q,s,d,f,g,h,j,k,l,m (Q instead of A, M instead of ;)
+
+const rawWords = [
+  // === HOME ROW AZERTY (q, s, d, f, j, k, l, m) ===
+  // Note: In AZERTY, Q is on home row, A is on top row
+  w('mal', 8),
+  w('fds', 3),
+  w('sdf', 3),
+
+  // === HOME ROW + G, H (Stage 2) ===
+  w('flash', 5),
+
+  // === + E, I (Stage 3) ===
+  w('le', 10),
+  w('de', 10),
+  w('je', 10),
+  w('me', 10),
+  w('il', 10),
+  w('si', 10),
+  w('mis', 8),
+  w('dis', 8),
+  w('fil', 6),
+  w('lit', 7),
+  w('film', 8),
+  w('fille', 9),
+  w('mille', 7),
+  w('famille', 9),
+
+  // === + R, U (Stage 4) ===
+  w('du', 10),
+  w('sur', 10),
+  w('rue', 8),
+  w('dur', 6),
+  w('sûr', 8),
+  w('mur', 7),
+  w('fuir', 5),
+  w('lire', 8),
+  w('dire', 9),
+  w('rire', 7),
+  w('fruit', 7),
+
+  // === + Z, O (Stage 5) - Note: Z is on top row in AZERTY ===
+  w('ou', 10),
+  w('mot', 8),
+  w('dos', 6),
+  w('zoo', 4),
+  w('zone', 6),
+  w('jouer', 8),
+  w('doute', 7),
+  w('rouge', 7),
+  w('douze', 6),
+
+  // === + A, P (Stage 6) - Note: A is on top row in AZERTY ===
+  w('la', 10),
+  w('ma', 9),
+  w('sa', 9),
+  w('ta', 8),
+  w('pas', 10),
+  w('par', 10),
+  w('papa', 8),
+  w('place', 8),
+  w('plaisir', 7),
+  w('partir', 8),
+
+  // === + T, Y (Stage 7) ===
+  w('et', 10),
+  w('tu', 10),
+  w('ta', 9),
+  w('tout', 10),
+  w('très', 10),
+  w('petit', 9),
+  w('partie', 8),
+  w('toujours', 9),
+  w('temps', 9),
+  w('travail', 8),
+  w('type', 6),
+  w('style', 6),
+
+  // === + C, COMMA (Stage 8) ===
+  w('ce', 10),
+  w('comme', 10),
+  w('car', 8),
+  w('ici', 8),
+  w('cela', 9),
+  w('chose', 9),
+  w('croire', 8),
+  w('compte', 8),
+  w('commencer', 7),
+
+  // === + V, N (Stage 9) ===
+  w('en', 10),
+  w('ne', 10),
+  w('un', 10),
+  w('on', 10),
+  w('non', 9),
+  w('van', 5),
+  w('vie', 10),
+  w('avant', 9),
+  w('venir', 9),
+  w('encore', 9),
+  w('nouveau', 8),
+  w('environ', 7),
+  w('devenir', 8),
+  w('souvent', 8),
+
+  // === + X, SEMICOLON (Stage 10) ===
+  w('deux', 9),
+  w('prix', 8),
+  w('voix', 7),
+  w('choix', 7),
+  w('exemple', 8),
+  w('exercice', 6),
+  w('excellent', 6),
+
+  // === + W, COLON (Stage 11) - W is on bottom row in AZERTY ===
+  w('web', 6),
+  w('wagon', 4),
+  w('weekend', 5),
+
+  // === + B, SPACE (Stage 12) ===
+  w('bien', 10),
+  w('bon', 9),
+  w('beau', 8),
+  w('blanc', 7),
+  w('besoin', 8),
+  w('beaucoup', 9),
+  w('problème', 8),
+  w('public', 7),
+
+  // === COMMON FRENCH WORDS ===
+  w('que', 10),
+  w('qui', 10),
+  w('dans', 10),
+  w('pour', 10),
+  w('plus', 10),
+  w('mais', 10),
+  w('avec', 10),
+  w('elle', 10),
+  w('nous', 10),
+  w('vous', 10),
+  w('leur', 9),
+  w('sans', 9),
+  w('même', 9),
+  w('avoir', 10),
+  w('être', 10),
+  w('faire', 10),
+  w('aller', 9),
+  w('voir', 9),
+  w('savoir', 9),
+  w('pouvoir', 9),
+  w('vouloir', 9),
+  w('falloir', 8),
+  w('devoir', 8),
+  w('prendre', 9),
+  w('donner', 8),
+  w('penser', 8),
+  w('parler', 8),
+  w('trouver', 8),
+  w('rester', 7),
+  w('passer', 8),
+  w('mettre', 8),
+  w('sembler', 7),
+  w('tenir', 7),
+  w('comprendre', 8),
+  w('permettre', 7),
+
+  // === FRENCH SPECIAL CHARACTERS ===
+  w('été', 9),
+  w('être', 10),
+  w('même', 9),
+  w('très', 10),
+  w('après', 9),
+  w('près', 7),
+  w('là', 9),
+  w('déjà', 8),
+  w('voilà', 7),
+  w('où', 9),
+  w('français', 8),
+  w('première', 7),
+  w('dernière', 7),
+  w('manière', 7),
+  w('système', 7),
+  w('problème', 8),
+  w('général', 7),
+  w('différent', 7),
+  w('économie', 6),
+  w('société', 7),
+  w('qualité', 7),
+  w('activité', 6),
+  w('réalité', 6),
+  w('majorité', 5),
+  w('possibilité', 6),
+  w('responsabilité', 5),
+  w('café', 8),
+  w('idée', 8),
+  w('année', 9),
+  w('journée', 7),
+  w('entrée', 6),
+  w('arrivée', 6),
+];
+
+export const frenchDatabase: WordDatabase = {
+  language: 'fr',
+  words: createWordEntries(rawWords),
+};
+
+export default frenchDatabase;

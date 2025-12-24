@@ -1,0 +1,238 @@
+{
+  "app": {
+    "title": "Type Quest",
+    "subtitle": "Meistere das Zehnfingersystem mit Retro-Charme",
+    "tagline": "Verbessere deine Tippfähigkeiten!"
+  },
+  "nav": {
+    "home": "Start",
+    "lessons": "Lektionen",
+    "practice": "Übung",
+    "settings": "Einstellungen",
+    "progress": "Fortschritt"
+  },
+  "settings": {
+    "title": "Einstellungen",
+    "language": "Sprache",
+    "wordLanguage": "Übungswörter",
+    "keyboardLayout": "Tastaturlayout",
+    "mixEnglishWords": "Englische Wörter mischen",
+    "englishMixRatio": "Englisch-Anteil",
+    "themes": "Wort-Themen",
+    "themeMixRatio": "Themen-Anteil",
+    "save": "Speichern",
+    "reset": "Zurücksetzen"
+  },
+  "languages": {
+    "en": "Englisch",
+    "de": "Deutsch",
+    "fr": "Französisch",
+    "es": "Spanisch",
+    "pt": "Portugiesisch",
+    "it": "Italienisch",
+    "nl": "Niederländisch",
+    "sv": "Schwedisch",
+    "pl": "Polnisch",
+    "tr": "Türkisch"
+  },
+  "layouts": {
+    "qwerty-us": "QWERTY (US)",
+    "qwerty-uk": "QWERTY (UK)",
+    "qwertz-de": "QWERTZ (Deutsch)",
+    "qwertz-ch": "QWERTZ (Schweiz)",
+    "azerty-fr": "AZERTY (Französisch)",
+    "azerty-be": "AZERTY (Belgisch)",
+    "dvorak": "Dvorak",
+    "colemak": "Colemak"
+  },
+  "lesson": {
+    "title": "Lektion {{number}}",
+    "start": "Lektion starten",
+    "continue": "Weiter",
+    "retry": "Nochmal",
+    "next": "Nächste Lektion",
+    "complete": "Geschafft!",
+    "locked": "Gesperrt",
+    "unlocked": "Freigeschaltet",
+    "newKeys": "Neue Tasten",
+    "targetWPM": "Ziel WPM",
+    "targetAccuracy": "Ziel Genauigkeit",
+    "home_row_basic": {
+      "title": "Grundstellung",
+      "description": "Lerne die Grundtasten unter deinen Fingern",
+      "concept": "Lege deine Finger auf die Grundreihe. Deine linke Hand liegt auf A, S, D, F und deine rechte auf J, K, L, Ö. Die kleinen Erhebungen auf F und J helfen dir, diese Tasten zu finden."
+    },
+    "home_row_extended": {
+      "title": "Grundreihe erweitert",
+      "description": "Füge G und H hinzu",
+      "concept": "Die Tasten G und H werden mit deinen Zeigefingern getippt, indem du sie von F und J nach innen bewegst."
+    },
+    "top_row_vowels": {
+      "title": "Obere Reihe Vokale",
+      "description": "Lerne E und I - wichtige Vokale",
+      "concept": "E wird mit dem linken Mittelfinger von D nach oben getippt. I mit dem rechten Mittelfinger von K. Dies sind sehr häufige Buchstaben."
+    },
+    "top_row_index": {
+      "title": "Obere Reihe Zeigefinger",
+      "description": "Füge R und U hinzu",
+      "concept": "R und U werden mit den Zeigefingern nach oben getippt. R von der F-Position, U von der J-Position."
+    },
+    "top_row_ring": {
+      "title": "Obere Reihe Ringfinger",
+      "description": "Lerne W und O",
+      "concept": "W und O erfordern, dass deine Ringfinger von S und L nach oben greifen."
+    },
+    "top_row_pinky": {
+      "title": "Obere Reihe kleiner Finger",
+      "description": "Fordere deine kleinen Finger mit Q und P",
+      "concept": "Q und P sind Dehnungen für die kleinen Finger. Q von der A-Position, P von der Ö-Position."
+    },
+    "top_row_complete": {
+      "title": "Obere Reihe komplett",
+      "description": "Meistere T und Z",
+      "concept": "T und Z sind zentrale Tasten. T greift nach oben-rechts von F, Z nach oben-links von J. Du kennst jetzt die gesamte obere Reihe!"
+    },
+    "bottom_row_middle_index": {
+      "title": "Untere Reihe Start",
+      "description": "Beginne mit C und M",
+      "concept": "C und M führen in die untere Reihe ein. C wird mit dem linken Mittelfinger von D nach unten getippt."
+    },
+    "bottom_row_index": {
+      "title": "Untere Reihe Zeigefinger",
+      "description": "Füge V und N hinzu",
+      "concept": "V und N werden mit Zeigefingern nach unten getippt. V von der F-Position, N von der J-Position."
+    },
+    "bottom_row_ring": {
+      "title": "Untere Reihe Ringfinger",
+      "description": "Lerne X und Komma",
+      "concept": "X und Komma nutzen deine Ringfinger für eine längere Bewegung nach unten."
+    },
+    "bottom_row_pinky": {
+      "title": "Untere Reihe kleiner Finger",
+      "description": "Vervollständige mit Y und Punkt",
+      "concept": "Y und Punkt sind die letzten regulären Tasten. Y ist die ultimative Dehnung für den kleinen Finger."
+    },
+    "complete_keyboard": {
+      "title": "Komplette Tastatur",
+      "description": "Füge B hinzu und meistere die Leertaste",
+      "concept": "B wird mit dem linken Zeigefinger nach unten-rechts getippt. Die Leertaste sollte mit dem Daumen bedient werden."
+    },
+    "full_practice": {
+      "title": "Vollständige Übung",
+      "description": "Übe mit allen Tasten",
+      "concept": "Zeit, alles zusammenzuführen. Übe echte Wörter und Sätze mit jeder Taste, die du gelernt hast."
+    },
+    "speed_building": {
+      "title": "Geschwindigkeit aufbauen",
+      "description": "Erhöhe deine Tippgeschwindigkeit",
+      "concept": "Da die Genauigkeit stimmt, bauen wir jetzt Geschwindigkeit auf. Versuche schneller zu tippen bei mindestens 95% Genauigkeit."
+    },
+    "mastery": {
+      "title": "Meisterschaft",
+      "description": "Erreiche Tipp-Meisterschaft",
+      "concept": "Du hast alle Tasten gelernt. Übe weiter, um Muskelgedächtnis aufzubauen."
+    }
+  },
+  "quiz": {
+    "title": "Schnelltest",
+    "instruction": "Tippe die Wörter unten",
+    "correct": "Richtig!",
+    "incorrect": "Nochmal",
+    "complete": "Test abgeschlossen!",
+    "score": "Punkte",
+    "accuracy": "Genauigkeit",
+    "wpm": "WPM"
+  },
+  "typing": {
+    "start": "Klicke hier oder drücke eine Taste zum Starten",
+    "placeholder": "Tippe den Text oben...",
+    "wpm": "WPM",
+    "accuracy": "Genauigkeit",
+    "time": "Zeit",
+    "errors": "Fehler",
+    "progress": "Fortschritt"
+  },
+  "results": {
+    "title": "Ergebnis",
+    "wpm": "Wörter pro Minute",
+    "accuracy": "Genauigkeit",
+    "time": "Zeit",
+    "errors": "Fehler",
+    "xpEarned": "XP verdient",
+    "newRecord": "Neuer Rekord!",
+    "passed": "Lektion bestanden!",
+    "failed": "Weiter üben",
+    "requirements": "Anforderungen"
+  },
+  "progress": {
+    "title": "Dein Fortschritt",
+    "level": "Level",
+    "xp": "XP",
+    "totalLessons": "Lektionen abgeschlossen",
+    "totalTime": "Gesamte Übungszeit",
+    "averageWPM": "Durchschnitt WPM",
+    "averageAccuracy": "Durchschnitt Genauigkeit"
+  },
+  "themes": {
+    "christmas": {
+      "name": "Weihnachten",
+      "description": "Festliche Wörter zur Weihnachtszeit"
+    },
+    "easter": {
+      "name": "Ostern",
+      "description": "Frühlingsvokabular zu Ostern"
+    },
+    "halloween": {
+      "name": "Halloween",
+      "description": "Gruselige Wörter"
+    },
+    "summer": {
+      "name": "Sommer",
+      "description": "Strand- und Urlaubsstimmung"
+    },
+    "vibe-coding": {
+      "name": "Vibe Coding",
+      "description": "Entwickler- und Programmierbegriffe"
+    },
+    "gaming": {
+      "name": "Gaming",
+      "description": "Videospiel-Vokabular"
+    },
+    "science": {
+      "name": "Wissenschaft",
+      "description": "MINT und wissenschaftliche Begriffe"
+    },
+    "nature": {
+      "name": "Natur",
+      "description": "Outdoor- und Tierwelt-Wörter"
+    },
+    "food": {
+      "name": "Essen",
+      "description": "Kulinarisches Vokabular"
+    },
+    "sports": {
+      "name": "Sport",
+      "description": "Sportliche Terminologie"
+    },
+    "music": {
+      "name": "Musik",
+      "description": "Musikalische Begriffe und Instrumente"
+    },
+    "travel": {
+      "name": "Reisen",
+      "description": "Abenteuer- und Entdeckungswörter"
+    }
+  },
+  "common": {
+    "loading": "Laden...",
+    "error": "Ein Fehler ist aufgetreten",
+    "retry": "Wiederholen",
+    "back": "Zurück",
+    "next": "Weiter",
+    "save": "Speichern",
+    "cancel": "Abbrechen",
+    "close": "Schließen",
+    "yes": "Ja",
+    "no": "Nein"
+  }
+}
