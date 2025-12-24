@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- Outer yellow border -->
+  <rect x="0" y="0" width="32" height="32" fill="#ffd93d"/>
+  <!-- Dark inner background -->
+  <rect x="3" y="3" width="26" height="26" fill="#1a1a2e"/>
+  <!-- Keyboard icon - simplified pixel art style -->
+  <rect x="10" y="12" width="12" height="8" fill="#ffd93d" rx="1"/>
+  <!-- Keyboard keys (3 rows) -->
+  <rect x="11" y="13" width="2" height="2" fill="#1a1a2e"/>
+  <rect x="14" y="13" width="2" height="2" fill="#1a1a2e"/>
+  <rect x="17" y="13" width="2" height="2" fill="#1a1a2e"/>
+  <rect x="20" y="13" width="1" height="2" fill="#1a1a2e"/>
+  <rect x="11" y="16" width="2" height="2" fill="#1a1a2e"/>
+  <rect x="14" y="16" width="2" height="2" fill="#1a1a2e"/>
+  <rect x="17" y="16" width="2" height="2" fill="#1a1a2e"/>
+  <rect x="20" y="16" width="1" height="2" fill="#1a1a2e"/>
+</svg>
