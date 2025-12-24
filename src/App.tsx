@@ -9,17 +9,20 @@ import { UserButton } from './components/UserButton';
 import { GuestBanner } from './components/GuestBanner';
 import { MigrationModal } from './components/MigrationModal';
 import { Leaderboard } from './components/Leaderboard';
+import { LegalPage } from './components/LegalPage';
 import { useGameState } from './hooks/useGameState';
 import { useLessonProgress } from './hooks/useLessonProgress';
 import type { KeyboardLayoutType } from './data/keyboardLayouts';
 import { getHomeRowKeys, getLayoutFamily } from './data/keyboardLayouts';
 import { generateLayoutLessons, generateLayoutLessonsSync } from './data/layoutLessons';
 
-type View = 'home' | 'lesson';
+type View = 'home' | 'lesson' | 'legal';
+type LegalPageType = 'impressum' | 'privacy' | 'terms';
 
 function App() {
   const [view, setView] = useState<View>('home');
   const [selectedLesson, setSelectedLesson] = useState<Lesson | null>(null);
+  const [selectedLegalPage, setSelectedLegalPage] = useState<LegalPageType>('impressum');
   const [showLayoutSelector, setShowLayoutSelector] = useState(false);
   const [showLayoutDetector, setShowLayoutDetector] = useState(false);
   const [keyboardLayout, setKeyboardLayout] = useState<KeyboardLayoutType>(() => {
@@ -103,8 +106,22 @@ function App() {
     setSelectedLesson(null);
   };
 
+  const handleLegalPage = (page: LegalPageType) => {
+    setSelectedLegalPage(page);
+    setView('legal');
+  };
+
   const totalCompleted = getCompletedCount();
   const homeRowKeys = getHomeRowKeys(keyboardLayout);
+
+  if (view === 'legal') {
+    return (
+      <LegalPage
+        page={selectedLegalPage}
+        onBack={() => setView('home')}
+      />
+    );
+  }
 
   if (view === 'lesson' && selectedLesson) {
     return (
@@ -356,10 +373,39 @@ function App() {
       {/* Footer */}
       <footer className="p-8 text-center">
         <p style={{ fontFamily: "'Press Start 2P'", fontSize: '8px', color: '#4a4a6e' }}>
-          TYPEBIT8 © 2024
+          TYPEBIT8 © 2025
         </p>
         <p style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: '#4a4a6e', marginTop: '8px' }}>
           PRACTICE DAILY FOR BEST RESULTS
+        </p>
+
+        {/* Legal Links */}
+        <div className="mt-6 flex justify-center gap-6 flex-wrap">
+          <button
+            onClick={() => handleLegalPage('impressum')}
+            style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: '#3bceac' }}
+            className="hover:underline cursor-pointer bg-transparent border-none"
+          >
+            IMPRESSUM
+          </button>
+          <button
+            onClick={() => handleLegalPage('privacy')}
+            style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: '#3bceac' }}
+            className="hover:underline cursor-pointer bg-transparent border-none"
+          >
+            PRIVACY POLICY
+          </button>
+          <button
+            onClick={() => handleLegalPage('terms')}
+            style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: '#3bceac' }}
+            className="hover:underline cursor-pointer bg-transparent border-none"
+          >
+            TERMS OF SERVICE
+          </button>
+        </div>
+
+        <p style={{ fontFamily: "'Press Start 2P'", fontSize: '5px', color: '#4a4a6e', marginTop: '16px' }}>
+          OPERATED BY STEININGER AG, ZUG, SWITZERLAND
         </p>
       </footer>
     </div>
