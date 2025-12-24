@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="128" height="128" style="image-rendering: pixelated">
+  <!-- Arcade Ghost - Pink friendly ghost -->
+  <rect width="16" height="16" fill="#1a1a2e"/>
+  <!-- Ghost body -->
+  <rect x="4" y="3" width="8" height="8" fill="#ff6b9d"/>
+  <rect x="3" y="4" width="1" height="6" fill="#ff6b9d"/>
+  <rect x="12" y="4" width="1" height="6" fill="#ff6b9d"/>
+  <!-- Rounded top -->
+  <rect x="5" y="2" width="6" height="1" fill="#ff6b9d"/>
+  <!-- Eyes -->
+  <rect x="5" y="5" width="2" height="2" fill="#eef5db"/>
+  <rect x="9" y="5" width="2" height="2" fill="#eef5db"/>
+  <rect x="6" y="5" width="1" height="1" fill="#1a1a2e"/>
+  <rect x="10" y="5" width="1" height="1" fill="#1a1a2e"/>
+  <!-- Wink -->
+  <rect x="10" y="5" width="1" height="1" fill="#ff6b9d"/>
+  <rect x="9" y="6" width="2" height="1" fill="#1a1a2e"/>
+  <!-- Blush -->
+  <rect x="4" y="7" width="1" height="1" fill="#ff8fab"/>
+  <rect x="11" y="7" width="1" height="1" fill="#ff8fab"/>
+  <!-- Wavy bottom -->
+  <rect x="3" y="11" width="2" height="2" fill="#ff6b9d"/>
+  <rect x="5" y="12" width="2" height="2" fill="#ff6b9d"/>
+  <rect x="7" y="11" width="2" height="2" fill="#ff6b9d"/>
+  <rect x="9" y="12" width="2" height="2" fill="#ff6b9d"/>
+  <rect x="11" y="11" width="2" height="2" fill="#ff6b9d"/>
+  <!-- Tiny keyboard -->
+  <rect x="6" y="9" width="4" height="2" fill="#3bceac"/>
+  <rect x="7" y="9" width="1" height="1" fill="#1a1a2e"/>
+  <rect x="6" y="10" width="1" height="1" fill="#1a1a2e"/>
+  <rect x="8" y="10" width="1" height="1" fill="#1a1a2e"/>
+</svg>

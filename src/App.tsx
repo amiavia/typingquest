@@ -17,6 +17,8 @@ import { PremiumPage } from './components/PremiumPage';
 import { CoinBalance } from './components/CoinBalance';
 import { StreakDisplay } from './components/StreakDisplay';
 import { PremiumBadge } from './components/PremiumBadge';
+import { Avatar } from './components/Avatar';
+import { AvatarSelector } from './components/AvatarSelector';
 import { useGameState } from './hooks/useGameState';
 import { useLessonProgress } from './hooks/useLessonProgress';
 import type { KeyboardLayoutType } from './data/keyboardLayouts';
@@ -35,6 +37,7 @@ function App() {
   const [selectedLegalPage, setSelectedLegalPage] = useState<LegalPageType>('impressum');
   const [showLayoutSelector, setShowLayoutSelector] = useState(false);
   const [showLayoutDetector, setShowLayoutDetector] = useState(false);
+  const [showAvatarSelector, setShowAvatarSelector] = useState(false);
   const [selectedTier, setSelectedTier] = useState<number | 'all'>('all');
   const [keyboardLayout, setKeyboardLayout] = useState<KeyboardLayoutType>(() => {
     const saved = localStorage.getItem('typingQuestLayout');
@@ -57,6 +60,7 @@ function App() {
     api.premium.isPremium,
     userId ? { clerkId: userId } : "skip"
   );
+  const userAvatarId = useQuery(api.users.getAvatar);
   const { progress, updateProgress, getCompletedCount, isLessonUnlocked } = useLessonProgress();
 
   // Use static 30 levels from levels.ts (PRP-027)
@@ -210,6 +214,13 @@ function App() {
         />
       )}
 
+      {/* Avatar Selector Modal */}
+      <AvatarSelector
+        isOpen={showAvatarSelector}
+        onClose={() => setShowAvatarSelector(false)}
+        userLevel={gameState.level}
+      />
+
       {/* Header HUD */}
       <header className="pixel-box m-4 p-4">
         <div className="flex items-center justify-between flex-wrap gap-4">
@@ -288,6 +299,15 @@ function App() {
                 />
               </div>
             </div>
+
+            {/* Avatar */}
+            {userId && (
+              <Avatar
+                avatarId={userAvatarId}
+                size="md"
+                onClick={() => setShowAvatarSelector(true)}
+              />
+            )}
 
             {/* User Button */}
             <UserButton />

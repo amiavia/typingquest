@@ -109,3 +109,43 @@ export const updateProfile = mutation({
     return user._id;
   },
 });
+
+// ═══════════════════════════════════════════════════════════════════
+// PRP-003: AVATAR SELECTION
+// ═══════════════════════════════════════════════════════════════════
+
+// Get user's selected avatar
+export const getAvatar = query({
+  args: {},
+  handler: async (ctx) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) return "pixel-knight"; // Default avatar
+
+    const user = await ctx.db
+      .query("users")
+      .withIndex("by_clerk_id", (q) => q.eq("clerkId", identity.subject))
+      .unique();
+
+    return user?.avatarId || "pixel-knight";
+  },
+});
+
+// Update user's avatar
+export const updateAvatar = mutation({
+  args: { avatarId: v.string() },
+  handler: async (ctx, { avatarId }) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new Error("Not authenticated");
+
+    const user = await ctx.db
+      .query("users")
+      .withIndex("by_clerk_id", (q) => q.eq("clerkId", identity.subject))
+      .unique();
+
+    if (!user) throw new Error("User not found");
+
+    await ctx.db.patch(user._id, { avatarId });
+
+    return { success: true, avatarId };
+  },
+});

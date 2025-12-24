@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="128" height="128" style="image-rendering: pixelated">
+  <!-- Code Wizard - Cyan mage -->
+  <rect width="16" height="16" fill="#1a1a2e"/>
+  <!-- Wizard hat -->
+  <rect x="7" y="1" width="2" height="1" fill="#3bceac"/>
+  <rect x="6" y="2" width="4" height="1" fill="#3bceac"/>
+  <rect x="5" y="3" width="6" height="2" fill="#3bceac"/>
+  <!-- Face -->
+  <rect x="6" y="5" width="4" height="2" fill="#eef5db"/>
+  <rect x="6" y="5" width="1" height="1" fill="#1a1a2e"/>
+  <rect x="9" y="5" width="1" height="1" fill="#1a1a2e"/>
+  <!-- Beard -->
+  <rect x="7" y="7" width="2" height="1" fill="#eef5db"/>
+  <!-- Robe -->
+  <rect x="4" y="7" width="8" height="5" fill="#3bceac"/>
+  <rect x="6" y="8" width="4" height="2" fill="#2aa391"/>
+  <!-- Staff -->
+  <rect x="12" y="3" width="1" height="9" fill="#8b5a2b"/>
+  <rect x="11" y="2" width="3" height="2" fill="#ffd93d"/>
+  <!-- Sparkles -->
+  <rect x="13" y="1" width="1" height="1" fill="#ffd93d"/>
+  <rect x="10" y="3" width="1" height="1" fill="#ffd93d"/>
+  <!-- Bottom robe -->
+  <rect x="3" y="12" width="10" height="2" fill="#3bceac"/>
+</svg>
