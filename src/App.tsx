@@ -11,6 +11,7 @@ import { MigrationModal } from './components/MigrationModal';
 import { Leaderboard } from './components/Leaderboard';
 import { LegalPage } from './components/LegalPage';
 import { DailyChallengeSection } from './components/DailyChallengeSection';
+import { DailyChallengeView } from './components/DailyChallengeView';
 import { StreakSection } from './components/StreakSection';
 import { Shop } from './components/Shop';
 import { PremiumPage } from './components/PremiumPage';
@@ -26,7 +27,7 @@ import { useQuery } from 'convex/react';
 import { api } from '../convex/_generated/api';
 import { useAuth } from '@clerk/clerk-react';
 
-type View = 'home' | 'lesson' | 'legal' | 'shop' | 'premium';
+type View = 'home' | 'lesson' | 'legal' | 'shop' | 'premium' | 'daily-challenge';
 type LegalPageType = 'impressum' | 'privacy' | 'terms';
 
 function App() {
@@ -156,6 +157,17 @@ function App() {
   if (view === 'premium') {
     return (
       <PremiumPage onClose={() => setView('home')} />
+    );
+  }
+
+  if (view === 'daily-challenge') {
+    return (
+      <div className="min-h-screen p-4 md:p-8">
+        <DailyChallengeView
+          onBack={() => setView('home')}
+          keyboardLayout={keyboardLayout}
+        />
+      </div>
     );
   }
 
@@ -416,7 +428,7 @@ function App() {
       {/* Daily Challenge & Streak Section */}
       <section className="p-4 md:p-8">
         <div className="max-w-4xl mx-auto grid md:grid-cols-2 gap-6">
-          <DailyChallengeSection onStartChallenge={() => {}} />
+          <DailyChallengeSection onStartChallenge={() => setView('daily-challenge')} />
           {userId && <StreakSection />}
         </div>
       </section>
