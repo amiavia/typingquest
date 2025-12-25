@@ -7,6 +7,7 @@ import './index.css'
 import App from './App.tsx'
 import { AuthProvider } from './contexts/AuthContext'
 import { PremiumSyncProvider } from './providers/PremiumSyncProvider'
+import { ThemeProvider } from './providers/ThemeProvider'
 
 // Initialize Convex client
 const convexUrl = import.meta.env.VITE_CONVEX_URL
@@ -28,7 +29,9 @@ function Providers({ children }: { children: React.ReactNode }) {
       <ConvexProviderWithClerk client={convex} useAuth={useAuth}>
         <AuthProvider>
           <PremiumSyncProvider>
-            {children}
+            <ThemeProvider>
+              {children}
+            </ThemeProvider>
           </PremiumSyncProvider>
         </AuthProvider>
       </ConvexProviderWithClerk>
