@@ -26,9 +26,6 @@ export function Shop({ onClose, onUpgrade }: ShopProps) {
   // Queries
   const allItems = useQuery(api.shop.getShopItems, {});
   const featuredItems = useQuery(api.shop.getFeaturedItems);
-
-  // Debug logging
-  console.log('[Shop] allItems:', allItems, 'featuredItems:', featuredItems);
   const inventory = useQuery(
     api.shop.getInventory,
     userId ? { clerkId: userId } : "skip"
