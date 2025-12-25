@@ -6,7 +6,7 @@ import { Keyboard } from './Keyboard';
 import { Quiz } from './Quiz';
 import { RewardPopup } from './RewardPopup';
 import type { KeyboardLayoutType } from '../data/keyboardLayouts';
-import { getLessonKeysForLayout } from '../data/keyboardLayouts';
+import { getLessonKeysForLayout, getExercisesForLayout, getQuizWordsForLayout } from '../data/keyboardLayouts';
 import { useAuthContext } from '../contexts/AuthContext';
 import { usePremium } from '../hooks/usePremium';
 
@@ -52,11 +52,17 @@ export function LessonView({ lesson, onComplete, onQuizComplete, onBack, keyboar
     [lesson.keys, keyboardLayout]
   );
 
-  // Don't transform exercise text - users should type actual English words
-  // The layout mapping only affects keyboard key highlighting, not practice content
-  const layoutExercises = lesson.exercises;
+  // Transform exercises and quiz words for the selected keyboard layout
+  // This ensures key drills match the user's actual keyboard (e.g., "jklö" for QWERTZ Swiss)
+  const layoutExercises = useMemo(
+    () => getExercisesForLayout(lesson.exercises, keyboardLayout),
+    [lesson.exercises, keyboardLayout]
+  );
 
-  const layoutQuizWords = lesson.quizWords;
+  const layoutQuizWords = useMemo(
+    () => getQuizWordsForLayout(lesson.quizWords, keyboardLayout),
+    [lesson.quizWords, keyboardLayout]
+  );
 
   const currentText = layoutExercises[currentExercise];
 
