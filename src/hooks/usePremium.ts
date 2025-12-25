@@ -1,11 +1,10 @@
 /**
- * PRP-027 Task 4.5: Premium Perks Integration Hook
+ * PRP-030: Clerk Billing Integration Hook
  *
- * Provides premium status and benefits across the app.
+ * Uses Clerk's has() helper to check premium status.
+ * Replaces the previous Convex-based premium checking.
  */
 
-import { useQuery } from "convex/react";
-import { api } from "../../convex/_generated/api";
 import { useAuth } from "@clerk/clerk-react";
 
 export interface PremiumBenefits {
@@ -20,9 +19,7 @@ export interface PremiumBenefits {
 export interface UsePremiumResult {
   isPremium: boolean;
   isLoading: boolean;
-  premiumExpiresAt: Date | null;
-  plan: string | null;
-  cancelAtPeriodEnd: boolean;
+  plan: "free" | "premium_monthly" | "premium_yearly" | null;
   benefits: PremiumBenefits;
   applyMultiplier: (coins: number) => number;
 }
@@ -46,15 +43,21 @@ const PREMIUM_BENEFITS: PremiumBenefits = {
 };
 
 export function usePremium(): UsePremiumResult {
-  const { userId } = useAuth();
+  const { has, isLoaded } = useAuth();
 
-  const premiumStatus = useQuery(
-    api.premium.getPremiumStatus,
-    userId ? { clerkId: userId } : "skip"
-  );
+  // Check premium plans using Clerk Billing's has() helper
+  // Plans must be configured in Clerk Dashboard:
+  // - premium_monthly: $4.99/month
+  // - premium_yearly: $39.99/year
+  const isMonthly = has?.({ plan: "premium_monthly" }) ?? false;
+  const isYearly = has?.({ plan: "premium_yearly" }) ?? false;
+  const isPremium = isMonthly || isYearly;
 
-  const isPremium = premiumStatus?.isPremium ?? false;
-  const isLoading = premiumStatus === undefined;
+  const plan = isYearly
+    ? "premium_yearly"
+    : isMonthly
+      ? "premium_monthly"
+      : "free";
 
   const benefits = isPremium ? PREMIUM_BENEFITS : FREE_BENEFITS;
 
@@ -64,13 +67,18 @@ export function usePremium(): UsePremiumResult {
 
   return {
     isPremium,
-    isLoading,
-    premiumExpiresAt: premiumStatus?.currentPeriodEnd
-      ? new Date(premiumStatus.currentPeriodEnd)
-      : null,
-    plan: premiumStatus?.plan ?? null,
-    cancelAtPeriodEnd: premiumStatus?.cancelAtPeriodEnd ?? false,
+    isLoading: !isLoaded,
+    plan,
     benefits,
     applyMultiplier,
   };
+}
+
+/**
+ * Helper to check specific premium features
+ * Usage: const hasDoubleCoins = usePremiumFeature('double_coins');
+ */
+export function usePremiumFeature(feature: string): boolean {
+  const { has } = useAuth();
+  return has?.({ feature }) ?? false;
 }

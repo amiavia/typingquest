@@ -4,6 +4,7 @@ import { api } from "../../convex/_generated/api";
 import { useAuth } from "@clerk/clerk-react";
 import { CoinBalance } from "./CoinBalance";
 import { PremiumLock } from "./PremiumBadge";
+import { usePremium } from "../hooks/usePremium";
 
 type ShopCategory = "all" | "avatar" | "theme" | "keyboard-skin" | "power-up";
 type ShopRarity = "all" | "common" | "rare" | "epic" | "legendary";
@@ -35,11 +36,8 @@ export function Shop({ onClose, onUpgrade }: ShopProps) {
     userId ? { clerkId: userId } : "skip"
   );
 
-  // Get premium status
-  const isPremium = useQuery(
-    api.premium.isPremium,
-    userId ? { clerkId: userId } : "skip"
-  );
+  // Get premium status from Clerk Billing
+  const { isPremium } = usePremium();
 
   // Mutations
   const purchaseItem = useMutation(api.shop.purchaseItem);

@@ -6,6 +6,7 @@ import { ConvexReactClient } from 'convex/react'
 import './index.css'
 import App from './App.tsx'
 import { AuthProvider } from './contexts/AuthContext'
+import { PremiumSyncProvider } from './providers/PremiumSyncProvider'
 
 // Initialize Convex client
 const convexUrl = import.meta.env.VITE_CONVEX_URL
@@ -26,7 +27,9 @@ function Providers({ children }: { children: React.ReactNode }) {
     <ClerkProvider publishableKey={clerkPubKey}>
       <ConvexProviderWithClerk client={convex} useAuth={useAuth}>
         <AuthProvider>
-          {children}
+          <PremiumSyncProvider>
+            {children}
+          </PremiumSyncProvider>
         </AuthProvider>
       </ConvexProviderWithClerk>
     </ClerkProvider>

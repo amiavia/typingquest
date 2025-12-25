@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
-import { useMutation, useQuery } from 'convex/react';
+import { useMutation } from 'convex/react';
 import type { Lesson, TypingStats } from '../types';
 import { TypingArea } from './TypingArea';
 import { Keyboard } from './Keyboard';
@@ -8,6 +8,7 @@ import { RewardPopup } from './RewardPopup';
 import type { KeyboardLayoutType } from '../data/keyboardLayouts';
 import { getLessonKeysForLayout } from '../data/keyboardLayouts';
 import { useAuthContext } from '../contexts/AuthContext';
+import { usePremium } from '../hooks/usePremium';
 
 import { api } from '../../convex/_generated/api';
 
@@ -36,10 +37,7 @@ export function LessonView({ lesson, onComplete, onQuizComplete, onBack, keyboar
   // Coin and streak integration
   const awardCoins = useMutation(api.coins.awardCoins);
   const recordActivity = useMutation(api.streaks.recordActivity);
-  const isPremium = useQuery(
-    api.premium.isPremium,
-    userId ? { clerkId: userId } : "skip"
-  );
+  const { isPremium } = usePremium();
 
   // Reward popup state
   const [showReward, setShowReward] = useState(false);

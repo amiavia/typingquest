@@ -5,11 +5,12 @@ interface LessonCardProps {
   lesson: Lesson;
   progress?: LessonProgress;
   isLocked?: boolean;
+  isPremiumLocked?: boolean;
   isNew?: boolean;
   onClick: () => void;
 }
 
-export function LessonCard({ lesson, progress, isLocked = false, isNew = false, onClick }: LessonCardProps) {
+export function LessonCard({ lesson, progress, isLocked = false, isPremiumLocked = false, isNew = false, onClick }: LessonCardProps) {
   const isCompleted = progress?.completed && progress?.quizPassed;
   const isStarted = progress && !isCompleted;
 
@@ -32,19 +33,24 @@ export function LessonCard({ lesson, progress, isLocked = false, isNew = false, 
   return (
     <button
       onClick={onClick}
-      disabled={isLocked}
+      disabled={isLocked && !isPremiumLocked}
       className={`
         w-full p-4 text-left transition-all
-        ${isLocked
-          ? 'pixel-box opacity-50 cursor-not-allowed'
-          : isCompleted
-            ? 'pixel-box pixel-box-green hover:translate-x-1 hover:-translate-y-1'
-            : isStarted
-              ? 'pixel-box pixel-box-yellow hover:translate-x-1 hover:-translate-y-1'
-              : 'pixel-box hover:translate-x-1 hover:-translate-y-1'
+        ${isPremiumLocked
+          ? 'pixel-box hover:translate-x-1 hover:-translate-y-1 cursor-pointer'
+          : isLocked
+            ? 'pixel-box opacity-50 cursor-not-allowed'
+            : isCompleted
+              ? 'pixel-box pixel-box-green hover:translate-x-1 hover:-translate-y-1'
+              : isStarted
+                ? 'pixel-box pixel-box-yellow hover:translate-x-1 hover:-translate-y-1'
+                : 'pixel-box hover:translate-x-1 hover:-translate-y-1'
         }
       `}
-      style={{ fontFamily: "'Press Start 2P', monospace" }}
+      style={{
+        fontFamily: "'Press Start 2P', monospace",
+        borderColor: isPremiumLocked ? '#ffd93d' : undefined,
+      }}
     >
       <div className="flex items-start justify-between mb-3">
         <div className="flex items-center gap-3">
@@ -53,25 +59,27 @@ export function LessonCard({ lesson, progress, isLocked = false, isNew = false, 
               w-10 h-10 flex items-center justify-center border-4
               ${isCompleted
                 ? 'border-[#0ead69] bg-[#0ead69] text-[#0f0f1b]'
-                : isLocked
-                  ? 'border-[#4a4a6e] bg-[#16213e] text-[#4a4a6e]'
-                  : 'bg-[#1a1a2e]'
+                : isPremiumLocked
+                  ? 'border-[#ffd93d] bg-[#16213e]'
+                  : isLocked
+                    ? 'border-[#4a4a6e] bg-[#16213e] text-[#4a4a6e]'
+                    : 'bg-[#1a1a2e]'
               }
             `}
             style={{
               fontSize: '14px',
-              boxShadow: isCompleted ? '0 0 15px #0ead69' : 'none',
-              borderColor: isCompleted ? '#0ead69' : isLocked ? '#4a4a6e' : tierColor,
-              color: isCompleted ? '#0f0f1b' : isLocked ? '#4a4a6e' : tierColor,
+              boxShadow: isCompleted ? '0 0 15px #0ead69' : isPremiumLocked ? '0 0 10px rgba(255,217,61,0.3)' : 'none',
+              borderColor: isCompleted ? '#0ead69' : isPremiumLocked ? '#ffd93d' : isLocked ? '#4a4a6e' : tierColor,
+              color: isCompleted ? '#0f0f1b' : isPremiumLocked ? '#ffd93d' : isLocked ? '#4a4a6e' : tierColor,
             }}
           >
-            {isCompleted ? '★' : isLocked ? '🔒' : lesson.id}
+            {isCompleted ? '★' : isPremiumLocked ? '👑' : isLocked ? '🔒' : lesson.id}
           </div>
           <div>
             <h3
               style={{
                 fontSize: '10px',
-                color: isLocked ? '#4a4a6e' : '#eef5db',
+                color: isPremiumLocked ? '#ffd93d' : isLocked ? '#4a4a6e' : '#eef5db',
                 lineHeight: '1.5'
               }}
             >
@@ -82,7 +90,7 @@ export function LessonCard({ lesson, progress, isLocked = false, isNew = false, 
               <span
                 style={{
                   fontSize: '6px',
-                  color: isLocked ? '#4a4a6e' : tierColor,
+                  color: isPremiumLocked ? '#ffd93d' : isLocked ? '#4a4a6e' : tierColor,
                 }}
               >
                 {tier.name}
@@ -92,8 +100,22 @@ export function LessonCard({ lesson, progress, isLocked = false, isNew = false, 
         </div>
 
         <div className="flex flex-col items-end gap-1">
+          {/* PREMIUM badge */}
+          {isPremiumLocked && (
+            <span
+              className="px-2 py-0.5"
+              style={{
+                fontSize: '6px',
+                backgroundColor: '#ffd93d',
+                color: '#1a1a2e',
+              }}
+            >
+              PREMIUM
+            </span>
+          )}
+
           {/* NEW badge */}
-          {isNew && !isCompleted && !isLocked && (
+          {isNew && !isCompleted && !isLocked && !isPremiumLocked && (
             <span
               className="px-2 py-0.5"
               style={{

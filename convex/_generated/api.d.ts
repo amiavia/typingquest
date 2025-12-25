@@ -22,7 +22,6 @@ import type * as seedShopItems from "../seedShopItems.js";
 import type * as settings from "../settings.js";
 import type * as shop from "../shop.js";
 import type * as streaks from "../streaks.js";
-import type * as stripe from "../stripe.js";
 import type * as users from "../users.js";
 
 import type {
@@ -46,7 +45,6 @@ declare const fullApi: ApiFromModules<{
   settings: typeof settings;
   shop: typeof shop;
   streaks: typeof streaks;
-  stripe: typeof stripe;
   users: typeof users;
 }>;
 

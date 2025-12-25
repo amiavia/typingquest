@@ -1,26 +1,36 @@
-import { v } from "convex/values";
-import { mutation, query, internalMutation } from "./_generated/server";
+/**
+ * PRP-030: Clerk Billing Premium Module
+ *
+ * Simplified premium module - subscription management is now handled by Clerk Billing.
+ * This file only contains helper queries for benefits display and streak freeze grants.
+ *
+ * MIGRATION NOTE:
+ * - isPremium/getPremiumStatus: Now checked via Clerk's has() in frontend
+ * - Checkout/Cancel/Reactivate: Now handled by Clerk PricingTable and UserProfile
+ * - Webhooks: Now handled internally by Clerk
+ */
 
-// Premium subscription plans
+import { v } from "convex/values";
+import { mutation, query } from "./_generated/server";
+
+// Premium subscription plans (for display only - actual plans configured in Clerk Dashboard)
 export const PLANS = {
   monthly: {
-    id: "monthly",
+    id: "premium_monthly",
     name: "Monthly Premium",
     price: 4.99,
     interval: "month",
-    stripePriceId: "", // Set via environment
   },
   yearly: {
-    id: "yearly",
+    id: "premium_yearly",
     name: "Yearly Premium",
     price: 39.99,
     interval: "year",
-    stripePriceId: "", // Set via environment
     savings: "33%",
   },
 };
 
-// Premium benefits list
+// Premium benefits list (for display)
 export const PREMIUM_BENEFITS = [
   { icon: "coin", title: "2x Coin Earnings", description: "Double coins on all activities" },
   { icon: "freeze", title: "3 Free Streak Freezes/Month", description: "Protect your streak" },
@@ -30,8 +40,28 @@ export const PREMIUM_BENEFITS = [
   { icon: "ad-free", title: "Ad-Free Experience", description: "No distractions" },
 ];
 
-// Check if user is premium
-export const isPremium = query({
+// Get available plans (for display purposes)
+export const getPlans = query({
+  args: {},
+  handler: async () => {
+    return Object.values(PLANS);
+  },
+});
+
+// Get premium benefits (for display purposes)
+export const getBenefits = query({
+  args: {},
+  handler: async () => {
+    return PREMIUM_BENEFITS;
+  },
+});
+
+/**
+ * Check if user is premium by checking the users table
+ * This is used as a backup for Convex mutations that need to check premium status
+ * The primary check should be done via Clerk's has() in the frontend
+ */
+export const isPremiumByClerkId = query({
   args: { clerkId: v.string() },
   handler: async (ctx, args) => {
     const user = await ctx.db
@@ -43,77 +73,21 @@ export const isPremium = query({
       return false;
     }
 
-    // Check if premium and not expired
-    if (user.isPremium && user.premiumExpiresAt) {
-      return user.premiumExpiresAt > Date.now();
-    }
-
+    // Check if premium flag is set
+    // With Clerk Billing, this should be synced via Clerk webhooks
     return user.isPremium === true;
   },
 });
 
-// Get full premium status
-export const getPremiumStatus = query({
-  args: { clerkId: v.string() },
-  handler: async (ctx, args) => {
-    const user = await ctx.db
-      .query("users")
-      .withIndex("by_clerk_id", (q) => q.eq("clerkId", args.clerkId))
-      .first();
-
-    if (!user) {
-      return {
-        isPremium: false,
-        plan: null,
-        expiresAt: null,
-        cancelAtPeriodEnd: false,
-      };
-    }
-
-    // Get subscription details
-    const subscription = await ctx.db
-      .query("subscriptions")
-      .withIndex("by_clerk_id", (q) => q.eq("clerkId", args.clerkId))
-      .first();
-
-    const isPremiumActive =
-      user.isPremium === true &&
-      (!user.premiumExpiresAt || user.premiumExpiresAt > Date.now());
-
-    return {
-      isPremium: isPremiumActive,
-      plan: subscription?.plan ?? null,
-      expiresAt: user.premiumExpiresAt ?? null,
-      cancelAtPeriodEnd: subscription?.cancelAtPeriodEnd ?? false,
-      stripeCustomerId: user.stripeCustomerId,
-      currentPeriodEnd: subscription?.currentPeriodEnd,
-    };
-  },
-});
-
-// Get available plans
-export const getPlans = query({
-  args: {},
-  handler: async () => {
-    return Object.values(PLANS);
-  },
-});
-
-// Get premium benefits
-export const getBenefits = query({
-  args: {},
-  handler: async () => {
-    return PREMIUM_BENEFITS;
-  },
-});
-
-// Update user premium status (called by webhook)
-export const updatePremiumStatus = mutation({
+/**
+ * Sync premium status from Clerk
+ * This can be called from a Clerk webhook handler if needed
+ * to keep the local database in sync with Clerk's subscription status
+ */
+export const syncPremiumStatus = mutation({
   args: {
     clerkId: v.string(),
     isPremium: v.boolean(),
-    premiumExpiresAt: v.optional(v.number()),
-    stripeCustomerId: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     const user = await ctx.db
@@ -122,150 +96,22 @@ export const updatePremiumStatus = mutation({
       .first();
 
     if (!user) {
-      throw new Error("User not found");
+      console.warn(`User not found for premium sync: ${args.clerkId}`);
+      return { success: false, reason: "User not found" };
     }
 
     await ctx.db.patch(user._id, {
       isPremium: args.isPremium,
-      premiumExpiresAt: args.premiumExpiresAt,
-      stripeCustomerId: args.stripeCustomerId ?? user.stripeCustomerId,
     });
 
     return { success: true };
   },
 });
 
-// Create or update subscription record
-export const upsertSubscription = mutation({
-  args: {
-    clerkId: v.string(),
-    stripeSubscriptionId: v.string(),
-    stripeCustomerId: v.string(),
-    status: v.string(),
-    plan: v.string(),
-    currentPeriodStart: v.number(),
-    currentPeriodEnd: v.number(),
-    cancelAtPeriodEnd: v.boolean(),
-  },
-  handler: async (ctx, args) => {
-    // Check for existing subscription
-    const existing = await ctx.db
-      .query("subscriptions")
-      .withIndex("by_clerk_id", (q) => q.eq("clerkId", args.clerkId))
-      .first();
-
-    if (existing) {
-      await ctx.db.patch(existing._id, {
-        stripeSubscriptionId: args.stripeSubscriptionId,
-        stripeCustomerId: args.stripeCustomerId,
-        status: args.status,
-        plan: args.plan,
-        currentPeriodStart: args.currentPeriodStart,
-        currentPeriodEnd: args.currentPeriodEnd,
-        cancelAtPeriodEnd: args.cancelAtPeriodEnd,
-      });
-      return existing._id;
-    }
-
-    return await ctx.db.insert("subscriptions", {
-      clerkId: args.clerkId,
-      stripeSubscriptionId: args.stripeSubscriptionId,
-      stripeCustomerId: args.stripeCustomerId,
-      status: args.status,
-      plan: args.plan,
-      currentPeriodStart: args.currentPeriodStart,
-      currentPeriodEnd: args.currentPeriodEnd,
-      cancelAtPeriodEnd: args.cancelAtPeriodEnd,
-      createdAt: Date.now(),
-    });
-  },
-});
-
-// Get subscription by Stripe subscription ID
-export const getSubscriptionByStripeId = query({
-  args: { stripeSubscriptionId: v.string() },
-  handler: async (ctx, args) => {
-    return await ctx.db
-      .query("subscriptions")
-      .withIndex("by_stripe_subscription", (q) =>
-        q.eq("stripeSubscriptionId", args.stripeSubscriptionId)
-      )
-      .first();
-  },
-});
-
-// Get subscription by Clerk ID
-export const getSubscriptionByClerkId = query({
-  args: { clerkId: v.string() },
-  handler: async (ctx, args) => {
-    return await ctx.db
-      .query("subscriptions")
-      .withIndex("by_clerk_id", (q) => q.eq("clerkId", args.clerkId))
-      .first();
-  },
-});
-
-// Cancel subscription (mark for cancellation at period end)
-export const cancelSubscription = mutation({
-  args: { clerkId: v.string() },
-  handler: async (ctx, args) => {
-    const subscription = await ctx.db
-      .query("subscriptions")
-      .withIndex("by_clerk_id", (q) => q.eq("clerkId", args.clerkId))
-      .first();
-
-    if (!subscription) {
-      return { success: false, reason: "No subscription found" };
-    }
-
-    // Mark for cancellation at period end
-    await ctx.db.patch(subscription._id, {
-      cancelAtPeriodEnd: true,
-    });
-
-    return { success: true };
-  },
-});
-
-// Reactivate a cancelled subscription
-export const reactivateSubscription = mutation({
-  args: { clerkId: v.string() },
-  handler: async (ctx, args) => {
-    const subscription = await ctx.db
-      .query("subscriptions")
-      .withIndex("by_clerk_id", (q) => q.eq("clerkId", args.clerkId))
-      .first();
-
-    if (!subscription) {
-      return { success: false, reason: "No subscription found" };
-    }
-
-    if (subscription.status !== "active") {
-      return { success: false, reason: "Subscription not active" };
-    }
-
-    await ctx.db.patch(subscription._id, {
-      cancelAtPeriodEnd: false,
-    });
-
-    return { success: true };
-  },
-});
-
-// Get user by Stripe customer ID
-export const getUserByStripeCustomerId = query({
-  args: { stripeCustomerId: v.string() },
-  handler: async (ctx, args) => {
-    return await ctx.db
-      .query("users")
-      .withIndex("by_stripe_customer", (q) =>
-        q.eq("stripeCustomerId", args.stripeCustomerId)
-      )
-      .first();
-  },
-});
-
-// Grant monthly premium freezes (called by cron/webhook on subscription renewal)
+/**
+ * Grant monthly premium benefits (streak freezes)
+ * This can be triggered by a Clerk subscription webhook or scheduled job
+ */
 export const grantMonthlyPremiumBenefits = mutation({
   args: { clerkId: v.string() },
   handler: async (ctx, args) => {
@@ -297,7 +143,10 @@ export const grantMonthlyPremiumBenefits = mutation({
   },
 });
 
-// Check coin multiplier for premium users
+/**
+ * Get coin multiplier for a user
+ * Uses local isPremium flag which should be synced with Clerk
+ */
 export const getCoinMultiplier = query({
   args: { clerkId: v.string() },
   handler: async (ctx, args) => {
@@ -310,194 +159,28 @@ export const getCoinMultiplier = query({
       return 1;
     }
 
-    // Check if premium and not expired
-    if (user.isPremium && user.premiumExpiresAt) {
-      if (user.premiumExpiresAt > Date.now()) {
-        return 2;
-      }
-      return 1;
-    }
-
     return user.isPremium === true ? 2 : 1;
   },
 });
 
 // ═══════════════════════════════════════════════════════════════════
-// INTERNAL MUTATIONS (called by webhook handler)
+// DEPRECATED - Kept for reference during migration
+// These functions are no longer needed with Clerk Billing
 // ═══════════════════════════════════════════════════════════════════
 
-// Handle checkout.session.completed
-export const handleCheckoutComplete = internalMutation({
-  args: {
-    clerkId: v.string(),
-    stripeCustomerId: v.string(),
-    stripeSubscriptionId: v.string(),
-    plan: v.string(),
-  },
-  handler: async (ctx, args) => {
-    // Update user premium status
-    const user = await ctx.db
-      .query("users")
-      .withIndex("by_clerk_id", (q) => q.eq("clerkId", args.clerkId))
-      .first();
-
-    if (!user) {
-      throw new Error(`User not found: ${args.clerkId}`);
-    }
-
-    // Set premium expiry based on plan
-    const now = Date.now();
-    const expiresAt =
-      args.plan === "yearly"
-        ? now + 365 * 24 * 60 * 60 * 1000
-        : now + 30 * 24 * 60 * 60 * 1000;
-
-    await ctx.db.patch(user._id, {
-      isPremium: true,
-      premiumExpiresAt: expiresAt,
-      stripeCustomerId: args.stripeCustomerId,
-    });
-
-    // Create subscription record
-    await ctx.db.insert("subscriptions", {
-      clerkId: args.clerkId,
-      stripeSubscriptionId: args.stripeSubscriptionId,
-      stripeCustomerId: args.stripeCustomerId,
-      status: "active",
-      plan: args.plan,
-      currentPeriodStart: now,
-      currentPeriodEnd: expiresAt,
-      cancelAtPeriodEnd: false,
-      createdAt: now,
-    });
-
-    // Grant monthly premium benefits (streak freezes)
-    const MONTHLY_FREE_FREEZES = 3;
-    let streak = await ctx.db
-      .query("streaks")
-      .withIndex("by_clerk_id", (q) => q.eq("clerkId", args.clerkId))
-      .first();
-
-    if (streak) {
-      await ctx.db.patch(streak._id, {
-        streakFreezeCount: streak.streakFreezeCount + MONTHLY_FREE_FREEZES,
-      });
-    }
-
-    return { success: true };
-  },
-});
-
-// Handle customer.subscription.updated
-export const handleSubscriptionUpdate = internalMutation({
-  args: {
-    stripeSubscriptionId: v.string(),
-    status: v.string(),
-    currentPeriodStart: v.number(),
-    currentPeriodEnd: v.number(),
-    cancelAtPeriodEnd: v.boolean(),
-  },
-  handler: async (ctx, args) => {
-    const subscription = await ctx.db
-      .query("subscriptions")
-      .withIndex("by_stripe_subscription", (q) =>
-        q.eq("stripeSubscriptionId", args.stripeSubscriptionId)
-      )
-      .first();
-
-    if (!subscription) {
-      console.error(`Subscription not found: ${args.stripeSubscriptionId}`);
-      return { success: false };
-    }
-
-    // Update subscription record
-    await ctx.db.patch(subscription._id, {
-      status: args.status,
-      currentPeriodStart: args.currentPeriodStart,
-      currentPeriodEnd: args.currentPeriodEnd,
-      cancelAtPeriodEnd: args.cancelAtPeriodEnd,
-    });
-
-    // Update user premium status
-    const user = await ctx.db
-      .query("users")
-      .withIndex("by_clerk_id", (q) => q.eq("clerkId", subscription.clerkId))
-      .first();
-
-    if (user) {
-      const isPremiumActive = args.status === "active";
-      await ctx.db.patch(user._id, {
-        isPremium: isPremiumActive,
-        premiumExpiresAt: isPremiumActive ? args.currentPeriodEnd : user.premiumExpiresAt,
-      });
-    }
-
-    return { success: true };
-  },
-});
-
-// Handle customer.subscription.deleted
-export const handleSubscriptionCanceled = internalMutation({
-  args: {
-    stripeSubscriptionId: v.string(),
-  },
-  handler: async (ctx, args) => {
-    const subscription = await ctx.db
-      .query("subscriptions")
-      .withIndex("by_stripe_subscription", (q) =>
-        q.eq("stripeSubscriptionId", args.stripeSubscriptionId)
-      )
-      .first();
-
-    if (!subscription) {
-      console.error(`Subscription not found: ${args.stripeSubscriptionId}`);
-      return { success: false };
-    }
-
-    // Update subscription status
-    await ctx.db.patch(subscription._id, {
-      status: "canceled",
-    });
-
-    // Update user premium status
-    const user = await ctx.db
-      .query("users")
-      .withIndex("by_clerk_id", (q) => q.eq("clerkId", subscription.clerkId))
-      .first();
-
-    if (user) {
-      await ctx.db.patch(user._id, {
-        isPremium: false,
-      });
-    }
-
-    return { success: true };
-  },
-});
-
-// Handle invoice.payment_failed
-export const handlePaymentFailed = internalMutation({
-  args: {
-    stripeSubscriptionId: v.string(),
-  },
-  handler: async (ctx, args) => {
-    const subscription = await ctx.db
-      .query("subscriptions")
-      .withIndex("by_stripe_subscription", (q) =>
-        q.eq("stripeSubscriptionId", args.stripeSubscriptionId)
-      )
-      .first();
-
-    if (!subscription) {
-      console.error(`Subscription not found: ${args.stripeSubscriptionId}`);
-      return { success: false };
-    }
-
-    // Update subscription status to past_due
-    await ctx.db.patch(subscription._id, {
-      status: "past_due",
-    });
-
-    return { success: true };
-  },
-});
+/*
+REMOVED FUNCTIONS (now handled by Clerk Billing):
+- isPremium: Use Clerk's has({ plan: 'premium_monthly' }) or has({ plan: 'premium_yearly' })
+- getPremiumStatus: Subscription details available in Clerk session
+- updatePremiumStatus: Clerk handles subscription state
+- upsertSubscription: Clerk manages subscriptions
+- getSubscriptionByStripeId: No longer needed
+- getSubscriptionByClerkId: No longer needed
+- cancelSubscription: Use Clerk's UserProfile component
+- reactivateSubscription: Use Clerk's UserProfile component
+- getUserByStripeCustomerId: Clerk links Stripe customers automatically
+- handleCheckoutComplete: Clerk handles checkout webhooks
+- handleSubscriptionUpdate: Clerk handles subscription webhooks
+- handleSubscriptionCanceled: Clerk handles cancellation webhooks
+- handlePaymentFailed: Clerk handles payment failure webhooks
+*/
