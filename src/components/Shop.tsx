@@ -380,9 +380,9 @@ function ShopItemCard({
 
       {/* Item Name */}
       <h4
-        className="mb-1"
+        className="mb-2"
         style={{
-          fontSize: "8px",
+          fontSize: "11px",
           color: "#eef5db",
           whiteSpace: "nowrap",
           overflow: "hidden",
@@ -396,11 +396,11 @@ function ShopItemCard({
       <p
         className="mb-3"
         style={{
-          fontSize: "6px",
-          color: "#9090b0",
-          lineHeight: "1.6",
-          minHeight: "32px",
-          maxHeight: "48px",
+          fontSize: "9px",
+          color: "#b0b0d0",
+          lineHeight: "1.7",
+          minHeight: "48px",
+          maxHeight: "64px",
           overflow: "hidden",
         }}
       >
