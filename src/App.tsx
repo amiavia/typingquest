@@ -258,13 +258,11 @@ function App() {
             )}
 
             {/* Coins with Shop Link */}
-            <button
+            <CoinBalance
+              balance={coinBalance ?? gameState.coins}
+              size="lg"
               onClick={() => setView('shop')}
-              className="flex items-center gap-2 hover:scale-105 transition-transform cursor-pointer"
-              title="Open Shop"
-            >
-              <CoinBalance balance={coinBalance ?? gameState.coins} size="lg" />
-            </button>
+            />
 
             {/* Premium/Upgrade Button */}
             {!isPremium && (
