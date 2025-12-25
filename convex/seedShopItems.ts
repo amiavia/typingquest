@@ -8,7 +8,7 @@ const SHOP_ITEMS = [
   {
     itemId: "pixel-knight",
     name: "Pixel Knight",
-    description: "A brave knight ready for typing adventures",
+    description: "A brave armored warrior ready for typing adventures. Free starter avatar with a keyboard-shaped shield.",
     category: "avatar",
     rarity: "common",
     price: 0, // Free starter avatar
@@ -21,7 +21,7 @@ const SHOP_ITEMS = [
   {
     itemId: "code-wizard",
     name: "Code Wizard",
-    description: "Master of programming spells and keyboard magic",
+    description: "Master of programming spells and keyboard magic. Wields a staff topped with the sacred @ symbol.",
     category: "avatar",
     rarity: "rare",
     price: 200,
@@ -34,7 +34,7 @@ const SHOP_ITEMS = [
   {
     itemId: "speed-ninja",
     name: "Speed Ninja",
-    description: "Swift as the wind, accurate as a shuriken",
+    description: "Swift as the wind, accurate as a shuriken. This stealthy warrior turns keystrokes into lethal precision.",
     category: "avatar",
     rarity: "rare",
     price: 250,
@@ -47,7 +47,7 @@ const SHOP_ITEMS = [
   {
     itemId: "robo-typer",
     name: "Robo Typer",
-    description: "Mechanical precision meets digital soul",
+    description: "Mechanical precision meets digital soul. This friendly robot was built for one purpose: perfect typing.",
     category: "avatar",
     rarity: "common",
     price: 75,
@@ -60,7 +60,7 @@ const SHOP_ITEMS = [
   {
     itemId: "keyboard-cat",
     name: "Keyboard Cat",
-    description: "The internet legend returns to teach you to type",
+    description: "The internet legend returns! This cool cat with headphones and shades is ready to teach you to type in style.",
     category: "avatar",
     rarity: "epic",
     price: 500,
@@ -73,7 +73,7 @@ const SHOP_ITEMS = [
   {
     itemId: "bit-hero",
     name: "Bit Hero",
-    description: "8-bit champion of the typing realm",
+    description: "Classic 8-bit platformer hero vibes. Cape flowing, fist raised, ready to conquer any typing challenge.",
     category: "avatar",
     rarity: "common",
     price: 150,
@@ -86,7 +86,7 @@ const SHOP_ITEMS = [
   {
     itemId: "arcade-ghost",
     name: "Arcade Ghost",
-    description: "Haunting high scores since 1980",
+    description: "Haunting high scores since 1980! This friendly pixel ghost brings classic arcade energy to your typing.",
     category: "avatar",
     rarity: "epic",
     price: 400,
@@ -99,7 +99,7 @@ const SHOP_ITEMS = [
   {
     itemId: "dragon-coder",
     name: "Dragon Coder",
-    description: "Legendary beast of the keyboard mountains",
+    description: "Legendary beast of the keyboard mountains. Breathes code instead of fire. Requires Level 10 to unlock.",
     category: "avatar",
     rarity: "legendary",
     price: 1200,
@@ -117,7 +117,7 @@ const SHOP_ITEMS = [
   {
     itemId: "retro-green",
     name: "Retro Green",
-    description: "Classic terminal green on black",
+    description: "Classic CRT terminal aesthetic with glowing green text on black. Perfect for nostalgic hackers and old-school programmers.",
     category: "theme",
     rarity: "common",
     price: 50,
@@ -130,7 +130,7 @@ const SHOP_ITEMS = [
   {
     itemId: "synthwave",
     name: "Synthwave",
-    description: "Neon grids and sunset gradients",
+    description: "Transport yourself to the 80s with neon grids, sunset gradients, and that iconic retro-futuristic vibe.",
     category: "theme",
     rarity: "rare",
     price: 300,
@@ -143,7 +143,7 @@ const SHOP_ITEMS = [
   {
     itemId: "cyberpunk",
     name: "Cyberpunk",
-    description: "High tech, low life aesthetics",
+    description: "High tech, low life. Neon-lit rain-soaked streets and futuristic cityscapes define this dystopian theme.",
     category: "theme",
     rarity: "epic",
     price: 600,
@@ -156,7 +156,7 @@ const SHOP_ITEMS = [
   {
     itemId: "ocean-depths",
     name: "Ocean Depths",
-    description: "Calming blues of the deep sea",
+    description: "Dive into calming blues and bioluminescent creatures. A peaceful underwater sanctuary for focused typing.",
     category: "theme",
     rarity: "rare",
     price: 200,
@@ -169,7 +169,7 @@ const SHOP_ITEMS = [
   {
     itemId: "forest-zen",
     name: "Forest Zen",
-    description: "Peaceful greens and natural tones",
+    description: "Find your inner peace with gentle greens and natural earth tones. Inspired by Japanese zen gardens.",
     category: "theme",
     rarity: "rare",
     price: 200,
@@ -182,7 +182,7 @@ const SHOP_ITEMS = [
   {
     itemId: "neon-nights",
     name: "Neon Nights",
-    description: "Electric city vibes - Premium exclusive",
+    description: "Electric city vibes with vibrant neon signs and wet street reflections. Premium exclusive for night owls.",
     category: "theme",
     rarity: "legendary",
     price: 450,
@@ -199,7 +199,7 @@ const SHOP_ITEMS = [
   {
     itemId: "wooden-keys",
     name: "Wooden Keys",
-    description: "Warm, natural wood texture",
+    description: "Warm, natural wood grain texture for your keyboard. Brings a cozy, artisanal feel to every keystroke.",
     category: "keyboard-skin",
     rarity: "common",
     price: 100,
@@ -212,7 +212,7 @@ const SHOP_ITEMS = [
   {
     itemId: "neon-glow",
     name: "Neon Glow",
-    description: "Keys that light up the night",
+    description: "Keys that light up the night with vibrant cyan and pink edges. Perfect for late-night typing sessions.",
     category: "keyboard-skin",
     rarity: "rare",
     price: 250,
@@ -225,7 +225,7 @@ const SHOP_ITEMS = [
   {
     itemId: "holographic",
     name: "Holographic",
-    description: "Shimmering rainbow reflections",
+    description: "Shimmering rainbow reflections dance across your keys. A premium iridescent finish that catches every eye.",
     category: "keyboard-skin",
     rarity: "epic",
     price: 550,
@@ -238,7 +238,7 @@ const SHOP_ITEMS = [
   {
     itemId: "mechanical-rgb",
     name: "Mechanical RGB",
-    description: "Gaming-grade RGB effects - Premium exclusive",
+    description: "Gaming-grade floating keycaps with full RGB underglow. The ultimate esports aesthetic for serious typists.",
     category: "keyboard-skin",
     rarity: "legendary",
     price: 400,
@@ -255,11 +255,11 @@ const SHOP_ITEMS = [
   {
     itemId: "xp-boost-2x",
     name: "XP Boost 2x",
-    description: "Double XP for your next lesson",
+    description: "Double your XP gains for the next lesson! Stack the gains and level up faster than ever before.",
     category: "power-up",
     rarity: "common",
     price: 100,
-    imageUrl: "/powerups/xp-boost.png",
+    imageUrl: "/powerups/xp-boost-2x.png",
     isConsumable: true,
     isPremiumOnly: false,
     isFeatured: false,
@@ -268,7 +268,7 @@ const SHOP_ITEMS = [
   {
     itemId: "streak-freeze",
     name: "Streak Freeze",
-    description: "Protect your streak for one day",
+    description: "Life happens! Protect your hard-earned streak for one day. Your progress stays safe even if you miss practice.",
     category: "power-up",
     rarity: "rare",
     price: 75,
@@ -281,7 +281,7 @@ const SHOP_ITEMS = [
   {
     itemId: "hint-token",
     name: "Hint Token",
-    description: "Get a hint during a difficult challenge",
+    description: "Stuck on a tough challenge? Use this token to reveal a helpful hint and keep your momentum going.",
     category: "power-up",
     rarity: "common",
     price: 25,
@@ -294,7 +294,7 @@ const SHOP_ITEMS = [
   {
     itemId: "coin-magnet",
     name: "Coin Magnet",
-    description: "2x coins for 1 hour of play",
+    description: "Attract double the coins for 1 hour! Every keystroke becomes more rewarding with this powerful magnet.",
     category: "power-up",
     rarity: "rare",
     price: 150,

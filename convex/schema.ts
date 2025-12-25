@@ -16,11 +16,18 @@ export default defineSchema({
     isPremium: v.optional(v.boolean()), // PRP-025
     premiumExpiresAt: v.optional(v.number()), // PRP-025
     stripeCustomerId: v.optional(v.string()), // PRP-025
+    // PRP-029: Nickname Privacy System
+    nickname: v.optional(v.string()), // Custom nickname set by user
+    autoNickname: v.optional(v.string()), // System-generated gaming nickname
+    isNicknameCustom: v.optional(v.boolean()), // Whether user set custom nickname
+    nicknameChangedAt: v.optional(v.number()), // When nickname was last changed
     createdAt: v.number(),
     lastLoginAt: v.number(),
   })
     .index("by_clerk_id", ["clerkId"])
-    .index("by_stripe_customer", ["stripeCustomerId"]),
+    .index("by_stripe_customer", ["stripeCustomerId"])
+    .index("by_nickname", ["nickname"])
+    .index("by_auto_nickname", ["autoNickname"]),
 
   // Game state - mirrors useGameState hook structure
   gameState: defineTable({

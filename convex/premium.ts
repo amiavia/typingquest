@@ -194,6 +194,17 @@ export const getSubscriptionByStripeId = query({
   },
 });
 
+// Get subscription by Clerk ID
+export const getSubscriptionByClerkId = query({
+  args: { clerkId: v.string() },
+  handler: async (ctx, args) => {
+    return await ctx.db
+      .query("subscriptions")
+      .withIndex("by_clerk_id", (q) => q.eq("clerkId", args.clerkId))
+      .first();
+  },
+});
+
 // Cancel subscription (mark for cancellation at period end)
 export const cancelSubscription = mutation({
   args: { clerkId: v.string() },

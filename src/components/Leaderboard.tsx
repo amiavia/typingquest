@@ -1,6 +1,7 @@
 import { useQuery } from 'convex/react'
 import { useAuthContext } from '../contexts/AuthContext'
 import { api } from '../../convex/_generated/api'
+import { Avatar } from './Avatar'
 
 interface LeaderboardProps {
   lessonId?: number
@@ -74,15 +75,16 @@ export function Leaderboard({
       {/* Scores table */}
       {scores && scores.length > 0 ? (
         <div className="space-y-2">
-          {scores.map((entry: any) => (
+          {scores.map((entry: any, index: number) => (
             <LeaderboardEntry
-              key={`${entry.userId}-${entry.lessonId || 'global'}`}
+              key={`${index}-${entry.lessonId || 'global'}`}
               rank={entry.rank}
-              username={entry.username}
+              displayName={entry.displayName}
+              avatarId={entry.avatarId}
               score={entry.score}
               accuracy={entry.accuracy}
               lessonId={entry.lessonId}
-              isCurrentUser={userId === entry.userId}
+              isCurrentUser={false}
               showLesson={showGlobal && !lessonId}
             />
           ))}
@@ -119,7 +121,7 @@ export function Leaderboard({
         >
           <LeaderboardEntry
             rank={userRank.rank}
-            username="YOU"
+            displayName="YOU"
             score={userRank.score}
             accuracy={userRank.accuracy}
             isCurrentUser={true}
@@ -150,7 +152,8 @@ export function Leaderboard({
 
 interface LeaderboardEntryProps {
   rank: number
-  username: string
+  displayName: string
+  avatarId?: string
   score: number
   accuracy: number
   lessonId?: number
@@ -160,7 +163,8 @@ interface LeaderboardEntryProps {
 
 function LeaderboardEntry({
   rank,
-  username,
+  displayName,
+  avatarId,
   score,
   accuracy,
   lessonId,
@@ -204,7 +208,10 @@ function LeaderboardEntry({
         {getRankEmoji(rank) || `#${rank}`}
       </div>
 
-      {/* Username */}
+      {/* Avatar */}
+      <Avatar avatarId={avatarId} size="sm" />
+
+      {/* Display Name (PRP-029: nickname, never email) */}
       <div
         className="flex-1 truncate"
         style={{
@@ -213,7 +220,7 @@ function LeaderboardEntry({
           color: isCurrentUser ? '#3bceac' : '#eef5db',
         }}
       >
-        {username}
+        {displayName}
       </div>
 
       {/* Lesson (if showing global) */}

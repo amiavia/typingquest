@@ -15,11 +15,14 @@ import type * as http from "../http.js";
 import type * as leaderboard from "../leaderboard.js";
 import type * as lessonProgress from "../lessonProgress.js";
 import type * as migrations from "../migrations.js";
+import type * as nicknameWords from "../nicknameWords.js";
+import type * as nicknames from "../nicknames.js";
 import type * as premium from "../premium.js";
 import type * as seedShopItems from "../seedShopItems.js";
 import type * as settings from "../settings.js";
 import type * as shop from "../shop.js";
 import type * as streaks from "../streaks.js";
+import type * as stripe from "../stripe.js";
 import type * as users from "../users.js";
 
 import type {
@@ -36,11 +39,14 @@ declare const fullApi: ApiFromModules<{
   leaderboard: typeof leaderboard;
   lessonProgress: typeof lessonProgress;
   migrations: typeof migrations;
+  nicknameWords: typeof nicknameWords;
+  nicknames: typeof nicknames;
   premium: typeof premium;
   seedShopItems: typeof seedShopItems;
   settings: typeof settings;
   shop: typeof shop;
   streaks: typeof streaks;
+  stripe: typeof stripe;
   users: typeof users;
 }>;
 
