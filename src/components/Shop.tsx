@@ -343,23 +343,39 @@ function ShopItemCard({
         </span>
       )}
 
-      {/* Item Image Placeholder */}
+      {/* Item Image */}
       <div
-        className="w-full aspect-square mb-3 border-2 flex items-center justify-center"
+        className="w-full aspect-square mb-3 border-2 flex items-center justify-center overflow-hidden"
         style={{
           borderColor: rarityColor,
           backgroundColor: "rgba(26, 26, 46, 0.5)",
         }}
       >
-        <span style={{ fontSize: "32px" }}>
-          {item.category === "avatar"
-            ? "👤"
-            : item.category === "theme"
-              ? "🎨"
-              : item.category === "keyboard-skin"
-                ? "⌨️"
-                : "⚡"}
-        </span>
+        <img
+          src={item.imageUrl}
+          alt={item.name}
+          className="w-full h-full object-cover"
+          style={{ imageRendering: "pixelated" }}
+          onError={(e) => {
+            // Fallback to emoji if image fails to load
+            const target = e.target as HTMLImageElement;
+            target.style.display = "none";
+            const parent = target.parentElement;
+            if (parent) {
+              const fallback = document.createElement("span");
+              fallback.style.fontSize = "32px";
+              fallback.textContent =
+                item.category === "avatar"
+                  ? "👤"
+                  : item.category === "theme"
+                    ? "🎨"
+                    : item.category === "keyboard-skin"
+                      ? "⌨️"
+                      : "⚡";
+              parent.appendChild(fallback);
+            }
+          }}
+        />
       </div>
 
       {/* Item Name */}
@@ -380,10 +396,11 @@ function ShopItemCard({
       <p
         className="mb-3"
         style={{
-          fontSize: "5px",
-          color: "#4a4a6e",
-          lineHeight: "1.5",
-          height: "20px",
+          fontSize: "6px",
+          color: "#9090b0",
+          lineHeight: "1.6",
+          minHeight: "32px",
+          maxHeight: "48px",
           overflow: "hidden",
         }}
       >
