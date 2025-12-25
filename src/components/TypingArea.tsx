@@ -125,8 +125,8 @@ export function TypingArea({ text: rawText, onComplete, onKeyPress, onComboChang
     return text.split('').map((char, index) => {
       let style: React.CSSProperties = {
         fontFamily: "'Press Start 2P', monospace",
-        fontSize: '24px',
-        padding: '4px 2px',
+        fontSize: '36px',
+        padding: '6px 3px',
         transition: 'all 0.1s',
       };
 
@@ -149,7 +149,7 @@ export function TypingArea({ text: rawText, onComplete, onKeyPress, onComboChang
 
       if (char === ' ') {
         return (
-          <span key={index} style={{ ...style, display: 'inline-block', width: '20px' }}>
+          <span key={index} style={{ ...style, display: 'inline-block', width: '30px' }}>
             {'\u00A0'}
           </span>
         );
@@ -218,10 +218,14 @@ export function TypingArea({ text: rawText, onComplete, onKeyPress, onComboChang
           ${shake ? 'animate-shake' : ''}
         `}
         style={{
-          minHeight: '140px',
+          minHeight: '200px',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
         }}
       >
-        <p className="break-words" style={{ lineHeight: '2.2' }}>
+        <p className="break-words text-center" style={{ lineHeight: '2.4' }}>
           {renderText()}
         </p>
         {isActive && input.length === 0 && (

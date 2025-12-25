@@ -20,6 +20,7 @@ import { StreakDisplay } from './components/StreakDisplay';
 import { PremiumBadge } from './components/PremiumBadge';
 import { useGameState } from './hooks/useGameState';
 import { useLessonProgress } from './hooks/useLessonProgress';
+import { usePremium } from './hooks/usePremium';
 import type { KeyboardLayoutType } from './data/keyboardLayouts';
 import { getHomeRowKeys } from './data/keyboardLayouts';
 import { LEVEL_TIERS, levels, type LevelTier } from './data/levels';
@@ -44,6 +45,7 @@ function App() {
 
   const { userId } = useAuth();
   const gameState = useGameState();
+  const { isPremium } = usePremium();
 
   // Convex queries for new features
   const coinBalance = useQuery(
@@ -52,10 +54,6 @@ function App() {
   );
   const streak = useQuery(
     api.streaks.getStreak,
-    userId ? { clerkId: userId } : "skip"
-  );
-  const isPremium = useQuery(
-    api.premium.isPremium,
     userId ? { clerkId: userId } : "skip"
   );
   const { progress, updateProgress, getCompletedCount, isLessonUnlocked } = useLessonProgress();
@@ -142,6 +140,14 @@ function App() {
     const { level, quizPassed } = tier.unlockRequirement;
     if (quizPassed && !progress[level]?.quizPassed) return false;
     return progress[level]?.completed ?? false;
+  };
+
+  // Premium level gating: levels 10-30 require premium
+  const PREMIUM_LEVEL_START = 10;
+  const requiresPremium = (lessonId: number): boolean => lessonId >= PREMIUM_LEVEL_START;
+  const isLevelAccessible = (lessonId: number): boolean => {
+    if (requiresPremium(lessonId) && !isPremium) return false;
+    return isLessonUnlocked(lessonId);
   };
 
   // Shop and Premium views
@@ -515,8 +521,19 @@ function App() {
                 key={lesson.id}
                 lesson={lesson}
                 progress={progress[lesson.id]}
-                isLocked={!isLessonUnlocked(lesson.id)}
-                onClick={() => isLessonUnlocked(lesson.id) && handleLessonSelect(lesson)}
+                isLocked={!isLevelAccessible(lesson.id)}
+                isPremiumLocked={requiresPremium(lesson.id) && !isPremium}
+                onClick={() => {
+                  // If level requires premium and user isn't premium, show premium page
+                  if (requiresPremium(lesson.id) && !isPremium) {
+                    setView('premium');
+                    return;
+                  }
+                  // Otherwise, normal unlock check
+                  if (isLessonUnlocked(lesson.id)) {
+                    handleLessonSelect(lesson);
+                  }
+                }}
               />
             ))}
           </div>
@@ -555,6 +572,23 @@ function App() {
           >
             TERMS OF SERVICE
           </button>
+        </div>
+
+        {/* Feedback Section */}
+        <div className="mt-8 pixel-box p-4 max-w-md mx-auto">
+          <p style={{ fontFamily: "'Press Start 2P'", fontSize: '8px', color: '#ffd93d', marginBottom: '12px' }}>
+            GOT FEEDBACK OR IDEAS?
+          </p>
+          <p style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: '#eef5db', lineHeight: '2', marginBottom: '12px' }}>
+            WE'D LOVE TO HEAR FROM YOU! SEND US YOUR SUGGESTIONS, BUG REPORTS, OR FEATURE REQUESTS.
+          </p>
+          <a
+            href="mailto:info@typebit8.com"
+            className="inline-block px-4 py-3 border-2 border-[#3bceac] hover:bg-[#3bceac] hover:text-[#1a1a2e] transition-colors"
+            style={{ fontFamily: "'Press Start 2P'", fontSize: '8px', color: '#3bceac' }}
+          >
+            ✉ INFO@TYPEBIT8.COM
+          </a>
         </div>
 
         <p style={{ fontFamily: "'Press Start 2P'", fontSize: '5px', color: '#4a4a6e', marginTop: '16px' }}>
