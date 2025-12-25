@@ -63,11 +63,11 @@ function App() {
   // Use static 30 levels from levels.ts (PRP-027)
   const lessons = levels;
 
-  // Show layout detector on first launch if no layout was previously set
+  // Show layout selector on first launch if no layout was previously set
   useEffect(() => {
     const hasSetLayout = localStorage.getItem('typingQuestLayout');
     if (!hasSetLayout) {
-      setShowLayoutDetector(true);
+      setShowLayoutSelector(true);
     }
   }, []);
 

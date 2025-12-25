@@ -1,6 +1,7 @@
-import { useQuery } from "convex/react";
+import { useState } from "react";
+import { useQuery, useAction, useMutation } from "convex/react";
 import { api } from "../../convex/_generated/api";
-import { useAuth } from "@clerk/clerk-react";
+import { useAuth, useUser } from "@clerk/clerk-react";
 
 interface PremiumPageProps {
   onClose?: () => void;
@@ -8,6 +9,14 @@ interface PremiumPageProps {
 
 export function PremiumPage({ onClose }: PremiumPageProps) {
   const { userId } = useAuth();
+  const { user } = useUser();
+  const [isLoading, setIsLoading] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  // Stripe actions
+  const createCheckoutSession = useAction(api.stripe.createCheckoutSession);
+  const cancelStripeSubscription = useAction(api.stripe.cancelSubscription);
+  const reactivateStripeSubscription = useAction(api.stripe.reactivateSubscription);
 
   // Get plans and benefits
   const plans = useQuery(api.premium.getPlans);
@@ -16,6 +25,88 @@ export function PremiumPage({ onClose }: PremiumPageProps) {
     api.premium.getPremiumStatus,
     userId ? { clerkId: userId } : "skip"
   );
+
+  // Get subscription for Stripe subscription ID
+  const subscription = useQuery(
+    api.premium.getSubscriptionByClerkId,
+    userId ? { clerkId: userId } : "skip"
+  );
+
+  // Handle subscribe click
+  const handleSubscribe = async (plan: "monthly" | "yearly") => {
+    if (!userId || !user?.primaryEmailAddress?.emailAddress) {
+      setError("Please sign in to subscribe");
+      return;
+    }
+
+    setIsLoading(plan);
+    setError(null);
+
+    try {
+      const result = await createCheckoutSession({
+        clerkId: userId,
+        email: user.primaryEmailAddress.emailAddress,
+        plan,
+        successUrl: `${window.location.origin}/?premium=success`,
+        cancelUrl: `${window.location.origin}/?premium=cancelled`,
+      });
+
+      if (result.url) {
+        window.location.href = result.url;
+      }
+    } catch (err: any) {
+      console.error("Checkout error:", err);
+      setError(err.message || "Failed to start checkout");
+    } finally {
+      setIsLoading(null);
+    }
+  };
+
+  // Handle cancel subscription
+  const handleCancel = async () => {
+    if (!subscription?.stripeSubscriptionId) {
+      setError("No subscription found");
+      return;
+    }
+
+    setIsLoading("cancel");
+    setError(null);
+
+    try {
+      await cancelStripeSubscription({
+        stripeSubscriptionId: subscription.stripeSubscriptionId,
+      });
+      // The webhook will update the database
+    } catch (err: any) {
+      console.error("Cancel error:", err);
+      setError(err.message || "Failed to cancel subscription");
+    } finally {
+      setIsLoading(null);
+    }
+  };
+
+  // Handle reactivate subscription
+  const handleReactivate = async () => {
+    if (!subscription?.stripeSubscriptionId) {
+      setError("No subscription found");
+      return;
+    }
+
+    setIsLoading("reactivate");
+    setError(null);
+
+    try {
+      await reactivateStripeSubscription({
+        stripeSubscriptionId: subscription.stripeSubscriptionId,
+      });
+      // The webhook will update the database
+    } catch (err: any) {
+      console.error("Reactivate error:", err);
+      setError(err.message || "Failed to reactivate subscription");
+    } finally {
+      setIsLoading(null);
+    }
+  };
 
   // Icon mapping
   const iconMap: Record<string, string> = {
@@ -62,6 +153,19 @@ export function PremiumPage({ onClose }: PremiumPageProps) {
         <div /> {/* Spacer */}
       </header>
 
+      {/* Error Message */}
+      {error && (
+        <div
+          className="max-w-2xl mx-auto mb-4 p-4 text-center"
+          style={{
+            background: "rgba(255, 107, 155, 0.2)",
+            border: "2px solid #ff6b9d",
+          }}
+        >
+          <p style={{ fontSize: "8px", color: "#ff6b9d" }}>{error.toUpperCase()}</p>
+        </div>
+      )}
+
       {/* Already Premium */}
       {premiumStatus?.isPremium && (
         <section
@@ -99,17 +203,21 @@ export function PremiumPage({ onClose }: PremiumPageProps) {
 
           {premiumStatus.cancelAtPeriodEnd ? (
             <button
-              className="mt-4 px-4 py-2 border-2 border-[#0ead69] hover:bg-[#0ead69] hover:text-[#1a1a2e] transition-colors"
+              onClick={handleReactivate}
+              disabled={isLoading === "reactivate"}
+              className="mt-4 px-4 py-2 border-2 border-[#0ead69] hover:bg-[#0ead69] hover:text-[#1a1a2e] transition-colors disabled:opacity-50"
               style={{ fontSize: "8px", color: "#0ead69" }}
             >
-              REACTIVATE SUBSCRIPTION
+              {isLoading === "reactivate" ? "REACTIVATING..." : "REACTIVATE SUBSCRIPTION"}
             </button>
           ) : (
             <button
-              className="mt-4 px-4 py-2 border-2 border-[#ff6b9d] hover:bg-[#ff6b9d] hover:text-[#1a1a2e] transition-colors"
+              onClick={handleCancel}
+              disabled={isLoading === "cancel"}
+              className="mt-4 px-4 py-2 border-2 border-[#ff6b9d] hover:bg-[#ff6b9d] hover:text-[#1a1a2e] transition-colors disabled:opacity-50"
               style={{ fontSize: "8px", color: "#ff6b9d" }}
             >
-              CANCEL SUBSCRIPTION
+              {isLoading === "cancel" ? "CANCELLING..." : "CANCEL SUBSCRIPTION"}
             </button>
           )}
         </section>
@@ -213,10 +321,12 @@ export function PremiumPage({ onClose }: PremiumPageProps) {
                 )}
 
                 <button
-                  className="w-full py-3 border-4 border-[#ffd93d] hover:bg-[#ffd93d] hover:text-[#1a1a2e] transition-colors"
+                  onClick={() => handleSubscribe(plan.id as "monthly" | "yearly")}
+                  disabled={isLoading === plan.id}
+                  className="w-full py-3 border-4 border-[#ffd93d] hover:bg-[#ffd93d] hover:text-[#1a1a2e] transition-colors disabled:opacity-50"
                   style={{ fontSize: "10px", color: "#ffd93d" }}
                 >
-                  SUBSCRIBE
+                  {isLoading === plan.id ? "LOADING..." : "SUBSCRIBE"}
                 </button>
               </div>
             ))}

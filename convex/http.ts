@@ -2,11 +2,12 @@
  * PRP-027 Task 5.6: Stripe Webhook Handler
  *
  * HTTP endpoint for processing Stripe webhook events.
+ * Uses Stripe SDK for signature verification.
  */
 
 import { httpRouter } from "convex/server";
 import { httpAction } from "./_generated/server";
-import { internal } from "./_generated/api";
+import { internal, api } from "./_generated/api";
 
 const http = httpRouter();
 
@@ -24,8 +25,18 @@ http.route({
     }
 
     try {
-      // Parse the event (in production, verify signature with Stripe SDK)
-      const event = JSON.parse(body);
+      // Verify webhook signature using Stripe SDK
+      const verification = await ctx.runAction(api.stripe.verifyWebhookSignature, {
+        payload: body,
+        signature,
+      });
+
+      if (!verification.valid) {
+        console.error("Webhook signature verification failed:", verification.error);
+        return new Response("Invalid signature", { status: 401 });
+      }
+
+      const event = verification.event;
 
       // Handle different event types
       switch (event.type) {

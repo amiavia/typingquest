@@ -2,6 +2,7 @@ import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
 
 // Get top scores for a lesson
+// PRP-029: Returns displayName (nickname) instead of email
 export const getTopScores = query({
   args: {
     lessonId: v.number(),
@@ -14,18 +15,29 @@ export const getTopScores = query({
       .order("desc")
       .take(limit);
 
-    return scores.map((s, index) => ({
-      rank: index + 1,
-      username: s.username,
-      score: s.score,
-      accuracy: s.accuracy,
-      timestamp: s.timestamp,
-      userId: s.userId,
-    }));
+    // Fetch user details for each score to get current nickname and avatar
+    const enrichedScores = await Promise.all(
+      scores.map(async (s, index) => {
+        const user = await ctx.db.get(s.userId);
+        return {
+          rank: index + 1,
+          // PRP-029: Use nickname, NEVER expose email
+          displayName: user?.nickname || user?.autoNickname || s.username || "Anonymous",
+          avatarId: user?.avatarId,
+          score: s.score,
+          accuracy: s.accuracy,
+          timestamp: s.timestamp,
+          // Note: We keep lessonId for reference but NOT email or clerkId
+        };
+      })
+    );
+
+    return enrichedScores;
   },
 });
 
 // Get global top scores across all lessons
+// PRP-029: Returns displayName (nickname) instead of email
 export const getGlobalTopScores = query({
   args: {
     limit: v.optional(v.number()),
@@ -39,19 +51,30 @@ export const getGlobalTopScores = query({
       .sort((a, b) => b.score - a.score)
       .slice(0, limit);
 
-    return sortedScores.map((s, index) => ({
-      rank: index + 1,
-      username: s.username,
-      score: s.score,
-      accuracy: s.accuracy,
-      lessonId: s.lessonId,
-      timestamp: s.timestamp,
-      userId: s.userId,
-    }));
+    // Fetch user details for each score to get current nickname and avatar
+    const enrichedScores = await Promise.all(
+      sortedScores.map(async (s, index) => {
+        const user = await ctx.db.get(s.userId);
+        return {
+          rank: index + 1,
+          // PRP-029: Use nickname, NEVER expose email
+          displayName: user?.nickname || user?.autoNickname || s.username || "Anonymous",
+          avatarId: user?.avatarId,
+          score: s.score,
+          accuracy: s.accuracy,
+          lessonId: s.lessonId,
+          timestamp: s.timestamp,
+          // Note: NOT exposing email or clerkId
+        };
+      })
+    );
+
+    return enrichedScores;
   },
 });
 
 // Submit a score to the leaderboard
+// PRP-029: Uses nickname for username field, NEVER stores email
 export const submitScore = mutation({
   args: {
     userId: v.id("users"),
@@ -64,7 +87,8 @@ export const submitScore = mutation({
     const user = await ctx.db.get(userId);
     if (!user) throw new Error("User not found");
 
-    const username = user.username || user.email || "Anonymous";
+    // PRP-029: Use nickname, NEVER use email in leaderboard
+    const displayName = user.nickname || user.autoNickname || user.username || "Anonymous";
 
     // Check if user already has a score for this lesson
     const existing = await ctx.db
@@ -81,7 +105,7 @@ export const submitScore = mutation({
           score,
           accuracy,
           timestamp: Date.now(),
-          username, // Update in case username changed
+          username: displayName, // Update in case nickname changed
         });
         return { updated: true, previousScore: existing.score };
       }
@@ -95,7 +119,7 @@ export const submitScore = mutation({
       score,
       accuracy,
       timestamp: Date.now(),
-      username,
+      username: displayName,
     });
 
     return { updated: true, previousScore: null };

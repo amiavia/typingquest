@@ -6,11 +6,12 @@ import {
   useClerk,
   useUser,
 } from '@clerk/clerk-react';
-import { useQuery } from 'convex/react';
+import { useQuery, useMutation } from 'convex/react';
 import { api } from '../../convex/_generated/api';
 import { useAuthContext } from '../contexts/AuthContext';
 import { Avatar } from './Avatar';
 import { AvatarSelector } from './AvatarSelector';
+import { NicknameEditor } from './NicknameEditor';
 
 interface UserButtonProps {
   userLevel?: number;
@@ -24,6 +25,7 @@ export function UserButton({ userLevel = 1 }: UserButtonProps) {
 
   const [showMenu, setShowMenu] = useState(false);
   const [showAvatarSelector, setShowAvatarSelector] = useState(false);
+  const [showNicknameEditor, setShowNicknameEditor] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
   // Close menu when clicking outside
@@ -173,6 +175,21 @@ export function UserButton({ userLevel = 1 }: UserButtonProps) {
               <button
                 onClick={() => {
                   setShowMenu(false);
+                  setShowNicknameEditor(true);
+                }}
+                className="w-full px-4 py-3 text-left hover:bg-[#2a2a3e] transition-colors flex items-center gap-2"
+                style={{
+                  fontFamily: "'Press Start 2P'",
+                  fontSize: '6px',
+                  color: '#3bceac',
+                }}
+              >
+                <span>✏️</span> EDIT NICKNAME
+              </button>
+
+              <button
+                onClick={() => {
+                  setShowMenu(false);
                   signOut();
                 }}
                 className="w-full px-4 py-3 text-left hover:bg-[#2a2a3e] transition-colors flex items-center gap-2 border-t"
@@ -194,6 +211,12 @@ export function UserButton({ userLevel = 1 }: UserButtonProps) {
           isOpen={showAvatarSelector}
           onClose={() => setShowAvatarSelector(false)}
           userLevel={userLevel}
+        />
+
+        {/* Nickname Editor Modal */}
+        <NicknameEditor
+          isOpen={showNicknameEditor}
+          onClose={() => setShowNicknameEditor(false)}
         />
       </SignedIn>
     </div>
