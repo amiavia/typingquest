@@ -17,9 +17,7 @@ const getStripe = () => {
   if (!secretKey) {
     throw new Error("STRIPE_SECRET_KEY environment variable is not set");
   }
-  return new Stripe(secretKey, {
-    apiVersion: "2024-12-18.acacia",
-  });
+  return new Stripe(secretKey);
 };
 
 /**
@@ -33,7 +31,7 @@ export const createCheckoutSession = action({
     successUrl: v.string(),
     cancelUrl: v.string(),
   },
-  handler: async (ctx, args) => {
+  handler: async (_ctx, args) => {
     const stripe = getStripe();
 
     // Get the correct price ID based on plan
@@ -86,7 +84,7 @@ export const createPortalSession = action({
     stripeCustomerId: v.string(),
     returnUrl: v.string(),
   },
-  handler: async (ctx, args) => {
+  handler: async (_ctx, args) => {
     const stripe = getStripe();
 
     const session = await stripe.billingPortal.sessions.create({
@@ -107,7 +105,7 @@ export const cancelSubscription = action({
   args: {
     stripeSubscriptionId: v.string(),
   },
-  handler: async (ctx, args) => {
+  handler: async (_ctx, args) => {
     const stripe = getStripe();
 
     const subscription = await stripe.subscriptions.update(
@@ -115,7 +113,7 @@ export const cancelSubscription = action({
       {
         cancel_at_period_end: true,
       }
-    );
+    ) as any;
 
     return {
       success: true,
@@ -132,7 +130,7 @@ export const reactivateSubscription = action({
   args: {
     stripeSubscriptionId: v.string(),
   },
-  handler: async (ctx, args) => {
+  handler: async (_ctx, args) => {
     const stripe = getStripe();
 
     const subscription = await stripe.subscriptions.update(
@@ -158,7 +156,7 @@ export const verifyWebhookSignature = action({
     payload: v.string(),
     signature: v.string(),
   },
-  handler: async (ctx, args) => {
+  handler: async (_ctx, args) => {
     const stripe = getStripe();
     const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
 

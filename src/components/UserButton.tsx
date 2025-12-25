@@ -6,7 +6,7 @@ import {
   useClerk,
   useUser,
 } from '@clerk/clerk-react';
-import { useQuery, useMutation } from 'convex/react';
+import { useQuery } from 'convex/react';
 import { api } from '../../convex/_generated/api';
 import { useAuthContext } from '../contexts/AuthContext';
 import { Avatar } from './Avatar';

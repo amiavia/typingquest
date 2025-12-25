@@ -36,20 +36,23 @@ http.route({
         return new Response("Invalid signature", { status: 401 });
       }
 
-      const event = verification.event;
+      const event = verification.event as any;
+      if (!event) {
+        return new Response("No event in verification", { status: 400 });
+      }
 
       // Handle different event types
       switch (event.type) {
         case "checkout.session.completed": {
-          const session = event.data.object;
+          const session = event.data.object as any;
           const clerkId = session.metadata?.clerkId;
           const plan = session.metadata?.plan;
 
-          if (clerkId && plan) {
+          if (clerkId && plan && session.customer && session.subscription) {
             await ctx.runMutation(internal.premium.handleCheckoutComplete, {
               clerkId,
-              stripeCustomerId: session.customer,
-              stripeSubscriptionId: session.subscription,
+              stripeCustomerId: String(session.customer),
+              stripeSubscriptionId: String(session.subscription),
               plan,
             });
           }
@@ -57,19 +60,19 @@ http.route({
         }
 
         case "customer.subscription.updated": {
-          const subscription = event.data.object;
+          const subscription = event.data.object as any;
           await ctx.runMutation(internal.premium.handleSubscriptionUpdate, {
             stripeSubscriptionId: subscription.id,
             status: subscription.status,
-            currentPeriodStart: subscription.current_period_start * 1000,
-            currentPeriodEnd: subscription.current_period_end * 1000,
-            cancelAtPeriodEnd: subscription.cancel_at_period_end,
+            currentPeriodStart: (subscription.current_period_start ?? 0) * 1000,
+            currentPeriodEnd: (subscription.current_period_end ?? 0) * 1000,
+            cancelAtPeriodEnd: subscription.cancel_at_period_end ?? false,
           });
           break;
         }
 
         case "customer.subscription.deleted": {
-          const subscription = event.data.object;
+          const subscription = event.data.object as any;
           await ctx.runMutation(internal.premium.handleSubscriptionCanceled, {
             stripeSubscriptionId: subscription.id,
           });
@@ -77,9 +80,9 @@ http.route({
         }
 
         case "invoice.payment_failed": {
-          const invoice = event.data.object;
+          const invoice = event.data.object as any;
           const subscriptionId = invoice.subscription;
-          if (subscriptionId) {
+          if (subscriptionId && typeof subscriptionId === "string") {
             await ctx.runMutation(internal.premium.handlePaymentFailed, {
               stripeSubscriptionId: subscriptionId,
             });
