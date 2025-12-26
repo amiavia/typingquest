@@ -60,8 +60,9 @@ export interface AnalyticsProperties {
   referrer?: string;
 }
 
-// Simple analytics implementation
-// In production, replace with actual analytics provider (Mixpanel, Amplitude, etc.)
+import { trackEvent as gtagTrackEvent, setUserId as gtagSetUserId } from "./gtag";
+
+// Simple analytics implementation with Google Analytics integration
 class Analytics {
   private enabled: boolean;
   private userId: string | null;
@@ -83,6 +84,8 @@ class Analytics {
 
   setUserId(userId: string | null): void {
     this.userId = userId;
+    // Also set user ID in Google Analytics for cross-device tracking
+    gtagSetUserId(userId);
   }
 
   track(event: AnalyticsEvent, properties?: AnalyticsProperties): void {
@@ -104,8 +107,8 @@ class Analytics {
       console.log("[Analytics]", eventData);
     }
 
-    // In production, send to analytics backend
-    // this.sendToBackend(eventData);
+    // Send to Google Analytics
+    gtagTrackEvent(event, properties as Record<string, unknown>);
   }
 
   // Track page views

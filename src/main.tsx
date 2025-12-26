@@ -11,6 +11,10 @@ import { ThemeProvider } from './providers/ThemeProvider'
 import { KeyboardSkinProvider } from './providers/KeyboardSkinProvider'
 import { PowerUpProvider } from './providers/PowerUpProvider'
 import { KeyboardLayoutProvider } from './providers/KeyboardLayoutProvider'
+import { initializeGoogleTags } from './lib/gtag'
+
+// Initialize Google Analytics & Ads (for visitor tracking and retargeting)
+initializeGoogleTags()
 
 // Initialize Convex client
 const convexUrl = import.meta.env.VITE_CONVEX_URL

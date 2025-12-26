@@ -129,7 +129,7 @@ function PrivacyPolicy() {
           marginBottom: '24px',
         }}
       >
-        Last updated: December 25, 2025
+        Last updated: December 27, 2025
       </p>
 
       <Section title="1. INTRODUCTION">
@@ -200,6 +200,14 @@ function PrivacyPolicy() {
             Vercel (hosting)
           </li>
           <li>
+            <strong>Analytics Providers:</strong> Google Analytics (GA4) for understanding how
+            users interact with our service and improving user experience
+          </li>
+          <li>
+            <strong>Advertising Partners:</strong> Google Ads for displaying relevant
+            advertisements to visitors who have previously used our service (retargeting)
+          </li>
+          <li>
             <strong>Public Leaderboards:</strong> Your username and scores may appear on public
             leaderboards if you achieve a top ranking
           </li>
@@ -229,6 +237,21 @@ function PrivacyPolicy() {
           We use local storage to save your keyboard layout preferences and session information.
           Our authentication provider (Clerk) uses cookies for session management. These are
           essential for the service to function properly.
+        </p>
+        <p className="mt-4">
+          We also use cookies from Google Analytics and Google Ads to analyze website traffic and
+          deliver personalized advertisements. These cookies collect information about your
+          browsing behavior and may be used to show you relevant ads on other websites you visit.
+          You can opt out of personalized advertising by visiting{' '}
+          <a
+            href="https://adssettings.google.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-[#3bceac] hover:underline"
+          >
+            Google Ads Settings
+          </a>
+          .
         </p>
       </Section>
 
