@@ -240,3 +240,111 @@ body {
   color: var(--color-retro-yellow);
   text-shadow: 0 0 10px var(--color-retro-yellow);
 }
+
+/* ============================================
+   MUTED ACCESSIBILITY MODE
+   Cream/stone palette for visual sensitivity
+   Inspired by draiv-spark light mode
+   ============================================ */
+
+[data-accessibility-mode="muted"] {
+  /* Override CSS custom properties for muted/calm mode */
+  --bg-primary: #f5f3ef;
+  --bg-secondary: #e8e4dd;
+  --bg-tertiary: #dbd6cc;
+  --text-primary: #2d2a26;
+  --text-secondary: #5a524a;
+  --text-muted: #8a8279;
+  --accent-yellow: #b5a078;
+  --accent-cyan: #7a9a8a;
+  --accent-green: #6a8a6a;
+  --accent-pink: #a08090;
+  --accent-red: #9a6a6a;
+  --border-color: #a09a8a;
+  --key-bg: #e8e4dd;
+  --key-border: #b5a078;
+  --key-text: #2d2a26;
+  --key-highlight: #c5b088;
+
+  /* Override Tailwind theme colors for muted mode */
+  --color-retro-black: #2d2a26;
+  --color-retro-dark: #3d3a36;
+  --color-retro-purple: #5a524a;
+  --color-retro-blue: #6a7a8a;
+  --color-retro-cyan: #7a9a8a;
+  --color-retro-green: #6a8a6a;
+  --color-retro-yellow: #b5a078;
+  --color-retro-orange: #a08060;
+  --color-retro-red: #9a6a6a;
+  --color-retro-pink: #a08090;
+  --color-retro-white: #2d2a26;
+}
+
+/* Muted mode body & root background */
+[data-accessibility-mode="muted"] body,
+[data-accessibility-mode="muted"] #root {
+  background: #f5f3ef;
+}
+
+/* Reduce/disable glow effects in muted mode */
+[data-accessibility-mode="muted"] .text-glow-cyan,
+[data-accessibility-mode="muted"] .text-glow-yellow,
+[data-accessibility-mode="muted"] .text-glow-green {
+  text-shadow: none;
+}
+
+/* Soften animations in muted mode */
+[data-accessibility-mode="muted"] * {
+  animation-duration: 1.5s !important;
+}
+
+[data-accessibility-mode="muted"] .animate-blink {
+  animation: none;
+  opacity: 1;
+}
+
+/* Softer box shadows in muted mode */
+[data-accessibility-mode="muted"] .pixel-box {
+  background: var(--bg-secondary);
+  border-color: var(--border-color);
+  box-shadow:
+    4px 4px 0 rgba(0,0,0,0.1),
+    inset -2px -2px 0 rgba(0,0,0,0.05),
+    inset 2px 2px 0 rgba(255,255,255,0.3);
+}
+
+[data-accessibility-mode="muted"] .pixel-btn {
+  background: var(--accent-cyan);
+  color: var(--text-primary);
+  box-shadow:
+    3px 3px 0 rgba(0,0,0,0.15),
+    inset -2px -2px 0 rgba(0,0,0,0.1),
+    inset 2px 2px 0 rgba(255,255,255,0.2);
+}
+
+/* Star styling in muted mode */
+[data-accessibility-mode="muted"] .star.filled {
+  color: var(--accent-yellow);
+  text-shadow: none;
+}
+
+/* Scanlines - lighter in muted mode */
+[data-accessibility-mode="muted"] .scanlines::after {
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.02),
+    rgba(0, 0, 0, 0.02) 1px,
+    transparent 1px,
+    transparent 2px
+  );
+}
+
+/* Pulse glow animation - subtle in muted mode */
+[data-accessibility-mode="muted"] .animate-pulse-glow {
+  animation-name: pulse-glow-muted;
+}
+
+@keyframes pulse-glow-muted {
+  0%, 100% { box-shadow: 0 0 2px currentColor; }
+  50% { box-shadow: 0 0 5px currentColor; }
+}

@@ -11,6 +11,7 @@ import { ThemeProvider } from './providers/ThemeProvider'
 import { KeyboardSkinProvider } from './providers/KeyboardSkinProvider'
 import { PowerUpProvider } from './providers/PowerUpProvider'
 import { KeyboardLayoutProvider } from './providers/KeyboardLayoutProvider'
+import { AccessibilityModeProvider } from './providers/AccessibilityModeProvider'
 
 // Initialize Convex client
 const convexUrl = import.meta.env.VITE_CONVEX_URL
@@ -24,27 +25,33 @@ function Providers({ children }: { children: React.ReactNode }) {
   // If Convex/Clerk not configured, render without auth
   if (!convex || !clerkPubKey) {
     console.warn('Convex or Clerk not configured. Running in local-only mode.')
-    return <>{children}</>
+    return (
+      <AccessibilityModeProvider>
+        {children}
+      </AccessibilityModeProvider>
+    )
   }
 
   return (
-    <ClerkProvider publishableKey={clerkPubKey}>
-      <ConvexProviderWithClerk client={convex} useAuth={useAuth}>
-        <AuthProvider>
-          <PremiumSyncProvider>
-            <ThemeProvider>
-              <KeyboardSkinProvider>
-                <KeyboardLayoutProvider>
-                  <PowerUpProvider>
-                    {children}
-                  </PowerUpProvider>
-                </KeyboardLayoutProvider>
-              </KeyboardSkinProvider>
-            </ThemeProvider>
-          </PremiumSyncProvider>
-        </AuthProvider>
-      </ConvexProviderWithClerk>
-    </ClerkProvider>
+    <AccessibilityModeProvider>
+      <ClerkProvider publishableKey={clerkPubKey}>
+        <ConvexProviderWithClerk client={convex} useAuth={useAuth}>
+          <AuthProvider>
+            <PremiumSyncProvider>
+              <ThemeProvider>
+                <KeyboardSkinProvider>
+                  <KeyboardLayoutProvider>
+                    <PowerUpProvider>
+                      {children}
+                    </PowerUpProvider>
+                  </KeyboardLayoutProvider>
+                </KeyboardSkinProvider>
+              </ThemeProvider>
+            </PremiumSyncProvider>
+          </AuthProvider>
+        </ConvexProviderWithClerk>
+      </ClerkProvider>
+    </AccessibilityModeProvider>
   )
 }
 

@@ -8,6 +8,7 @@ import { DailyChallengeButton } from './components/DailyChallengeButton';
 import { RetroLoadingScreen } from './components/RetroLoadingScreen';
 import { useKeyboardLayout } from './providers/KeyboardLayoutProvider';
 import { UserButton } from './components/UserButton';
+import { AccessibilityModeToggle } from './components/AccessibilityModeToggle';
 import { GuestBanner } from './components/GuestBanner';
 import { MigrationModal } from './components/MigrationModal';
 import { Leaderboard } from './components/Leaderboard';
@@ -305,6 +306,9 @@ function App() {
                 />
               </div>
             </div>
+
+            {/* Accessibility Mode Toggle */}
+            <AccessibilityModeToggle />
 
             {/* User Button (includes Avatar) */}
             <UserButton userLevel={gameState.level} />
