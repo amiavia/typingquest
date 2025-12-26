@@ -21,7 +21,6 @@ const PREMIUM_BENEFITS = [
   { icon: "🏪", title: "EXCLUSIVE ITEMS", description: "Access premium-only shop items" },
   { icon: "👑", title: "PREMIUM BADGE", description: "Show off your supporter status" },
   { icon: "⚡", title: "PRIORITY SUPPORT", description: "Get help faster" },
-  { icon: "🚫", title: "AD-FREE", description: "No distractions while typing" },
 ];
 
 export function PremiumPage({ onClose }: PremiumPageProps) {
@@ -140,6 +139,161 @@ export function PremiumPage({ onClose }: PremiumPageProps) {
           ))}
         </div>
       </section>
+
+      {/* Learning Journey - Motivational Section */}
+      {!isPremium && (
+        <section className="max-w-3xl mx-auto mb-8">
+          <div
+            className="relative overflow-hidden p-6"
+            style={{
+              background: "linear-gradient(135deg, #0f3460 0%, #16213e 50%, #1a1a2e 100%)",
+              border: "4px solid #3bceac",
+              boxShadow: "0 0 40px rgba(59,206,172,0.2), inset 0 0 60px rgba(59,206,172,0.05)",
+            }}
+          >
+            {/* Decorative corner elements */}
+            <div
+              className="absolute top-0 left-0 w-16 h-16"
+              style={{
+                background: "linear-gradient(135deg, #3bceac 0%, transparent 50%)",
+                opacity: 0.3,
+              }}
+            />
+            <div
+              className="absolute bottom-0 right-0 w-16 h-16"
+              style={{
+                background: "linear-gradient(315deg, #3bceac 0%, transparent 50%)",
+                opacity: 0.3,
+              }}
+            />
+
+            <h2
+              className="text-center mb-2"
+              style={{ fontSize: "12px", color: "#3bceac" }}
+            >
+              ⌨️ YOUR TYPING JOURNEY ⌨️
+            </h2>
+            <p
+              className="text-center mb-6"
+              style={{ fontSize: "7px", color: "#eef5db", opacity: 0.8 }}
+            >
+              MASTER 10-FINGER TOUCH TYPING IN JUST A FEW MONTHS
+            </p>
+
+            {/* Journey Timeline */}
+            <div className="relative">
+              {/* Progress line */}
+              <div
+                className="absolute left-1/2 top-0 bottom-0 w-1 -translate-x-1/2 hidden md:block"
+                style={{
+                  background: "linear-gradient(180deg, #3bceac 0%, #ffd93d 50%, #f97316 100%)",
+                  opacity: 0.5,
+                }}
+              />
+
+              <div className="grid md:grid-cols-4 gap-4">
+                {/* Week 1-2 */}
+                <div
+                  className="text-center p-4 relative"
+                  style={{
+                    background: "rgba(59,206,172,0.1)",
+                    border: "2px solid rgba(59,206,172,0.3)",
+                  }}
+                >
+                  <div
+                    className="inline-block px-3 py-1 mb-2"
+                    style={{ background: "#3bceac", color: "#1a1a2e", fontSize: "6px" }}
+                  >
+                    WEEK 1-2
+                  </div>
+                  <p style={{ fontSize: "16px", marginBottom: "4px" }}>🌱</p>
+                  <p style={{ fontSize: "8px", color: "#3bceac" }}>15-20 WPM</p>
+                  <p style={{ fontSize: "6px", color: "#eef5db", marginTop: "4px", lineHeight: "1.6" }}>
+                    BUILDING MUSCLE MEMORY
+                  </p>
+                </div>
+
+                {/* Month 1-2 */}
+                <div
+                  className="text-center p-4 relative"
+                  style={{
+                    background: "rgba(59,206,172,0.15)",
+                    border: "2px solid rgba(59,206,172,0.4)",
+                  }}
+                >
+                  <div
+                    className="inline-block px-3 py-1 mb-2"
+                    style={{ background: "#6ee7b7", color: "#1a1a2e", fontSize: "6px" }}
+                  >
+                    MONTH 1-2
+                  </div>
+                  <p style={{ fontSize: "16px", marginBottom: "4px" }}>🌿</p>
+                  <p style={{ fontSize: "8px", color: "#6ee7b7" }}>30-40 WPM</p>
+                  <p style={{ fontSize: "6px", color: "#eef5db", marginTop: "4px", lineHeight: "1.6" }}>
+                    COMFORTABLE TYPING
+                  </p>
+                </div>
+
+                {/* Month 3-6 */}
+                <div
+                  className="text-center p-4 relative"
+                  style={{
+                    background: "rgba(255,217,61,0.15)",
+                    border: "2px solid rgba(255,217,61,0.4)",
+                  }}
+                >
+                  <div
+                    className="inline-block px-3 py-1 mb-2"
+                    style={{ background: "#ffd93d", color: "#1a1a2e", fontSize: "6px" }}
+                  >
+                    MONTH 3-6
+                  </div>
+                  <p style={{ fontSize: "16px", marginBottom: "4px" }}>🌳</p>
+                  <p style={{ fontSize: "8px", color: "#ffd93d" }}>50-60 WPM</p>
+                  <p style={{ fontSize: "6px", color: "#eef5db", marginTop: "4px", lineHeight: "1.6" }}>
+                    PROFICIENT TYPIST
+                  </p>
+                </div>
+
+                {/* Month 6-12 */}
+                <div
+                  className="text-center p-4 relative"
+                  style={{
+                    background: "rgba(249,115,22,0.15)",
+                    border: "2px solid rgba(249,115,22,0.4)",
+                  }}
+                >
+                  <div
+                    className="inline-block px-3 py-1 mb-2"
+                    style={{ background: "#f97316", color: "#1a1a2e", fontSize: "6px" }}
+                  >
+                    MONTH 6-12
+                  </div>
+                  <p style={{ fontSize: "16px", marginBottom: "4px" }}>🏆</p>
+                  <p style={{ fontSize: "8px", color: "#f97316" }}>70+ WPM</p>
+                  <p style={{ fontSize: "6px", color: "#eef5db", marginTop: "4px", lineHeight: "1.6" }}>
+                    TYPING MASTER
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Pro tip */}
+            <div
+              className="mt-6 p-3 text-center"
+              style={{
+                background: "rgba(255,217,61,0.1)",
+                border: "2px dashed rgba(255,217,61,0.4)",
+              }}
+            >
+              <p style={{ fontSize: "6px", color: "#ffd93d", lineHeight: "1.8" }}>
+                💡 PRO TIP: 15-30 MIN DAILY PRACTICE BEATS OCCASIONAL LONG SESSIONS.<br />
+                CONSISTENCY IS KEY - NEVER LOOK AT THE KEYBOARD!
+              </p>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Pricing Table - Only show if not premium */}
       {!isPremium && (

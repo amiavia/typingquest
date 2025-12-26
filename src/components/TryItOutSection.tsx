@@ -110,6 +110,8 @@ export function TryItOutSection() {
           <input
             ref={inputRef}
             type="text"
+            name="typing-practice"
+            id="typing-practice-input"
             value={inputText}
             onChange={handleInputChange}
             placeholder={`Try: "${currentPrompt.text}"`}
@@ -117,6 +119,9 @@ export function TryItOutSection() {
             autoCapitalize="off"
             autoCorrect="off"
             spellCheck={false}
+            data-1p-ignore="true"
+            data-lpignore="true"
+            data-form-type="other"
             style={{
               width: '100%',
               maxWidth: '400px',
