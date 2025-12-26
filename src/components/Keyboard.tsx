@@ -1,5 +1,6 @@
 import type { KeyboardLayoutType } from '../data/keyboardLayouts';
 import { KEYBOARD_LAYOUTS, getFingerForPosition } from '../data/keyboardLayouts';
+import { useKeyboardSkin } from '../providers/KeyboardSkinProvider';
 
 interface KeyboardProps {
   highlightKeys?: string[];
@@ -33,6 +34,8 @@ export function Keyboard({
 }: KeyboardProps) {
   const layoutConfig = KEYBOARD_LAYOUTS[layout];
   const rows = layoutConfig.rows;
+  const { currentSkin } = useKeyboardSkin();
+  const skin = currentSkin.cssVariables;
 
   const normalizedHighlight = highlightKeys.map(k => k.toLowerCase());
   const normalizedActive = activeKey?.toLowerCase();
@@ -45,31 +48,33 @@ export function Keyboard({
     const isActive = normalizedActive === keyLower;
     const isPressed = normalizedPressed === keyLower;
 
-    let bgColor = '#1a1a2e';
-    let borderColor = '#3bceac';
-    let textColor = '#eef5db';
-    let boxShadow = '4px 4px 0 #0f0f1b, inset -2px -2px 0 rgba(0,0,0,0.3), inset 2px 2px 0 rgba(255,255,255,0.1)';
+    // Use skin CSS variables with fallbacks
+    let bgColor = skin['--skin-key-bg'] || '#1a1a2e';
+    let borderColor = skin['--skin-key-border'] || '#3bceac';
+    let textColor = skin['--skin-key-text'] || '#eef5db';
+    let boxShadow = skin['--skin-key-shadow'] || '4px 4px 0 #0f0f1b, inset -2px -2px 0 rgba(0,0,0,0.3), inset 2px 2px 0 rgba(255,255,255,0.1)';
+    const glow = skin['--skin-key-glow'] || 'none';
 
     if (isPressed && incorrectKey) {
-      bgColor = '#e63946';
-      borderColor = '#ff6b6b';
-      boxShadow = '2px 2px 0 #0f0f1b, 0 0 20px #e63946';
+      bgColor = skin['--skin-key-incorrect-bg'] || '#e63946';
+      borderColor = skin['--skin-key-incorrect-bg'] || '#ff6b6b';
+      boxShadow = `2px 2px 0 #0f0f1b, 0 0 20px ${bgColor}`;
     } else if (isPressed) {
-      bgColor = '#0ead69';
-      borderColor = '#3bceac';
-      boxShadow = '2px 2px 0 #0f0f1b, 0 0 20px #0ead69';
+      bgColor = skin['--skin-key-correct-bg'] || '#0ead69';
+      borderColor = skin['--skin-key-border'] || '#3bceac';
+      boxShadow = `2px 2px 0 #0f0f1b, 0 0 20px ${bgColor}`;
     } else if (isActive) {
-      bgColor = '#ffd93d';
-      borderColor = '#ffd93d';
+      bgColor = skin['--skin-key-highlight-bg'] || '#ffd93d';
+      borderColor = skin['--skin-key-highlight-border'] || '#ffd93d';
       textColor = '#0f0f1b';
-      boxShadow = '4px 4px 0 #0f0f1b, 0 0 30px #ffd93d';
+      boxShadow = glow !== 'none' ? `4px 4px 0 #0f0f1b, ${glow}` : `4px 4px 0 #0f0f1b, 0 0 30px ${bgColor}`;
     } else if (isHighlighted && showFingerColors) {
       const color = PIXEL_FINGER_COLORS[finger];
       borderColor = color;
       bgColor = `${color}33`;
     } else if (!isHighlighted) {
       borderColor = '#2a2a4e';
-      bgColor = '#16213e';
+      bgColor = skin['--skin-key-bg-hover'] || '#16213e';
       textColor = '#4a4a6e';
     }
 
@@ -79,6 +84,8 @@ export function Keyboard({
       color: textColor,
       boxShadow,
       transform: isPressed ? 'translate(2px, 2px)' : 'none',
+      borderRadius: skin['--skin-key-border-radius'] || '4px',
+      borderWidth: skin['--skin-key-border-width'] || '4px',
     };
   };
 
@@ -114,13 +121,14 @@ export function Keyboard({
               return (
                 <div
                   key={`${rowIndex}-${keyIndex}`}
-                  className="relative flex items-center justify-center border-4 transition-all duration-75"
+                  className="relative flex items-center justify-center transition-all duration-75"
                   style={{
                     ...getKeyStyle(key, rowIndex, keyIndex),
                     width: isSpace ? '200px' : '36px',
                     height: '36px',
                     fontFamily: "'Press Start 2P', monospace",
                     fontSize: '10px',
+                    borderStyle: 'solid',
                   }}
                 >
                   {isSpace ? 'SPACE' : key.toUpperCase()}

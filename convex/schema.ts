@@ -203,4 +203,19 @@ export default defineSchema({
   })
     .index("by_clerk_id", ["clerkId"])
     .index("by_timestamp", ["timestamp"]),
+
+  // ═══════════════════════════════════════════════════════════════════
+  // PRP-033: POWER-UPS SYSTEM
+  // ═══════════════════════════════════════════════════════════════════
+
+  activePowerUps: defineTable({
+    clerkId: v.string(),
+    powerUpType: v.string(), // "xp-boost" | "coin-magnet" | "hint-token" | "streak-freeze"
+    multiplier: v.optional(v.number()), // e.g., 1.5 for 50% boost
+    remainingUses: v.optional(v.number()), // For consumables like hint tokens
+    expiresAt: v.optional(v.number()), // Unix timestamp for time-based power-ups
+    activatedAt: v.number(),
+  })
+    .index("by_clerk_id", ["clerkId"])
+    .index("by_clerk_type", ["clerkId", "powerUpType"]),
 });

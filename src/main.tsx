@@ -8,6 +8,8 @@ import App from './App.tsx'
 import { AuthProvider } from './contexts/AuthContext'
 import { PremiumSyncProvider } from './providers/PremiumSyncProvider'
 import { ThemeProvider } from './providers/ThemeProvider'
+import { KeyboardSkinProvider } from './providers/KeyboardSkinProvider'
+import { PowerUpProvider } from './providers/PowerUpProvider'
 
 // Initialize Convex client
 const convexUrl = import.meta.env.VITE_CONVEX_URL
@@ -30,7 +32,11 @@ function Providers({ children }: { children: React.ReactNode }) {
         <AuthProvider>
           <PremiumSyncProvider>
             <ThemeProvider>
-              {children}
+              <KeyboardSkinProvider>
+                <PowerUpProvider>
+                  {children}
+                </PowerUpProvider>
+              </KeyboardSkinProvider>
             </ThemeProvider>
           </PremiumSyncProvider>
         </AuthProvider>

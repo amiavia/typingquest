@@ -17,6 +17,7 @@ import type * as lessonProgress from "../lessonProgress.js";
 import type * as migrations from "../migrations.js";
 import type * as nicknameWords from "../nicknameWords.js";
 import type * as nicknames from "../nicknames.js";
+import type * as powerups from "../powerups.js";
 import type * as premium from "../premium.js";
 import type * as seedShopItems from "../seedShopItems.js";
 import type * as settings from "../settings.js";
@@ -40,6 +41,7 @@ declare const fullApi: ApiFromModules<{
   migrations: typeof migrations;
   nicknameWords: typeof nicknameWords;
   nicknames: typeof nicknames;
+  powerups: typeof powerups;
   premium: typeof premium;
   seedShopItems: typeof seedShopItems;
   settings: typeof settings;
