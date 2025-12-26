@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import type { Lesson, TypingStats } from '../types';
 import { TypingArea } from './TypingArea';
-import { Keyboard } from './Keyboard';
+import { KeyboardWithHands } from './KeyboardWithHands';
 import type { KeyboardLayoutType } from '../data/keyboardLayouts';
 
 interface QuizProps {
@@ -152,13 +152,15 @@ export function Quiz({ lesson, quizWords, layoutKeys, onComplete, onCancel, keyb
         isActive={true}
       />
 
-      <Keyboard
+      <KeyboardWithHands
+        layout={keyboardLayout}
         highlightKeys={layoutKeys}
         activeKey={activeKey}
         pressedKey={pressedKey}
         incorrectKey={!isCorrect}
         showFingerColors={true}
-        layout={keyboardLayout}
+        showHands={true}
+        compact={true}
       />
 
       <div className="flex justify-center">

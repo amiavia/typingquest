@@ -134,7 +134,7 @@ function PrivacyPolicy() {
 
       <Section title="1. INTRODUCTION">
         <p>
-          TypeBit8 ("we", "our", or "us") is committed to protecting your privacy. This Privacy
+          typebit8 ("we", "our", or "us") is committed to protecting your privacy. This Privacy
           Policy explains how we collect, use, and safeguard your information when you use our
           typing practice application at typebit8.com.
         </p>
@@ -234,7 +234,7 @@ function PrivacyPolicy() {
 
       <Section title="8. CHILDREN'S PRIVACY">
         <p>
-          TypeBit8 is suitable for users of all ages. We do not knowingly collect personal
+          typebit8 is suitable for users of all ages. We do not knowingly collect personal
           information from children under 13 without parental consent. If you believe a child has
           provided us with personal data, please contact us.
         </p>
@@ -296,14 +296,14 @@ function TermsOfService() {
 
       <Section title="1. ACCEPTANCE OF TERMS">
         <p>
-          By accessing or using TypeBit8 (typebit8.com), you agree to be bound by these Terms of
+          By accessing or using typebit8 (typebit8.com), you agree to be bound by these Terms of
           Service. If you do not agree to these terms, please do not use the service.
         </p>
       </Section>
 
       <Section title="2. DESCRIPTION OF SERVICE">
         <p>
-          TypeBit8 is a free typing practice application designed to help users improve their
+          typebit8 is a free typing practice application designed to help users improve their
           keyboard typing skills through gamified lessons and exercises. The service includes
           progress tracking, leaderboards, and various typing challenges.
         </p>
@@ -334,7 +334,7 @@ function TermsOfService() {
 
       <Section title="5. INTELLECTUAL PROPERTY">
         <p>
-          All content, features, and functionality of TypeBit8, including but not limited to
+          All content, features, and functionality of typebit8, including but not limited to
           text, graphics, logos, and software, are owned by Steininger AG and are protected by
           international copyright, trademark, and other intellectual property laws.
         </p>

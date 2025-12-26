@@ -19,7 +19,7 @@ export interface PremiumBenefits {
 export interface UsePremiumResult {
   isPremium: boolean;
   isLoading: boolean;
-  plan: "free" | "premium_monthly" | "premium_yearly" | null;
+  plan: "free" | "premium_monthly" | null;
   benefits: PremiumBenefits;
   applyMultiplier: (coins: number) => number;
 }
@@ -45,19 +45,14 @@ const PREMIUM_BENEFITS: PremiumBenefits = {
 export function usePremium(): UsePremiumResult {
   const { has, isLoaded } = useAuth();
 
-  // Check premium plans using Clerk Billing's has() helper
-  // Plans must be configured in Clerk Dashboard:
-  // - premium_monthly: $4.99/month
-  // - premium_yearly: $39.99/year
-  const isMonthly = has?.({ plan: "premium_monthly" }) ?? false;
-  const isYearly = has?.({ plan: "premium_yearly" }) ?? false;
-  const isPremium = isMonthly || isYearly;
+  // Check premium plan using Clerk Billing's has() helper
+  // Clerk uses a single plan with both monthly and annual billing options
+  // Plan key: premium_monthly (covers both billing frequencies)
+  const isPremium = has?.({ plan: "premium_monthly" }) ?? false;
 
-  const plan = isYearly
-    ? "premium_yearly"
-    : isMonthly
-      ? "premium_monthly"
-      : "free";
+  // Note: Clerk's single plan covers both monthly and annual billing
+  // The plan key is the same regardless of billing frequency
+  const plan = isPremium ? "premium_monthly" : "free";
 
   const benefits = isPremium ? PREMIUM_BENEFITS : FREE_BENEFITS;
 

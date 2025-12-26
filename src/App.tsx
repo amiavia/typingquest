@@ -1,18 +1,18 @@
-import { useState, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import type { Lesson, TypingStats } from './types';
 import { LessonCard } from './components/LessonCard';
 import { LessonView } from './components/LessonView';
-import { Keyboard } from './components/Keyboard';
-import { LayoutSelector } from './components/LayoutSelector';
-import { LayoutDetector } from './components/LayoutDetector';
+import { TryItOutSection } from './components/TryItOutSection';
+import { CompactKeyboardBadge } from './components/CompactKeyboardBadge';
+import { DailyChallengeButton } from './components/DailyChallengeButton';
+import { RetroLoadingScreen } from './components/RetroLoadingScreen';
+import { useKeyboardLayout } from './providers/KeyboardLayoutProvider';
 import { UserButton } from './components/UserButton';
 import { GuestBanner } from './components/GuestBanner';
 import { MigrationModal } from './components/MigrationModal';
 import { Leaderboard } from './components/Leaderboard';
 import { LegalPage } from './components/LegalPage';
-import { DailyChallengeSection } from './components/DailyChallengeSection';
 import { DailyChallengeView } from './components/DailyChallengeView';
-import { StreakSection } from './components/StreakSection';
 import { Shop } from './components/Shop';
 import { PremiumPage } from './components/PremiumPage';
 import { CoinBalance } from './components/CoinBalance';
@@ -21,8 +21,6 @@ import { PremiumBadge } from './components/PremiumBadge';
 import { useGameState } from './hooks/useGameState';
 import { useLessonProgress } from './hooks/useLessonProgress';
 import { usePremium } from './hooks/usePremium';
-import type { KeyboardLayoutType } from './data/keyboardLayouts';
-import { getHomeRowKeys } from './data/keyboardLayouts';
 import { LEVEL_TIERS, levels, type LevelTier } from './data/levels';
 import { useQuery } from 'convex/react';
 import { api } from '../convex/_generated/api';
@@ -31,17 +29,29 @@ import { useAuth } from '@clerk/clerk-react';
 type View = 'home' | 'lesson' | 'legal' | 'shop' | 'premium' | 'daily-challenge';
 type LegalPageType = 'impressum' | 'privacy' | 'terms';
 
+// Loading screen duration in ms
+const LOADING_DURATION = 600;
+
+// Context-aware loading messages
+const LOADING_MESSAGES: Record<View, string> = {
+  'home': 'RETURNING TO BASE...',
+  'lesson': 'LOADING LEVEL...',
+  'legal': 'LOADING DOCS...',
+  'shop': 'OPENING SHOP...',
+  'premium': 'LOADING PREMIUM...',
+  'daily-challenge': 'PREPARING CHALLENGE...',
+};
+
 function App() {
   const [view, setView] = useState<View>('home');
   const [selectedLesson, setSelectedLesson] = useState<Lesson | null>(null);
   const [selectedLegalPage, setSelectedLegalPage] = useState<LegalPageType>('impressum');
-  const [showLayoutSelector, setShowLayoutSelector] = useState(false);
-  const [showLayoutDetector, setShowLayoutDetector] = useState(false);
   const [selectedTier, setSelectedTier] = useState<number | 'all'>('all');
-  const [keyboardLayout, setKeyboardLayout] = useState<KeyboardLayoutType>(() => {
-    const saved = localStorage.getItem('typingQuestLayout');
-    return (saved as KeyboardLayoutType) || 'qwerty-us';
-  });
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [loadingMessage, setLoadingMessage] = useState<string | undefined>();
+
+  // Get layout from global context
+  const { layout: keyboardLayout, isLocked: keyboardLocked } = useKeyboardLayout();
 
   const { userId } = useAuth();
   const gameState = useGameState();
@@ -61,21 +71,23 @@ function App() {
   // Use static 30 levels from levels.ts (PRP-027)
   const lessons = levels;
 
-  // Show layout selector on first launch if no layout was previously set
-  useEffect(() => {
-    const hasSetLayout = localStorage.getItem('typingQuestLayout');
-    if (!hasSetLayout) {
-      setShowLayoutSelector(true);
-    }
-  }, []);
+  // Navigate with loading screen transition
+  const navigateTo = useCallback((newView: View, message?: string) => {
+    if (newView === view) return; // Don't transition to same view
 
-  useEffect(() => {
-    localStorage.setItem('typingQuestLayout', keyboardLayout);
-  }, [keyboardLayout]);
+    setLoadingMessage(message || LOADING_MESSAGES[newView]);
+    setIsTransitioning(true);
+
+    setTimeout(() => {
+      setView(newView);
+      setIsTransitioning(false);
+      setLoadingMessage(undefined);
+    }, LOADING_DURATION);
+  }, [view]);
 
   const handleLessonSelect = (lesson: Lesson) => {
     setSelectedLesson(lesson);
-    setView('lesson');
+    navigateTo('lesson', `LOADING ${lesson.title.toUpperCase()}...`);
   };
 
   const handleLessonComplete = (stats: TypingStats) => {
@@ -114,17 +126,16 @@ function App() {
   };
 
   const handleBack = () => {
-    setView('home');
     setSelectedLesson(null);
+    navigateTo('home');
   };
 
   const handleLegalPage = (page: LegalPageType) => {
     setSelectedLegalPage(page);
-    setView('legal');
+    navigateTo('legal');
   };
 
   const totalCompleted = getCompletedCount();
-  const homeRowKeys = getHomeRowKeys(keyboardLayout);
 
   // Filter lessons by tier
   const filteredLessons = selectedTier === 'all'
@@ -150,19 +161,24 @@ function App() {
     return isLessonUnlocked(lessonId);
   };
 
+  // Show loading screen during transitions
+  if (isTransitioning) {
+    return <RetroLoadingScreen message={loadingMessage} />;
+  }
+
   // Shop and Premium views
   if (view === 'shop') {
     return (
       <Shop
-        onClose={() => setView('home')}
-        onUpgrade={() => setView('premium')}
+        onClose={() => navigateTo('home')}
+        onUpgrade={() => navigateTo('premium')}
       />
     );
   }
 
   if (view === 'premium') {
     return (
-      <PremiumPage onClose={() => setView('home')} />
+      <PremiumPage onClose={() => navigateTo('home')} />
     );
   }
 
@@ -170,7 +186,7 @@ function App() {
     return (
       <div className="min-h-screen p-4 md:p-8">
         <DailyChallengeView
-          onBack={() => setView('home')}
+          onBack={() => navigateTo('home')}
           keyboardLayout={keyboardLayout}
         />
       </div>
@@ -181,7 +197,7 @@ function App() {
     return (
       <LegalPage
         page={selectedLegalPage}
-        onBack={() => setView('home')}
+        onBack={() => navigateTo('home')}
       />
     );
   }
@@ -207,26 +223,6 @@ function App() {
 
       {/* Migration Modal */}
       <MigrationModal />
-
-      {/* Layout Selector Modal */}
-      <LayoutSelector
-        currentLayout={keyboardLayout}
-        onLayoutChange={setKeyboardLayout}
-        isOpen={showLayoutSelector}
-        onClose={() => setShowLayoutSelector(false)}
-        onDetect={() => setShowLayoutDetector(true)}
-      />
-
-      {/* Layout Detector Modal */}
-      {showLayoutDetector && (
-        <LayoutDetector
-          onLayoutDetected={(layout) => {
-            setKeyboardLayout(layout);
-            setShowLayoutDetector(false);
-          }}
-          onCancel={() => setShowLayoutDetector(false)}
-        />
-      )}
 
       {/* Header HUD */}
       <header className="pixel-box m-4 p-4">
@@ -267,13 +263,18 @@ function App() {
             <CoinBalance
               balance={coinBalance ?? gameState.coins}
               size="lg"
-              onClick={() => setView('shop')}
+              onClick={() => navigateTo('shop')}
             />
+
+            {/* Daily Challenge Button (only when keyboard is set up) */}
+            {keyboardLocked && (
+              <DailyChallengeButton onClick={() => navigateTo('daily-challenge')} />
+            )}
 
             {/* Premium/Upgrade Button */}
             {!isPremium && (
               <button
-                onClick={() => setView('premium')}
+                onClick={() => navigateTo('premium')}
                 className="px-3 py-2 border-2 border-[#ffd93d] hover:bg-[#ffd93d] hover:text-[#1a1a2e] transition-colors"
                 style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: '#ffd93d' }}
               >
@@ -307,137 +308,115 @@ function App() {
 
             {/* User Button (includes Avatar) */}
             <UserButton userLevel={gameState.level} />
-
-            {/* Settings Button */}
-            <button
-              onClick={() => setShowLayoutSelector(true)}
-              className="pixel-btn"
-              style={{ fontSize: '12px', padding: '8px 12px' }}
-              title="Keyboard Layout"
-            >
-              ⚙
-            </button>
           </div>
         </div>
       </header>
 
-      {/* Hero Section */}
-      <section className="p-4 md:p-8 text-center">
-        <div className="max-w-4xl mx-auto">
-          {/* Title */}
-          <div className="mb-8">
-            <h2
-              style={{ fontFamily: "'Press Start 2P'", fontSize: '24px', color: '#eef5db', lineHeight: '2' }}
-              className="mb-4"
+      {/* Conditional Layout Based on Keyboard Detection */}
+      {!keyboardLocked ? (
+        /* ========== NEW USER FLOW (Keyboard not set up) ========== */
+        <>
+          {/* Hero Section with full onboarding */}
+          <section className="p-4 md:p-8 text-center">
+            <div className="max-w-4xl mx-auto">
+              {/* Title */}
+              <div className="mb-8">
+                <h2
+                  style={{ fontFamily: "'Press Start 2P'", fontSize: '24px', color: '#eef5db', lineHeight: '2' }}
+                  className="mb-4"
+                >
+                  LEARN TO TYPE WITH
+                </h2>
+                <h2
+                  style={{ fontFamily: "'Press Start 2P'", fontSize: '32px', color: '#3bceac', lineHeight: '1.5' }}
+                  className="text-glow-cyan"
+                >
+                  ALL 10 FINGERS
+                </h2>
+              </div>
+
+              {/* Stats boxes */}
+              <div className="flex flex-wrap gap-4 justify-center mb-8">
+                <div className="pixel-box p-4 text-center">
+                  <div style={{ fontFamily: "'Press Start 2P'", fontSize: '24px', color: '#ffd93d' }} className="text-glow-yellow">
+                    {lessons.length}
+                  </div>
+                  <div style={{ fontFamily: "'Press Start 2P'", fontSize: '8px', color: '#3bceac' }}>LEVELS</div>
+                </div>
+                <div className="pixel-box p-4 text-center">
+                  <div style={{ fontFamily: "'Press Start 2P'", fontSize: '24px', color: '#0ead69' }} className="text-glow-green">
+                    {totalCompleted}
+                  </div>
+                  <div style={{ fontFamily: "'Press Start 2P'", fontSize: '8px', color: '#3bceac' }}>CLEARED</div>
+                </div>
+                <div className="pixel-box p-4 text-center">
+                  <div style={{ fontFamily: "'Press Start 2P'", fontSize: '24px', color: '#ff6b9d' }}>
+                    {gameState.maxCombo}x
+                  </div>
+                  <div style={{ fontFamily: "'Press Start 2P'", fontSize: '8px', color: '#3bceac' }}>BEST COMBO</div>
+                </div>
+              </div>
+
+              {/* Try It Out - Keyboard with Detection */}
+              <TryItOutSection />
+            </div>
+          </section>
+        </>
+      ) : (
+        /* ========== RETURNING USER FLOW (Keyboard set up) ========== */
+        <>
+          {/* Compact Keyboard Badge */}
+          <CompactKeyboardBadge />
+        </>
+      )}
+
+      {/* How to Play - Only for new users */}
+      {!keyboardLocked && (
+        <section className="p-4 md:p-8">
+          <div className="max-w-4xl mx-auto">
+            <h3
+              style={{ fontFamily: "'Press Start 2P'", fontSize: '14px', color: '#ffd93d', marginBottom: '24px' }}
+              className="text-center"
             >
-              LEARN TO TYPE WITH
-            </h2>
-            <h2
-              style={{ fontFamily: "'Press Start 2P'", fontSize: '32px', color: '#3bceac', lineHeight: '1.5' }}
-              className="text-glow-cyan"
-            >
-              ALL 10 FINGERS
-            </h2>
-          </div>
+              HOW TO PLAY
+            </h3>
 
-          {/* Stats boxes */}
-          <div className="flex flex-wrap gap-4 justify-center mb-8">
-            <div className="pixel-box p-4 text-center">
-              <div style={{ fontFamily: "'Press Start 2P'", fontSize: '24px', color: '#ffd93d' }} className="text-glow-yellow">
-                {lessons.length}
+            <div className="grid md:grid-cols-3 gap-4">
+              <div className="pixel-box p-6 text-center">
+                <div className="text-4xl mb-4">📖</div>
+                <h4 style={{ fontFamily: "'Press Start 2P'", fontSize: '10px', color: '#eef5db', marginBottom: '8px' }}>
+                  1. LEARN
+                </h4>
+                <p style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: '#3bceac', lineHeight: '2' }}>
+                  EACH LEVEL TEACHES NEW KEYS AND FINGER POSITIONS
+                </p>
               </div>
-              <div style={{ fontFamily: "'Press Start 2P'", fontSize: '8px', color: '#3bceac' }}>LEVELS</div>
-            </div>
-            <div className="pixel-box p-4 text-center">
-              <div style={{ fontFamily: "'Press Start 2P'", fontSize: '24px', color: '#0ead69' }} className="text-glow-green">
-                {totalCompleted}
+
+              <div className="pixel-box pixel-box-yellow p-6 text-center">
+                <div className="text-4xl mb-4">⚔️</div>
+                <h4 style={{ fontFamily: "'Press Start 2P'", fontSize: '10px', color: '#eef5db', marginBottom: '8px' }}>
+                  2. BATTLE
+                </h4>
+                <p style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: '#3bceac', lineHeight: '2' }}>
+                  TYPE FAST AND BUILD COMBOS TO DEFEAT THE BOSS
+                </p>
               </div>
-              <div style={{ fontFamily: "'Press Start 2P'", fontSize: '8px', color: '#3bceac' }}>CLEARED</div>
-            </div>
-            <div className="pixel-box p-4 text-center">
-              <div style={{ fontFamily: "'Press Start 2P'", fontSize: '24px', color: '#ff6b9d' }}>
-                {gameState.maxCombo}x
+
+              <div className="pixel-box pixel-box-green p-6 text-center">
+                <div className="text-4xl mb-4">🏆</div>
+                <h4 style={{ fontFamily: "'Press Start 2P'", fontSize: '10px', color: '#eef5db', marginBottom: '8px' }}>
+                  3. VICTORY
+                </h4>
+                <p style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: '#3bceac', lineHeight: '2' }}>
+                  EARN XP, COINS AND UNLOCK NEW LEVELS
+                </p>
               </div>
-              <div style={{ fontFamily: "'Press Start 2P'", fontSize: '8px', color: '#3bceac' }}>BEST COMBO</div>
-            </div>
-          </div>
-
-          {/* Keyboard preview */}
-          <Keyboard
-            highlightKeys={homeRowKeys}
-            showFingerColors={true}
-            layout={keyboardLayout}
-          />
-
-          <p
-            style={{ fontFamily: "'Press Start 2P'", fontSize: '8px', color: '#4a4a6e', marginTop: '16px' }}
-            className="animate-blink"
-          >
-            {'>>> PLACE FINGERS ON HOME ROW TO BEGIN <<<'}
-          </p>
-        </div>
-      </section>
-
-      {/* How to Play */}
-      <section className="p-4 md:p-8">
-        <div className="max-w-4xl mx-auto">
-          <h3
-            style={{ fontFamily: "'Press Start 2P'", fontSize: '14px', color: '#ffd93d', marginBottom: '24px' }}
-            className="text-center"
-          >
-            HOW TO PLAY
-          </h3>
-
-          <div className="grid md:grid-cols-3 gap-4">
-            <div className="pixel-box p-6 text-center">
-              <div className="text-4xl mb-4">📖</div>
-              <h4 style={{ fontFamily: "'Press Start 2P'", fontSize: '10px', color: '#eef5db', marginBottom: '8px' }}>
-                1. LEARN
-              </h4>
-              <p style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: '#3bceac', lineHeight: '2' }}>
-                EACH LEVEL TEACHES NEW KEYS AND FINGER POSITIONS
-              </p>
-            </div>
-
-            <div className="pixel-box pixel-box-yellow p-6 text-center">
-              <div className="text-4xl mb-4">⚔️</div>
-              <h4 style={{ fontFamily: "'Press Start 2P'", fontSize: '10px', color: '#eef5db', marginBottom: '8px' }}>
-                2. BATTLE
-              </h4>
-              <p style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: '#3bceac', lineHeight: '2' }}>
-                TYPE FAST AND BUILD COMBOS TO DEFEAT THE BOSS
-              </p>
-            </div>
-
-            <div className="pixel-box pixel-box-green p-6 text-center">
-              <div className="text-4xl mb-4">🏆</div>
-              <h4 style={{ fontFamily: "'Press Start 2P'", fontSize: '10px', color: '#eef5db', marginBottom: '8px' }}>
-                3. VICTORY
-              </h4>
-              <p style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: '#3bceac', lineHeight: '2' }}>
-                EARN XP, COINS AND UNLOCK NEW LEVELS
-              </p>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
-      {/* Leaderboard Section */}
-      <section className="p-4 md:p-8">
-        <div className="max-w-4xl mx-auto">
-          <Leaderboard showGlobal={true} limit={5} />
-        </div>
-      </section>
-
-      {/* Daily Challenge & Streak Section */}
-      <section className="p-4 md:p-8">
-        <div className="max-w-4xl mx-auto grid md:grid-cols-2 gap-6">
-          <DailyChallengeSection onStartChallenge={() => setView('daily-challenge')} />
-          {userId && <StreakSection />}
-        </div>
-      </section>
-
-      {/* Level Select */}
+      {/* Level Select - PROMOTED TO TOP for returning users */}
       <section className="p-4 md:p-8">
         <div className="max-w-6xl mx-auto">
           <div className="flex items-center justify-between mb-6 flex-wrap gap-4">
@@ -526,7 +505,7 @@ function App() {
                 onClick={() => {
                   // If level requires premium and user isn't premium, show premium page
                   if (requiresPremium(lesson.id) && !isPremium) {
-                    setView('premium');
+                    navigateTo('premium');
                     return;
                   }
                   // Otherwise, normal unlock check
@@ -539,6 +518,15 @@ function App() {
           </div>
         </div>
       </section>
+
+      {/* Leaderboard - Show for returning users */}
+      {keyboardLocked && (
+        <section className="p-4 md:p-8">
+          <div className="max-w-4xl mx-auto">
+            <Leaderboard showGlobal={true} limit={5} />
+          </div>
+        </section>
+      )}
 
       {/* Footer */}
       <footer className="p-8 text-center">

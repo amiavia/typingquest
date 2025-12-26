@@ -1,7 +1,8 @@
 export default {
   providers: [
     {
-      domain: "https://crucial-oryx-92.clerk.accounts.dev",
+      // Production Clerk domain (custom domain from Clerk Dashboard)
+      domain: "https://clerk.typebit8.com",
       applicationID: "convex",
     },
   ],

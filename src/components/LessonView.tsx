@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { useMutation } from 'convex/react';
 import type { Lesson, TypingStats } from '../types';
 import { TypingArea } from './TypingArea';
-import { Keyboard } from './Keyboard';
+import { KeyboardWithHands } from './KeyboardWithHands';
 import { Quiz } from './Quiz';
 import { RewardPopup } from './RewardPopup';
 import type { KeyboardLayoutType } from '../data/keyboardLayouts';
@@ -253,10 +253,12 @@ export function LessonView({ lesson, onComplete, onQuizComplete, onBack, keyboar
           </div>
         </div>
 
-        <Keyboard
+        <KeyboardWithHands
+          layout={keyboardLayout}
           highlightKeys={layoutKeys}
           showFingerColors={true}
-          layout={keyboardLayout}
+          showHands={true}
+          compact={false}
         />
 
         <div className="flex justify-center">
@@ -399,13 +401,15 @@ export function LessonView({ lesson, onComplete, onQuizComplete, onBack, keyboar
         isActive={true}
       />
 
-      <Keyboard
+      <KeyboardWithHands
+        layout={keyboardLayout}
         highlightKeys={layoutKeys}
         activeKey={activeKey}
         pressedKey={pressedKey}
         incorrectKey={!isCorrect}
         showFingerColors={true}
-        layout={keyboardLayout}
+        showHands={true}
+        compact={true}
       />
 
       {/* Stage progress */}

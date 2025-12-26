@@ -10,6 +10,7 @@ import { PremiumSyncProvider } from './providers/PremiumSyncProvider'
 import { ThemeProvider } from './providers/ThemeProvider'
 import { KeyboardSkinProvider } from './providers/KeyboardSkinProvider'
 import { PowerUpProvider } from './providers/PowerUpProvider'
+import { KeyboardLayoutProvider } from './providers/KeyboardLayoutProvider'
 
 // Initialize Convex client
 const convexUrl = import.meta.env.VITE_CONVEX_URL
@@ -33,9 +34,11 @@ function Providers({ children }: { children: React.ReactNode }) {
           <PremiumSyncProvider>
             <ThemeProvider>
               <KeyboardSkinProvider>
-                <PowerUpProvider>
-                  {children}
-                </PowerUpProvider>
+                <KeyboardLayoutProvider>
+                  <PowerUpProvider>
+                    {children}
+                  </PowerUpProvider>
+                </KeyboardLayoutProvider>
               </KeyboardSkinProvider>
             </ThemeProvider>
           </PremiumSyncProvider>
