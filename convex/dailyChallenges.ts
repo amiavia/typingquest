@@ -58,7 +58,9 @@ function generateChallengeForDate(date: string) {
   let targetKeys: string[] | undefined;
 
   if (type === "keys") {
-    targetValue = 100; // Placeholder for key challenges
+    // Keys challenges measure accuracy (%), target 90% with slight variation
+    const baseAccuracy = 90;
+    targetValue = Math.min(98, Math.round(baseAccuracy + (dayOfMonth % 5) * 2)); // 90-98%
     targetKeys = (template as { targetKeys: string[] }).targetKeys;
   } else {
     const baseTarget = (template as { baseTarget: number }).baseTarget;

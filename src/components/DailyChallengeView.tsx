@@ -97,6 +97,10 @@ export function DailyChallengeView({
       case "endurance":
         value = stats.correctChars;
         break;
+      case "keys":
+        // Keys challenges measure accuracy on the target keys
+        value = stats.accuracy;
+        break;
       default:
         value = stats.wpm;
     }
@@ -241,7 +245,7 @@ export function DailyChallengeView({
               }}
             >
               {challenge.targetValue}
-              {challenge.challengeType === "accuracy" && "%"}
+              {(challenge.challengeType === "accuracy" || challenge.challengeType === "keys") && "%"}
               {challenge.challengeType === "speed" && " WPM"}
             </p>
           </div>
@@ -373,7 +377,7 @@ export function DailyChallengeView({
                 }}
               >
                 {currentValue}
-                {challenge.challengeType === "accuracy" && "%"}
+                {(challenge.challengeType === "accuracy" || challenge.challengeType === "keys") && "%"}
                 {challenge.challengeType === "speed" && " WPM"}
               </p>
             </div>
@@ -429,7 +433,7 @@ export function DailyChallengeView({
           }}
         >
           TARGET: {challenge.targetValue}
-          {challenge.challengeType === "accuracy" && "%"}
+          {(challenge.challengeType === "accuracy" || challenge.challengeType === "keys") && "%"}
           {challenge.challengeType === "speed" && " WPM"}
         </p>
       </div>
