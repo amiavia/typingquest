@@ -24,13 +24,16 @@ import { usePremium } from './hooks/usePremium';
 import { LEVEL_TIERS, levels, type LevelTier } from './data/levels';
 import { useQuery, useMutation } from 'convex/react';
 import { api } from '../convex/_generated/api';
-import { useAuth } from '@clerk/clerk-react';
+import { useAuth, useClerk } from '@clerk/clerk-react';
 
 type View = 'home' | 'lesson' | 'legal' | 'shop' | 'premium' | 'daily-challenge';
 type LegalPageType = 'impressum' | 'privacy' | 'terms';
 
 // Loading screen duration in ms
 const LOADING_DURATION = 600;
+
+// Guest users can only access levels 1-2
+const GUEST_LEVEL_LIMIT = 2;
 
 // Context-aware loading messages
 const LOADING_MESSAGES: Record<View, string> = {
@@ -50,11 +53,13 @@ function App() {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [loadingMessage, setLoadingMessage] = useState<string | undefined>();
   const [showSpeedTest, setShowSpeedTest] = useState(false); // For retaking speed test
+  const [showSignUpModal, setShowSignUpModal] = useState(false); // For post-level-2 encouragement
 
   // Get layout from global context
   const { layout: keyboardLayout, isLocked: keyboardLocked, lockLayout } = useKeyboardLayout();
 
-  const { userId } = useAuth();
+  const { userId, isSignedIn } = useAuth();
+  const { openSignUp } = useClerk();
   const gameState = useGameState();
   const { isPremium } = usePremium();
 
@@ -111,6 +116,12 @@ function App() {
       attempts: (progress[selectedLesson.id]?.attempts || 0) + 1,
       quizPassed: progress[selectedLesson.id]?.quizPassed || false,
     });
+
+    // Show sign-up modal after completing level 2 for guests
+    if (!isSignedIn && selectedLesson.id === GUEST_LEVEL_LIMIT) {
+      // Delay slightly so user sees the completion screen first
+      setTimeout(() => setShowSignUpModal(true), 1500);
+    }
   };
 
   const handleQuizComplete = (passed: boolean, stats: TypingStats) => {
@@ -213,7 +224,14 @@ function App() {
   // Premium level gating: levels 10-30 require premium
   const PREMIUM_LEVEL_START = 10;
   const requiresPremium = (lessonId: number): boolean => lessonId >= PREMIUM_LEVEL_START;
+
+  // Guest level gating: levels 3+ require sign-up
+  const requiresSignUp = (lessonId: number): boolean => !isSignedIn && lessonId > GUEST_LEVEL_LIMIT;
+
   const isLevelAccessible = (lessonId: number): boolean => {
+    // Guest users can only access levels 1-2
+    if (requiresSignUp(lessonId)) return false;
+    // Premium levels require premium
     if (requiresPremium(lessonId) && !isPremium) return false;
     return isLessonUnlocked(lessonId);
   };
@@ -280,6 +298,141 @@ function App() {
 
       {/* Migration Modal */}
       <MigrationModal />
+
+      {/* Sign Up Modal (shown after level 2 or when clicking locked levels) */}
+      {showSignUpModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          {/* Backdrop */}
+          <div
+            className="absolute inset-0"
+            style={{ background: 'rgba(14, 14, 18, 0.95)' }}
+            onClick={() => setShowSignUpModal(false)}
+          />
+
+          {/* Modal */}
+          <div
+            className="relative pixel-box p-8 max-w-md w-full text-center"
+            style={{
+              background: '#1a1a2e',
+              border: '4px solid #3bceac',
+            }}
+          >
+            {/* Close button */}
+            <button
+              onClick={() => setShowSignUpModal(false)}
+              className="absolute top-4 right-4"
+              style={{
+                fontFamily: "'Press Start 2P'",
+                fontSize: '14px',
+                color: '#4a4a6e',
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer',
+              }}
+            >
+              ×
+            </button>
+
+            {/* Icon */}
+            <div className="text-5xl mb-6">🎮</div>
+
+            {/* Title */}
+            <h2
+              style={{
+                fontFamily: "'Press Start 2P'",
+                fontSize: '14px',
+                color: '#ffd93d',
+                marginBottom: '16px',
+              }}
+              className="text-glow-yellow"
+            >
+              UNLOCK MORE LEVELS!
+            </h2>
+
+            {/* Description */}
+            <p
+              style={{
+                fontFamily: "'Press Start 2P'",
+                fontSize: '8px',
+                color: '#eef5db',
+                lineHeight: '2.2',
+                marginBottom: '24px',
+              }}
+            >
+              CREATE A FREE ACCOUNT TO<br />
+              CONTINUE YOUR TYPING JOURNEY
+            </p>
+
+            {/* Benefits */}
+            <div
+              className="p-4 mb-6"
+              style={{
+                background: 'rgba(59, 206, 172, 0.1)',
+                border: '2px solid rgba(59, 206, 172, 0.3)',
+                borderRadius: '4px',
+              }}
+            >
+              <div className="grid grid-cols-2 gap-3 text-left">
+                <div className="flex items-center gap-2">
+                  <span>🎯</span>
+                  <span style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: '#3bceac' }}>
+                    30 LEVELS
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span>📊</span>
+                  <span style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: '#3bceac' }}>
+                    TRACK PROGRESS
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span>🏆</span>
+                  <span style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: '#3bceac' }}>
+                    LEADERBOARDS
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span>🔥</span>
+                  <span style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: '#3bceac' }}>
+                    DAILY STREAKS
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Sign Up Button */}
+            <button
+              onClick={() => {
+                setShowSignUpModal(false);
+                openSignUp();
+              }}
+              className="w-full px-6 py-4 mb-4 transition-transform hover:scale-105"
+              style={{
+                fontFamily: "'Press Start 2P'",
+                fontSize: '12px',
+                background: 'linear-gradient(180deg, #3bceac, #0ead69)',
+                color: '#0f0f1b',
+                border: 'none',
+                cursor: 'pointer',
+                boxShadow: '0 4px 0 #0a8a54',
+              }}
+            >
+              SIGN UP FREE
+            </button>
+
+            {/* Guest note */}
+            <p
+              style={{
+                fontFamily: "'Press Start 2P'",
+                fontSize: '6px',
+                color: '#4a4a6e',
+              }}
+            >
+              GUEST ACCESS: LEVELS 1-2 ONLY
+            </p>
+          </div>
+        </div>
+      )}
 
       {/* Header HUD */}
       <header className="pixel-box m-4 p-4">
@@ -573,7 +726,13 @@ function App() {
                 progress={progress[lesson.id]}
                 isLocked={!isLevelAccessible(lesson.id)}
                 isPremiumLocked={requiresPremium(lesson.id) && !isPremium}
+                isGuestLocked={requiresSignUp(lesson.id)}
                 onClick={() => {
+                  // If level requires sign-up (guest trying to access level 3+), open sign-up
+                  if (requiresSignUp(lesson.id)) {
+                    setShowSignUpModal(true);
+                    return;
+                  }
                   // If level requires premium and user isn't premium, show premium page
                   if (requiresPremium(lesson.id) && !isPremium) {
                     navigateTo('premium');
