@@ -467,8 +467,8 @@ function App() {
       )}
 
       {/* Header HUD */}
-      <header className="pixel-box m-2 p-2 md:m-4 md:p-4">
-        <div className="flex items-center justify-between gap-2 md:gap-4">
+      <header className="pixel-box m-2 p-2 md:m-4 md:p-4 overflow-hidden">
+        <div className="flex items-center justify-between gap-1 sm:gap-2 md:gap-4">
           {/* Logo */}
           <div className="flex items-center gap-2 md:gap-4 min-w-0">
             <div
@@ -503,12 +503,21 @@ function App() {
               </div>
             )}
 
-            {/* Coins with Shop Link */}
-            <CoinBalance
-              balance={coinBalance ?? gameState.coins}
-              size="lg"
-              onClick={() => navigateTo('shop')}
-            />
+            {/* Coins with Shop Link - responsive size */}
+            <div className="hidden sm:block">
+              <CoinBalance
+                balance={coinBalance ?? gameState.coins}
+                size="lg"
+                onClick={() => navigateTo('shop')}
+              />
+            </div>
+            <div className="sm:hidden">
+              <CoinBalance
+                balance={coinBalance ?? gameState.coins}
+                size="sm"
+                onClick={() => navigateTo('shop')}
+              />
+            </div>
 
             {/* Daily Challenge Button - hidden on mobile */}
             {keyboardLocked && (

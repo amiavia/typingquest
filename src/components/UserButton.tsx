@@ -45,10 +45,10 @@ export function UserButton({ userLevel = 1, onOpenShop }: UserButtonProps) {
       <SignedOut>
         <SignInButton mode="modal">
           <button
-            className="pixel-box px-4 py-2 cursor-pointer transition-all hover:scale-105"
+            className="pixel-box px-2 py-1 sm:px-4 sm:py-2 cursor-pointer transition-all hover:scale-105 whitespace-nowrap"
             style={{
               fontFamily: "'Press Start 2P', monospace",
-              fontSize: '8px',
+              fontSize: '7px',
               color: '#3bceac',
               background: 'rgba(59, 206, 172, 0.1)',
               border: '2px solid #3bceac',
