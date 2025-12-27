@@ -1166,16 +1166,72 @@ function App() {
                 </div>
               )}
 
-              {/* Themed Levels (31-50) - Always Collapsed for now (content coming soon) */}
-              <LevelGroupCollapsed
-                type="themed"
-                isUnlocked={isPremium}
-                isPremium={isPremium}
-                onUpgrade={() => navigateTo('premium')}
-                onExpand={() => setExpandThemedLevels(true)}
-                levelRange="31-50"
-                totalLevels={20}
-              />
+              {/* Themed Levels (31-50) - Collapsed or Expanded */}
+              {!expandThemedLevels ? (
+                <LevelGroupCollapsed
+                  type="themed"
+                  isUnlocked={isPremium}
+                  isPremium={isPremium}
+                  onUpgrade={() => navigateTo('premium')}
+                  onExpand={() => setExpandThemedLevels(true)}
+                  levelRange="31-50"
+                  totalLevels={20}
+                />
+              ) : (
+                <div>
+                  <div className="flex items-center justify-between mb-4">
+                    <h4
+                      className="flex items-center gap-2"
+                      style={{
+                        fontFamily: "'Press Start 2P'",
+                        fontSize: '10px',
+                        color: '#8b5cf6',
+                      }}
+                    >
+                      <span>⚡</span> SPEED OF THOUGHT (31-50)
+                    </h4>
+                    <button
+                      onClick={() => setExpandThemedLevels(false)}
+                      className="cursor-pointer transition-all hover:scale-105"
+                      style={{
+                        fontFamily: "'Press Start 2P'",
+                        fontSize: '7px',
+                        color: '#4a4a6e',
+                        background: 'transparent',
+                        border: '1px solid #4a4a6e',
+                        padding: '6px 12px',
+                      }}
+                    >
+                      ▲ COLLAPSE
+                    </button>
+                  </div>
+                  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {lessons.filter(l => l.id >= 31 && l.id <= 50).map(lesson => (
+                      <LessonCard
+                        key={lesson.id}
+                        lesson={lesson}
+                        progress={progress[lesson.id]}
+                        isLocked={!isLevelAccessible(lesson.id)}
+                        isPremiumLocked={!isPremium}
+                        isGuestLocked={requiresSignUp(lesson.id)}
+                        onClick={() => {
+                          if (requiresSignUp(lesson.id)) {
+                            setShowSignUpModal(true);
+                            return;
+                          }
+                          if (!isPremium) {
+                            navigateTo('premium');
+                            return;
+                          }
+                          if (isLessonUnlocked(lesson.id)) {
+                            handleLessonSelect(lesson);
+                          }
+                        }}
+                      />
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           ) : (
             /* Filtered tier view - show all levels in selected tier */
