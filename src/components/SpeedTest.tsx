@@ -80,6 +80,7 @@ export function SpeedTest({ onComplete, onSkip }: SpeedTestProps) {
   // Detection state
   const [detectedFamily, setDetectedFamily] = useState<LayoutFamily>(null);
   const [keystrokes, setKeystrokes] = useState<KeystrokeEvent[]>([]);
+  const [pendingPhase2, setPendingPhase2] = useState(false); // Wait for sentence completion before switching
 
   // Results state
   const [results, setResults] = useState<SpeedTestResults | null>(null);
@@ -147,6 +148,35 @@ export function SpeedTest({ onComplete, onSkip }: SpeedTestProps) {
     return null;
   }, []);
 
+  // Detect QWERTZ variant (DE vs CH) based on ß handling
+  const detectQwertzVariant = useCallback((strokes: KeystrokeEvent[]): 'qwertz-de' | 'qwertz-ch' => {
+    // Check ß keystrokes - Swiss keyboards don't have native ß key
+    const eszettStrokes = strokes.filter(k => k.expectedChar === 'ß');
+
+    if (eszettStrokes.length > 0) {
+      // Count how many ß were typed correctly vs incorrectly
+      const correctEszett = eszettStrokes.filter(k => k.correct).length;
+      const wrongEszett = eszettStrokes.filter(k => !k.correct).length;
+
+      // If user got ß wrong more than right, likely Swiss (no native ß key)
+      if (wrongEszett > correctEszett) {
+        return 'qwertz-ch';
+      }
+      // If user typed ß correctly, likely German (has native ß key)
+      if (correctEszett > 0) {
+        return 'qwertz-de';
+      }
+    }
+
+    // Fall back to browser locale
+    const locale = navigator.language.toLowerCase();
+    if (locale.includes('ch') || locale === 'de-ch' || locale === 'fr-ch' || locale === 'it-ch') {
+      return 'qwertz-ch';
+    }
+
+    return 'qwertz-de';
+  }, []);
+
   // Calculate WPM and accuracy
   const calculateResults = useCallback((): SpeedTestResults => {
     const elapsedMs = Date.now() - startTimeRef.current;
@@ -162,9 +192,16 @@ export function SpeedTest({ onComplete, onSkip }: SpeedTestProps) {
     const errors = keystrokes.filter(k => !k.correct).length;
     const accuracy = totalChars > 0 ? Math.round((correctChars / totalChars) * 100) : 0;
 
-    // Determine layout
+    // Determine layout family first
     const family = analyzeKeystrokes(keystrokes) || 'qwerty';
-    const detectedLayout = getVariantForFamily(family);
+
+    // For QWERTZ, use smart variant detection based on ß handling
+    let detectedLayout: KeyboardLayoutType;
+    if (family === 'qwertz') {
+      detectedLayout = detectQwertzVariant(keystrokes);
+    } else {
+      detectedLayout = getVariantForFamily(family);
+    }
 
     return {
       wpm: Math.max(0, wpm),
@@ -175,7 +212,7 @@ export function SpeedTest({ onComplete, onSkip }: SpeedTestProps) {
       detectedFamily: family,
       testDurationMs: elapsedMs,
     };
-  }, [keystrokes, analyzeKeystrokes]);
+  }, [keystrokes, analyzeKeystrokes, detectQwertzVariant]);
 
   // Handle countdown
   useEffect(() => {
@@ -232,15 +269,13 @@ export function SpeedTest({ onComplete, onSkip }: SpeedTestProps) {
       const remaining = Math.max(0, Math.ceil((TEST_DURATION_MS - elapsed) / 1000));
       setTimeLeft(remaining);
 
-      // Check if we should switch to Phase 2 (German text for QWERTZ)
-      if (!isPhase2 && elapsed > DETECTION_THRESHOLD_MS) {
+      // Check if we should prepare for Phase 2 (German text for QWERTZ variant detection)
+      if (!isPhase2 && !pendingPhase2 && elapsed > DETECTION_THRESHOLD_MS) {
         const family = analyzeKeystrokes(keystrokes);
         if (family === 'qwertz') {
-          setIsPhase2(true);
+          // Mark as pending - will switch when current sentence is completed
+          setPendingPhase2(true);
           setDetectedFamily('qwertz');
-          // Load German sentence
-          setCurrentSentence(getNextSentence(true));
-          setInputText('');
         } else if (family) {
           setDetectedFamily(family);
         }
@@ -258,7 +293,7 @@ export function SpeedTest({ onComplete, onSkip }: SpeedTestProps) {
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
     };
-  }, [phase, isPhase2, keystrokes, analyzeKeystrokes, calculateResults, getNextSentence]);
+  }, [phase, isPhase2, pendingPhase2, keystrokes, analyzeKeystrokes, calculateResults, getNextSentence]);
 
   // Handle input
   const handleInput = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
@@ -285,11 +320,17 @@ export function SpeedTest({ onComplete, onSkip }: SpeedTestProps) {
 
     // Check if sentence completed
     if (value === currentSentence) {
-      // Load next sentence
-      setCurrentSentence(getNextSentence(isPhase2));
+      // Check if we should transition to Phase 2 (German text)
+      if (pendingPhase2 && !isPhase2) {
+        setIsPhase2(true);
+        setPendingPhase2(false);
+        setCurrentSentence(getNextSentence(true)); // German sentence
+      } else {
+        setCurrentSentence(getNextSentence(isPhase2));
+      }
       setInputText('');
     }
-  }, [phase, currentSentence, inputText, isPhase2, getNextSentence]);
+  }, [phase, currentSentence, inputText, isPhase2, pendingPhase2, getNextSentence]);
 
   // Store physical key code before input event fires
   const handleKeyDown = useCallback((e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -314,6 +355,7 @@ export function SpeedTest({ onComplete, onSkip }: SpeedTestProps) {
     setKeystrokes([]);
     setResults(null);
     setIsPhase2(false);
+    setPendingPhase2(false);
     setDetectedFamily(null);
     sentenceIndexRef.current = 0;
     setCurrentSentence(getNextSentence(false));
