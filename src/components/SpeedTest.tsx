@@ -65,7 +65,7 @@ interface SpeedTestProps {
 }
 
 export function SpeedTest({ onComplete, onSkip }: SpeedTestProps) {
-  const { layout, lockLayout, processKeystroke } = useKeyboardLayout();
+  const { layout, lockLayout, pauseDetection, resumeDetection } = useKeyboardLayout();
   const { isSignedIn } = useAuth();
   const { openSignUp } = useClerk();
 
@@ -202,6 +202,26 @@ export function SpeedTest({ onComplete, onSkip }: SpeedTestProps) {
     }
   }, [phase]);
 
+  // Pause global layout detection during speed test (we do our own detection)
+  useEffect(() => {
+    if (phase === 'countdown' || phase === 'testing') {
+      pauseDetection();
+    }
+    return () => {
+      // Resume when component unmounts or phase changes
+      if (phase === 'results' || phase === 'intro') {
+        resumeDetection();
+      }
+    };
+  }, [phase, pauseDetection, resumeDetection]);
+
+  // Resume detection when test completes or is skipped
+  useEffect(() => {
+    return () => {
+      resumeDetection();
+    };
+  }, [resumeDetection]);
+
   // Handle test timer
   useEffect(() => {
     if (phase !== 'testing') return;
@@ -248,7 +268,7 @@ export function SpeedTest({ onComplete, onSkip }: SpeedTestProps) {
     const typedChar = value[value.length - 1];
 
     if (typedChar && expectedChar) {
-      // Record keystroke for detection
+      // Record keystroke for detection (SpeedTest does its own detection)
       const event: KeystrokeEvent = {
         expectedChar,
         actualKey: typedChar,
@@ -257,9 +277,8 @@ export function SpeedTest({ onComplete, onSkip }: SpeedTestProps) {
         correct: typedChar === expectedChar,
       };
       setKeystrokes(prev => [...prev, event]);
-
-      // Process for layout detection
-      processKeystroke('', typedChar);
+      // Note: We don't call processKeystroke here to avoid premature layout locking
+      // SpeedTest has its own detection via analyzeKeystrokes()
     }
 
     setInputText(value);
@@ -270,7 +289,7 @@ export function SpeedTest({ onComplete, onSkip }: SpeedTestProps) {
       setCurrentSentence(getNextSentence(isPhase2));
       setInputText('');
     }
-  }, [phase, currentSentence, inputText, isPhase2, getNextSentence, processKeystroke]);
+  }, [phase, currentSentence, inputText, isPhase2, getNextSentence]);
 
   // Track physical key codes
   const handleKeyDown = useCallback((e: React.KeyboardEvent<HTMLInputElement>) => {

@@ -21,6 +21,11 @@ interface KeyboardLayoutContextValue {
   setLayout: (layout: KeyboardLayoutType) => void;
   lockLayout: (layout: KeyboardLayoutType) => void;
 
+  // Pause detection (for SpeedTest to run its own detection)
+  pauseDetection: () => void;
+  resumeDetection: () => void;
+  isDetectionPaused: boolean;
+
   // For UI feedback
   lastDetectedKey: string | null;
   confidence: Record<LayoutFamily, number>;
@@ -239,6 +244,16 @@ export function KeyboardLayoutProvider({ children }: KeyboardLayoutProviderProps
   });
 
   const [lastDetectedKey, setLastDetectedKey] = useState<string | null>(null);
+  const [isDetectionPaused, setIsDetectionPaused] = useState(false);
+
+  // Pause/resume detection (for SpeedTest)
+  const pauseDetection = useCallback(() => {
+    setIsDetectionPaused(true);
+  }, []);
+
+  const resumeDetection = useCallback(() => {
+    setIsDetectionPaused(false);
+  }, []);
 
   // Lock and save layout
   const lockLayout = useCallback((newLayout: KeyboardLayoutType) => {
@@ -250,6 +265,9 @@ export function KeyboardLayoutProvider({ children }: KeyboardLayoutProviderProps
 
   // Process keystroke for detection
   const processKeystroke = useCallback((code: string, key: string) => {
+    // Skip if detection is paused (SpeedTest is running its own detection)
+    if (isDetectionPaused) return;
+
     const keyLower = key.toLowerCase();
 
     // If layout is locked, only check for CONTRADICTING definitive keys
@@ -317,7 +335,7 @@ export function KeyboardLayoutProvider({ children }: KeyboardLayoutProviderProps
       });
       setLastDetectedKey(keyLower);
     }
-  }, [isLocked, layout, lockLayout]);
+  }, [isDetectionPaused, isLocked, layout, lockLayout]);
 
   // Reset detection
   const resetDetection = useCallback(() => {
@@ -359,6 +377,9 @@ export function KeyboardLayoutProvider({ children }: KeyboardLayoutProviderProps
     resetDetection,
     setLayout,
     lockLayout,
+    pauseDetection,
+    resumeDetection,
+    isDetectionPaused,
     lastDetectedKey,
     confidence,
   }), [
@@ -370,6 +391,9 @@ export function KeyboardLayoutProvider({ children }: KeyboardLayoutProviderProps
     resetDetection,
     setLayout,
     lockLayout,
+    pauseDetection,
+    resumeDetection,
+    isDetectionPaused,
     lastDetectedKey,
     confidence,
   ]);
