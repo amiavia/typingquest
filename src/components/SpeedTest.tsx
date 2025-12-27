@@ -14,6 +14,7 @@ import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { useKeyboardLayout, getVariantForFamily } from '../providers/KeyboardLayoutProvider';
 import { KeyboardWithHands } from './KeyboardWithHands';
 import { KEYBOARD_LAYOUTS, type KeyboardLayoutType } from '../data/keyboardLayouts';
+import { useAuth, useClerk } from '@clerk/clerk-react';
 
 // ==================== TEST SENTENCES ====================
 
@@ -65,6 +66,8 @@ interface SpeedTestProps {
 
 export function SpeedTest({ onComplete, onSkip }: SpeedTestProps) {
   const { layout, lockLayout, processKeystroke } = useKeyboardLayout();
+  const { isSignedIn } = useAuth();
+  const { openSignUp } = useClerk();
 
   // Test state
   const [phase, setPhase] = useState<TestPhase>('intro');
@@ -187,6 +190,17 @@ export function SpeedTest({ onComplete, onSkip }: SpeedTestProps) {
       inputRef.current?.focus();
     }
   }, [phase, countdown]);
+
+  // Focus input when testing starts
+  useEffect(() => {
+    if (phase === 'testing') {
+      // Small delay to ensure DOM is ready
+      const focusTimer = setTimeout(() => {
+        inputRef.current?.focus();
+      }, 100);
+      return () => clearTimeout(focusTimer);
+    }
+  }, [phase]);
 
   // Handle test timer
   useEffect(() => {
@@ -452,9 +466,10 @@ export function SpeedTest({ onComplete, onSkip }: SpeedTestProps) {
             </span>
           </div>
 
-          {/* Typing area */}
+          {/* Typing area with overlaid input */}
           <div
-            className="p-4 mb-4 text-left"
+            className="relative p-4 mb-4 text-left cursor-text"
+            onClick={() => inputRef.current?.focus()}
             style={{
               background: '#0d0d1a',
               border: `2px solid ${isPhase2 ? '#ffd93d' : '#3bceac'}`,
@@ -464,22 +479,28 @@ export function SpeedTest({ onComplete, onSkip }: SpeedTestProps) {
             <p style={{ fontFamily: "'Press Start 2P'", fontSize: '14px', lineHeight: '2.5' }}>
               {renderTypedText}
             </p>
+            {/* Invisible input overlaying the typing area */}
+            <input
+              ref={inputRef}
+              type="text"
+              value={inputText}
+              onChange={handleInput}
+              onKeyDown={handleKeyDown}
+              autoComplete="off"
+              autoCapitalize="off"
+              autoCorrect="off"
+              spellCheck={false}
+              autoFocus
+              className="absolute inset-0 w-full h-full"
+              style={{
+                background: 'transparent',
+                color: 'transparent',
+                caretColor: 'transparent',
+                outline: 'none',
+                border: 'none',
+              }}
+            />
           </div>
-
-          {/* Hidden input */}
-          <input
-            ref={inputRef}
-            type="text"
-            value={inputText}
-            onChange={handleInput}
-            onKeyDown={handleKeyDown}
-            autoComplete="off"
-            autoCapitalize="off"
-            autoCorrect="off"
-            spellCheck={false}
-            className="opacity-0 absolute"
-            style={{ pointerEvents: 'auto' }}
-          />
 
           {/* Click to focus hint */}
           <p
@@ -671,8 +692,45 @@ export function SpeedTest({ onComplete, onSkip }: SpeedTestProps) {
             </div>
           </div>
 
-          <p style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: '#4a4a6e' }}>
-            YOUR BASELINE WILL BE SAVED AFTER CONFIRMATION
+          {/* Sign-up CTA for guests */}
+          {!isSignedIn && (
+            <div
+              className="mt-6 p-4"
+              style={{
+                background: 'linear-gradient(135deg, rgba(59, 206, 172, 0.15), rgba(255, 217, 61, 0.15))',
+                border: '2px solid #3bceac',
+                borderRadius: '8px',
+              }}
+            >
+              <p
+                style={{ fontFamily: "'Press Start 2P'", fontSize: '10px', color: '#3bceac' }}
+                className="mb-3"
+              >
+                CREATE FREE ACCOUNT
+              </p>
+              <p style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: '#eef5db', lineHeight: '2' }}>
+                TRACK YOUR PROGRESS OVER TIME AND EARN CREDITS FOR NEW LEVELS
+              </p>
+              <button
+                onClick={() => openSignUp()}
+                className="mt-4 px-6 py-3"
+                style={{
+                  fontFamily: "'Press Start 2P'",
+                  fontSize: '10px',
+                  background: 'linear-gradient(180deg, #3bceac, #0ead69)',
+                  color: '#0f0f1b',
+                  border: 'none',
+                  cursor: 'pointer',
+                  boxShadow: '0 4px 0 #0a8a54',
+                }}
+              >
+                SIGN UP FREE
+              </button>
+            </div>
+          )}
+
+          <p style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: '#4a4a6e', marginTop: '12px' }}>
+            {isSignedIn ? 'YOUR BASELINE WILL BE SAVED AFTER CONFIRMATION' : 'SIGN UP TO SAVE YOUR PROGRESS'}
           </p>
 
           {/* Layout picker */}
