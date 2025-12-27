@@ -1,6 +1,6 @@
 # PRP-040: Mobile Experience & Desktop Handoff
 
-## Status: Proposed
+## Status: Implemented
 
 ## Summary
 
