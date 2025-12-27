@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "lib": ["ES2023"],
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "isolatedModules": true,
+    "types": ["node"]
+  },
+  "include": ["./**/*"],
+  "exclude": ["node_modules", "_generated"]
+}

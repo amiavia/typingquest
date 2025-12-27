@@ -8,7 +8,9 @@
  * @module
  */
 
+import type * as analytics from "../analytics.js";
 import type * as coins from "../coins.js";
+import type * as crons from "../crons.js";
 import type * as dailyChallenges from "../dailyChallenges.js";
 import type * as gameState from "../gameState.js";
 import type * as http from "../http.js";
@@ -32,7 +34,9 @@ import type {
 } from "convex/server";
 
 declare const fullApi: ApiFromModules<{
+  analytics: typeof analytics;
   coins: typeof coins;
+  crons: typeof crons;
   dailyChallenges: typeof dailyChallenges;
   gameState: typeof gameState;
   http: typeof http;

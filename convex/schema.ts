@@ -21,6 +21,30 @@ export default defineSchema({
     autoNickname: v.optional(v.string()), // System-generated gaming nickname
     isNicknameCustom: v.optional(v.boolean()), // Whether user set custom nickname
     nicknameChangedAt: v.optional(v.number()), // When nickname was last changed
+    // PRP-038: Initial Speed Test
+    initialSpeedTest: v.optional(
+      v.object({
+        wpm: v.number(),
+        accuracy: v.number(),
+        timestamp: v.number(),
+        keyboardLayout: v.string(),
+        charactersTyped: v.number(),
+        testDurationMs: v.number(),
+      })
+    ),
+    speedTests: v.optional(
+      v.array(
+        v.object({
+          wpm: v.number(),
+          accuracy: v.number(),
+          timestamp: v.number(),
+          keyboardLayout: v.string(),
+          charactersTyped: v.number(),
+          testDurationMs: v.number(),
+          testType: v.string(), // 'initial' | 'practice' | 'retake'
+        })
+      )
+    ),
     createdAt: v.number(),
     lastLoginAt: v.number(),
   })

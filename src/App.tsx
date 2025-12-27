@@ -2,8 +2,8 @@ import { useState, useCallback } from 'react';
 import type { Lesson, TypingStats } from './types';
 import { LessonCard } from './components/LessonCard';
 import { LessonView } from './components/LessonView';
-import { TryItOutSection } from './components/TryItOutSection';
-import { CompactKeyboardBadge } from './components/CompactKeyboardBadge';
+import { SpeedTest } from './components/SpeedTest';
+import { CollapsedHero } from './components/CollapsedHero';
 import { DailyChallengeButton } from './components/DailyChallengeButton';
 import { RetroLoadingScreen } from './components/RetroLoadingScreen';
 import { useKeyboardLayout } from './providers/KeyboardLayoutProvider';
@@ -22,7 +22,7 @@ import { useGameState } from './hooks/useGameState';
 import { useLessonProgress } from './hooks/useLessonProgress';
 import { usePremium } from './hooks/usePremium';
 import { LEVEL_TIERS, levels, type LevelTier } from './data/levels';
-import { useQuery } from 'convex/react';
+import { useQuery, useMutation } from 'convex/react';
 import { api } from '../convex/_generated/api';
 import { useAuth } from '@clerk/clerk-react';
 
@@ -49,9 +49,10 @@ function App() {
   const [selectedTier, setSelectedTier] = useState<number | 'all'>('all');
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [loadingMessage, setLoadingMessage] = useState<string | undefined>();
+  const [showSpeedTest, setShowSpeedTest] = useState(false); // For retaking speed test
 
   // Get layout from global context
-  const { layout: keyboardLayout, isLocked: keyboardLocked } = useKeyboardLayout();
+  const { layout: keyboardLayout, isLocked: keyboardLocked, lockLayout } = useKeyboardLayout();
 
   const { userId } = useAuth();
   const gameState = useGameState();
@@ -66,6 +67,11 @@ function App() {
     api.streaks.getStreak,
     userId ? { clerkId: userId } : "skip"
   );
+  const speedTestData = useQuery(
+    api.users.getSpeedTestData,
+    userId ? {} : "skip"
+  );
+  const saveInitialSpeedTest = useMutation(api.users.saveInitialSpeedTest);
   const { progress, updateProgress, getCompletedCount, isLessonUnlocked } = useLessonProgress();
 
   // Use static 30 levels from levels.ts (PRP-027)
@@ -134,6 +140,57 @@ function App() {
     setSelectedLegalPage(page);
     navigateTo('legal');
   };
+
+  // PRP-038: Speed test handlers
+  const handleSpeedTestComplete = useCallback(async (results: {
+    wpm: number;
+    accuracy: number;
+    charactersTyped: number;
+    errors: number;
+    detectedLayout: string;
+    testDurationMs: number;
+  }, confirmed: boolean) => {
+    if (confirmed) {
+      // Lock the layout (already done in SpeedTest component)
+      lockLayout(results.detectedLayout as Parameters<typeof lockLayout>[0]);
+
+      // Save to Convex if authenticated
+      if (userId) {
+        try {
+          await saveInitialSpeedTest({
+            wpm: results.wpm,
+            accuracy: results.accuracy,
+            keyboardLayout: results.detectedLayout,
+            charactersTyped: results.charactersTyped,
+            testDurationMs: results.testDurationMs,
+          });
+        } catch (err) {
+          console.error('Failed to save speed test:', err);
+        }
+      } else {
+        // Save to localStorage for guests
+        localStorage.setItem('typebit8_speedtest', JSON.stringify({
+          wpm: results.wpm,
+          accuracy: results.accuracy,
+          keyboardLayout: results.detectedLayout,
+          timestamp: Date.now(),
+        }));
+      }
+
+      // Exit retake mode
+      setShowSpeedTest(false);
+    }
+  }, [userId, saveInitialSpeedTest, lockLayout]);
+
+  const handleSpeedTestSkip = useCallback(() => {
+    // Skip the speed test but still need to select keyboard manually
+    // This will be handled by the existing layout picker
+    setShowSpeedTest(false);
+  }, []);
+
+  const handleRetakeTest = useCallback(() => {
+    setShowSpeedTest(true);
+  }, []);
 
   const totalCompleted = getCompletedCount();
 
@@ -313,8 +370,8 @@ function App() {
       </header>
 
       {/* Conditional Layout Based on Keyboard Detection */}
-      {!keyboardLocked ? (
-        /* ========== NEW USER FLOW (Keyboard not set up) ========== */
+      {(!keyboardLocked || showSpeedTest) ? (
+        /* ========== NEW USER FLOW (Keyboard not set up) or RETAKE ========== */
         <>
           {/* Hero Section with full onboarding */}
           <section className="p-4 md:p-8 text-center">
@@ -357,21 +414,35 @@ function App() {
                 </div>
               </div>
 
-              {/* Try It Out - Keyboard with Detection */}
-              <TryItOutSection />
+              {/* PRP-038: Speed Test for keyboard detection + baseline measurement */}
+              <SpeedTest
+                onComplete={handleSpeedTestComplete}
+                onSkip={showSpeedTest ? handleSpeedTestSkip : undefined}
+              />
             </div>
           </section>
         </>
       ) : (
         /* ========== RETURNING USER FLOW (Keyboard set up) ========== */
         <>
-          {/* Compact Keyboard Badge */}
-          <CompactKeyboardBadge />
+          {/* PRP-038: Collapsed Hero for returning users */}
+          <section className="p-4 md:p-8">
+            <div className="max-w-4xl mx-auto">
+              <CollapsedHero
+                initialWpm={speedTestData?.initialSpeedTest?.wpm}
+                onRetakeTest={handleRetakeTest}
+                onStartPracticing={() => {
+                  // Scroll to lessons section
+                  document.getElementById('lessons-section')?.scrollIntoView({ behavior: 'smooth' });
+                }}
+              />
+            </div>
+          </section>
         </>
       )}
 
-      {/* How to Play - Only for new users */}
-      {!keyboardLocked && (
+      {/* How to Play - Only for new users (not during retake) */}
+      {(!keyboardLocked && !showSpeedTest) && (
         <section className="p-4 md:p-8">
           <div className="max-w-4xl mx-auto">
             <h3
@@ -417,7 +488,7 @@ function App() {
       )}
 
       {/* Level Select - PROMOTED TO TOP for returning users */}
-      <section className="p-4 md:p-8">
+      <section id="lessons-section" className="p-4 md:p-8">
         <div className="max-w-6xl mx-auto">
           <div className="flex items-center justify-between mb-6 flex-wrap gap-4">
             <h3 style={{ fontFamily: "'Press Start 2P'", fontSize: '14px', color: '#ffd93d' }}>

@@ -149,3 +149,128 @@ export const updateAvatar = mutation({
     return { success: true, avatarId };
   },
 });
+
+// ═══════════════════════════════════════════════════════════════════
+// PRP-038: SPEED TEST
+// ═══════════════════════════════════════════════════════════════════
+
+// Save initial speed test results
+export const saveInitialSpeedTest = mutation({
+  args: {
+    wpm: v.number(),
+    accuracy: v.number(),
+    keyboardLayout: v.string(),
+    charactersTyped: v.number(),
+    testDurationMs: v.number(),
+  },
+  handler: async (ctx, { wpm, accuracy, keyboardLayout, charactersTyped, testDurationMs }) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new Error("Not authenticated");
+
+    const user = await ctx.db
+      .query("users")
+      .withIndex("by_clerk_id", (q) => q.eq("clerkId", identity.subject))
+      .unique();
+
+    if (!user) throw new Error("User not found");
+
+    const speedTestData = {
+      wpm,
+      accuracy,
+      timestamp: Date.now(),
+      keyboardLayout,
+      charactersTyped,
+      testDurationMs,
+    };
+
+    // Save as initial speed test
+    await ctx.db.patch(user._id, {
+      initialSpeedTest: speedTestData,
+    });
+
+    // Also add to speed tests history
+    const existingTests = user.speedTests || [];
+    await ctx.db.patch(user._id, {
+      speedTests: [
+        ...existingTests,
+        { ...speedTestData, testType: "initial" },
+      ],
+    });
+
+    // Update settings with the keyboard layout
+    const settings = await ctx.db
+      .query("settings")
+      .withIndex("by_user", (q) => q.eq("userId", user._id))
+      .unique();
+
+    if (settings) {
+      await ctx.db.patch(settings._id, {
+        keyboardLayout,
+        updatedAt: Date.now(),
+      });
+    }
+
+    return { success: true, speedTestData };
+  },
+});
+
+// Add a speed test to history (for retakes/practice)
+export const addSpeedTest = mutation({
+  args: {
+    wpm: v.number(),
+    accuracy: v.number(),
+    keyboardLayout: v.string(),
+    charactersTyped: v.number(),
+    testDurationMs: v.number(),
+    testType: v.string(), // 'practice' | 'retake'
+  },
+  handler: async (ctx, { wpm, accuracy, keyboardLayout, charactersTyped, testDurationMs, testType }) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) throw new Error("Not authenticated");
+
+    const user = await ctx.db
+      .query("users")
+      .withIndex("by_clerk_id", (q) => q.eq("clerkId", identity.subject))
+      .unique();
+
+    if (!user) throw new Error("User not found");
+
+    const speedTestData = {
+      wpm,
+      accuracy,
+      timestamp: Date.now(),
+      keyboardLayout,
+      charactersTyped,
+      testDurationMs,
+      testType,
+    };
+
+    const existingTests = user.speedTests || [];
+    await ctx.db.patch(user._id, {
+      speedTests: [...existingTests, speedTestData],
+    });
+
+    return { success: true, speedTestData };
+  },
+});
+
+// Get user's speed test data
+export const getSpeedTestData = query({
+  args: {},
+  handler: async (ctx) => {
+    const identity = await ctx.auth.getUserIdentity();
+    if (!identity) return null;
+
+    const user = await ctx.db
+      .query("users")
+      .withIndex("by_clerk_id", (q) => q.eq("clerkId", identity.subject))
+      .unique();
+
+    if (!user) return null;
+
+    return {
+      initialSpeedTest: user.initialSpeedTest || null,
+      speedTests: user.speedTests || [],
+    };
+  },
+});

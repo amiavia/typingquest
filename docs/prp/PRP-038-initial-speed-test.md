@@ -1,238 +1,416 @@
 # PRP-038: Initial Speed Test & First Experience Enhancement
 
 ## Summary
-Enhance the first-time user experience by requiring a speed test when no keyboard layout is stored in the user's profile. This establishes a baseline typing speed that can be used for progress tracking and statistics. Users who have already set their keyboard layout will see a collapsed onboarding view.
+Replace the current keyboard detection flow with a unified **Speed Test** that serves dual purpose:
+1. **Detects keyboard layout** through typing (replaces current "press Z/Y" detection)
+2. **Measures baseline WPM** for progress tracking
+
+Users who already have a keyboard layout saved see a **collapsed view** with immediate access to lessons.
 
 ## Problem Statement
-Currently, new users see a "type some words" experience which is engaging but doesn't capture any metrics. We're missing an opportunity to:
-1. Establish a baseline typing speed for measuring progress
-2. Create a more engaging first-time experience
-3. Store valuable data for future statistics and personalized recommendations
+Currently, we have two separate experiences:
+1. Keyboard detection ("type some words" / "press Z or Y")
+2. No speed baseline captured
+
+This misses an opportunity to combine these into a single, engaging experience that both detects the keyboard AND establishes a typing baseline.
 
 ## Goals
-1. Implement a speed test that appears when user has no keyboard layout set
-2. Store speed test results with timestamp in user profile
-3. Show collapsed onboarding view for returning users with keyboard layout set
-4. Create foundation for progress tracking statistics
+1. **Single Speed Test** for all users without keyboard set (guest or authenticated)
+2. Speed test **detects keyboard layout** from typing patterns
+3. Speed test **captures WPM baseline** with timestamp
+4. **Collapsed view** for returning users with keyboard already set
+5. Store results for future statistics and progress tracking
 
 ## Non-Goals
 - Advanced typing analytics (accuracy breakdown by finger, etc.)
-- Comparative statistics with other users (leaderboard for speed tests)
+- Comparative statistics with other users
 - Multiple speed test difficulty levels
+
+## Success Metrics
+
+| Metric | Target | How to Measure |
+|--------|--------|----------------|
+| Detection accuracy | >95% users confirm detected layout | `layout_confirmed` analytics |
+| Completion rate | >80% complete test (don't skip) | `speed_test_completed` / `speed_test_started` |
+| Time to detect | <15 seconds for family detection | `avg_detection_time` metric |
+| User satisfaction | <5% retake immediately | `retake_rate` within 1 minute |
+| Onboarding improvement | Faster time-to-first-lesson | Compare with current flow |
+
+## Open Questions
+
+1. **Test duration**: 30 seconds feels right, but should we test 20s or 45s?
+2. **Skip penalty**: Should skipping disable some features until test taken?
+3. **Retake cooldown**: Can users spam retakes? Should there be a limit?
+4. **Baseline visibility**: Should baseline WPM be shown on profile/stats page?
+5. **Progress notifications**: "You've improved 15% since your first test!" - when to show?
+
+## User Flow Matrix
+
+| User State | Keyboard Set? | Experience |
+|------------|---------------|------------|
+| Guest (new) | No | Speed Test (detects keyboard + measures WPM) |
+| Guest (returning) | Yes (local) | Collapsed View |
+| Authenticated (new) | No | Speed Test (detects keyboard + measures WPM) |
+| Authenticated (returning) | Yes | Collapsed View |
 
 ## Technical Approach
 
-### 1. Database Schema Changes
+### 1. Speed Test with Keyboard Detection
 
-Add new fields to user document in Convex:
+The speed test will include words that reveal keyboard layout:
+- Words containing "z" and "y" (QWERTY vs QWERTZ detection)
+- Common letter patterns for layout confirmation
 
 ```typescript
-// convex/schema.ts - users table updates
-speedTests: v.optional(v.array(v.object({
-  wpm: v.number(),
-  accuracy: v.number(),
-  timestamp: v.number(), // Unix timestamp
-  keyboardLayout: v.string(), // Layout used during test
-  testType: v.string(), // 'initial' | 'practice'
-}))),
+// src/components/SpeedTest.tsx
+
+interface SpeedTestProps {
+  onComplete: (results: {
+    wpm: number;
+    accuracy: number;
+    detectedLayout: string;
+  }) => void;
+  onSkip?: () => void;
+}
+
+export function SpeedTest({ onComplete, onSkip }: SpeedTestProps) {
+  // Phases: 'intro' | 'countdown' | 'testing' | 'results'
+  //
+  // During 'testing':
+  //   - Track keystrokes to detect layout (z/y position)
+  //   - Calculate WPM and accuracy
+  //   - Show real-time stats
+  //
+  // On complete:
+  //   - Determine layout from keystroke analysis
+  //   - Save WPM baseline
+  //   - Transition to results screen
+}
+```
+
+### 2. Database Schema
+
+```typescript
+// convex/schema.ts - users table additions
 initialSpeedTest: v.optional(v.object({
   wpm: v.number(),
   accuracy: v.number(),
   timestamp: v.number(),
   keyboardLayout: v.string(),
 })),
+speedTests: v.optional(v.array(v.object({
+  wpm: v.number(),
+  accuracy: v.number(),
+  timestamp: v.number(),
+  keyboardLayout: v.string(),
+  testType: v.string(), // 'initial' | 'practice' | 'challenge'
+}))),
 ```
 
-### 2. New Convex Mutations
+### 3. App.tsx Flow
 
 ```typescript
-// convex/users.ts
+// Simplified conditional rendering
 
-// Save initial speed test
-export const saveInitialSpeedTest = mutation({
-  args: {
-    wpm: v.number(),
-    accuracy: v.number(),
-    keyboardLayout: v.string(),
-  },
-  handler: async (ctx, args) => {
-    const identity = await ctx.auth.getUserIdentity();
-    if (!identity) throw new Error('Not authenticated');
+const hasKeyboardLayout = keyboardLocked; // From KeyboardLayoutProvider
 
-    const user = await ctx.db
-      .query('users')
-      .withIndex('by_clerk_id', (q) => q.eq('clerkId', identity.subject))
-      .first();
-
-    if (!user) throw new Error('User not found');
-
-    const testResult = {
-      wpm: args.wpm,
-      accuracy: args.accuracy,
-      timestamp: Date.now(),
-      keyboardLayout: args.keyboardLayout,
-    };
-
-    await ctx.db.patch(user._id, {
-      initialSpeedTest: testResult,
-      speedTests: [...(user.speedTests || []), { ...testResult, testType: 'initial' }],
-    });
-  },
-});
-
-// Get initial speed test
-export const getInitialSpeedTest = query({
-  handler: async (ctx) => {
-    const identity = await ctx.auth.getUserIdentity();
-    if (!identity) return null;
-
-    const user = await ctx.db
-      .query('users')
-      .withIndex('by_clerk_id', (q) => q.eq('clerkId', identity.subject))
-      .first();
-
-    return user?.initialSpeedTest || null;
-  },
-});
-```
-
-### 3. Speed Test Component
-
-```typescript
-// src/components/InitialSpeedTest.tsx
-
-interface InitialSpeedTestProps {
-  keyboardLayout: string;
-  onComplete: (results: { wpm: number; accuracy: number }) => void;
-  onSkip?: () => void;
-}
-
-export function InitialSpeedTest({ keyboardLayout, onComplete, onSkip }: InitialSpeedTestProps) {
-  // State for test phase: 'ready' | 'countdown' | 'testing' | 'complete'
-  // Use existing typing logic from TypeTest component
-  // Display engaging retro UI with:
-  //   - 3-2-1 countdown animation
-  //   - Real-time WPM display during test
-  //   - Pixel art keyboard showing which keys to press
-  //   - Progress bar
-  //   - Results screen with "Your starting speed: XX WPM"
-}
-```
-
-### 4. App.tsx Flow Changes
-
-```typescript
-// Modify the new user flow detection logic
-
-const hasKeyboardLayout = keyboardLocked; // User has set keyboard layout
-const hasInitialSpeedTest = useQuery(api.users.getInitialSpeedTest);
-
-// Show full onboarding with speed test if:
-// - No keyboard layout set OR
-// - Keyboard layout set but no initial speed test
-const showFullOnboarding = !hasKeyboardLayout || !hasInitialSpeedTest;
-
-// In the render:
 {!hasKeyboardLayout ? (
-  // Full onboarding with keyboard detection + speed test
-  <OnboardingFlow onComplete={handleOnboardingComplete} />
-) : !hasInitialSpeedTest ? (
-  // Keyboard set but no speed test - show speed test only
-  <InitialSpeedTest
-    keyboardLayout={detectedLayout}
-    onComplete={handleSpeedTestComplete}
-    onSkip={handleSpeedTestSkip}
+  // Speed Test: detects keyboard + measures baseline
+  <SpeedTest
+    onComplete={({ wpm, accuracy, detectedLayout }) => {
+      // 1. Lock keyboard layout
+      lockKeyboard(detectedLayout);
+      // 2. Save speed test results (if authenticated)
+      saveInitialSpeedTest({ wpm, accuracy, keyboardLayout: detectedLayout });
+    }}
   />
 ) : (
-  // Returning user - show collapsed view
-  <CollapsedOnboarding />
+  // Collapsed view: keyboard already set
+  <>
+    <CollapsedHero
+      layout={detectedLayout}
+      onChangeLayout={() => unlockKeyboard()}
+    />
+    <LessonsGrid />
+  </>
 )}
 ```
 
-### 5. Collapsed Onboarding View
-
-For users who have keyboard layout set, show a minimal collapsed section:
+### 4. Collapsed Hero Component
 
 ```typescript
-// src/components/CollapsedOnboarding.tsx
+// src/components/CollapsedHero.tsx
 
-export function CollapsedOnboarding() {
+export function CollapsedHero({ layout, onChangeLayout, initialWpm }) {
   return (
     <div className="collapsed-hero">
-      {/* Small keyboard layout indicator */}
-      {/* Quick "Change keyboard" button */}
-      {/* Go straight to lessons */}
+      <div className="keyboard-info">
+        <span className="keyboard-icon">⌨️</span>
+        <span className="layout-name">{layout}</span>
+        <button onClick={onChangeLayout}>Change</button>
+      </div>
+      {initialWpm && (
+        <div className="baseline-info">
+          Starting speed: {initialWpm} WPM
+        </div>
+      )}
+      <button className="continue-btn">START PRACTICING</button>
     </div>
   );
 }
 ```
 
-## User Experience
-
-### First-Time User Flow
-1. User lands on typebit8
-2. Keyboard detection runs, user confirms/selects layout
-3. **NEW: Speed test appears**
-   - "Let's see how fast you type!"
-   - 3-2-1 countdown with retro animation
-   - 30-second or 1-minute typing test with common words
-   - Results displayed: "Your starting speed: 45 WPM, 92% accuracy"
-   - "Let's improve that!" CTA to continue
-4. User proceeds to lesson selection
-
-### Returning User Flow (keyboard set)
-1. User lands on typebit8
-2. Collapsed hero section with:
-   - Small keyboard layout indicator (e.g., "QWERTZ Swiss")
-   - "Start Practicing" primary CTA
-   - Optional "Change Keyboard" link
-3. Immediate access to lessons
-
 ## Speed Test Design
 
-- **Duration**: 30 seconds (short enough to not be tedious)
-- **Content**: Common words appropriate for all layouts
-- **Metrics captured**:
-  - WPM (words per minute)
-  - Accuracy percentage
-  - Characters typed
-  - Errors made
-- **Visual style**: Match existing retro aesthetic
-- **Skip option**: Available but discouraged via UI
+### Content
+- **Duration**: 30 seconds
+- **Words**: Carefully crafted sentences that include:
+  1. **Layout family detection** (QWERTY vs QWERTZ vs AZERTY)
+  2. **Variant detection** within each family (DE vs CH vs AT)
+  3. **Special character detection** for precise identification
 
-## Future Extensions
+### Detection Characters
 
-This data enables:
-1. Progress charts showing WPM improvement over time
-2. Weekly/monthly speed test prompts
-3. Personalized difficulty recommendations
-4. "You've improved by X% since you started!" celebrations
+| Detection Goal | Characters Used | Example Words |
+|----------------|-----------------|---------------|
+| QWERTY vs QWERTZ | y, z | "lazy", "yellow", "zone", "fuzzy" |
+| QWERTY vs AZERTY | a, q, w, z | "quick", "away", "wizard" |
+| QWERTZ-DE vs QWERTZ-CH | ß, ü, ö, ä | "größe", "süß", "über", "größer" |
+| Variant confirmation | Special punctuation | brackets, semicolons, quotes |
+
+### Test Sentence Examples
+
+**Phase 1: Layout family detection (first ~15 seconds)**
+```
+"the lazy yellow fox jumps quickly over frozen zones"
+```
+- All users type the same English text
+- Detects QWERTY vs QWERTZ vs AZERTY from physical key positions
+- No special characters - works for everyone
+
+**Phase 2: Variant detection (remaining time) - ADAPTIVE**
+
+Only triggered AFTER detecting QWERTZ:
+```
+"größe und maße über die straße"  // Tests for ß → German
+"grösse und masse über die strasse"  // No ß available → Swiss
+```
+
+For QWERTY/AZERTY users:
+```
+Continue with English text - no special characters needed
+```
+
+### Detection Logic
+```typescript
+interface KeystrokeEvent {
+  expectedChar: string;
+  actualKeyCode: string;
+  physicalKey: string;  // e.g., "KeyY", "KeyZ"
+  timestamp: number;
+}
+
+function detectLayout(keystrokes: KeystrokeEvent[]): KeyboardLayout {
+  // Step 1: Detect family (QWERTY/QWERTZ/AZERTY)
+  const family = detectLayoutFamily(keystrokes);
+
+  // Step 2: Detect variant within family
+  const variant = detectVariant(keystrokes, family);
+
+  return { family, variant };  // e.g., { family: "QWERTZ", variant: "CH" }
+}
+
+function detectLayoutFamily(keystrokes: KeystrokeEvent[]): string {
+  // Count physical key positions when typing y/z
+  const yTyped = keystrokes.filter(k => k.expectedChar === 'y');
+  const zTyped = keystrokes.filter(k => k.expectedChar === 'z');
+
+  // If 'y' triggers KeyZ physical key → QWERTZ
+  // If 'y' triggers KeyY physical key → QWERTY
+  // If 'a' triggers KeyQ physical key → AZERTY
+}
+
+function detectVariant(keystrokes: KeystrokeEvent[], family: string): string {
+  if (family === 'QWERTZ') {
+    // Check for ß character usage
+    const usesEszett = keystrokes.some(k => k.expectedChar === 'ß');
+    const usesSS = !usesEszett; // Swiss German uses 'ss' instead
+
+    // German uses ß, Swiss uses ss
+    if (usesEszett) return 'DE';
+    if (usesSS) return 'CH';
+  }
+  return 'default';
+}
+```
+
+### Adaptive Test Flow
+1. **All users**: Start with English text containing y/z (detect family)
+2. **Mid-test**: Once family detected (~10-15 seconds in):
+   - QWERTZ detected → Switch to German text with öäüß
+   - QWERTY detected → Continue with English text
+   - AZERTY detected → Continue with English/French text
+3. **QWERTZ only**: Detect DE vs CH based on ß availability
+4. No confusing special characters for QWERTY users
+
+### UI Elements
+1. **Intro screen**: "LET'S SEE HOW FAST YOU TYPE!"
+2. **Countdown**: 3... 2... 1... GO!
+3. **Test screen**: Typing area + real-time WPM + progress bar + "Detecting layout..." indicator
+4. **Results**: WPM score + detected keyboard (with variant) + "Let's improve!" CTA
 
 ## Implementation Phases
 
 ### Phase 1: Core Speed Test
-- [ ] Add database schema for speed tests
-- [ ] Create InitialSpeedTest component
-- [ ] Integrate into App.tsx flow
-- [ ] Save results to user profile
+- [ ] Create SpeedTest component with keyboard detection
+- [ ] Replace current onboarding flow in App.tsx
+- [ ] Save results to profile (authenticated users)
+- [ ] Save results to localStorage (guests)
 
-### Phase 2: Collapsed Onboarding
-- [ ] Create CollapsedOnboarding component
-- [ ] Conditionally render based on user state
-- [ ] Add "Change keyboard" functionality
+### Phase 2: Collapsed View
+- [ ] Create CollapsedHero component
+- [ ] Show baseline WPM if available
+- [ ] "Change keyboard" functionality (re-run speed test)
 
-### Phase 3: Statistics Foundation
+### Phase 3: Data Foundation
 - [ ] Query for speed test history
-- [ ] Basic statistics display (optional, can be separate PRP)
+- [ ] Display progress over time (future PRP)
 
-## Dependencies
-- Existing keyboard detection system (PRP-034, PRP-035)
-- User authentication (Clerk + Convex)
-- Existing TypeTest component logic (can be reused)
+## Benefits
+
+1. **Simpler UX**: One test instead of separate keyboard detection
+2. **More engaging**: Speed test is gamified and fun
+3. **Valuable data**: Baseline for progress tracking
+4. **Unified flow**: Same experience for guests and authenticated users
+
+## Edge Cases & Error Handling
+
+### Skip Flow
+- If user clicks "Skip", we still need a keyboard layout
+- Show manual keyboard selector as fallback
+- Mark `initialSpeedTest` as `null` but still save keyboard choice
+- Prompt to take test later (optional banner)
+
+### Inconclusive Detection
+- Minimum threshold: At least 3 y/z characters typed for reliable detection
+- If insufficient data: Show confirmation dialog with best guess
+- "We detected QWERTZ - is this correct?" with options to confirm or change
+
+### Existing Users (Migration)
+- Users with keyboard set but no speed test: Show optional "Take speed test" banner
+- Don't force them - it's a nice-to-have for returning users
+- Can access via settings or collapsed hero "Retake test" link
+
+### Suspiciously Low WPM
+- If WPM < 10: Likely AFK or connection issues
+- Show "Something went wrong - try again?" prompt
+- Don't save as baseline if clearly invalid
+
+### Detection Conflicts
+- If user manually selected layout differs from detected: Trust user's choice
+- Show "We detected X but you selected Y - keep Y?" confirmation
+- Store both for analytics (detected vs selected)
+
+### Mobile/Touch Users
+- Speed test requires physical keyboard
+- If touch input detected: Skip to manual keyboard selection
+- Show message: "For the best experience, use a physical keyboard"
+
+## Confirmation Flow
+
+After speed test completes:
+1. Show results: WPM, accuracy, detected layout
+2. Layout confirmation: "We detected **QWERTZ Swiss** - is this correct?"
+3. Options: ✓ Confirm | ↻ Retake | ✎ Choose Manually
+4. Only save after user confirms
+
+```typescript
+// Results screen state
+interface SpeedTestResults {
+  wpm: number;
+  accuracy: number;
+  detectedLayout: string;
+  confirmed: boolean;  // User confirmed the detection
+  manualOverride?: string;  // If user chose different layout
+}
+```
+
+## Localization
+
+### Language-Specific Test Sentences
+
+| Layout Family | Phase 1 (Detection) | Phase 2 (Variant) |
+|---------------|---------------------|-------------------|
+| QWERTY | English with y/z | Continue English |
+| QWERTZ | English with y/z | German with öäüß |
+| AZERTY | English with a/q/w | French text (optional) |
+
+### Future: Multi-language Support
+- Store user's preferred test language
+- Offer English/German/French options
+- Detection still works regardless of language (based on physical keys)
+
+## Analytics & Monitoring
+
+Track these metrics to validate detection accuracy:
+- `detection_success_rate`: % of users who confirm detected layout
+- `manual_override_rate`: % who choose different layout
+- `skip_rate`: % who skip the test entirely
+- `retake_rate`: % who retake the test
+- `avg_detection_time`: How quickly we can reliably detect (seconds)
+
+```typescript
+// Analytics events
+trackEvent('speed_test_started', { source: 'onboarding' | 'settings' });
+trackEvent('speed_test_completed', { wpm, accuracy, detected_layout });
+trackEvent('layout_confirmed', { detected, confirmed, match: boolean });
+trackEvent('layout_overridden', { detected, selected });
+trackEvent('speed_test_skipped', { reason: 'user' | 'mobile' | 'timeout' });
+```
+
+## Dependencies & Refactoring
+
+### Current Code to Replace
+- `src/components/KeyboardDetection.tsx` - Replace with SpeedTest
+- `src/providers/KeyboardLayoutProvider.tsx` - Extend to handle speed test results
+- Current "type some words" onboarding flow in `App.tsx`
+
+### Integration Points
+- `KeyboardLayoutProvider`: Add `initialSpeedTest` to context
+- `useKeyboardLayout` hook: Expose baseline WPM
+- Convex `users` table: Add speed test fields
+
+### Backwards Compatibility
+- Existing users with keyboard set: Continue working, no speed test required
+- New `initialSpeedTest` field is optional in schema
+- Graceful degradation if speed test fails
+
+## Accessibility
+
+- **Screen readers**: Announce WPM updates at intervals (not every keystroke)
+- **Motor impairments**: No minimum WPM required, just completion
+- **Visual**: High contrast mode support, large text option
+- **Keyboard navigation**: Full keyboard control, no mouse required
 
 ## Testing Considerations
-- Test with new users (no profile data)
-- Test with users who have keyboard set but no speed test
-- Test with returning users (full data)
-- Test skip flow
-- Test speed test accuracy calculations
+
+### Unit Tests
+- Detection algorithm with mock keystrokes
+- Various keyboard layouts (QWERTY-US, QWERTY-UK, QWERTZ-DE, QWERTZ-CH, AZERTY-FR)
+- Edge cases: Few keystrokes, mixed signals, special characters
+
+### Integration Tests
+- Full flow: Intro → Test → Results → Confirm → Save
+- Skip flow with manual selection
+- Retake flow from collapsed hero
+- Guest → Sign up data migration
+
+### E2E Tests
+- Test with actual keyboard input
+- Verify correct layout saved to database
+- Check collapsed view renders correctly
+
+### Manual QA
+- Test on different OS (Windows, Mac, Linux)
+- Test with different browser keyboard APIs
+- Verify special character input (ß, ö, ä, ü)
