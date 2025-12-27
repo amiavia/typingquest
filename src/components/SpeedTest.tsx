@@ -84,7 +84,7 @@ export function SpeedTest({ onComplete, onSkip }: SpeedTestProps) {
 
   // Results state
   const [results, setResults] = useState<SpeedTestResults | null>(null);
-  const [showLayoutPicker, setShowLayoutPicker] = useState(false);
+  const [selectedLayout, setSelectedLayout] = useState<KeyboardLayoutType | null>(null);
 
   // Refs
   const inputRef = useRef<HTMLInputElement>(null);
@@ -286,6 +286,7 @@ export function SpeedTest({ onComplete, onSkip }: SpeedTestProps) {
         clearInterval(timerRef.current!);
         const testResults = calculateResults();
         setResults(testResults);
+        setSelectedLayout(testResults.detectedLayout); // Pre-select detected layout
         setPhase('results');
       }
     }, 100);
@@ -339,12 +340,12 @@ export function SpeedTest({ onComplete, onSkip }: SpeedTestProps) {
     pendingKeyCodeRef.current = e.code;
   }, [phase]);
 
-  // Handle confirmation
+  // Handle confirmation - uses selectedLayout (user may have changed it)
   const handleConfirm = useCallback(() => {
-    if (!results) return;
-    lockLayout(results.detectedLayout);
-    onComplete(results, true);
-  }, [results, lockLayout, onComplete]);
+    if (!results || !selectedLayout) return;
+    lockLayout(selectedLayout);
+    onComplete({ ...results, detectedLayout: selectedLayout }, true);
+  }, [results, selectedLayout, lockLayout, onComplete]);
 
   // Handle retake
   const handleRetake = useCallback(() => {
@@ -354,6 +355,7 @@ export function SpeedTest({ onComplete, onSkip }: SpeedTestProps) {
     setTimeLeft(TEST_DURATION_MS / 1000);
     setKeystrokes([]);
     setResults(null);
+    setSelectedLayout(null);
     setIsPhase2(false);
     setPendingPhase2(false);
     setDetectedFamily(null);
@@ -361,12 +363,6 @@ export function SpeedTest({ onComplete, onSkip }: SpeedTestProps) {
     setCurrentSentence(getNextSentence(false));
   }, [getNextSentence]);
 
-  // Handle manual layout selection
-  const handleManualSelect = useCallback((selectedLayout: KeyboardLayoutType) => {
-    if (!results) return;
-    lockLayout(selectedLayout);
-    onComplete({ ...results, detectedLayout: selectedLayout }, true);
-  }, [results, lockLayout, onComplete]);
 
   // Calculate real-time stats
   const currentStats = useMemo(() => {
@@ -660,45 +656,63 @@ export function SpeedTest({ onComplete, onSkip }: SpeedTestProps) {
             </div>
           </div>
 
-          {/* Confirmation section */}
+          {/* Keyboard Selection */}
           <div
             className="p-4 mb-6"
             style={{ background: 'rgba(255, 217, 61, 0.1)', border: '2px solid #ffd93d' }}
           >
-            <p style={{ fontFamily: "'Press Start 2P'", fontSize: '8px', color: '#4a4a6e' }}>
-              WE DETECTED YOUR KEYBOARD AS:
+            <p style={{ fontFamily: "'Press Start 2P'", fontSize: '8px', color: '#4a4a6e', marginBottom: '8px' }}>
+              SELECT YOUR KEYBOARD LAYOUT:
             </p>
-            <p
-              className="my-3"
-              style={{ fontFamily: "'Press Start 2P'", fontSize: '16px', color: '#ffd93d' }}
-            >
-              {results.detectedLayout.toUpperCase().replace('-', ' ')}
-            </p>
-            <p style={{ fontFamily: "'Press Start 2P'", fontSize: '8px', color: '#eef5db' }}>
-              IS THIS CORRECT?
+            <p style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: '#3bceac', marginBottom: '16px' }}>
+              DETECTED: {results.detectedLayout.toUpperCase().replace('-', ' ')}
             </p>
 
-            <div className="flex gap-3 justify-center mt-4">
+            {/* All keyboard options */}
+            <div className="flex flex-wrap gap-2 justify-center mb-6">
+              {Object.values(KEYBOARD_LAYOUTS).map((layoutConfig) => (
+                <button
+                  key={layoutConfig.id}
+                  onClick={() => setSelectedLayout(layoutConfig.id as KeyboardLayoutType)}
+                  className="px-3 py-2 transition-all hover:brightness-125"
+                  style={{
+                    fontFamily: "'Press Start 2P'",
+                    fontSize: '7px',
+                    background: selectedLayout === layoutConfig.id ? '#ffd93d' : 'transparent',
+                    border: `2px solid ${selectedLayout === layoutConfig.id ? '#ffd93d' : '#3bceac'}`,
+                    borderRadius: '4px',
+                    color: selectedLayout === layoutConfig.id ? '#0f0f1b' : '#eef5db',
+                    cursor: 'pointer',
+                  }}
+                >
+                  {layoutConfig.name}
+                </button>
+              ))}
+            </div>
+
+            {/* Action buttons */}
+            <div className="flex gap-3 justify-center">
               <button
                 onClick={handleConfirm}
-                className="px-4 py-2"
+                className="px-6 py-3"
                 style={{
                   fontFamily: "'Press Start 2P'",
-                  fontSize: '8px',
+                  fontSize: '10px',
                   background: 'linear-gradient(180deg, #0ead69, #0a8a54)',
                   color: '#0f0f1b',
                   border: 'none',
                   cursor: 'pointer',
+                  boxShadow: '0 4px 0 #0a8a54',
                 }}
               >
                 ✓ CONFIRM
               </button>
               <button
                 onClick={handleRetake}
-                className="px-4 py-2"
+                className="px-4 py-3"
                 style={{
                   fontFamily: "'Press Start 2P'",
-                  fontSize: '8px',
+                  fontSize: '10px',
                   background: 'transparent',
                   color: '#3bceac',
                   border: '2px solid #3bceac',
@@ -706,20 +720,6 @@ export function SpeedTest({ onComplete, onSkip }: SpeedTestProps) {
                 }}
               >
                 ↻ RETAKE
-              </button>
-              <button
-                onClick={() => setShowLayoutPicker(true)}
-                className="px-4 py-2"
-                style={{
-                  fontFamily: "'Press Start 2P'",
-                  fontSize: '8px',
-                  background: 'transparent',
-                  color: '#4a4a6e',
-                  border: '2px solid #4a4a6e',
-                  cursor: 'pointer',
-                }}
-              >
-                ✎ CHOOSE
               </button>
             </div>
           </div>
@@ -785,54 +785,6 @@ export function SpeedTest({ onComplete, onSkip }: SpeedTestProps) {
             {isSignedIn ? 'YOUR BASELINE WILL BE SAVED AFTER CONFIRMATION' : 'SIGN UP TO SAVE YOUR PROGRESS'}
           </p>
 
-          {/* Layout picker */}
-          {showLayoutPicker && (
-            <div
-              className="mt-6 p-4"
-              style={{ background: 'rgba(0, 0, 0, 0.3)', border: '2px solid #3bceac', borderRadius: '8px' }}
-            >
-              <p
-                style={{ fontFamily: "'Press Start 2P'", fontSize: '8px', color: '#ffd93d' }}
-                className="mb-4"
-              >
-                SELECT YOUR KEYBOARD LAYOUT:
-              </p>
-              <div className="flex flex-wrap gap-2 justify-center">
-                {Object.values(KEYBOARD_LAYOUTS).map((layoutConfig) => (
-                  <button
-                    key={layoutConfig.id}
-                    onClick={() => handleManualSelect(layoutConfig.id as KeyboardLayoutType)}
-                    className="px-3 py-2 transition-all hover:brightness-125"
-                    style={{
-                      fontFamily: "'Press Start 2P'",
-                      fontSize: '7px',
-                      background: results.detectedLayout === layoutConfig.id ? '#0ead69' : 'transparent',
-                      border: `2px solid ${results.detectedLayout === layoutConfig.id ? '#0ead69' : '#3bceac'}`,
-                      borderRadius: '4px',
-                      color: results.detectedLayout === layoutConfig.id ? '#0f0f1b' : '#eef5db',
-                      cursor: 'pointer',
-                    }}
-                  >
-                    {layoutConfig.name}
-                  </button>
-                ))}
-              </div>
-              <button
-                onClick={() => setShowLayoutPicker(false)}
-                className="mt-4"
-                style={{
-                  fontFamily: "'Press Start 2P'",
-                  fontSize: '8px',
-                  color: '#4a4a6e',
-                  background: 'none',
-                  border: 'none',
-                  cursor: 'pointer',
-                }}
-              >
-                CANCEL
-              </button>
-            </div>
-          )}
         </div>
       </section>
     );
