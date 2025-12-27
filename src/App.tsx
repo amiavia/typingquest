@@ -467,17 +467,17 @@ function App() {
       )}
 
       {/* Header HUD */}
-      <header className="pixel-box m-4 p-4">
-        <div className="flex items-center justify-between flex-wrap gap-4">
+      <header className="pixel-box m-2 p-2 md:m-4 md:p-4">
+        <div className="flex items-center justify-between gap-2 md:gap-4">
           {/* Logo */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 md:gap-4 min-w-0">
             <div
-              className="w-12 h-12 border-4 border-[#ffd93d] bg-[#1a1a2e] flex items-center justify-center"
+              className="w-10 h-10 md:w-12 md:h-12 border-4 border-[#ffd93d] bg-[#1a1a2e] flex items-center justify-center flex-shrink-0"
               style={{ boxShadow: '4px 4px 0 #0f0f1b, 0 0 15px rgba(255, 217, 61, 0.3)' }}
             >
-              <span style={{ fontFamily: "'Press Start 2P'", fontSize: '20px', color: '#ffd93d' }}>⌨</span>
+              <span style={{ fontFamily: "'Press Start 2P'", fontSize: '16px', color: '#ffd93d' }} className="md:text-xl">⌨</span>
             </div>
-            <div>
+            <div className="hidden sm:block">
               <h1 style={{ fontFamily: "'Press Start 2P'", fontSize: '14px', color: '#ffd93d' }} className="text-glow-yellow">
                 TYPEBIT8
               </h1>
@@ -485,20 +485,22 @@ function App() {
                 MASTER THE KEYBOARD
               </p>
             </div>
-            {/* Premium Badge */}
-            {isPremium && <PremiumBadge />}
+            {/* Premium Badge - hidden on mobile */}
+            {isPremium && <div className="hidden md:block"><PremiumBadge /></div>}
           </div>
 
           {/* Player Stats */}
-          <div className="flex items-center gap-4 md:gap-6">
-            {/* Streak Display */}
+          <div className="flex items-center gap-2 md:gap-6">
+            {/* Streak Display - hidden on small mobile */}
             {userId && streak && (
-              <StreakDisplay
-                streak={streak.currentStreak}
-                freezeCount={streak.streakFreezeCount}
-                longestStreak={streak.longestStreak}
-                showDetails={true}
-              />
+              <div className="hidden sm:block">
+                <StreakDisplay
+                  streak={streak.currentStreak}
+                  freezeCount={streak.streakFreezeCount}
+                  longestStreak={streak.longestStreak}
+                  showDetails={true}
+                />
+              </div>
             )}
 
             {/* Coins with Shop Link */}
@@ -508,32 +510,34 @@ function App() {
               onClick={() => navigateTo('shop')}
             />
 
-            {/* Daily Challenge Button (only when keyboard is set up) */}
+            {/* Daily Challenge Button - hidden on mobile */}
             {keyboardLocked && (
-              <DailyChallengeButton onClick={() => navigateTo('daily-challenge')} />
+              <div className="hidden md:block">
+                <DailyChallengeButton onClick={() => navigateTo('daily-challenge')} />
+              </div>
             )}
 
-            {/* Premium/Upgrade Button */}
+            {/* Premium/Upgrade Button - hidden on mobile */}
             {!isPremium && (
               <button
                 onClick={() => navigateTo('premium')}
-                className="px-3 py-2 border-2 border-[#ffd93d] hover:bg-[#ffd93d] hover:text-[#1a1a2e] transition-colors"
+                className="hidden md:block px-3 py-2 border-2 border-[#ffd93d] hover:bg-[#ffd93d] hover:text-[#1a1a2e] transition-colors"
                 style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: '#ffd93d' }}
               >
                 👑 PREMIUM
               </button>
             )}
 
-            {/* Level */}
+            {/* Level - compact on mobile */}
             <div className="text-center">
-              <div style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: '#3bceac' }}>LEVEL</div>
-              <div style={{ fontFamily: "'Press Start 2P'", fontSize: '20px', color: '#ffd93d' }} className="text-glow-yellow">
+              <div style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: '#3bceac' }} className="hidden md:block">LEVEL</div>
+              <div style={{ fontFamily: "'Press Start 2P'", fontSize: '16px', color: '#ffd93d' }} className="text-glow-yellow md:text-xl">
                 {gameState.level}
               </div>
             </div>
 
-            {/* XP Bar */}
-            <div className="w-24 md:w-32">
+            {/* XP Bar - hidden on mobile */}
+            <div className="hidden md:block w-24 md:w-32">
               <div style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: '#3bceac', marginBottom: '4px' }}>
                 XP: {gameState.xp}/{gameState.XP_PER_LEVEL}
               </div>
