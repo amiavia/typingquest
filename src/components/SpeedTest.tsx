@@ -14,7 +14,7 @@ import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { useKeyboardLayout, getVariantForFamily } from '../providers/KeyboardLayoutProvider';
 import { KeyboardWithHands } from './KeyboardWithHands';
 import { KEYBOARD_LAYOUTS, type KeyboardLayoutType } from '../data/keyboardLayouts';
-import { useAuth } from '@clerk/clerk-react';
+import { useAuth, useClerk } from '@clerk/clerk-react';
 
 // ==================== TEST SENTENCES ====================
 
@@ -67,6 +67,7 @@ interface SpeedTestProps {
 export function SpeedTest({ onComplete, onSkip }: SpeedTestProps) {
   const { layout, pauseDetection, resumeDetection } = useKeyboardLayout();
   const { isSignedIn } = useAuth();
+  const { openSignUp } = useClerk();
 
   // Test state
   const [phase, setPhase] = useState<TestPhase>('intro');
