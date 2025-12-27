@@ -163,10 +163,19 @@ function App() {
     testDurationMs: number;
   }, confirmed: boolean) => {
     if (confirmed) {
-      // Lock the layout (already done in SpeedTest component)
+      // IMPORTANT: Order matters here to prevent race conditions with re-renders
+      // 1. For guests, set up the onboarding screen FIRST (before lockLayout triggers re-render)
+      if (!userId) {
+        setShowGuestOnboarding(true);
+      }
+
+      // 2. Exit retake mode
+      setShowSpeedTest(false);
+
+      // 3. NOW lock the layout (this triggers context update and re-renders)
       lockLayout(results.detectedLayout as Parameters<typeof lockLayout>[0]);
 
-      // Save to Convex if authenticated
+      // 4. Save data to Convex or localStorage
       if (userId) {
         try {
           await saveInitialSpeedTest({
@@ -187,14 +196,6 @@ function App() {
           keyboardLayout: results.detectedLayout,
           timestamp: Date.now(),
         }));
-      }
-
-      // Exit retake mode
-      setShowSpeedTest(false);
-
-      // For guests, show the sign-up onboarding screen
-      if (!userId) {
-        setShowGuestOnboarding(true);
       }
     }
   }, [userId, saveInitialSpeedTest, lockLayout]);

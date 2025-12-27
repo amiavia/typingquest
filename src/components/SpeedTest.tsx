@@ -65,7 +65,7 @@ interface SpeedTestProps {
 }
 
 export function SpeedTest({ onComplete, onSkip }: SpeedTestProps) {
-  const { layout, lockLayout, pauseDetection, resumeDetection } = useKeyboardLayout();
+  const { layout, pauseDetection, resumeDetection } = useKeyboardLayout();
   const { isSignedIn } = useAuth();
 
   // Test state
@@ -340,11 +340,11 @@ export function SpeedTest({ onComplete, onSkip }: SpeedTestProps) {
   }, [phase]);
 
   // Handle confirmation - uses selectedLayout (user may have changed it)
+  // NOTE: Don't call lockLayout here - let App.tsx handle it to control state update order
   const handleConfirm = useCallback(() => {
     if (!results || !selectedLayout) return;
-    lockLayout(selectedLayout);
     onComplete({ ...results, detectedLayout: selectedLayout }, true);
-  }, [results, selectedLayout, lockLayout, onComplete]);
+  }, [results, selectedLayout, onComplete]);
 
   // Handle retake
   const handleRetake = useCallback(() => {
