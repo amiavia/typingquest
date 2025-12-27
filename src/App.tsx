@@ -821,6 +821,119 @@ function App() {
               </div>
             </section>
           )}
+
+          {/* PRP-041: Dual Learning Advantage Marketing Section */}
+          <section className="p-4 md:p-8">
+            <div className="max-w-4xl mx-auto">
+              <div
+                className="pixel-box p-8 text-center"
+                style={{
+                  background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(59, 206, 172, 0.1))',
+                  border: '4px solid #8b5cf6',
+                  boxShadow: '0 0 30px rgba(139, 92, 246, 0.2)',
+                }}
+              >
+                {/* Title */}
+                <h2
+                  style={{
+                    fontFamily: "'Press Start 2P'",
+                    fontSize: '16px',
+                    color: '#ffd93d',
+                    marginBottom: '24px',
+                    lineHeight: '1.8',
+                  }}
+                  className="text-glow-yellow"
+                >
+                  LEARN TWO SKILLS AT ONCE
+                </h2>
+
+                {/* Subtitle */}
+                <p
+                  style={{
+                    fontFamily: "'Press Start 2P'",
+                    fontSize: '10px',
+                    color: '#eef5db',
+                    marginBottom: '24px',
+                  }}
+                >
+                  MASTER TYPING SPEED WHILE LEARNING:
+                </p>
+
+                {/* Skills Grid */}
+                <div className="grid md:grid-cols-3 gap-4 mb-8">
+                  <div
+                    className="p-4"
+                    style={{
+                      background: 'rgba(59, 206, 172, 0.1)',
+                      border: '2px solid rgba(59, 206, 172, 0.4)',
+                      borderRadius: '4px',
+                    }}
+                  >
+                    <div className="text-3xl mb-2">🤖</div>
+                    <p style={{ fontFamily: "'Press Start 2P'", fontSize: '7px', color: '#3bceac', lineHeight: '2' }}>
+                      EXPERT AI PROMPTING<br />TECHNIQUES
+                    </p>
+                  </div>
+                  <div
+                    className="p-4"
+                    style={{
+                      background: 'rgba(255, 217, 61, 0.1)',
+                      border: '2px solid rgba(255, 217, 61, 0.4)',
+                      borderRadius: '4px',
+                    }}
+                  >
+                    <div className="text-3xl mb-2">💻</div>
+                    <p style={{ fontFamily: "'Press Start 2P'", fontSize: '7px', color: '#ffd93d', lineHeight: '2' }}>
+                      PROFESSIONAL CODING<br />PATTERNS
+                    </p>
+                  </div>
+                  <div
+                    className="p-4"
+                    style={{
+                      background: 'rgba(139, 92, 246, 0.1)',
+                      border: '2px solid rgba(139, 92, 246, 0.4)',
+                      borderRadius: '4px',
+                    }}
+                  >
+                    <div className="text-3xl mb-2">📧</div>
+                    <p style={{ fontFamily: "'Press Start 2P'", fontSize: '7px', color: '#8b5cf6', lineHeight: '2' }}>
+                      BUSINESS<br />COMMUNICATION
+                    </p>
+                  </div>
+                </div>
+
+                {/* Tagline */}
+                <p
+                  style={{
+                    fontFamily: "'Press Start 2P'",
+                    fontSize: '9px',
+                    color: '#3bceac',
+                    marginBottom: '24px',
+                    fontStyle: 'italic',
+                  }}
+                >
+                  "TYPE IT. LEARN IT. NEVER FORGET IT."
+                </p>
+
+                {/* CTA Button */}
+                <button
+                  onClick={() => navigateTo('premium')}
+                  className="px-8 py-4 transition-transform hover:scale-105"
+                  style={{
+                    fontFamily: "'Press Start 2P'",
+                    fontSize: '10px',
+                    background: 'linear-gradient(180deg, #8b5cf6, #6d28d9)',
+                    color: '#ffffff',
+                    border: 'none',
+                    cursor: 'pointer',
+                    boxShadow: '0 4px 0 #4c1d95, 0 0 20px rgba(139, 92, 246, 0.4)',
+                  }}
+                >
+                  ⚡ UNLOCK SPEED OF THOUGHT TYPING
+                </button>
+              </div>
+            </div>
+          </section>
         </>
       )}
 

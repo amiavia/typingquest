@@ -1,13 +1,17 @@
 /**
- * PRP-027: 30 Levels Data
+ * PRP-027: 30 Levels Data + PRP-041: Themed Levels
  *
- * Organized into 6 tiers:
+ * Organized into 10 tiers:
  * - Tier 1: Home Row (Levels 1-5) - Foundation
  * - Tier 2: Top Row (Levels 6-10) - Expansion
  * - Tier 3: Bottom Row (Levels 11-15) - Completion
  * - Tier 4: Numbers & Symbols (Levels 16-20) - Specialization
  * - Tier 5: Advanced (Levels 21-25) - Mastery
  * - Tier 6: Expert (Levels 26-30) - Excellence
+ * - Tier 7: AI Prompts Theme (Levels 31-35) - Speed of Thought
+ * - Tier 8: Developer Theme (Levels 36-40) - Code Fluency
+ * - Tier 9: Business Theme (Levels 41-45) - Professional Communication
+ * - Tier 10: Mixed Expert (Levels 46-50) - Ultimate Mastery
  */
 
 import type { Lesson, FingerType } from "../types";
@@ -69,6 +73,38 @@ export const LEVEL_TIERS: LevelTier[] = [
     levels: [26, 27, 28, 29, 30],
     color: "#ffd93d", // gold
     unlockRequirement: { level: 25, quizPassed: true },
+  },
+  {
+    id: 7,
+    name: "AI PROMPTS",
+    description: "Master prompting at the speed of thought",
+    levels: [31, 32, 33, 34, 35],
+    color: "#06b6d4", // cyan
+    unlockRequirement: { level: 30, quizPassed: true },
+  },
+  {
+    id: 8,
+    name: "DEVELOPER",
+    description: "Code patterns and terminal fluency",
+    levels: [36, 37, 38, 39, 40],
+    color: "#10b981", // emerald
+    unlockRequirement: { level: 35, quizPassed: true },
+  },
+  {
+    id: 9,
+    name: "BUSINESS",
+    description: "Professional communication mastery",
+    levels: [41, 42, 43, 44, 45],
+    color: "#6366f1", // indigo
+    unlockRequirement: { level: 40, quizPassed: true },
+  },
+  {
+    id: 10,
+    name: "EXPERT/MIXED",
+    description: "Ultimate mastery combining all themes",
+    levels: [46, 47, 48, 49, 50],
+    color: "#dc2626", // red
+    unlockRequirement: { level: 45, quizPassed: true },
   },
 ];
 
@@ -368,14 +404,14 @@ export const levels: Lesson[] = [
     keys: ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p", "a", "s", "d", "f", "g", "h", "j", "k", "l", ";"],
     fingers: ["left-pinky", "left-ring", "left-middle", "left-index", "right-index", "right-middle", "right-ring", "right-pinky"],
     exercises: [
-      "the quick typist wrote stories",
-      "our world requires dedication",
-      "practice quietly for perfekt results",
-      "writers pursue their purpose",
-      "quality software requires effort",
-      "together we will thrive",
+      "the quiet writer seeks the truth",
+      "jupiter rises high for twilight",
+      "your future requires real effort",
+      "swift thought is powerful still",
+      "repeat this drill to forge skill",
+      "the explorer stood higher yet",
     ],
-    quizWords: ["together", "quality", "software", "purpose", "required", "practice", "quietly", "stories"],
+    quizWords: ["jupiter", "twilight", "thought", "powerful", "explorer", "future", "higher", "swift"],
     minWPM: 20,
     minAccuracy: 88,
   },
@@ -398,13 +434,13 @@ export const levels: Lesson[] = [
     fingers: ["left-pinky", "left-ring", "left-middle", "left-index", "right-index", "right-middle", "right-ring", "right-pinky"],
     exercises: [
       "dcdc jmjm dcdc jmjm",
-      "come came came came",
-      "cream scream stream",
-      "magic music cosmic",
-      "commit comment chrome",
-      "commercial commitment",
+      "climb the cosmic staircase home",
+      "cream cheese with my warm toast",
+      "music from the old record machine",
+      "sometimes magic comes from courage",
+      "the camera captured their smiles",
     ],
-    quizWords: ["come", "music", "magic", "cream", "cosmic", "chrome", "commit", "compact"],
+    quizWords: ["climb", "cosmic", "cheese", "machine", "courage", "camera", "captured", "sometimes"],
     minWPM: 19,
     minAccuracy: 85,
   },
@@ -422,13 +458,13 @@ export const levels: Lesson[] = [
     fingers: ["left-pinky", "left-ring", "left-middle", "left-index", "right-index", "right-middle", "right-ring", "right-pinky"],
     exercises: [
       "fvfv jnjn fvfv jnjn",
-      "even never seven vine",
-      "invest invent prevent",
-      "convenient invention",
-      "environment convince",
-      "adventure government",
+      "never give in to the mountain wind",
+      "seven ravens nested on the ancient vine",
+      "driven to invent new and clever things",
+      "every adventure means constant motion",
+      "the given environment shapes everyone",
     ],
-    quizWords: ["even", "vine", "never", "seven", "event", "invent", "prevent", "convince"],
+    quizWords: ["driven", "ravens", "motion", "shapes", "clever", "ancient", "everyone", "mountain"],
     minWPM: 20,
     minAccuracy: 85,
   },
@@ -447,13 +483,13 @@ export const levels: Lesson[] = [
     fingers: ["left-pinky", "left-ring", "left-middle", "left-index", "right-index", "right-middle", "right-ring", "right-pinky"],
     exercises: [
       "sxsx fbfb k,k, k,k,",
-      "box fox mix fix six",
-      "by buy but best be",
-      "yes, no, maybe, sure,",
-      "about above between",
-      "excellent, fantastic,",
+      "the box held exactly six foxes",
+      "be bold, be brave, be brilliant",
+      "next, mix the herbs and bake them",
+      "above the cabin, birds were singing",
+      "explore, experiment, excel beyond limits",
     ],
-    quizWords: ["box", "mix", "best", "about", "above", "between", "exactly", "excellent"],
+    quizWords: ["bold", "brave", "cabin", "birds", "herbs", "explore", "experiment", "brilliant"],
     minWPM: 21,
     minAccuracy: 85,
   },
@@ -471,13 +507,13 @@ export const levels: Lesson[] = [
     fingers: ["left-pinky", "left-ring", "left-middle", "left-index", "right-index", "right-middle", "right-ring", "right-pinky"],
     exercises: [
       "zaza l.l. zaza l.l.",
-      "zone zero zoo zip.",
-      "fizz buzz jazz fuzz.",
-      "The quick fox. Lazy dog.",
-      "Amazing prize. Frozen.",
-      "zigzag. organize. realize.",
+      "the wizard gazed at the frozen horizon.",
+      "jazz music filled the plaza at dusk.",
+      "realize your dreams. organize your goals.",
+      "the breeze carried a faint buzzing sound.",
+      "amazed by the size of the bronze statue.",
     ],
-    quizWords: ["zone", "zero", "lazy", "fizz", "buzz", "prize", "freeze", "organize"],
+    quizWords: ["wizard", "frozen", "horizon", "plaza", "breeze", "buzzing", "bronze", "amazed"],
     minWPM: 22,
     minAccuracy: 85,
   },
@@ -493,13 +529,13 @@ export const levels: Lesson[] = [
     fingers: ALL_FINGERS,
     exercises: [
       "The quick brown fox jumps over the lazy dog.",
-      "Pack my box with five dozen liquor jugs.",
+      "Grumpy wizards make toxic brew for evil queen.",
+      "Pack my box with five dozen quality jugs.",
+      "Jackdaws love my big sphinx of quartz.",
       "How vexingly quick daft zebras jump.",
-      "Sphinx of black quartz, judge my vow.",
-      "Two driven jocks help fax my big quiz.",
-      "The five boxing wizards jump quickly.",
+      "The five boxing wizards jump very quickly.",
     ],
-    quizWords: ["quick", "brown", "jumps", "sphinx", "quartz", "boxing", "wizard", "vexing"],
+    quizWords: ["grumpy", "wizards", "toxic", "sphinx", "jackdaws", "vexingly", "boxing", "quickly"],
     minWPM: 25,
     minAccuracy: 90,
   },
@@ -521,13 +557,13 @@ export const levels: Lesson[] = [
     fingers: ALL_FINGERS,
     exercises: [
       "1 2 3 4 5 1 2 3 4 5",
-      "11 22 33 44 55",
-      "12 23 34 45 51 12 23",
-      "I have 5 apples and 3 oranges.",
-      "The year is 2025.",
-      "Call me at 555 1234.",
+      "The store opens at 5 and closes at 11.",
+      "Flight 243 departs from gate 15 today.",
+      "Chapter 3 covers pages 42 through 51.",
+      "Mix 2 cups flour with 3 eggs and 1 butter.",
+      "She scored 45 points in just 23 minutes.",
     ],
-    quizWords: ["1", "2", "3", "4", "5", "12", "23", "45"],
+    quizWords: ["243", "gate", "chapter", "pages", "scored", "points", "minutes", "butter"],
     minWPM: 18,
     minAccuracy: 85,
   },
@@ -544,13 +580,13 @@ export const levels: Lesson[] = [
     fingers: ALL_FINGERS,
     exercises: [
       "6 7 8 9 0 6 7 8 9 0",
-      "66 77 88 99 00",
-      "67 78 89 90 06 67 78",
-      "1234567890 0987654321",
-      "The code is 8675309.",
-      "Room 101, Floor 7.",
+      "The package weighs 78 kilograms exactly.",
+      "Meeting room 906 is on floor 18.",
+      "Her birthday is June 27, born in 1990.",
+      "The marathon distance is 42.195 kilometers.",
+      "Temperature dropped to 0 degrees at 6 am.",
     ],
-    quizWords: ["6", "7", "8", "9", "0", "67", "89", "100"],
+    quizWords: ["weighs", "kilograms", "meeting", "birthday", "marathon", "distance", "temperature", "degrees"],
     minWPM: 18,
     minAccuracy: 85,
   },
@@ -568,13 +604,13 @@ export const levels: Lesson[] = [
     fingers: ALL_FINGERS,
     exercises: [
       "! @ # $ % ! @ # $ %",
-      "Hello! How are you?",
-      "Email: test@example.com",
-      "Use #hashtag for topics.",
-      "Price: $99.99",
-      "Sale! 50% off!",
+      "Amazing! The sale offers 50% off today!",
+      "Contact us at support@company.com now.",
+      "Trending: #coding #developer #tech",
+      "Total: $149.99 plus $12.50 shipping.",
+      "Breaking news! 85% of users approved!",
     ],
-    quizWords: ["!", "@", "#", "$", "%", "100%", "$50", "test@example.com"],
+    quizWords: ["amazing", "trending", "contact", "shipping", "breaking", "approved", "developer", "support"],
     minWPM: 16,
     minAccuracy: 82,
   },
@@ -592,13 +628,13 @@ export const levels: Lesson[] = [
     fingers: ALL_FINGERS,
     exercises: [
       "() [] {} <> () [] {}",
-      "function() { return true; }",
-      "array[0] list[1] map[key]",
-      "if (x > 0) { print(x); }",
-      "user_name first-name",
-      "<html><body></body></html>",
+      "const data = { name: 'Alex', age: 25 };",
+      "items.filter((x) => x > 10).map((x) => x * 2)",
+      "config[settings] = { enabled: true };",
+      "if (count >= 0) { run_task(count); }",
+      "<div class='container'><p>Hello</p></div>",
     ],
-    quizWords: ["()", "[]", "{}", "<>", "function()", "array[0]", "<html>", "if(){}"],
+    quizWords: ["const", "filter", "config", "enabled", "container", "settings", "count", "class"],
     minWPM: 15,
     minAccuracy: 80,
   },
@@ -613,14 +649,14 @@ export const levels: Lesson[] = [
     keys: [...FULL_KEYBOARD, "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "!", "@", "#", "$", "%", "(", ")", "-", "_"],
     fingers: ALL_FINGERS,
     exercises: [
-      "Order #12345 is ready!",
-      "Email me at john@test.com today.",
-      "The price is $29.99 (50% off)!",
-      "Call 555-1234 for support.",
-      "Version 2.0.1 is now available!",
-      "Score: 100% - Perfect!",
+      "Invoice #78542 totals $1,299.00 today!",
+      "Contact sarah@startup.io for 25% discount.",
+      "Build v3.2.1 passed 100% of all tests!",
+      "Support hotline: 1-800-555-0199 (24/7).",
+      "Flash sale! Items from $9.99 to $49.99!",
+      "User @techguru scored 98% accuracy!",
     ],
-    quizWords: ["#12345", "$29.99", "50%", "555-1234", "2.0.1", "john@test.com", "100%", "Order#1"],
+    quizWords: ["invoice", "totals", "startup", "discount", "hotline", "accuracy", "passed", "flash"],
     minWPM: 20,
     minAccuracy: 85,
   },
@@ -643,14 +679,14 @@ export const levels: Lesson[] = [
     keys: FULL_KEYBOARD,
     fingers: ALL_FINGERS,
     exercises: [
-      "Aa Bb Cc Dd Ee Ff Gg",
-      "John Smith Mary Jones",
-      "New York Los Angeles",
-      "Monday Tuesday Wednesday",
-      "January February March",
-      "Apple Google Microsoft",
+      "Alice Baker Charlie David Emma Frank",
+      "Paris London Tokyo Sydney Berlin Rome",
+      "Sunday Monday Tuesday Wednesday Thursday",
+      "September October November December",
+      "Amazon Netflix Spotify Tesla SpaceX",
+      "Harvard Stanford Oxford Cambridge Yale",
     ],
-    quizWords: ["John", "Mary", "Monday", "January", "Apple", "Google", "New York", "London"],
+    quizWords: ["Alice", "Paris", "Sunday", "September", "Amazon", "Netflix", "Harvard", "Stanford"],
     minWPM: 22,
     minAccuracy: 88,
   },
@@ -669,14 +705,14 @@ export const levels: Lesson[] = [
     keys: FULL_KEYBOARD,
     fingers: ALL_FINGERS,
     exercises: [
-      "iPhone iPad MacBook Pro",
-      "JavaScript TypeScript Python",
-      "GitHub GitLab BitBucket",
-      "McDonald's Starbucks Nike",
-      "NASA FBI CIA UNESCO",
-      "firstName lastName userId",
+      "LinkedIn YouTube TikTok WhatsApp Instagram",
+      "ChatGPT OpenAI DeepMind Anthropic Claude",
+      "PostgreSQL MongoDB Redis GraphQL Docker",
+      "DevOps DevSecOps SaaS PaaS IaaS",
+      "getUserById setUserName isValidEmail",
+      "McDonalds JPMorgan eBay PayPal LinkedIn",
     ],
-    quizWords: ["iPhone", "JavaScript", "GitHub", "NASA", "firstName", "lastName", "MacBook", "TypeScript"],
+    quizWords: ["LinkedIn", "ChatGPT", "PostgreSQL", "DevOps", "MongoDB", "getUserById", "Anthropic", "GraphQL"],
     minWPM: 23,
     minAccuracy: 88,
   },
@@ -695,14 +731,14 @@ export const levels: Lesson[] = [
     keys: FULL_KEYBOARD,
     fingers: ALL_FINGERS,
     exercises: [
-      "Hello, how are you today?",
-      "I am learning to type faster.",
-      "The weather is nice outside.",
-      "Would you like some coffee?",
-      "Thank you for your help!",
-      "Practice makes perfect.",
+      "Can you believe how quickly time flies?",
+      "The sunset painted the sky in brilliant colors.",
+      "Music has a way of touching our deepest emotions.",
+      "Every journey begins with a single step forward.",
+      "Knowledge is power, but wisdom is freedom.",
+      "Dreams become reality through dedication and effort.",
     ],
-    quizWords: ["Hello", "today", "learning", "weather", "coffee", "Thank", "Practice", "perfect"],
+    quizWords: ["believe", "sunset", "brilliant", "emotions", "journey", "knowledge", "wisdom", "dedication"],
     minWPM: 25,
     minAccuracy: 90,
   },
@@ -719,11 +755,12 @@ export const levels: Lesson[] = [
     keys: FULL_KEYBOARD,
     fingers: ALL_FINGERS,
     exercises: [
-      "Touch typing is a valuable skill. It allows you to type without looking at the keyboard. With practice, you can reach high speeds.",
-      "The quick brown fox jumps over the lazy dog. This sentence contains every letter of the alphabet. It is often used for typing practice.",
-      "Learning to type takes time and patience. Start slow and focus on accuracy. Speed will come naturally with practice.",
+      "The art of communication lies in clarity and purpose. Choose your words carefully, for they shape how others understand you.",
+      "Technology evolves rapidly, transforming how we work and live. Those who adapt quickly will thrive in this changing landscape.",
+      "Success is not a destination but a continuous journey. Embrace challenges as opportunities to grow and improve yourself.",
+      "Creativity flows from curiosity and experimentation. Never be afraid to try new approaches and learn from your mistakes.",
     ],
-    quizWords: ["valuable", "keyboard", "practice", "sentence", "alphabet", "patience", "accuracy", "naturally"],
+    quizWords: ["communication", "clarity", "technology", "transforming", "destination", "continuous", "creativity", "experimentation"],
     minWPM: 28,
     minAccuracy: 90,
   },
@@ -742,14 +779,14 @@ export const levels: Lesson[] = [
     keys: FULL_KEYBOARD,
     fingers: ALL_FINGERS,
     exercises: [
-      "Dear Mr. Johnson, Thank you for your email. I will respond by Friday.",
-      "The meeting is scheduled for 3:00 PM on Tuesday, March 15th.",
-      "Please review the attached document and provide your feedback.",
-      "Best regards, Sarah Williams, Senior Developer at TechCorp Inc.",
-      "Remember to save your work frequently. You never know when the power might go out!",
-      "The project deadline is approaching. Let's make sure we deliver on time.",
+      "Dear Dr. Martinez, I hope this message finds you well. I wanted to follow up on our discussion from last week.",
+      "The quarterly report shows a 23% increase in revenue compared to the same period last year.",
+      "Please confirm your attendance at the Annual Tech Summit in San Francisco on November 8th.",
+      "After careful consideration, the committee has decided to approve your proposal for Phase Two.",
+      "Attached you will find the revised contract with the updated terms and conditions we discussed.",
+      "Looking forward to our collaboration. Please do not hesitate to reach out if you have any questions.",
     ],
-    quizWords: ["Johnson", "scheduled", "Tuesday", "attached", "feedback", "regards", "Developer", "deadline"],
+    quizWords: ["quarterly", "revenue", "attendance", "committee", "proposal", "collaboration", "hesitate", "consideration"],
     minWPM: 32,
     minAccuracy: 92,
   },
@@ -773,14 +810,14 @@ export const levels: Lesson[] = [
     keys: FULL_KEYBOARD,
     fingers: ALL_FINGERS,
     exercises: [
-      "function const let var return",
-      "if else for while switch case",
-      "class interface import export",
-      "true false null undefined void",
-      "async await promise resolve reject",
-      "console.log debugger breakpoint",
+      "const handleClick = async () => { await fetchData(); };",
+      "export interface UserProfile { id: number; name: string; }",
+      "if (isValid && !isLoading) { return processData(items); }",
+      "try { await saveToDatabase(); } catch (error) { logError(error); }",
+      "const result = items.filter(x => x.active).map(x => x.value);",
+      "import { useState, useEffect, useCallback } from 'react';",
     ],
-    quizWords: ["function", "return", "const", "interface", "import", "export", "async", "await"],
+    quizWords: ["handleClick", "interface", "isValid", "isLoading", "processData", "useState", "useEffect", "useCallback"],
     minWPM: 30,
     minAccuracy: 90,
   },
@@ -799,14 +836,14 @@ export const levels: Lesson[] = [
     keys: FULL_KEYBOARD,
     fingers: ALL_FINGERS,
     exercises: [
-      "algorithm database framework",
-      "authentication authorization",
-      "configuration implementation",
-      "optimization performance",
-      "infrastructure deployment",
-      "documentation specification",
+      "The microservices architecture enables horizontal scalability.",
+      "Implement caching to reduce database query latency significantly.",
+      "Configure the load balancer for optimal traffic distribution.",
+      "Containerization with Docker simplifies deployment workflows.",
+      "The authentication middleware validates JWT tokens securely.",
+      "Continuous integration ensures automated testing on every commit.",
     ],
-    quizWords: ["algorithm", "database", "framework", "authentication", "configuration", "optimization", "infrastructure", "documentation"],
+    quizWords: ["microservices", "scalability", "caching", "latency", "containerization", "middleware", "validates", "integration"],
     minWPM: 30,
     minAccuracy: 90,
   },
@@ -825,14 +862,14 @@ export const levels: Lesson[] = [
     keys: FULL_KEYBOARD,
     fingers: ALL_FINGERS,
     exercises: [
-      "The API returned a 404 error at 14:32:05.",
-      "Users.find({ age: { $gte: 18 } })",
-      "git commit -m 'Fixed bug #1234'",
-      "npm install --save-dev typescript@4.9.5",
-      "SELECT * FROM users WHERE id = 42;",
-      "curl -X POST https://api.example.com/v1/data",
+      "Error 503: Service temporarily unavailable. Retry in 30 seconds.",
+      "git rebase -i HEAD~5 && git push origin feature/auth --force-with-lease",
+      "docker run -d -p 8080:80 --name webapp nginx:alpine",
+      "kubectl apply -f deployment.yaml --namespace=production",
+      "INSERT INTO orders (user_id, total, status) VALUES (42, 299.99, 'pending');",
+      "ssh -i ~/.ssh/id_rsa admin@192.168.1.100 -p 2222",
     ],
-    quizWords: ["API", "404", "git", "npm", "SELECT", "curl", "POST", "https"],
+    quizWords: ["rebase", "docker", "kubectl", "deployment", "namespace", "INSERT", "VALUES", "pending"],
     minWPM: 28,
     minAccuracy: 88,
   },
@@ -851,12 +888,13 @@ export const levels: Lesson[] = [
     keys: FULL_KEYBOARD,
     fingers: ALL_FINGERS,
     exercises: [
-      "Learning to type efficiently is one of the best investments you can make in yourself. Every day, we communicate more through text than ever before.",
-      "The world of technology moves fast. Those who can type quickly and accurately have a significant advantage in today's digital workplace.",
-      "Touch typing frees your mind to focus on what you're writing rather than how you're writing it. Your fingers know the way; trust them.",
-      "Practice daily, even if just for fifteen minutes. Consistency beats intensity when building any skill. You've got this!",
+      "In the realm of software development, architecture decisions made early often determine the scalability and maintainability of the entire system.",
+      "Effective documentation serves as a bridge between developers, enabling knowledge transfer and reducing onboarding time for new team members.",
+      "The best engineers understand that writing clean, readable code is more valuable than clever solutions that only they can understand.",
+      "When debugging complex systems, methodical elimination of possibilities will always outperform random guessing, no matter how intuitive.",
+      "Performance optimization should be guided by profiling data, not assumptions. Measure first, then improve the bottlenecks that matter.",
     ],
-    quizWords: ["efficiently", "investments", "communicate", "technology", "significant", "advantage", "workplace", "consistency"],
+    quizWords: ["architecture", "scalability", "maintainability", "documentation", "onboarding", "debugging", "methodical", "optimization"],
     minWPM: 35,
     minAccuracy: 92,
   },
@@ -876,16 +914,565 @@ export const levels: Lesson[] = [
     keys: FULL_KEYBOARD,
     fingers: ALL_FINGERS,
     exercises: [
-      "The quick brown fox jumps over the lazy dog. Pack my box with five dozen liquor jugs.",
-      "Congratulations! You have mastered touch typing. Your fingers dance across the keyboard with precision and grace.",
-      "function calculateTotal(items) { return items.reduce((sum, item) => sum + item.price, 0); }",
-      "Dear Team, Please review PR #2048 by EOD Friday. Let me know if you have any questions. Thanks!",
-      "SELECT u.name, COUNT(o.id) as orders FROM users u JOIN orders o ON u.id = o.user_id GROUP BY u.id;",
-      "You are now a certified typebit8 Master! Share your achievement and keep practicing every day!",
+      "The quick brown fox jumps over the lazy dog while sphinx of black quartz judges every vow. Amazing!",
+      "export async function fetchUserData(userId: string): Promise<UserProfile | null> { return await api.get(`/users/${userId}`); }",
+      "SELECT p.name, SUM(oi.quantity * oi.price) AS total FROM products p JOIN order_items oi ON p.id = oi.product_id GROUP BY p.id;",
+      "@keyframes fadeIn { 0% { opacity: 0; transform: translateY(-20px); } 100% { opacity: 1; transform: translateY(0); } }",
+      "The TypeBit8 Master certification requires 40+ WPM with 95% accuracy. You have proven your exceptional skills!",
+      "Congratulations! You have conquered all 30 levels. Your dedication and persistence have made you a typing champion!",
     ],
-    quizWords: ["Congratulations", "mastered", "precision", "calculate", "function", "certified", "achievement", "typebit8"],
+    quizWords: ["fetchUserData", "Promise", "keyframes", "translateY", "certification", "exceptional", "conquered", "persistence"],
     minWPM: 40,
     minAccuracy: 95,
+  },
+
+  // ═══════════════════════════════════════════════════════════════════
+  // TIER 7: AI PROMPTS THEME (Levels 31-35)
+  // Type at the Speed of Thought - Learn prompting while building speed
+  // ═══════════════════════════════════════════════════════════════════
+
+  {
+    id: 31,
+    title: "Basic Prompts",
+    description: "Learn foundational AI prompt patterns",
+    concept: `Welcome to the AI Prompts theme!
+
+    Master the prompts you'll use every day with ChatGPT, Claude, and other AI tools.
+    Type these prompts until they become second nature.
+
+    Start with simple, effective prompt starters.`,
+    keys: FULL_KEYBOARD,
+    fingers: ALL_FINGERS,
+    exercises: [
+      "Explain this concept in simple terms",
+      "Write a summary of the following text",
+      "Create a list of 5 ideas for this topic",
+      "Help me brainstorm solutions for this problem",
+      "What are the pros and cons of this approach?",
+      "Give me three examples of how to use this",
+    ],
+    quizWords: ["Explain", "summary", "Create", "brainstorm", "solutions", "approach", "examples", "concept"],
+    minWPM: 25,
+    minAccuracy: 90,
+  },
+  {
+    id: 32,
+    title: "Advanced Prompts",
+    description: "Master role-based and context-rich prompts",
+    concept: `Level up your prompting with advanced techniques!
+
+    Role-based prompts get better results:
+    - "Act as a..." sets the AI's expertise
+    - Adding context improves accuracy
+    - Specific instructions yield specific results
+
+    These prompts will transform your AI interactions.`,
+    keys: FULL_KEYBOARD,
+    fingers: ALL_FINGERS,
+    exercises: [
+      "Act as a senior software engineer and review this code",
+      "Write a professional email declining the meeting politely",
+      "Create a marketing plan for a B2B SaaS startup",
+      "Analyze this data and identify the key trends",
+      "Rewrite this paragraph to be more concise and clear",
+      "Suggest improvements for this user interface design",
+    ],
+    quizWords: ["professional", "engineer", "marketing", "analyze", "concise", "interface", "improvements", "identify"],
+    minWPM: 28,
+    minAccuracy: 90,
+  },
+  {
+    id: 33,
+    title: "System Prompts",
+    description: "Write powerful system instructions",
+    concept: `System prompts shape AI behavior!
+
+    These set the rules for how the AI responds:
+    - Define the assistant's role and expertise
+    - Specify output formats (JSON, markdown, etc.)
+    - Establish constraints and guidelines
+
+    Master these to build custom AI assistants.`,
+    keys: FULL_KEYBOARD,
+    fingers: ALL_FINGERS,
+    exercises: [
+      "You are a helpful assistant that specializes in coding",
+      "Respond in JSON format with the following structure",
+      "Think step by step and show your reasoning process",
+      "Always include code examples in your explanations",
+      "Keep your responses concise and under 200 words",
+      "If you are unsure, ask clarifying questions first",
+    ],
+    quizWords: ["assistant", "specializes", "structure", "reasoning", "explanations", "concise", "clarifying", "process"],
+    minWPM: 30,
+    minAccuracy: 90,
+  },
+  {
+    id: 34,
+    title: "Multi-turn Conversations",
+    description: "Master follow-up prompts and context",
+    concept: `Real AI conversations are multi-turn!
+
+    Build on previous responses effectively:
+    - Reference earlier context
+    - Request modifications
+    - Drill deeper into topics
+    - Course-correct when needed
+
+    These prompts keep conversations productive.`,
+    keys: FULL_KEYBOARD,
+    fingers: ALL_FINGERS,
+    exercises: [
+      "Based on our previous discussion about the project",
+      "Can you modify the previous response to include more detail?",
+      "Let me provide more context about the requirements",
+      "That's helpful, but can you focus more on the technical aspects?",
+      "Please expand on the third point you mentioned earlier",
+      "How would this change if we had a larger budget?",
+    ],
+    quizWords: ["previous", "discussion", "modify", "context", "requirements", "technical", "expand", "mentioned"],
+    minWPM: 32,
+    minAccuracy: 90,
+  },
+  {
+    id: 35,
+    title: "Power User Prompts",
+    description: "Elite prompting techniques for maximum results",
+    concept: `You've reached the power user level!
+
+    These advanced prompts unlock AI's full potential:
+    - Comprehensive analysis requests
+    - Detailed implementation plans
+    - Production-ready outputs
+    - Complex multi-step tasks
+
+    Type like a pro, prompt like a pro.`,
+    keys: FULL_KEYBOARD,
+    fingers: ALL_FINGERS,
+    exercises: [
+      "Generate a comprehensive analysis comparing these two approaches",
+      "Create a detailed implementation plan with milestones and deadlines",
+      "Write production-ready code with error handling and documentation",
+      "Develop a complete test strategy covering edge cases and integration",
+      "Build a step-by-step tutorial that a beginner could follow",
+      "Design a scalable architecture diagram with explanations for each component",
+    ],
+    quizWords: ["comprehensive", "implementation", "milestones", "production", "documentation", "strategy", "integration", "scalable"],
+    minWPM: 35,
+    minAccuracy: 92,
+  },
+
+  // ═══════════════════════════════════════════════════════════════════
+  // TIER 8: DEVELOPER THEME (Levels 36-40)
+  // Code Fluency Through Repetition
+  // ═══════════════════════════════════════════════════════════════════
+
+  {
+    id: 36,
+    title: "Variables & Functions",
+    description: "Type JavaScript/TypeScript declarations",
+    concept: `Code fluency starts with declarations!
+
+    Master the patterns you type every day:
+    - const, let, function declarations
+    - Arrow functions and async syntax
+    - TypeScript type annotations
+
+    Build muscle memory for code!`,
+    keys: FULL_KEYBOARD,
+    fingers: ALL_FINGERS,
+    exercises: [
+      "const handleSubmit = async (event) => {",
+      "function calculateTotal(items: Item[]): number",
+      "export default function HomePage() {",
+      "const [count, setCount] = useState(0)",
+      "let result = await fetchData()",
+      "type Props = { children: React.ReactNode }",
+    ],
+    quizWords: ["const", "function", "async", "export", "default", "useState", "await", "type"],
+    minWPM: 28,
+    minAccuracy: 88,
+  },
+  {
+    id: 37,
+    title: "Terminal Commands",
+    description: "Master CLI and DevOps commands",
+    concept: `The terminal is your power tool!
+
+    These commands save you time every day:
+    - Git workflows and commit messages
+    - npm/yarn package management
+    - Docker and deployment commands
+
+    Type commands without thinking!`,
+    keys: FULL_KEYBOARD,
+    fingers: ALL_FINGERS,
+    exercises: [
+      "git commit -m 'feat: add user authentication'",
+      "npm install --save-dev @types/react",
+      "docker-compose up -d --build",
+      "git checkout -b feature/new-dashboard",
+      "npm run build && npm run start",
+      "kubectl apply -f deployment.yaml",
+    ],
+    quizWords: ["commit", "install", "docker", "checkout", "feature", "build", "kubectl", "deploy"],
+    minWPM: 30,
+    minAccuracy: 88,
+  },
+  {
+    id: 38,
+    title: "Common Patterns",
+    description: "Type everyday code patterns fluently",
+    concept: `These patterns appear in every codebase!
+
+    Master the building blocks of modern code:
+    - Error handling patterns
+    - React hooks and state management
+    - Try/catch and async patterns
+
+    Code faster, think less about syntax!`,
+    keys: FULL_KEYBOARD,
+    fingers: ALL_FINGERS,
+    exercises: [
+      "if (error) { console.error(error); return; }",
+      "const [state, setState] = useState<T | null>(null)",
+      "try { await fetchData() } catch (e) { handleError(e) }",
+      "const { data, isLoading } = useQuery(queryKey)",
+      "return items.map((item) => <Item key={item.id} />)",
+      "Object.entries(config).forEach(([key, value]) => {",
+    ],
+    quizWords: ["error", "console", "useState", "catch", "useQuery", "isLoading", "forEach", "entries"],
+    minWPM: 32,
+    minAccuracy: 88,
+  },
+  {
+    id: 39,
+    title: "API & Config",
+    description: "Type API calls and configuration",
+    concept: `APIs and configs are everywhere!
+
+    Master these essential patterns:
+    - HTTP headers and auth tokens
+    - Environment variables
+    - Configuration objects
+
+    Configure with confidence!`,
+    keys: FULL_KEYBOARD,
+    fingers: ALL_FINGERS,
+    exercises: [
+      '"Authorization": `Bearer ${token}`',
+      "process.env.NEXT_PUBLIC_API_URL",
+      'export const config = { runtime: "edge" }',
+      'headers: { "Content-Type": "application/json" }',
+      "const response = await fetch(url, { method: 'POST' })",
+      "DATABASE_URL=postgresql://user:pass@localhost:5432/db",
+    ],
+    quizWords: ["Authorization", "Bearer", "process", "runtime", "headers", "Content", "response", "DATABASE"],
+    minWPM: 35,
+    minAccuracy: 88,
+  },
+  {
+    id: 40,
+    title: "Code Reviews",
+    description: "Type comments, TODOs, and documentation",
+    concept: `Great developers document their code!
+
+    Master code review language:
+    - TODO and FIXME comments
+    - JSDoc annotations
+    - Inline explanations
+
+    Communicate clearly in code!`,
+    keys: FULL_KEYBOARD,
+    fingers: ALL_FINGERS,
+    exercises: [
+      "// TODO: Refactor this to use a more efficient algorithm",
+      "/* This handles the edge case where user is not authenticated */",
+      "/** @param {string} userId - The unique identifier */",
+      "// FIXME: This will break if the array is empty",
+      "/** Returns the calculated total with tax included */",
+      "// NOTE: This is intentionally synchronous for backwards compatibility",
+    ],
+    quizWords: ["TODO", "Refactor", "efficient", "algorithm", "FIXME", "param", "Returns", "NOTE"],
+    minWPM: 38,
+    minAccuracy: 88,
+  },
+
+
+  // ═══════════════════════════════════════════════════════════════════
+  // TIER 9: BUSINESS THEME (Levels 41-45)
+  // Professional Communication Mastery
+  // ═══════════════════════════════════════════════════════════════════
+
+  {
+    id: 41,
+    title: "Email Openers",
+    description: "Master professional email greetings and openers",
+    concept: `Professional emails start with the right tone!
+
+    Learn the most common email opening phrases used in business:
+    - Greetings that set a professional tone
+    - Follow-up references
+    - Thank you openers
+
+    Type these phrases until they become second nature.`,
+    keys: FULL_KEYBOARD,
+    fingers: ALL_FINGERS,
+    exercises: [
+      "I hope this email finds you well.",
+      "Thank you for your prompt response.",
+      "Following up on our conversation yesterday,",
+      "I wanted to reach out regarding our upcoming meeting.",
+      "Thank you for getting back to me so quickly.",
+      "I hope you had a great weekend.",
+    ],
+    quizWords: ["email", "prompt", "response", "conversation", "regarding", "upcoming", "quickly", "weekend"],
+    minWPM: 30,
+    minAccuracy: 90,
+  },
+  {
+    id: 42,
+    title: "Slack & Teams Messages",
+    description: "Type fast in real-time team communication",
+    concept: `Modern workplaces run on instant messaging!
+
+    Master the quick, informal yet professional style of:
+    - Channel announcements
+    - Quick updates
+    - Acknowledgments and reactions
+
+    Speed matters when your team is waiting for a response.`,
+    keys: FULL_KEYBOARD,
+    fingers: ALL_FINGERS,
+    exercises: [
+      "Hey team, quick update on the project status:",
+      "@channel Please review the attached document by EOD",
+      "Thanks for flagging this! I'll look into it right away.",
+      "Just pushed the latest changes to the staging branch.",
+      "Can someone take a look at this PR when you have a moment?",
+      "Great catch! I'll fix that in the next commit.",
+    ],
+    quizWords: ["channel", "attached", "flagging", "staging", "branch", "pushed", "commit", "review"],
+    minWPM: 32,
+    minAccuracy: 88,
+  },
+  {
+    id: 43,
+    title: "Meeting Notes",
+    description: "Capture decisions and action items efficiently",
+    concept: `Good meeting notes drive results!
+
+    Practice typing common meeting documentation patterns:
+    - Action items and owners
+    - Decisions made
+    - Next steps and deadlines
+
+    Clear notes keep everyone aligned and accountable.`,
+    keys: FULL_KEYBOARD,
+    fingers: ALL_FINGERS,
+    exercises: [
+      "Action items from today's standup:",
+      "Decision: We will proceed with Option B",
+      "Next steps: John to provide estimates by Friday",
+      "Attendees: Sarah, Mike, Lisa, and David",
+      "Key takeaway: Launch date moved to Q2",
+      "Follow-up required: Budget approval from finance team",
+    ],
+    quizWords: ["standup", "decision", "proceed", "estimates", "attendees", "takeaway", "approval", "finance"],
+    minWPM: 34,
+    minAccuracy: 88,
+  },
+  {
+    id: 44,
+    title: "Professional Requests",
+    description: "Make polite and effective asks",
+    concept: `Requests are an art in business communication!
+
+    Learn to type professional requests that get results:
+    - Meeting invitations
+    - Feedback requests
+    - Information asks
+
+    Polite, clear requests build strong working relationships.`,
+    keys: FULL_KEYBOARD,
+    fingers: ALL_FINGERS,
+    exercises: [
+      "Would you be available for a quick sync this week?",
+      "I'd appreciate your input on this proposal.",
+      "Please let me know if you need any additional information.",
+      "Could you share your thoughts on the revised timeline?",
+      "I was hoping to get your feedback before the deadline.",
+      "Would it be possible to reschedule our call to Thursday?",
+    ],
+    quizWords: ["available", "appreciate", "proposal", "additional", "revised", "timeline", "feedback", "reschedule"],
+    minWPM: 36,
+    minAccuracy: 90,
+  },
+  {
+    id: 45,
+    title: "Formal Communication",
+    description: "Master formal business writing",
+    concept: `Some situations require formal language!
+
+    Practice the formal phrases used in:
+    - Legal and contractual communications
+    - Official announcements
+    - Executive correspondence
+
+    Formal writing builds trust and professionalism.`,
+    keys: FULL_KEYBOARD,
+    fingers: ALL_FINGERS,
+    exercises: [
+      "Per our agreement dated January 15th, 2025,",
+      "We are pleased to inform you that your application",
+      "This serves as official confirmation of your request.",
+      "In accordance with the terms outlined in Section 3,",
+      "Please find attached the quarterly financial report.",
+      "We regret to inform you that the position has been filled.",
+    ],
+    quizWords: ["agreement", "pleased", "confirmation", "accordance", "outlined", "quarterly", "financial", "position"],
+    minWPM: 38,
+    minAccuracy: 90,
+  },
+
+  // ═══════════════════════════════════════════════════════════════════
+  // TIER 10: EXPERT/MIXED (Levels 46-50)
+  // Combines AI, Developer, and Business themes for expert-level typing
+  // ═══════════════════════════════════════════════════════════════════
+
+  {
+    id: 46,
+    title: "AI + Developer Fusion",
+    description: "Combine AI prompts with code snippets",
+    concept: `The ultimate developer-AI collaboration!
+
+    In modern development, you constantly switch between:
+    - Writing prompts for AI assistants
+    - Typing code that AI generates
+    - Explaining code requirements in natural language
+
+    Master the seamless blend of prompts and code.`,
+    keys: FULL_KEYBOARD,
+    fingers: ALL_FINGERS,
+    exercises: [
+      "Write a Python function that takes a list and returns the sum of all even numbers.",
+      "Create a TypeScript interface for a User with id, name, email, and createdAt fields.",
+      "Explain this regex pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$/",
+      "Generate a React component that displays a loading spinner while data is fetching.",
+      "Refactor this function to use async/await instead of .then() chains.",
+      "Debug the following code: const result = items.filter(i => i.active).map(i => i.name);",
+    ],
+    quizWords: ["TypeScript", "interface", "async", "await", "component", "refactor", "regex", "filter"],
+    minWPM: 35,
+    minAccuracy: 90,
+  },
+  {
+    id: 47,
+    title: "Developer + Business Bridge",
+    description: "Technical emails and code review comments",
+    concept: `Developers communicate constantly!
+
+    From code reviews to stakeholder updates:
+    - PR review comments
+    - Technical email updates
+    - Sprint planning notes
+    - Bug reports and documentation
+
+    Type professional technical communication.`,
+    keys: FULL_KEYBOARD,
+    fingers: ALL_FINGERS,
+    exercises: [
+      "Please review the PR for the authentication feature before we merge to main.",
+      "LGTM! Consider adding error handling for the edge case when userId is undefined.",
+      "Hi Team, The API endpoint is deployed to staging. Please test and provide feedback by EOD.",
+      "Bug Report: Login fails on Safari when cookies are disabled. Steps to reproduce attached.",
+      "Sprint Retro: We shipped 12 story points. Blockers: CI pipeline slowness, API documentation.",
+      "Can we schedule a quick sync to discuss the database migration strategy for v2.0?",
+    ],
+    quizWords: ["authentication", "merge", "endpoint", "staging", "cookies", "migration", "pipeline", "documentation"],
+    minWPM: 38,
+    minAccuracy: 90,
+  },
+  {
+    id: 48,
+    title: "Speed Challenge I",
+    description: "Fast-paced mixed content from all themes",
+    concept: `Speed is the name of the game!
+
+    Short, punchy sentences across all domains:
+    - Quick AI commands
+    - Rapid code snippets
+    - Brief business messages
+
+    Stay sharp and type fast!`,
+    keys: FULL_KEYBOARD,
+    fingers: ALL_FINGERS,
+    exercises: [
+      "Summarize this in 3 bullet points. Fix the null check. Meeting at 2pm.",
+      "npm run build && git push origin main. LGTM, ship it! Thanks for the update.",
+      "Act as a senior dev. const data = await fetch(url); Sounds good, let's proceed.",
+      "Explain like I'm 5. return arr.sort((a, b) => b - a); Will circle back tomorrow.",
+      "Generate test cases. if (!user) throw new Error(); Per my last email, we need this ASAP.",
+      "Optimize for performance. Object.keys(obj).forEach(k => {}); Let's sync offline.",
+    ],
+    quizWords: ["summarize", "fetch", "optimize", "forEach", "proceed", "generate", "performance", "offline"],
+    minWPM: 40,
+    minAccuracy: 88,
+  },
+  {
+    id: 49,
+    title: "Speed Challenge II",
+    description: "Longer sentences requiring sustained focus",
+    concept: `Endurance meets complexity!
+
+    Longer sentences with:
+    - Complex punctuation
+    - Special characters
+    - Mixed case throughout
+    - Technical terminology
+
+    Maintain your speed over extended text.`,
+    keys: FULL_KEYBOARD,
+    fingers: ALL_FINGERS,
+    exercises: [
+      "The deployment pipeline (CI/CD) automatically runs tests, builds artifacts, and pushes to production on merge.",
+      "Please analyze the user engagement metrics for Q4 2024 and provide actionable insights by January 15th, 2025.",
+      "You are an expert software architect; design a microservices system with REST APIs, message queues, and caching layers.",
+      "const handleSubmit = async (e: React.FormEvent) => { e.preventDefault(); await submitForm(formData); };",
+      "Dear Stakeholders, Attached is the technical specification document for Project Phoenix (v2.1.0-beta) - please review.",
+      "SELECT u.email, COUNT(o.id) AS total_orders FROM users u LEFT JOIN orders o ON u.id = o.user_id GROUP BY u.id;",
+    ],
+    quizWords: ["deployment", "microservices", "stakeholders", "specification", "artifacts", "engagement", "handleSubmit", "preventDefault"],
+    minWPM: 42,
+    minAccuracy: 88,
+  },
+  {
+    id: 50,
+    title: "Ultimate Mastery",
+    description: "The hardest typing challenges - prove your expertise",
+    concept: `You've reached the pinnacle!
+
+    This is the ULTIMATE test:
+    - Long technical content
+    - Complex special characters
+    - API endpoints and URLs
+    - Production-ready code patterns
+    - Executive communications
+
+    Complete this to become a TypeBit8 Legend!`,
+    keys: FULL_KEYBOARD,
+    fingers: ALL_FINGERS,
+    exercises: [
+      "The API endpoint /api/v2/users/{userId}/settings accepts PATCH requests with JSON body: { \"theme\": \"dark\" }",
+      "export const fetchUserData = async (id: string): Promise<User | null> => { try { return await api.get(`/users/${id}`); } catch { return null; } };",
+      "Write a comprehensive technical design document outlining the authentication flow, including OAuth2.0, JWT tokens, and refresh mechanisms.",
+      "Dear Board of Directors, Q4 revenue exceeded projections by 23%. Key drivers: enterprise contracts ($2.4M) and API usage growth (+156%).",
+      "git rebase -i HEAD~5 && git push --force-with-lease origin feature/auth-refactor # Careful: force push to feature branch only!",
+      "CREATE INDEX idx_users_email ON users(email) WHERE deleted_at IS NULL; -- Partial index for active users, ~40% storage savings",
+    ],
+    quizWords: ["endpoint", "authentication", "OAuth2", "projections", "enterprise", "rebase", "Promise", "comprehensive"],
+    minWPM: 45,
+    minAccuracy: 90,
   },
 ];
 

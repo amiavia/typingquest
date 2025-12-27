@@ -295,6 +295,162 @@ export function PremiumPage({ onClose }: PremiumPageProps) {
         </section>
       )}
 
+      {/* Speed of Thought Package - Only show if not premium */}
+      {!isPremium && (
+        <section className="max-w-3xl mx-auto mb-8">
+          <div
+            className="relative overflow-hidden p-6"
+            style={{
+              background: "linear-gradient(135deg, #1a1a2e 0%, #0f3460 50%, #16213e 100%)",
+              border: "4px solid #ffd93d",
+              boxShadow: "0 0 40px rgba(255,217,61,0.2), inset 0 0 60px rgba(255,217,61,0.05)",
+            }}
+          >
+            {/* Decorative corner elements */}
+            <div
+              className="absolute top-0 left-0 w-20 h-20"
+              style={{
+                background: "linear-gradient(135deg, #ffd93d 0%, transparent 50%)",
+                opacity: 0.2,
+              }}
+            />
+            <div
+              className="absolute bottom-0 right-0 w-20 h-20"
+              style={{
+                background: "linear-gradient(315deg, #ffd93d 0%, transparent 50%)",
+                opacity: 0.2,
+              }}
+            />
+
+            <h2
+              className="text-center mb-2"
+              style={{ fontSize: "14px", color: "#ffd93d" }}
+            >
+              PREMIUM INCLUDES:
+            </h2>
+
+            {/* Speed of Thought Package Header */}
+            <div
+              className="text-center mb-6 p-4"
+              style={{
+                background: "rgba(255,217,61,0.1)",
+                border: "2px solid rgba(255,217,61,0.3)",
+              }}
+            >
+              <p style={{ fontSize: "12px", color: "#ffd93d", marginBottom: "8px" }}>
+                THE SPEED OF THOUGHT PACKAGE
+              </p>
+            </div>
+
+            {/* Levels 10-30 */}
+            <div className="mb-6">
+              <div className="flex items-start gap-2 mb-2">
+                <span style={{ fontSize: "10px", color: "#3bceac" }}>✓</span>
+                <div>
+                  <p style={{ fontSize: "9px", color: "#eef5db" }}>
+                    LEVELS 10-30: ADVANCED TYPING MASTERY
+                  </p>
+                  <p style={{ fontSize: "7px", color: "#3bceac", marginTop: "4px", lineHeight: "1.6" }}>
+                    BUILD SPEED TO 80+ WPM WITH ADVANCED EXERCISES
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Levels 31-50: Themed Learning */}
+            <div className="mb-6">
+              <div className="flex items-start gap-2 mb-4">
+                <span style={{ fontSize: "10px", color: "#3bceac" }}>✓</span>
+                <div>
+                  <p style={{ fontSize: "9px", color: "#eef5db" }}>
+                    LEVELS 31-50: THEMED LEARNING
+                  </p>
+                  <p style={{ fontSize: "7px", color: "#3bceac", marginTop: "4px", lineHeight: "1.6" }}>
+                    UNLOCK EXPERT KNOWLEDGE WHILE PERFECTING YOUR TYPING:
+                  </p>
+                </div>
+              </div>
+
+              {/* Theme Cards Grid */}
+              <div className="grid md:grid-cols-3 gap-4 ml-4">
+                {/* AI Prompts */}
+                <div
+                  className="p-4"
+                  style={{
+                    background: "rgba(59,206,172,0.1)",
+                    border: "2px solid rgba(59,206,172,0.3)",
+                  }}
+                >
+                  <p style={{ fontSize: "14px", marginBottom: "8px" }}>🤖</p>
+                  <p style={{ fontSize: "8px", color: "#3bceac", marginBottom: "4px" }}>
+                    AI PROMPTS
+                  </p>
+                  <p style={{ fontSize: "6px", color: "#4a4a6e", marginBottom: "8px" }}>
+                    LEVELS 31-35
+                  </p>
+                  <p style={{ fontSize: "6px", color: "#eef5db", lineHeight: "1.8" }}>
+                    • MASTER CHATGPT & CLAUDE PROMPTING TECHNIQUES
+                  </p>
+                </div>
+
+                {/* Developer */}
+                <div
+                  className="p-4"
+                  style={{
+                    background: "rgba(249,115,22,0.1)",
+                    border: "2px solid rgba(249,115,22,0.3)",
+                  }}
+                >
+                  <p style={{ fontSize: "14px", marginBottom: "8px" }}>💻</p>
+                  <p style={{ fontSize: "8px", color: "#f97316", marginBottom: "4px" }}>
+                    DEVELOPER
+                  </p>
+                  <p style={{ fontSize: "6px", color: "#4a4a6e", marginBottom: "8px" }}>
+                    LEVELS 36-40
+                  </p>
+                  <p style={{ fontSize: "6px", color: "#eef5db", lineHeight: "1.8" }}>
+                    • CODE PATTERNS BURNED INTO MUSCLE MEMORY
+                  </p>
+                </div>
+
+                {/* Business */}
+                <div
+                  className="p-4"
+                  style={{
+                    background: "rgba(168,85,247,0.1)",
+                    border: "2px solid rgba(168,85,247,0.3)",
+                  }}
+                >
+                  <p style={{ fontSize: "14px", marginBottom: "8px" }}>📧</p>
+                  <p style={{ fontSize: "8px", color: "#a855f7", marginBottom: "4px" }}>
+                    BUSINESS
+                  </p>
+                  <p style={{ fontSize: "6px", color: "#4a4a6e", marginBottom: "8px" }}>
+                    LEVELS 41-45
+                  </p>
+                  <p style={{ fontSize: "6px", color: "#eef5db", lineHeight: "1.8" }}>
+                    • PROFESSIONAL EMAIL TEMPLATES
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Tagline */}
+            <div
+              className="mt-6 p-3 text-center"
+              style={{
+                background: "rgba(255,217,61,0.1)",
+                border: "2px dashed rgba(255,217,61,0.4)",
+              }}
+            >
+              <p style={{ fontSize: "7px", color: "#ffd93d", lineHeight: "1.8" }}>
+                "TYPE IT. LEARN IT. NEVER FORGET IT."
+              </p>
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* Pricing Table - Only show if not premium */}
       {!isPremium && (
         <section className="max-w-3xl mx-auto mb-8">
