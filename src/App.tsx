@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import type { Lesson, TypingStats } from './types';
 import { LessonCard } from './components/LessonCard';
 import { LessonView } from './components/LessonView';
@@ -18,9 +18,11 @@ import { PremiumPage } from './components/PremiumPage';
 import { CoinBalance } from './components/CoinBalance';
 import { StreakDisplay } from './components/StreakDisplay';
 import { PremiumBadge } from './components/PremiumBadge';
+import { MobileLanding } from './components/MobileLanding';
 import { useGameState } from './hooks/useGameState';
 import { useLessonProgress } from './hooks/useLessonProgress';
 import { usePremium } from './hooks/usePremium';
+import { useDeviceDetection, shouldShowMobileLanding } from './hooks/useDeviceDetection';
 import { LEVEL_TIERS, levels, type LevelTier } from './data/levels';
 import { useQuery, useMutation } from 'convex/react';
 import { api } from '../convex/_generated/api';
@@ -55,6 +57,20 @@ function App() {
   const [showSpeedTest, setShowSpeedTest] = useState(false); // For retaking speed test
   const [showSignUpModal, setShowSignUpModal] = useState(false); // For post-level-2 encouragement
   const [showGuestOnboarding, setShowGuestOnboarding] = useState(false); // For post-SpeedTest sign-up prompt
+
+  // PRP-040: Mobile device detection and keyboard verification
+  const deviceCapabilities = useDeviceDetection();
+  const [mobileKeyboardVerified, setMobileKeyboardVerified] = useState(() => {
+    // Check if keyboard was previously verified (persisted in localStorage)
+    return localStorage.getItem('typebit8_keyboard_verified') === 'true';
+  });
+
+  // Persist keyboard verification
+  useEffect(() => {
+    if (mobileKeyboardVerified) {
+      localStorage.setItem('typebit8_keyboard_verified', 'true');
+    }
+  }, [mobileKeyboardVerified]);
 
   // Get layout from global context
   const { layout: keyboardLayout, isLocked: keyboardLocked, lockLayout } = useKeyboardLayout();
@@ -246,6 +262,15 @@ function App() {
   // Show loading screen during transitions
   if (isTransitioning) {
     return <RetroLoadingScreen message={loadingMessage} />;
+  }
+
+  // PRP-040: Show mobile landing page for touch devices without verified keyboard
+  if (shouldShowMobileLanding(deviceCapabilities, mobileKeyboardVerified)) {
+    return (
+      <MobileLanding
+        onKeyboardVerified={() => setMobileKeyboardVerified(true)}
+      />
+    );
   }
 
   // Shop and Premium views
