@@ -15,9 +15,10 @@ import { NicknameEditor } from './NicknameEditor';
 
 interface UserButtonProps {
   userLevel?: number;
+  onOpenShop?: () => void;
 }
 
-export function UserButton({ userLevel = 1 }: UserButtonProps) {
+export function UserButton({ userLevel = 1, onOpenShop }: UserButtonProps) {
   const { hasLocalData, migrateLocalData, migrationStatus } = useAuthContext();
   const { signOut } = useClerk();
   const { user } = useUser();
@@ -211,6 +212,7 @@ export function UserButton({ userLevel = 1 }: UserButtonProps) {
           isOpen={showAvatarSelector}
           onClose={() => setShowAvatarSelector(false)}
           userLevel={userLevel}
+          onOpenShop={onOpenShop}
         />
 
         {/* Nickname Editor Modal */}

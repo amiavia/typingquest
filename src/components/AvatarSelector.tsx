@@ -2,31 +2,58 @@
  * PRP-003: Avatar Selector Modal Component
  *
  * Modal for users to select and change their avatar.
+ * Only allows selection of avatars that user owns (purchased from shop).
+ * Default avatar (pixel-knight) is always available for free.
  */
 
 import { useState } from 'react';
 import { useMutation, useQuery } from 'convex/react';
+import { useAuth } from '@clerk/clerk-react';
 import { api } from '../../convex/_generated/api';
-import { getUnlockedAvatars, getLockedAvatars } from '../data/avatars';
+import { AVATARS, DEFAULT_AVATAR_ID } from '../data/avatars';
 
 interface AvatarSelectorProps {
   isOpen: boolean;
   onClose: () => void;
   userLevel: number;
+  onOpenShop?: () => void;
 }
 
-export function AvatarSelector({ isOpen, onClose, userLevel }: AvatarSelectorProps) {
+export function AvatarSelector({ isOpen, onClose, userLevel, onOpenShop }: AvatarSelectorProps) {
+  const { userId } = useAuth();
   const currentAvatarId = useQuery(api.users.getAvatar);
   const updateAvatar = useMutation(api.users.updateAvatar);
+  const inventory = useQuery(
+    api.shop.getInventory,
+    userId ? { clerkId: userId } : 'skip'
+  );
   const [isUpdating, setIsUpdating] = useState(false);
 
   if (!isOpen) return null;
 
-  const unlockedAvatars = getUnlockedAvatars(userLevel);
-  const lockedAvatars = getLockedAvatars(userLevel);
+  // Get owned avatar IDs from inventory
+  const ownedAvatarIds = new Set<string>(
+    inventory
+      ?.filter(item => item.item?.category === 'avatar')
+      .map(item => item.itemId) ?? []
+  );
+
+  // Default avatar is always free/owned
+  ownedAvatarIds.add(DEFAULT_AVATAR_ID);
+
+  // Categorize avatars
+  const ownedAvatars = AVATARS.filter(a => ownedAvatarIds.has(a.id));
+  const availableToBuy = AVATARS.filter(a =>
+    !ownedAvatarIds.has(a.id) && a.unlockLevel <= userLevel
+  );
+  const levelLocked = AVATARS.filter(a =>
+    !ownedAvatarIds.has(a.id) && a.unlockLevel > userLevel
+  );
 
   const handleSelect = async (avatarId: string) => {
     if (isUpdating) return;
+    if (!ownedAvatarIds.has(avatarId)) return; // Can't select unowned avatars
+
     setIsUpdating(true);
     try {
       await updateAvatar({ avatarId });
@@ -36,6 +63,11 @@ export function AvatarSelector({ isOpen, onClose, userLevel }: AvatarSelectorPro
     } finally {
       setIsUpdating(false);
     }
+  };
+
+  const handleGoToShop = () => {
+    onClose();
+    onOpenShop?.();
   };
 
   return (
@@ -78,26 +110,26 @@ export function AvatarSelector({ isOpen, onClose, userLevel }: AvatarSelectorPro
           </button>
         </div>
 
-        {/* Unlocked Avatars */}
+        {/* Owned Avatars */}
         <p
           style={{
             fontFamily: "'Press Start 2P'",
             fontSize: '8px',
-            color: '#3bceac',
+            color: '#0ead69',
             marginBottom: '12px',
           }}
         >
-          AVAILABLE ({unlockedAvatars.length})
+          OWNED ({ownedAvatars.length})
         </p>
         <div className="grid grid-cols-5 gap-4 mb-6">
-          {unlockedAvatars.map((avatar) => (
+          {ownedAvatars.map((avatar) => (
             <button
               key={avatar.id}
               onClick={() => handleSelect(avatar.id)}
               disabled={isUpdating}
               className={`p-2 transition-all ${
                 currentAvatarId === avatar.id
-                  ? 'ring-4 ring-offset-2 ring-offset-[#1a1a2e]'
+                  ? 'ring-4 ring-offset-2 ring-offset-[#1a1a2e] ring-[#ffd93d]'
                   : 'hover:ring-2 hover:ring-[#3bceac]'
               }`}
               style={{
@@ -145,8 +177,90 @@ export function AvatarSelector({ isOpen, onClose, userLevel }: AvatarSelectorPro
           ))}
         </div>
 
-        {/* Locked Avatars */}
-        {lockedAvatars.length > 0 && (
+        {/* Available to Buy */}
+        {availableToBuy.length > 0 && (
+          <>
+            <div className="flex items-center justify-between mb-3">
+              <p
+                style={{
+                  fontFamily: "'Press Start 2P'",
+                  fontSize: '8px',
+                  color: '#3bceac',
+                }}
+              >
+                GET IN SHOP ({availableToBuy.length})
+              </p>
+              {onOpenShop && (
+                <button
+                  onClick={handleGoToShop}
+                  className="hover:brightness-125 transition-all"
+                  style={{
+                    fontFamily: "'Press Start 2P'",
+                    fontSize: '6px',
+                    color: '#ffd93d',
+                    background: 'transparent',
+                    border: '2px solid #ffd93d',
+                    padding: '4px 8px',
+                    cursor: 'pointer',
+                  }}
+                >
+                  OPEN SHOP
+                </button>
+              )}
+            </div>
+            <div className="grid grid-cols-5 gap-4 mb-6 opacity-60">
+              {availableToBuy.map((avatar) => (
+                <div
+                  key={avatar.id}
+                  className="p-2 relative cursor-pointer hover:opacity-80 transition-opacity"
+                  style={{
+                    background: '#0d0d1a',
+                    border: '2px solid #3bceac',
+                    borderRadius: '4px',
+                  }}
+                  onClick={handleGoToShop}
+                >
+                  <img
+                    src={avatar.src}
+                    alt={avatar.name}
+                    className="w-full aspect-square"
+                    style={{ imageRendering: 'pixelated', filter: 'saturate(0.5)' }}
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.outerHTML = `<span style="font-size: 24px; display: flex; align-items: center; justify-content: center; aspect-ratio: 1; filter: saturate(0.5);">${avatar.emoji}</span>`;
+                    }}
+                  />
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/40">
+                    <span
+                      style={{
+                        fontFamily: "'Press Start 2P'",
+                        fontSize: '6px',
+                        color: '#ffd93d',
+                      }}
+                    >
+                      💰 BUY
+                    </span>
+                  </div>
+                  <p
+                    style={{
+                      fontFamily: "'Press Start 2P'",
+                      fontSize: '5px',
+                      color: '#3bceac',
+                      marginTop: '6px',
+                      textAlign: 'center',
+                      lineHeight: '1.4',
+                    }}
+                  >
+                    {avatar.name.toUpperCase()}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </>
+        )}
+
+        {/* Level Locked */}
+        {levelLocked.length > 0 && (
           <>
             <p
               style={{
@@ -156,10 +270,10 @@ export function AvatarSelector({ isOpen, onClose, userLevel }: AvatarSelectorPro
                 marginBottom: '12px',
               }}
             >
-              LOCKED ({lockedAvatars.length})
+              LOCKED ({levelLocked.length})
             </p>
-            <div className="grid grid-cols-5 gap-4 opacity-50">
-              {lockedAvatars.map((avatar) => (
+            <div className="grid grid-cols-5 gap-4 opacity-40">
+              {levelLocked.map((avatar) => (
                 <div
                   key={avatar.id}
                   className="p-2 relative"
@@ -187,7 +301,7 @@ export function AvatarSelector({ isOpen, onClose, userLevel }: AvatarSelectorPro
                         color: '#ffd93d',
                       }}
                     >
-                      LV{avatar.unlockLevel}
+                      🔒 LV{avatar.unlockLevel}
                     </span>
                   </div>
                   <p
@@ -217,7 +331,7 @@ export function AvatarSelector({ isOpen, onClose, userLevel }: AvatarSelectorPro
             color: '#4a4a6e',
           }}
         >
-          LEVEL UP TO UNLOCK MORE AVATARS!
+          BUY AVATARS IN THE SHOP OR LEVEL UP TO UNLOCK MORE!
         </p>
       </div>
     </div>
