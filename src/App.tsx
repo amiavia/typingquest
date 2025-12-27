@@ -2,6 +2,7 @@ import { useState, useCallback, useEffect } from 'react';
 import type { Lesson, TypingStats } from './types';
 import { LessonCard } from './components/LessonCard';
 import { LessonView } from './components/LessonView';
+import { LevelGroupCollapsed } from './components/LevelGroupCollapsed';
 import { SpeedTest } from './components/SpeedTest';
 import { CollapsedHero } from './components/CollapsedHero';
 import { DailyChallengeButton } from './components/DailyChallengeButton';
@@ -57,6 +58,8 @@ function App() {
   const [showSpeedTest, setShowSpeedTest] = useState(false); // For retaking speed test
   const [showSignUpModal, setShowSignUpModal] = useState(false); // For post-level-2 encouragement
   const [showGuestOnboarding, setShowGuestOnboarding] = useState(false); // For post-SpeedTest sign-up prompt
+  const [expandPremiumLevels, setExpandPremiumLevels] = useState(false); // PRP-041: Collapsed premium levels
+  const [expandThemedLevels, setExpandThemedLevels] = useState(false); // PRP-041: Collapsed themed levels
 
   // PRP-040: Mobile device detection and keyboard verification
   const deviceCapabilities = useDeviceDetection();
@@ -945,34 +948,150 @@ function App() {
             </div>
           )}
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {filteredLessons.map(lesson => (
-              <LessonCard
-                key={lesson.id}
-                lesson={lesson}
-                progress={progress[lesson.id]}
-                isLocked={!isLevelAccessible(lesson.id)}
-                isPremiumLocked={requiresPremium(lesson.id) && !isPremium}
-                isGuestLocked={requiresSignUp(lesson.id)}
-                onClick={() => {
-                  // If level requires sign-up (guest trying to access level 3+), open sign-up
-                  if (requiresSignUp(lesson.id)) {
-                    setShowSignUpModal(true);
-                    return;
-                  }
-                  // If level requires premium and user isn't premium, show premium page
-                  if (requiresPremium(lesson.id) && !isPremium) {
-                    navigateTo('premium');
-                    return;
-                  }
-                  // Otherwise, normal unlock check
-                  if (isLessonUnlocked(lesson.id)) {
-                    handleLessonSelect(lesson);
-                  }
-                }}
+          {/* PRP-041: Grouped Level View */}
+          {selectedTier === 'all' ? (
+            <div className="space-y-6">
+              {/* Free Levels (1-9) */}
+              <div>
+                <h4
+                  className="mb-4 flex items-center gap-2"
+                  style={{
+                    fontFamily: "'Press Start 2P'",
+                    fontSize: '10px',
+                    color: '#22c55e',
+                  }}
+                >
+                  <span>🎮</span> FREE BASICS (1-9)
+                </h4>
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {lessons.filter(l => l.id <= 9).map(lesson => (
+                    <LessonCard
+                      key={lesson.id}
+                      lesson={lesson}
+                      progress={progress[lesson.id]}
+                      isLocked={!isLevelAccessible(lesson.id)}
+                      isPremiumLocked={false}
+                      isGuestLocked={requiresSignUp(lesson.id)}
+                      onClick={() => {
+                        if (requiresSignUp(lesson.id)) {
+                          setShowSignUpModal(true);
+                          return;
+                        }
+                        if (isLessonUnlocked(lesson.id)) {
+                          handleLessonSelect(lesson);
+                        }
+                      }}
+                    />
+                  ))}
+                </div>
+              </div>
+
+              {/* Premium Levels (10-30) - Collapsed or Expanded */}
+              {!expandPremiumLevels ? (
+                <LevelGroupCollapsed
+                  type="premium"
+                  isUnlocked={isPremium}
+                  isPremium={isPremium}
+                  onUpgrade={() => navigateTo('premium')}
+                  onExpand={() => setExpandPremiumLevels(true)}
+                  levelRange="10-30"
+                  totalLevels={21}
+                />
+              ) : (
+                <div>
+                  <div className="flex items-center justify-between mb-4">
+                    <h4
+                      className="flex items-center gap-2"
+                      style={{
+                        fontFamily: "'Press Start 2P'",
+                        fontSize: '10px',
+                        color: '#ffd93d',
+                      }}
+                    >
+                      <span>⭐</span> PREMIUM LEVELS (10-30)
+                    </h4>
+                    <button
+                      onClick={() => setExpandPremiumLevels(false)}
+                      className="cursor-pointer transition-all hover:scale-105"
+                      style={{
+                        fontFamily: "'Press Start 2P'",
+                        fontSize: '7px',
+                        color: '#4a4a6e',
+                        background: 'transparent',
+                        border: '1px solid #4a4a6e',
+                        padding: '6px 12px',
+                      }}
+                    >
+                      ▲ COLLAPSE
+                    </button>
+                  </div>
+                  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {lessons.filter(l => l.id >= 10 && l.id <= 30).map(lesson => (
+                      <LessonCard
+                        key={lesson.id}
+                        lesson={lesson}
+                        progress={progress[lesson.id]}
+                        isLocked={!isLevelAccessible(lesson.id)}
+                        isPremiumLocked={!isPremium}
+                        isGuestLocked={requiresSignUp(lesson.id)}
+                        onClick={() => {
+                          if (requiresSignUp(lesson.id)) {
+                            setShowSignUpModal(true);
+                            return;
+                          }
+                          if (!isPremium) {
+                            navigateTo('premium');
+                            return;
+                          }
+                          if (isLessonUnlocked(lesson.id)) {
+                            handleLessonSelect(lesson);
+                          }
+                        }}
+                      />
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Themed Levels (31-50) - Always Collapsed for now (content coming soon) */}
+              <LevelGroupCollapsed
+                type="themed"
+                isUnlocked={isPremium}
+                isPremium={isPremium}
+                onUpgrade={() => navigateTo('premium')}
+                onExpand={() => setExpandThemedLevels(true)}
+                levelRange="31-50"
+                totalLevels={20}
               />
-            ))}
-          </div>
+            </div>
+          ) : (
+            /* Filtered tier view - show all levels in selected tier */
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {filteredLessons.map(lesson => (
+                <LessonCard
+                  key={lesson.id}
+                  lesson={lesson}
+                  progress={progress[lesson.id]}
+                  isLocked={!isLevelAccessible(lesson.id)}
+                  isPremiumLocked={requiresPremium(lesson.id) && !isPremium}
+                  isGuestLocked={requiresSignUp(lesson.id)}
+                  onClick={() => {
+                    if (requiresSignUp(lesson.id)) {
+                      setShowSignUpModal(true);
+                      return;
+                    }
+                    if (requiresPremium(lesson.id) && !isPremium) {
+                      navigateTo('premium');
+                      return;
+                    }
+                    if (isLessonUnlocked(lesson.id)) {
+                      handleLessonSelect(lesson);
+                    }
+                  }}
+                />
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
