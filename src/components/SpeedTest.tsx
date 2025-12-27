@@ -90,6 +90,7 @@ export function SpeedTest({ onComplete, onSkip }: SpeedTestProps) {
   const startTimeRef = useRef<number>(0);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const sentenceIndexRef = useRef(0);
+  const pendingKeyCodeRef = useRef<string>(''); // Store keydown code for detection
 
   // Get random sentence from pool
   const getNextSentence = useCallback((isGerman: boolean) => {
@@ -268,17 +269,16 @@ export function SpeedTest({ onComplete, onSkip }: SpeedTestProps) {
     const typedChar = value[value.length - 1];
 
     if (typedChar && expectedChar) {
-      // Record keystroke for detection (SpeedTest does its own detection)
+      // Record keystroke with the physical key code from keydown event
       const event: KeystrokeEvent = {
         expectedChar,
         actualKey: typedChar,
-        physicalCode: '', // Will be set by keydown handler
+        physicalCode: pendingKeyCodeRef.current, // Use stored keycode from keydown
         timestamp: Date.now(),
         correct: typedChar === expectedChar,
       };
       setKeystrokes(prev => [...prev, event]);
-      // Note: We don't call processKeystroke here to avoid premature layout locking
-      // SpeedTest has its own detection via analyzeKeystrokes()
+      pendingKeyCodeRef.current = ''; // Clear for next keystroke
     }
 
     setInputText(value);
@@ -291,20 +291,11 @@ export function SpeedTest({ onComplete, onSkip }: SpeedTestProps) {
     }
   }, [phase, currentSentence, inputText, isPhase2, getNextSentence]);
 
-  // Track physical key codes
+  // Store physical key code before input event fires
   const handleKeyDown = useCallback((e: React.KeyboardEvent<HTMLInputElement>) => {
     if (phase !== 'testing') return;
-
-    // Update the last keystroke with physical code
-    setKeystrokes(prev => {
-      if (prev.length === 0) return prev;
-      const updated = [...prev];
-      const last = updated[updated.length - 1];
-      if (!last.physicalCode) {
-        updated[updated.length - 1] = { ...last, physicalCode: e.code };
-      }
-      return updated;
-    });
+    // Store the physical key code - will be used by handleInput
+    pendingKeyCodeRef.current = e.code;
   }, [phase]);
 
   // Handle confirmation
