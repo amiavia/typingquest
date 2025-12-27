@@ -21,24 +21,45 @@ function getInitialCapabilities(): DeviceCapabilities {
     };
   }
 
-  // Touch capability detection
+  // Touch capability detection - primary signal for mobile/tablet
   const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
   // Screen size detection
   const isSmallScreen = window.innerWidth < 768;
   const isMediumScreen = window.innerWidth >= 768 && window.innerWidth < 1024;
+  const isLargeScreen = window.innerWidth >= 1024;
 
-  // User agent hints (secondary signal)
-  const ua = navigator.userAgent.toLowerCase();
+  // User agent analysis
+  const ua = navigator.userAgent;
+
+  // Direct mobile UA detection
   const mobileUA = /android|webos|iphone|ipod|blackberry|iemobile|opera mini/i.test(ua);
-  const tabletUA = /ipad|android(?!.*mobile)/i.test(ua);
 
-  // Combine signals for detection
-  // Mobile: small screen + touch OR mobile user agent
+  // iPad detection (older iPads)
+  const oldIPadUA = /ipad/i.test(ua);
+
+  // iOS 13+ iPad detection: reports as Mac but has touch support
+  // Check for Mac + touch capability (real Macs don't have touch)
+  const isMacWithTouch = /macintosh|mac os x/i.test(ua) && isTouchDevice;
+
+  // Additional iOS detection via platform (catches more cases)
+  const platform = navigator.platform || '';
+  const isIOSPlatform = /iPhone|iPod|iPad/.test(platform) ||
+    (platform === 'MacIntel' && isTouchDevice && navigator.maxTouchPoints > 1);
+
+  // Combine signals for mobile detection
+  // Mobile: iPhone-sized screen with touch OR explicit mobile UA
   const isMobile = (isSmallScreen && isTouchDevice) || mobileUA;
 
-  // Tablet: medium screen + touch OR tablet user agent (but not if also mobile UA)
-  const isTablet = ((isMediumScreen && isTouchDevice) || tabletUA) && !mobileUA;
+  // Tablet: iPad or larger touch device that's not mobile
+  // Catches: explicit iPad UA, iOS 13+ iPad (Mac + touch), medium screen touch devices
+  const isTablet = !isMobile && (
+    oldIPadUA ||
+    isMacWithTouch ||
+    isIOSPlatform ||
+    (isMediumScreen && isTouchDevice) ||
+    (isLargeScreen && isTouchDevice) // Large touch screen = tablet/iPad Pro
+  );
 
   return {
     isMobile,
