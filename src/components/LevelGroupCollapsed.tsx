@@ -2,7 +2,6 @@ import { useState } from 'react';
 
 interface LevelGroupCollapsedProps {
   type: 'premium' | 'themed';
-  isUnlocked: boolean;
   isPremium: boolean;
   onUpgrade: () => void;
   onExpand?: () => void;
@@ -12,7 +11,6 @@ interface LevelGroupCollapsedProps {
 
 export function LevelGroupCollapsed({
   type,
-  isUnlocked,
   isPremium,
   onUpgrade,
   onExpand,

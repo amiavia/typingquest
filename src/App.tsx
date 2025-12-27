@@ -1103,7 +1103,6 @@ function App() {
               {!expandPremiumLevels ? (
                 <LevelGroupCollapsed
                   type="premium"
-                  isUnlocked={isPremium}
                   isPremium={isPremium}
                   onUpgrade={() => navigateTo('premium')}
                   onExpand={() => setExpandPremiumLevels(true)}
@@ -1170,7 +1169,6 @@ function App() {
               {!expandThemedLevels ? (
                 <LevelGroupCollapsed
                   type="themed"
-                  isUnlocked={isPremium}
                   isPremium={isPremium}
                   onUpgrade={() => navigateTo('premium')}
                   onExpand={() => setExpandThemedLevels(true)}
