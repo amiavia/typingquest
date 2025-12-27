@@ -338,7 +338,7 @@ export const getStreakLeaderboard = query({
       .sort((a, b) => b.currentStreak - a.currentStreak)
       .slice(0, limit);
 
-    // Get usernames
+    // Get display names - ONLY use nickname or autoNickname, never real name
     const leaderboard = await Promise.all(
       sorted.map(async (streak) => {
         const user = await ctx.db
@@ -348,7 +348,8 @@ export const getStreakLeaderboard = query({
 
         return {
           clerkId: streak.clerkId,
-          username: user?.username ?? "Anonymous",
+          // PRP-029: Use nickname, NEVER expose real name or email
+          username: user?.nickname || user?.autoNickname || "Anonymous",
           imageUrl: user?.imageUrl,
           currentStreak: streak.currentStreak,
           longestStreak: streak.longestStreak,

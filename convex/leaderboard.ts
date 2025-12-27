@@ -21,8 +21,9 @@ export const getTopScores = query({
         const user = await ctx.db.get(s.userId);
         return {
           rank: index + 1,
-          // PRP-029: Use nickname, NEVER expose email
-          displayName: user?.nickname || user?.autoNickname || s.username || "Anonymous",
+          // PRP-029: Use nickname, NEVER expose real name or email
+          // ONLY use nickname or autoNickname, never fall back to username (which may contain real name)
+          displayName: user?.nickname || user?.autoNickname || "Anonymous",
           avatarId: user?.avatarId,
           score: s.score,
           accuracy: s.accuracy,
@@ -57,8 +58,9 @@ export const getGlobalTopScores = query({
         const user = await ctx.db.get(s.userId);
         return {
           rank: index + 1,
-          // PRP-029: Use nickname, NEVER expose email
-          displayName: user?.nickname || user?.autoNickname || s.username || "Anonymous",
+          // PRP-029: Use nickname, NEVER expose real name or email
+          // ONLY use nickname or autoNickname, never fall back to username (which may contain real name)
+          displayName: user?.nickname || user?.autoNickname || "Anonymous",
           avatarId: user?.avatarId,
           score: s.score,
           accuracy: s.accuracy,
@@ -87,8 +89,9 @@ export const submitScore = mutation({
     const user = await ctx.db.get(userId);
     if (!user) throw new Error("User not found");
 
-    // PRP-029: Use nickname, NEVER use email in leaderboard
-    const displayName = user.nickname || user.autoNickname || user.username || "Anonymous";
+    // PRP-029: Use nickname, NEVER expose real name or email in leaderboard
+    // ONLY use nickname or autoNickname, never fall back to username (which may contain real name)
+    const displayName = user.nickname || user.autoNickname || "Anonymous";
 
     // Check if user already has a score for this lesson
     const existing = await ctx.db
