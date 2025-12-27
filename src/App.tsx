@@ -591,6 +591,120 @@ function App() {
               />
             </div>
           </section>
+
+          {/* Sign-up encouragement for guests after keyboard setup */}
+          {!isSignedIn && (
+            <section className="p-4 md:p-8 pt-0">
+              <div className="max-w-2xl mx-auto">
+                <div
+                  className="pixel-box p-8 text-center"
+                  style={{
+                    background: 'linear-gradient(135deg, rgba(59, 206, 172, 0.1), rgba(255, 217, 61, 0.05))',
+                    border: '3px solid #3bceac',
+                  }}
+                >
+                  <h2
+                    style={{ fontFamily: "'Press Start 2P'", fontSize: '14px', color: '#ffd93d' }}
+                    className="mb-4 text-glow-yellow"
+                  >
+                    CREATE FREE ACCOUNT
+                  </h2>
+
+                  <p
+                    style={{ fontFamily: "'Press Start 2P'", fontSize: '8px', color: '#eef5db', lineHeight: '2.2' }}
+                    className="mb-6"
+                  >
+                    UNLOCK THE FULL EXPERIENCE!
+                  </p>
+
+                  {/* Benefits Grid */}
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
+                    <div
+                      className="p-3 text-center"
+                      style={{
+                        background: 'rgba(59, 206, 172, 0.15)',
+                        border: '2px solid rgba(59, 206, 172, 0.4)',
+                        borderRadius: '4px',
+                      }}
+                    >
+                      <span className="text-2xl">📊</span>
+                      <p style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: '#3bceac', marginTop: '4px' }}>
+                        TRACK<br />PROGRESS
+                      </p>
+                    </div>
+                    <div
+                      className="p-3 text-center"
+                      style={{
+                        background: 'rgba(255, 217, 61, 0.15)',
+                        border: '2px solid rgba(255, 217, 61, 0.4)',
+                        borderRadius: '4px',
+                      }}
+                    >
+                      <span className="text-2xl">🎮</span>
+                      <p style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: '#ffd93d', marginTop: '4px' }}>
+                        30 LEVELS<br />UNLOCKED
+                      </p>
+                    </div>
+                    <div
+                      className="p-3 text-center"
+                      style={{
+                        background: 'rgba(14, 173, 105, 0.15)',
+                        border: '2px solid rgba(14, 173, 105, 0.4)',
+                        borderRadius: '4px',
+                      }}
+                    >
+                      <span className="text-2xl">🏆</span>
+                      <p style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: '#0ead69', marginTop: '4px' }}>
+                        COMPETE ON<br />LEADERBOARDS
+                      </p>
+                    </div>
+                    <div
+                      className="p-3 text-center"
+                      style={{
+                        background: 'rgba(255, 107, 157, 0.15)',
+                        border: '2px solid rgba(255, 107, 157, 0.4)',
+                        borderRadius: '4px',
+                      }}
+                    >
+                      <span className="text-2xl">🔥</span>
+                      <p style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: '#ff6b9d', marginTop: '4px' }}>
+                        BUILD<br />STREAKS
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Sign Up Button */}
+                  <button
+                    onClick={() => openSignUp()}
+                    className="px-8 py-4 mb-4 transition-transform hover:scale-105"
+                    style={{
+                      fontFamily: "'Press Start 2P'",
+                      fontSize: '12px',
+                      background: 'linear-gradient(180deg, #3bceac, #0ead69)',
+                      color: '#0f0f1b',
+                      border: 'none',
+                      cursor: 'pointer',
+                      boxShadow: '0 4px 0 #0a8a54',
+                    }}
+                  >
+                    SIGN UP FREE
+                  </button>
+
+                  {/* Guest note */}
+                  <p
+                    style={{
+                      fontFamily: "'Press Start 2P'",
+                      fontSize: '6px',
+                      color: '#4a4a6e',
+                      marginTop: '8px',
+                    }}
+                  >
+                    OR CONTINUE AS GUEST (LEVELS 1-2 ONLY)
+                  </p>
+                </div>
+              </div>
+            </section>
+          )}
         </>
       )}
 

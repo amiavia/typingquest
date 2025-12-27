@@ -14,7 +14,7 @@ import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { useKeyboardLayout, getVariantForFamily } from '../providers/KeyboardLayoutProvider';
 import { KeyboardWithHands } from './KeyboardWithHands';
 import { KEYBOARD_LAYOUTS, type KeyboardLayoutType } from '../data/keyboardLayouts';
-import { useAuth, useClerk } from '@clerk/clerk-react';
+import { useAuth } from '@clerk/clerk-react';
 
 // ==================== TEST SENTENCES ====================
 
@@ -38,7 +38,7 @@ const PHASE2_GERMAN = [
 const TEST_DURATION_MS = 30000; // 30 seconds
 const DETECTION_THRESHOLD_MS = 12000; // Start checking for Phase 2 after 12s
 
-type TestPhase = 'intro' | 'countdown' | 'testing' | 'results' | 'signup';
+type TestPhase = 'intro' | 'countdown' | 'testing' | 'results';
 type LayoutFamily = 'qwerty' | 'qwertz' | 'azerty' | null;
 
 interface KeystrokeEvent {
@@ -67,7 +67,6 @@ interface SpeedTestProps {
 export function SpeedTest({ onComplete, onSkip }: SpeedTestProps) {
   const { layout, lockLayout, pauseDetection, resumeDetection } = useKeyboardLayout();
   const { isSignedIn } = useAuth();
-  const { openSignUp } = useClerk();
 
   // Test state
   const [phase, setPhase] = useState<TestPhase>('intro');
@@ -344,21 +343,8 @@ export function SpeedTest({ onComplete, onSkip }: SpeedTestProps) {
   const handleConfirm = useCallback(() => {
     if (!results || !selectedLayout) return;
     lockLayout(selectedLayout);
-
-    // If already signed in, complete immediately
-    if (isSignedIn) {
-      onComplete({ ...results, detectedLayout: selectedLayout }, true);
-    } else {
-      // Show signup encouragement phase for guests
-      setPhase('signup');
-    }
-  }, [results, selectedLayout, lockLayout, onComplete, isSignedIn]);
-
-  // Handle continue as guest after signup phase
-  const handleContinueAsGuest = useCallback(() => {
-    if (!results || !selectedLayout) return;
     onComplete({ ...results, detectedLayout: selectedLayout }, true);
-  }, [results, selectedLayout, onComplete]);
+  }, [results, selectedLayout, lockLayout, onComplete]);
 
   // Handle retake
   const handleRetake = useCallback(() => {
@@ -798,158 +784,6 @@ export function SpeedTest({ onComplete, onSkip }: SpeedTestProps) {
             {isSignedIn ? 'YOUR BASELINE WILL BE SAVED AFTER CONFIRMATION' : 'SIGN UP TO SAVE YOUR PROGRESS'}
           </p>
 
-        </div>
-      </section>
-    );
-  }
-
-  // Signup Encouragement Phase (after keyboard confirmation for guests)
-  if (phase === 'signup' && results) {
-    return (
-      <section className="p-4 md:p-8 max-w-2xl mx-auto">
-        <div className="pixel-box p-8 text-center">
-          {/* Keyboard Confirmed Badge */}
-          <div
-            className="inline-block px-4 py-2 mb-6"
-            style={{
-              background: 'rgba(14, 173, 105, 0.2)',
-              border: '2px solid #0ead69',
-              borderRadius: '4px',
-            }}
-          >
-            <span style={{ fontFamily: "'Press Start 2P'", fontSize: '8px', color: '#0ead69' }}>
-              ✓ {selectedLayout?.toUpperCase().replace('-', ' ')} KEYBOARD SET
-            </span>
-          </div>
-
-          <h2
-            style={{ fontFamily: "'Press Start 2P'", fontSize: '16px', color: '#ffd93d' }}
-            className="mb-4 text-glow-yellow"
-          >
-            CREATE FREE ACCOUNT
-          </h2>
-
-          <p
-            style={{ fontFamily: "'Press Start 2P'", fontSize: '8px', color: '#eef5db', lineHeight: '2.2' }}
-            className="mb-6"
-          >
-            UNLOCK THE FULL EXPERIENCE!
-          </p>
-
-          {/* Benefits Grid */}
-          <div className="grid grid-cols-2 gap-3 mb-6">
-            <div
-              className="p-3 text-left"
-              style={{
-                background: 'rgba(59, 206, 172, 0.1)',
-                border: '2px solid rgba(59, 206, 172, 0.3)',
-                borderRadius: '4px',
-              }}
-            >
-              <span className="text-xl">📊</span>
-              <p style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: '#3bceac', marginTop: '4px' }}>
-                TRACK PROGRESS<br />OVER TIME
-              </p>
-            </div>
-            <div
-              className="p-3 text-left"
-              style={{
-                background: 'rgba(255, 217, 61, 0.1)',
-                border: '2px solid rgba(255, 217, 61, 0.3)',
-                borderRadius: '4px',
-              }}
-            >
-              <span className="text-xl">🎮</span>
-              <p style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: '#ffd93d', marginTop: '4px' }}>
-                ACCESS MORE<br />LEVELS
-              </p>
-            </div>
-            <div
-              className="p-3 text-left"
-              style={{
-                background: 'rgba(14, 173, 105, 0.1)',
-                border: '2px solid rgba(14, 173, 105, 0.3)',
-                borderRadius: '4px',
-              }}
-            >
-              <span className="text-xl">🏆</span>
-              <p style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: '#0ead69', marginTop: '4px' }}>
-                COMPETE ON<br />LEADERBOARDS
-              </p>
-            </div>
-            <div
-              className="p-3 text-left"
-              style={{
-                background: 'rgba(255, 107, 157, 0.1)',
-                border: '2px solid rgba(255, 107, 157, 0.3)',
-                borderRadius: '4px',
-              }}
-            >
-              <span className="text-xl">🔥</span>
-              <p style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: '#ff6b9d', marginTop: '4px' }}>
-                BUILD STREAKS<br />& EARN COINS
-              </p>
-            </div>
-          </div>
-
-          {/* WPM Result Reminder */}
-          <div
-            className="p-4 mb-6"
-            style={{
-              background: '#0d0d1a',
-              border: '2px solid #3bceac',
-              borderRadius: '4px',
-            }}
-          >
-            <p style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: '#4a4a6e', marginBottom: '4px' }}>
-              YOUR STARTING SPEED
-            </p>
-            <span
-              className="text-glow-cyan"
-              style={{ fontFamily: "'Press Start 2P'", fontSize: '24px', color: '#3bceac' }}
-            >
-              {results.wpm} WPM
-            </span>
-            <p style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: '#4a4a6e', marginTop: '4px' }}>
-              SIGN UP TO TRACK YOUR IMPROVEMENT!
-            </p>
-          </div>
-
-          {/* Sign Up Button */}
-          <button
-            onClick={() => openSignUp()}
-            className="w-full px-6 py-4 mb-4 transition-transform hover:scale-105"
-            style={{
-              fontFamily: "'Press Start 2P'",
-              fontSize: '12px',
-              background: 'linear-gradient(180deg, #3bceac, #0ead69)',
-              color: '#0f0f1b',
-              border: 'none',
-              cursor: 'pointer',
-              boxShadow: '0 4px 0 #0a8a54',
-            }}
-          >
-            SIGN UP FREE
-          </button>
-
-          {/* Guest Option */}
-          <p style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: '#4a4a6e', marginBottom: '8px' }}>
-            OR
-          </p>
-          <button
-            onClick={handleContinueAsGuest}
-            style={{
-              fontFamily: "'Press Start 2P'",
-              fontSize: '8px',
-              color: '#4a4a6e',
-              background: 'none',
-              border: 'none',
-              cursor: 'pointer',
-              textDecoration: 'underline',
-            }}
-          >
-            CONTINUE AS GUEST (LEVELS 1-2 ONLY)
-          </button>
         </div>
       </section>
     );
