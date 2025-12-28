@@ -1,0 +1,68 @@
+{
+  "exportedAt": "2025-12-26T19:46:09.882Z",
+  "summary": {
+    "approved": 5,
+    "needsWork": 1,
+    "pending": 1
+  },
+  "keyLearnings": "",
+  "videosNeedingWork": [
+    {
+      "day": "Day 3",
+      "title": "Satisfying ASMR",
+      "feedback": "The keyboard keys keep disappearing",
+      "originalPrompt": "Vertical 9:16 TikTok ASMR video. Extreme close-up macro shot of fingers typing on a high-end mechanical keyboard with Cherry MX switches. Keycaps are backlit with cyan and yellow RGB lighting creating beautiful color gradient. Each keypress shows satisfying tactile movement - keys pressing down smoothly and springing back up. Fingers positioned correctly on home row, typing rapidly in a rhythmic pattern. Shallow depth of field focusing on fingertips and keys. Dark moody background with soft bokeh lights. Slow motion moments capturing the satisfying key travel. No face visible, just hands and keyboard. Cinematic 24fps, premium feel, extremely satisfying to watch."
+    }
+  ],
+  "allVideos": [
+    {
+      "day": "Day 1",
+      "title": "Launch / Transformation",
+      "status": "approved",
+      "feedback": "Day 1 could be even slower typing but ok",
+      "prompt": "Split-screen transformation video, vertical 9:16 TikTok format. TOP HALF labeled \"DAY 1\": A person hunting and pecking with two index fingers on a keyboard, looking down at keys, slow and hesitant typing, frustrated expression. BOTTOM HALF labeled \"WEEK 2\": Same person now touch typing with all 10 fingers properly positioned on home row keys ASDF JKL, fingers curved naturally, smooth rapid typing motion without looking at keyboard, confident satisfied expression. Dark room with cyan and yellow RGB keyboard backlighting, retro gaming monitor glow in background. Cinematic lighting, satisfying progression."
+    },
+    {
+      "day": "Day 2",
+      "title": "Education Hook",
+      "status": "approved",
+      "feedback": "We are still in 2025 and just about to enter 2026 hence reference could we useful but ok",
+      "prompt": "Vertical 9:16 TikTok format educational video. A young professional sitting at a desk looking frustrated, typing slowly with two fingers while looking down at keyboard. Text overlay appears: \"Why you're STILL typing slow in 2025\". Camera zooms to show incorrect hand position - index fingers hunting for keys, other fingers not touching keyboard. Then transition to same person now with proper touch typing form: all 10 fingers resting on home row ASDF JKL keys, wrists elevated, fingers curved naturally. Text overlay: \"The fix takes 2 weeks\". Fast smooth typing motion without looking at keyboard. Dark room with cyan and yellow RGB keyboard backlighting, retro gaming monitors in background. Cinematic lighting, satisfying transformation."
+    },
+    {
+      "day": "Day 3",
+      "title": "Satisfying ASMR",
+      "status": "needs-work",
+      "feedback": "The keyboard keys keep disappearing",
+      "prompt": "Vertical 9:16 TikTok ASMR video. Extreme close-up macro shot of fingers typing on a high-end mechanical keyboard with Cherry MX switches. Keycaps are backlit with cyan and yellow RGB lighting creating beautiful color gradient. Each keypress shows satisfying tactile movement - keys pressing down smoothly and springing back up. Fingers positioned correctly on home row, typing rapidly in a rhythmic pattern. Shallow depth of field focusing on fingertips and keys. Dark moody background with soft bokeh lights. Slow motion moments capturing the satisfying key travel. No face visible, just hands and keyboard. Cinematic 24fps, premium feel, extremely satisfying to watch."
+    },
+    {
+      "day": "Day 4",
+      "title": "AI Connection",
+      "status": "approved",
+      "feedback": "Slow typing could be even slower but ok",
+      "prompt": "Vertical 9:16 TikTok format. Split screen showing productivity comparison. LEFT SIDE labeled \"SLOW TYPER\": Person typing slowly with two fingers, frustrated expression, AI chat interface on screen showing only 2 messages sent, clock showing significant time passing. RIGHT SIDE labeled \"FAST TYPER\": Same person typing rapidly with all 10 fingers, confident expression, AI chat interface showing 8+ messages exchanged, rapid back-and-forth conversation. Text overlay: \"More prompts = Better AI results\". Dark room with cyan and yellow RGB keyboard, multiple monitors showing AI interfaces. Modern tech aesthetic, productivity focused, satisfying comparison."
+    },
+    {
+      "day": "Day 5",
+      "title": "Challenge / Duet",
+      "status": "pending",
+      "feedback": "",
+      "prompt": "Vertical 9:16 TikTok challenge video. Person sitting at desk with mechanical keyboard, looking directly at camera with confident expression. Large text overlay: \"Can you beat 60 WPM?\". Person starts typing test, camera shows close-up of hands typing rapidly on RGB keyboard with cyan and yellow backlighting. Screen shows WPM counter climbing: 45... 52... 58... 63... 70 WPM. Person looks satisfied, pumps fist in celebration. Text overlay changes to: \"Duet this with your score\". Retro gaming monitors in background, dark moody lighting, competitive energy, engaging challenge format."
+    },
+    {
+      "day": "Day 6",
+      "title": "Progress Journey",
+      "status": "approved",
+      "feedback": "",
+      "prompt": "Vertical 9:16 TikTok format showing weekly typing progress. Timeline format video with clear labels. WEEK 1 scene: Person typing slowly with two fingers, hesitant, WPM counter showing \"35 WPM\" on screen, frustrated expression. WEEK 2 scene: Same person now using more fingers, slightly faster, WPM showing \"50 WPM\", more confident. WEEK 3 scene: Person with better form, fingers on home row ASDF JKL keys, WPM showing \"65 WPM\", satisfied smile. WEEK 4 scene: Person touch typing rapidly without looking at keyboard, all 10 fingers moving fluidly, WPM showing \"80 WPM\", proud triumphant expression. Dark room with cyan and yellow RGB mechanical keyboard backlighting, retro gaming monitors in background. Text overlay: \"1 month of practice\". Cinematic transformation, motivational progression, satisfying improvement journey."
+    },
+    {
+      "day": "Day 7",
+      "title": "Feature Highlight",
+      "status": "approved",
+      "feedback": "",
+      "prompt": "Vertical 9:16 TikTok format showing gamified typing app interface. Screen recording style video of a retro gaming-inspired typing game interface. Dark background with cyan and yellow neon accents. XP bar filling up as person types, level up animation with sparkles and celebration effects. WPM counter in corner showing \"75 WPM\". Achievement badges popping up on screen. Typing challenge with words falling or scrolling across screen. Person's hands visible at bottom typing rapidly on RGB mechanical keyboard with cyan and yellow backlighting. Satisfying combo counter increasing. Retro pixel art elements mixed with modern UI. Gaming energy, addictive app feel, competitive leaderboard visible. Text overlay: \"Typing but make it a game\". Dark moody lighting, premium tech aesthetic."
+    }
+  ]
+}

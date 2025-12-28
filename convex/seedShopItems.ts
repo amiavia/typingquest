@@ -1,4 +1,5 @@
 import { mutation } from "./_generated/server";
+import { requireAdmin } from "./auth";
 
 // Shop item definitions
 const SHOP_ITEMS = [
@@ -310,6 +311,7 @@ const SHOP_ITEMS = [
 export const seedAllItems = mutation({
   args: {},
   handler: async (ctx) => {
+    await requireAdmin(ctx);
     // Get existing items
     const existingItems = await ctx.db.query("shopItems").collect();
     const existingIds = new Set(existingItems.map((item) => item.itemId));
@@ -342,6 +344,7 @@ export const seedAllItems = mutation({
 export const reseedAllItems = mutation({
   args: {},
   handler: async (ctx) => {
+    await requireAdmin(ctx);
     // Delete all existing items
     const existingItems = await ctx.db.query("shopItems").collect();
     for (const item of existingItems) {
@@ -367,6 +370,7 @@ export const reseedAllItems = mutation({
 export const addShopItem = mutation({
   args: {},
   handler: async (ctx) => {
+    await requireAdmin(ctx);
     // This is a template - modify as needed
     const item = {
       itemId: "new-item",
@@ -398,6 +402,7 @@ export const addShopItem = mutation({
 export const getShopStats = mutation({
   args: {},
   handler: async (ctx) => {
+    await requireAdmin(ctx);
     const items = await ctx.db.query("shopItems").collect();
 
     const stats = {

@@ -1,5 +1,6 @@
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
+import { getAuthenticatedUser } from "./auth";
 
 // Get all lesson progress for a user
 export const getAllProgress = query({
@@ -98,6 +99,7 @@ export const updateLessonProgress = mutation({
 });
 
 // Bulk import progress (for migration)
+// Protected: Users can only import their own progress data
 export const bulkImportProgress = mutation({
   args: {
     userId: v.id("users"),
@@ -113,6 +115,11 @@ export const bulkImportProgress = mutation({
     ),
   },
   handler: async (ctx, { userId, progressData }) => {
+    // Verify authenticated user matches the target userId
+    const authenticatedUser = await getAuthenticatedUser(ctx);
+    if (authenticatedUser._id !== userId) {
+      throw new Error("Unauthorized: Cannot import progress for another user");
+    }
     for (const progress of progressData) {
       const existing = await ctx.db
         .query("lessonProgress")

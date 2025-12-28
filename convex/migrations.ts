@@ -1,5 +1,6 @@
 import { v } from "convex/values";
 import { mutation } from "./_generated/server";
+import { getAuthenticatedUser } from "./auth";
 
 // Import all localStorage data in one transaction
 export const importLocalStorageData = mutation({
@@ -37,6 +38,12 @@ export const importLocalStorageData = mutation({
     }),
   },
   handler: async (ctx, { userId, gameState, lessonProgress, settings }) => {
+    // Verify the caller owns this userId
+    const user = await getAuthenticatedUser(ctx);
+    if (user._id !== userId) {
+      throw new Error("Unauthorized: Cannot import data for another user");
+    }
+
     const now = Date.now();
 
     // Import game state - merge with existing if present
@@ -153,6 +160,12 @@ function mergeHighScores(
 export const checkMigrationStatus = mutation({
   args: { userId: v.id("users") },
   handler: async (ctx, { userId }) => {
+    // Verify the caller owns this userId
+    const user = await getAuthenticatedUser(ctx);
+    if (user._id !== userId) {
+      throw new Error("Unauthorized: Cannot check migration status for another user");
+    }
+
     const gameState = await ctx.db
       .query("gameState")
       .withIndex("by_user", (q) => q.eq("userId", userId))

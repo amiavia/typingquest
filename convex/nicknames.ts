@@ -6,6 +6,7 @@
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
 import { generateRandomNickname, validateNickname } from "./nicknameWords";
+import { requireAdmin } from "./auth";
 
 /**
  * Get user's display name (custom nickname > auto nickname > "Anonymous")
@@ -261,6 +262,7 @@ async function generateUniqueNickname(ctx: any): Promise<string> {
 export const migrateAllUsersNicknames = mutation({
   args: {},
   handler: async (ctx) => {
+    await requireAdmin(ctx);
     const users = await ctx.db.query("users").collect();
     let assigned = 0;
     let skipped = 0;

@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PRP-038: Speed Test User Flows</title>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Press Start 2P', monospace;
+      background: #0a0a12;
+      color: #eef5db;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .flow-container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      font-size: 14px;
+      color: #ffd93d;
+      text-align: center;
+      margin-bottom: 8px;
+      text-shadow: 0 0 20px rgba(255, 217, 61, 0.5);
+    }
+
+    .subtitle {
+      font-size: 7px;
+      color: #4a4a6e;
+      text-align: center;
+      margin-bottom: 8px;
+    }
+
+    .flow-matrix {
+      background: #1a1a2e;
+      border: 2px solid #3bceac;
+      padding: 16px;
+      margin-bottom: 24px;
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+    }
+
+    .matrix-item {
+      text-align: center;
+    }
+
+    .matrix-condition {
+      font-size: 7px;
+      color: #ffd93d;
+      margin-bottom: 6px;
+    }
+
+    .matrix-result {
+      font-size: 6px;
+      color: #3bceac;
+      padding: 6px 12px;
+      border: 2px solid #3bceac;
+      background: rgba(59, 206, 172, 0.1);
+    }
+
+    .matrix-arrow {
+      font-size: 16px;
+      color: #4a4a6e;
+      display: flex;
+      align-items: center;
+    }
+
+    .flows-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+
+    .flow-card {
+      background: #0f0f1b;
+      border: 3px solid #3bceac;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .flow-card.full-width {
+      grid-column: 1 / -1;
+    }
+
+    .flow-header {
+      background: linear-gradient(90deg, #3bceac, #2a9d8f);
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .flow-header.warning {
+      background: linear-gradient(90deg, #ffd93d, #f4a261);
+    }
+
+    .flow-header.success {
+      background: linear-gradient(90deg, #0ead69, #2a9d8f);
+    }
+
+    .flow-header.neutral {
+      background: linear-gradient(90deg, #4a4a6e, #3a3a5e);
+    }
+
+    .flow-number {
+      width: 24px;
+      height: 24px;
+      background: #0f0f1b;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      color: #ffd93d;
+    }
+
+    .flow-title {
+      font-size: 7px;
+      color: #0f0f1b;
+      flex: 1;
+    }
+
+    .flow-badge {
+      font-size: 5px;
+      padding: 4px 8px;
+      background: rgba(0,0,0,0.3);
+      color: #fff;
+      border-radius: 2px;
+    }
+
+    .flow-content {
+      padding: 14px;
+    }
+
+    /* App Preview Styles */
+    .app-preview {
+      background: #1a1a2e;
+      border: 2px solid #2a2a3e;
+      border-radius: 4px;
+      overflow: hidden;
+      min-height: 280px;
+    }
+
+    .app-header {
+      background: linear-gradient(180deg, #1a1a2e 0%, #0f0f1b 100%);
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 2px solid #2a2a3e;
+    }
+
+    .app-logo {
+      font-size: 9px;
+      color: #ffd93d;
+      text-shadow: 0 0 10px rgba(255, 217, 61, 0.5);
+    }
+
+    .app-nav {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .nav-item {
+      font-size: 5px;
+      color: #4a4a6e;
+    }
+
+    .sign-in-btn {
+      font-size: 5px;
+      color: #3bceac;
+      background: rgba(59, 206, 172, 0.1);
+      border: 2px solid #3bceac;
+      padding: 5px 10px;
+    }
+
+    .user-avatar {
+      width: 28px;
+      height: 28px;
+      background: linear-gradient(135deg, #3bceac, #ffd93d);
+      border: 2px solid #ffd93d;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+    }
+
+    .app-body {
+      padding: 16px;
+    }
+
+    /* Speed Test UI */
+    .speed-test-container {
+      text-align: center;
+    }
+
+    .speed-test-title {
+      font-size: 11px;
+      color: #ffd93d;
+      margin-bottom: 6px;
+    }
+
+    .speed-test-subtitle {
+      font-size: 6px;
+      color: #3bceac;
+      margin-bottom: 16px;
+    }
+
+    .typing-area {
+      background: #0d0d1a;
+      border: 2px solid #3bceac;
+      padding: 14px;
+      margin-bottom: 14px;
+      text-align: left;
+    }
+
+    .typing-text {
+      font-size: 9px;
+      line-height: 2;
+      color: #4a4a6e;
+    }
+
+    .typing-text .typed {
+      color: #0ead69;
+    }
+
+    .typing-text .current {
+      color: #ffd93d;
+      background: rgba(255, 217, 61, 0.2);
+      padding: 2px 0;
+    }
+
+    .typing-text .error {
+      color: #ff6b6b;
+      text-decoration: underline;
+    }
+
+    .stats-row {
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      margin-bottom: 12px;
+    }
+
+    .stat {
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 16px;
+      color: #3bceac;
+      text-shadow: 0 0 10px rgba(59, 206, 172, 0.5);
+    }
+
+    .stat-label {
+      font-size: 4px;
+      color: #4a4a6e;
+      margin-top: 3px;
+    }
+
+    .progress-bar {
+      height: 6px;
+      background: #0d0d1a;
+      border: 2px solid #2a2a3e;
+      margin-bottom: 12px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #3bceac, #ffd93d);
+      transition: width 0.3s;
+    }
+
+    .skip-btn {
+      font-size: 5px;
+      color: #4a4a6e;
+      background: none;
+      border: none;
+    }
+
+    /* Detection indicator */
+    .detection-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255, 217, 61, 0.1);
+      border: 1px solid #ffd93d;
+      padding: 4px 10px;
+      margin-bottom: 12px;
+      font-size: 5px;
+      color: #ffd93d;
+    }
+
+    .detection-dot {
+      width: 6px;
+      height: 6px;
+      background: #ffd93d;
+      border-radius: 50%;
+      animation: blink 1s infinite;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    /* Collapsed Onboarding */
+    .collapsed-hero {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: linear-gradient(90deg, rgba(59, 206, 172, 0.1), transparent);
+      border: 2px solid #3bceac;
+      padding: 10px 14px;
+      margin-bottom: 14px;
+    }
+
+    .keyboard-indicator {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .keyboard-icon {
+      font-size: 18px;
+    }
+
+    .keyboard-info {
+      text-align: left;
+    }
+
+    .keyboard-layout-name {
+      font-size: 7px;
+      color: #3bceac;
+    }
+
+    .keyboard-change {
+      font-size: 4px;
+      color: #4a4a6e;
+      margin-top: 2px;
+    }
+
+    .baseline-display {
+      text-align: center;
+      padding: 0 20px;
+    }
+
+    .baseline-value {
+      font-size: 14px;
+      color: #ffd93d;
+    }
+
+    .baseline-label {
+      font-size: 4px;
+      color: #4a4a6e;
+      margin-top: 2px;
+    }
+
+    .start-btn {
+      font-size: 7px;
+      color: #0f0f1b;
+      background: linear-gradient(180deg, #ffd93d, #f4a261);
+      border: none;
+      padding: 8px 16px;
+      box-shadow: 0 3px 0 #c9a227;
+    }
+
+    /* Lessons Grid */
+    .lessons-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+    }
+
+    .lesson-card {
+      background: #0d0d1a;
+      border: 2px solid #2a2a3e;
+      padding: 8px;
+      text-align: center;
+    }
+
+    .lesson-card.completed {
+      border-color: #0ead69;
+    }
+
+    .lesson-card.current {
+      border-color: #ffd93d;
+      box-shadow: 0 0 10px rgba(255, 217, 61, 0.3);
+    }
+
+    .lesson-number {
+      font-size: 8px;
+      color: #ffd93d;
+      margin-bottom: 3px;
+    }
+
+    .lesson-keys {
+      font-size: 5px;
+      color: #4a4a6e;
+    }
+
+    .lesson-check {
+      color: #0ead69;
+    }
+
+    /* Results Screen */
+    .results-container {
+      text-align: center;
+    }
+
+    .results-title {
+      font-size: 9px;
+      color: #0ead69;
+      margin-bottom: 12px;
+    }
+
+    .results-main {
+      background: #0d0d1a;
+      border: 3px solid #ffd93d;
+      padding: 16px;
+      margin-bottom: 12px;
+    }
+
+    .results-wpm {
+      font-size: 28px;
+      color: #ffd93d;
+      text-shadow: 0 0 20px rgba(255, 217, 61, 0.5);
+    }
+
+    .results-wpm-label {
+      font-size: 6px;
+      color: #3bceac;
+      margin-top: 4px;
+    }
+
+    .results-accuracy {
+      font-size: 8px;
+      color: #eef5db;
+      margin-top: 10px;
+    }
+
+    .detected-layout {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(59, 206, 172, 0.1);
+      border: 2px solid #3bceac;
+      padding: 8px 14px;
+      margin: 12px 0;
+    }
+
+    .detected-label {
+      font-size: 5px;
+      color: #4a4a6e;
+    }
+
+    .detected-value {
+      font-size: 7px;
+      color: #3bceac;
+    }
+
+    .continue-btn {
+      font-size: 7px;
+      color: #0f0f1b;
+      background: linear-gradient(180deg, #3bceac, #2a9d8f);
+      border: none;
+      padding: 10px 20px;
+      box-shadow: 0 3px 0 #1a7a6d;
+    }
+
+    .results-hint {
+      font-size: 5px;
+      color: #4a4a6e;
+      margin-top: 10px;
+    }
+
+    /* Flow description */
+    .flow-description {
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px dashed #2a2a3e;
+    }
+
+    .flow-steps {
+      list-style: none;
+    }
+
+    .flow-steps li {
+      font-size: 5px;
+      color: #4a4a6e;
+      padding: 3px 0;
+      padding-left: 14px;
+      position: relative;
+    }
+
+    .flow-steps li::before {
+      content: '>';
+      position: absolute;
+      left: 0;
+      color: #3bceac;
+    }
+
+    /* Intro Screen */
+    .intro-screen {
+      text-align: center;
+      padding: 20px;
+    }
+
+    .intro-icon {
+      font-size: 40px;
+      margin-bottom: 12px;
+    }
+
+    .intro-title {
+      font-size: 12px;
+      color: #ffd93d;
+      margin-bottom: 8px;
+    }
+
+    .intro-subtitle {
+      font-size: 6px;
+      color: #3bceac;
+      margin-bottom: 16px;
+    }
+
+    .intro-features {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 16px;
+    }
+
+    .intro-feature {
+      text-align: center;
+    }
+
+    .intro-feature-icon {
+      font-size: 16px;
+      margin-bottom: 4px;
+    }
+
+    .intro-feature-text {
+      font-size: 5px;
+      color: #4a4a6e;
+    }
+
+    .start-test-btn {
+      font-size: 8px;
+      color: #0f0f1b;
+      background: linear-gradient(180deg, #ffd93d, #f4a261);
+      border: none;
+      padding: 12px 24px;
+      box-shadow: 0 4px 0 #c9a227;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.02); }
+    }
+
+    /* Guest badge */
+    .guest-badge {
+      font-size: 4px;
+      color: #ff6b9d;
+      background: rgba(255, 107, 157, 0.1);
+      border: 1px solid #ff6b9d;
+      padding: 3px 6px;
+      margin-right: 8px;
+    }
+
+    .section-title {
+      font-size: 10px;
+      color: #3bceac;
+      margin: 24px 0 12px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="flow-container">
+    <h1>PRP-038: UNIFIED SPEED TEST</h1>
+    <p class="subtitle">SPEED TEST DETECTS KEYBOARD + MEASURES WPM IN ONE STEP</p>
+
+    <!-- Flow Matrix -->
+    <div class="flow-matrix">
+      <div class="matrix-item">
+        <div class="matrix-condition">NO KEYBOARD SET</div>
+        <div class="matrix-result">SPEED TEST</div>
+      </div>
+      <div class="matrix-arrow">vs</div>
+      <div class="matrix-item">
+        <div class="matrix-condition">KEYBOARD ALREADY SET</div>
+        <div class="matrix-result">COLLAPSED VIEW</div>
+      </div>
+    </div>
+
+    <div class="section-title">SPEED TEST FLOW (NO KEYBOARD SET)</div>
+
+    <div class="flows-grid">
+      <!-- Flow 1: Speed Test Intro -->
+      <div class="flow-card">
+        <div class="flow-header warning">
+          <div class="flow-number">1</div>
+          <div class="flow-title">SPEED TEST INTRO</div>
+          <div class="flow-badge">GUEST OR AUTH</div>
+        </div>
+        <div class="flow-content">
+          <div class="app-preview">
+            <div class="app-header">
+              <div class="app-logo">TYPEBIT8</div>
+              <div class="app-nav">
+                <span class="guest-badge">GUEST</span>
+                <button class="sign-in-btn">SIGN IN</button>
+              </div>
+            </div>
+            <div class="app-body">
+              <div class="intro-screen">
+                <div class="intro-icon">⌨️</div>
+                <div class="intro-title">LET'S SEE HOW FAST YOU TYPE!</div>
+                <div class="intro-subtitle">30 SECOND SPEED TEST</div>
+
+                <div class="intro-features">
+                  <div class="intro-feature">
+                    <div class="intro-feature-icon">🎯</div>
+                    <div class="intro-feature-text">DETECT YOUR<br>KEYBOARD</div>
+                  </div>
+                  <div class="intro-feature">
+                    <div class="intro-feature-icon">⚡</div>
+                    <div class="intro-feature-text">MEASURE YOUR<br>SPEED</div>
+                  </div>
+                  <div class="intro-feature">
+                    <div class="intro-feature-icon">📊</div>
+                    <div class="intro-feature-text">TRACK YOUR<br>PROGRESS</div>
+                  </div>
+                </div>
+
+                <button class="start-test-btn">START TEST</button>
+              </div>
+            </div>
+          </div>
+          <div class="flow-description">
+            <ul class="flow-steps">
+              <li>User lands on typebit8 (no keyboard set)</li>
+              <li>Welcoming intro explains dual purpose</li>
+              <li>Works same for guests AND authenticated</li>
+              <li>Click START TEST to begin</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Flow 2: Speed Test Active -->
+      <div class="flow-card">
+        <div class="flow-header">
+          <div class="flow-number">2</div>
+          <div class="flow-title">SPEED TEST ACTIVE</div>
+          <div class="flow-badge">DETECTING + MEASURING</div>
+        </div>
+        <div class="flow-content">
+          <div class="app-preview">
+            <div class="app-header">
+              <div class="app-logo">TYPEBIT8</div>
+              <div class="app-nav">
+                <div class="user-avatar">🧙</div>
+              </div>
+            </div>
+            <div class="app-body">
+              <div class="speed-test-container">
+                <div class="detection-badge">
+                  <div class="detection-dot"></div>
+                  DETECTING KEYBOARD LAYOUT...
+                </div>
+
+                <div class="typing-area">
+                  <div class="typing-text">
+                    <span class="typed">the lazy </span><span class="current">y</span>ellow fox jumps quickly over frozen zones
+                  </div>
+                </div>
+                <div style="font-size: 4px; color: #ffd93d; margin-top: -10px; margin-bottom: 10px; text-align: left;">
+                  Phase 1: English text with y/z → detects QWERTY vs QWERTZ
+                </div>
+
+                <div class="stats-row">
+                  <div class="stat">
+                    <div class="stat-value">47</div>
+                    <div class="stat-label">WPM</div>
+                  </div>
+                  <div class="stat">
+                    <div class="stat-value">94%</div>
+                    <div class="stat-label">ACCURACY</div>
+                  </div>
+                  <div class="stat">
+                    <div class="stat-value">0:18</div>
+                    <div class="stat-label">TIME LEFT</div>
+                  </div>
+                </div>
+
+                <div class="progress-bar">
+                  <div class="progress-fill" style="width: 40%"></div>
+                </div>
+
+                <button class="skip-btn">SKIP FOR NOW</button>
+              </div>
+            </div>
+          </div>
+          <div class="flow-description">
+            <ul class="flow-steps">
+              <li>ALL users start with English text (y/z detection)</li>
+              <li>System tracks physical key positions</li>
+              <li>~15 seconds in: layout family is detected</li>
+              <li>QWERTY users → continue English text</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Flow 2b: QWERTZ Variant Detection -->
+      <div class="flow-card">
+        <div class="flow-header warning">
+          <div class="flow-number">2b</div>
+          <div class="flow-title">QWERTZ DETECTED → VARIANT TEST</div>
+          <div class="flow-badge">ONLY FOR QWERTZ</div>
+        </div>
+        <div class="flow-content">
+          <div class="app-preview">
+            <div class="app-header">
+              <div class="app-logo">TYPEBIT8</div>
+              <div class="app-nav">
+                <div class="user-avatar">🧙</div>
+              </div>
+            </div>
+            <div class="app-body">
+              <div class="speed-test-container">
+                <div class="detection-badge" style="border-color: #0ead69; background: rgba(14, 173, 105, 0.1);">
+                  <div class="detection-dot" style="background: #0ead69;"></div>
+                  QWERTZ DETECTED - CHECKING VARIANT...
+                </div>
+
+                <div class="typing-area" style="border-color: #ffd93d;">
+                  <div class="typing-text">
+                    <span class="typed">größe und </span><span class="current">m</span>aße über die straße
+                  </div>
+                </div>
+                <div style="font-size: 4px; color: #ffd93d; margin-top: -10px; margin-bottom: 10px; text-align: left;">
+                  Phase 2: German text with ß → detects DE vs CH
+                </div>
+
+                <div class="stats-row">
+                  <div class="stat">
+                    <div class="stat-value">52</div>
+                    <div class="stat-label">WPM</div>
+                  </div>
+                  <div class="stat">
+                    <div class="stat-value">96%</div>
+                    <div class="stat-label">ACCURACY</div>
+                  </div>
+                  <div class="stat">
+                    <div class="stat-value">0:08</div>
+                    <div class="stat-label">TIME LEFT</div>
+                  </div>
+                </div>
+
+                <div class="progress-bar">
+                  <div class="progress-fill" style="width: 75%"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="flow-description">
+            <ul class="flow-steps">
+              <li>Only shown AFTER QWERTZ detected</li>
+              <li>German text with ß tests for DE keyboard</li>
+              <li>If user can type ß → German layout</li>
+              <li>If user types ss instead → Swiss layout</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Flow 3: Results with Confirmation -->
+      <div class="flow-card full-width">
+        <div class="flow-header success">
+          <div class="flow-number">3</div>
+          <div class="flow-title">RESULTS + CONFIRMATION</div>
+          <div class="flow-badge">USER CONFIRMS DETECTION</div>
+        </div>
+        <div class="flow-content">
+          <div class="app-preview" style="max-width: 700px; margin: 0 auto;">
+            <div class="app-header">
+              <div class="app-logo">TYPEBIT8</div>
+              <div class="app-nav">
+                <div class="user-avatar">🧙</div>
+              </div>
+            </div>
+            <div class="app-body">
+              <div class="results-container">
+                <div class="results-title">TEST COMPLETE!</div>
+
+                <div class="results-main">
+                  <div class="results-wpm">52</div>
+                  <div class="results-wpm-label">WORDS PER MINUTE</div>
+                  <div class="results-accuracy">ACCURACY: 96%</div>
+                </div>
+
+                <!-- Confirmation Section -->
+                <div style="background: rgba(255, 217, 61, 0.1); border: 2px solid #ffd93d; padding: 14px; margin: 16px 0;">
+                  <div style="font-size: 6px; color: #4a4a6e; margin-bottom: 8px;">WE DETECTED YOUR KEYBOARD AS:</div>
+                  <div style="font-size: 12px; color: #ffd93d; margin-bottom: 12px;">QWERTZ SWISS</div>
+                  <div style="font-size: 6px; color: #eef5db; margin-bottom: 12px;">IS THIS CORRECT?</div>
+                  <div style="display: flex; gap: 10px; justify-content: center;">
+                    <button style="font-family: 'Press Start 2P'; font-size: 6px; padding: 8px 16px; background: linear-gradient(180deg, #0ead69, #0a8a54); color: #0f0f1b; border: none; cursor: pointer;">✓ CONFIRM</button>
+                    <button style="font-family: 'Press Start 2P'; font-size: 6px; padding: 8px 16px; background: transparent; color: #3bceac; border: 2px solid #3bceac; cursor: pointer;">↻ RETAKE</button>
+                    <button style="font-family: 'Press Start 2P'; font-size: 6px; padding: 8px 16px; background: transparent; color: #4a4a6e; border: 2px solid #4a4a6e; cursor: pointer;">✎ CHOOSE</button>
+                  </div>
+                </div>
+
+                <div class="results-hint">YOUR BASELINE WILL BE SAVED AFTER CONFIRMATION</div>
+              </div>
+            </div>
+          </div>
+          <div class="flow-description" style="max-width: 700px; margin: 12px auto 0;">
+            <ul class="flow-steps">
+              <li>WPM and accuracy displayed prominently</li>
+              <li>Detected layout shown with confirmation prompt</li>
+              <li>Three options: Confirm | Retake | Choose Manually</li>
+              <li>Only saved to profile AFTER user confirms</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-title">RETURNING USER (KEYBOARD ALREADY SET)</div>
+
+    <div class="flows-grid">
+      <!-- Flow 4: Collapsed View -->
+      <div class="flow-card full-width">
+        <div class="flow-header neutral">
+          <div class="flow-number">4</div>
+          <div class="flow-title">COLLAPSED VIEW - IMMEDIATE ACCESS TO LESSONS</div>
+          <div class="flow-badge">KEYBOARD ALREADY SET</div>
+        </div>
+        <div class="flow-content">
+          <div class="app-preview" style="max-width: 800px; margin: 0 auto;">
+            <div class="app-header">
+              <div class="app-logo">TYPEBIT8</div>
+              <div class="app-nav">
+                <span class="nav-item">SHOP</span>
+                <span class="nav-item" style="color: #3bceac;">HOME</span>
+                <div class="user-avatar">🧙</div>
+              </div>
+            </div>
+            <div class="app-body">
+              <div class="collapsed-hero">
+                <div class="keyboard-indicator">
+                  <span class="keyboard-icon">⌨️</span>
+                  <div class="keyboard-info">
+                    <div class="keyboard-layout-name">QWERTZ SWISS</div>
+                    <div class="keyboard-change">RETAKE TEST TO CHANGE</div>
+                  </div>
+                </div>
+                <div class="baseline-display">
+                  <div class="baseline-value">52 WPM</div>
+                  <div class="baseline-label">YOUR BASELINE</div>
+                </div>
+                <button class="start-btn">CONTINUE</button>
+              </div>
+
+              <div class="lessons-grid">
+                <div class="lesson-card completed">
+                  <div class="lesson-number">1 <span class="lesson-check">✓</span></div>
+                  <div class="lesson-keys">F J</div>
+                </div>
+                <div class="lesson-card completed">
+                  <div class="lesson-number">2 <span class="lesson-check">✓</span></div>
+                  <div class="lesson-keys">D K</div>
+                </div>
+                <div class="lesson-card completed">
+                  <div class="lesson-number">3 <span class="lesson-check">✓</span></div>
+                  <div class="lesson-keys">S L</div>
+                </div>
+                <div class="lesson-card current">
+                  <div class="lesson-number">4</div>
+                  <div class="lesson-keys">A ;</div>
+                </div>
+                <div class="lesson-card">
+                  <div class="lesson-number">5</div>
+                  <div class="lesson-keys">G H</div>
+                </div>
+                <div class="lesson-card">
+                  <div class="lesson-number">6</div>
+                  <div class="lesson-keys">HOME</div>
+                </div>
+                <div class="lesson-card">
+                  <div class="lesson-number">7</div>
+                  <div class="lesson-keys">E I</div>
+                </div>
+                <div class="lesson-card">
+                  <div class="lesson-number">8</div>
+                  <div class="lesson-keys">R U</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="flow-description" style="max-width: 800px; margin: 12px auto 0;">
+            <ul class="flow-steps">
+              <li>Keyboard layout shown in collapsed bar</li>
+              <li>Baseline WPM displayed for reference</li>
+              <li>"Retake test" option to change keyboard or update baseline</li>
+              <li>Immediate access to lesson grid - no onboarding friction</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Detection Table -->
+    <div style="margin-top: 30px; padding: 20px; background: #1a1a2e; border: 2px solid #3bceac;">
+      <h2 style="font-size: 10px; color: #3bceac; margin-bottom: 16px; text-align: center;">KEYBOARD DETECTION CHARACTERS</h2>
+      <table style="width: 100%; border-collapse: collapse; font-size: 6px;">
+        <thead>
+          <tr style="background: #0d0d1a;">
+            <th style="padding: 10px; text-align: left; color: #ffd93d; border-bottom: 2px solid #3bceac;">DETECTION GOAL</th>
+            <th style="padding: 10px; text-align: left; color: #ffd93d; border-bottom: 2px solid #3bceac;">CHARACTERS</th>
+            <th style="padding: 10px; text-align: left; color: #ffd93d; border-bottom: 2px solid #3bceac;">EXAMPLE WORDS</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="padding: 8px; color: #eef5db; border-bottom: 1px solid #2a2a3e;">QWERTY vs QWERTZ</td>
+            <td style="padding: 8px; color: #3bceac; border-bottom: 1px solid #2a2a3e;">y, z</td>
+            <td style="padding: 8px; color: #4a4a6e; border-bottom: 1px solid #2a2a3e;">"lazy", "yellow", "zone", "fuzzy"</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px; color: #eef5db; border-bottom: 1px solid #2a2a3e;">QWERTY vs AZERTY</td>
+            <td style="padding: 8px; color: #3bceac; border-bottom: 1px solid #2a2a3e;">a, q, w, z</td>
+            <td style="padding: 8px; color: #4a4a6e; border-bottom: 1px solid #2a2a3e;">"quick", "away", "wizard"</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px; color: #eef5db; border-bottom: 1px solid #2a2a3e;">QWERTZ-DE vs QWERTZ-CH</td>
+            <td style="padding: 8px; color: #3bceac; border-bottom: 1px solid #2a2a3e;">ß, ü, ö, ä</td>
+            <td style="padding: 8px; color: #ffd93d; border-bottom: 1px solid #2a2a3e;"><strong>ONLY after QWERTZ detected!</strong> "größe" vs "grösse"</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px; color: #eef5db;">Special punctuation</td>
+            <td style="padding: 8px; color: #3bceac;">[ ] ; ' @</td>
+            <td style="padding: 8px; color: #4a4a6e;">Variant confirmation for edge cases</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Summary -->
+    <div style="margin-top: 20px; padding: 20px; background: #1a1a2e; border: 2px solid #ffd93d;">
+      <h2 style="font-size: 10px; color: #ffd93d; margin-bottom: 16px; text-align: center;">BENEFITS OF UNIFIED SPEED TEST</h2>
+      <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; text-align: center;">
+        <div>
+          <div style="font-size: 20px; margin-bottom: 8px;">🎯</div>
+          <div style="font-size: 6px; color: #3bceac; margin-bottom: 4px;">ONE TEST</div>
+          <div style="font-size: 5px; color: #4a4a6e;">Detects keyboard AND measures speed in one step</div>
+        </div>
+        <div>
+          <div style="font-size: 20px; margin-bottom: 8px;">🎮</div>
+          <div style="font-size: 6px; color: #3bceac; margin-bottom: 4px;">MORE ENGAGING</div>
+          <div style="font-size: 5px; color: #4a4a6e;">Gamified experience vs boring "press Z/Y"</div>
+        </div>
+        <div>
+          <div style="font-size: 20px; margin-bottom: 8px;">📊</div>
+          <div style="font-size: 6px; color: #3bceac; margin-bottom: 4px;">PRECISE DETECTION</div>
+          <div style="font-size: 5px; color: #4a4a6e;">Detects exact variant (DE vs CH vs AT)</div>
+        </div>
+        <div>
+          <div style="font-size: 20px; margin-bottom: 8px;">⚡</div>
+          <div style="font-size: 6px; color: #3bceac; margin-bottom: 4px;">UNIFIED FLOW</div>
+          <div style="font-size: 5px; color: #4a4a6e;">Same experience for guests & authenticated</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,5 +1,6 @@
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
+import { requireAdmin } from "./auth";
 
 // Get today's date in YYYY-MM-DD format
 function getTodayDate(): string {
@@ -286,6 +287,7 @@ export const purchaseStreakFreeze = mutation({
 export const grantPremiumFreezes = mutation({
   args: { clerkId: v.string() },
   handler: async (ctx, args) => {
+    await requireAdmin(ctx);
     const PREMIUM_FREE_FREEZES = 3;
 
     const user = await ctx.db

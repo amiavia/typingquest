@@ -1,0 +1,1221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Keyboard Finger Visualization Proposals - TypeBit8</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: #0f0f1b;
+      color: #eef5db;
+      font-family: 'Press Start 2P', monospace;
+      padding: 20px;
+      min-height: 100vh;
+    }
+
+    h1 {
+      text-align: center;
+      color: #3bceac;
+      font-size: 16px;
+      margin-bottom: 40px;
+      text-shadow: 0 0 20px #3bceac;
+    }
+
+    h2 {
+      color: #ffd93d;
+      font-size: 12px;
+      margin-bottom: 20px;
+      padding: 10px;
+      border: 2px solid #ffd93d;
+      display: inline-block;
+    }
+
+    .proposal {
+      background: #1a1a2e;
+      border: 4px solid #3bceac;
+      border-radius: 8px;
+      padding: 30px;
+      margin-bottom: 60px;
+      box-shadow: 8px 8px 0 #0f0f1b;
+    }
+
+    .keyboard-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      margin-top: 20px;
+    }
+
+    .keyboard-row {
+      display: flex;
+      gap: 6px;
+    }
+
+    .key {
+      width: 44px;
+      height: 44px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #1a1a2e;
+      border: 3px solid #3bceac;
+      border-radius: 4px;
+      font-size: 12px;
+      color: #eef5db;
+      box-shadow: 3px 3px 0 #0f0f1b;
+      transition: all 0.1s;
+      position: relative;
+    }
+
+    .key.inactive {
+      border-color: #2a2a4e;
+      color: #4a4a6e;
+      background: #16213e;
+    }
+
+    .key.highlight {
+      background: #ffd93d;
+      border-color: #ffd93d;
+      color: #0f0f1b;
+      box-shadow: 3px 3px 0 #0f0f1b, 0 0 20px #ffd93d;
+      animation: pulse 1s infinite;
+    }
+
+    .key.space {
+      width: 220px;
+    }
+
+    .home-indicator {
+      position: absolute;
+      bottom: 4px;
+      width: 10px;
+      height: 3px;
+      background: #ffd93d;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    @keyframes finger-pulse {
+      0%, 100% { opacity: 0.6; }
+      50% { opacity: 1; }
+    }
+
+    /* Finger colors */
+    .finger-lpinky { border-color: #e63946 !important; background: rgba(230, 57, 70, 0.2) !important; }
+    .finger-lring { border-color: #ff6b35 !important; background: rgba(255, 107, 53, 0.2) !important; }
+    .finger-lmid { border-color: #ffd93d !important; background: rgba(255, 217, 61, 0.2) !important; }
+    .finger-lindex { border-color: #0ead69 !important; background: rgba(14, 173, 105, 0.2) !important; }
+    .finger-rindex { border-color: #3bceac !important; background: rgba(59, 206, 172, 0.2) !important; }
+    .finger-rmid { border-color: #0f4c75 !important; background: rgba(15, 76, 117, 0.2) !important; }
+    .finger-rring { border-color: #9d4edd !important; background: rgba(157, 78, 221, 0.2) !important; }
+    .finger-rpinky { border-color: #ff6b9d !important; background: rgba(255, 107, 157, 0.2) !important; }
+    .finger-thumb { border-color: #6c757d !important; background: rgba(108, 117, 125, 0.3) !important; }
+
+    /* ==================== PROPOSAL 1: Pixel Hands Below ==================== */
+    .hands-container {
+      display: flex;
+      justify-content: center;
+      gap: 100px;
+      margin-top: 30px;
+    }
+
+    .pixel-hand {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .pixel-hand .label {
+      font-size: 8px;
+      margin-bottom: 10px;
+      color: #3bceac;
+    }
+
+    .hand-pixels {
+      display: grid;
+      grid-template-columns: repeat(5, 16px);
+      gap: 2px;
+    }
+
+    .finger-pixel {
+      width: 16px;
+      height: 24px;
+      border-radius: 8px 8px 4px 4px;
+      transition: all 0.2s;
+    }
+
+    .finger-pixel.active {
+      animation: finger-pulse 0.5s infinite;
+      box-shadow: 0 0 10px currentColor;
+    }
+
+    .palm-pixels {
+      display: flex;
+      gap: 2px;
+      margin-top: 2px;
+    }
+
+    .palm-pixel {
+      width: 34px;
+      height: 30px;
+      background: #4a4a6e;
+      border-radius: 4px;
+    }
+
+    /* ==================== PROPOSAL 2: Finger Icons on Keys ==================== */
+    .key-with-icon {
+      flex-direction: column;
+      gap: 2px;
+      height: 52px;
+    }
+
+    .key-with-icon .finger-icon {
+      font-size: 10px;
+      opacity: 0.7;
+    }
+
+    .key-with-icon .key-label {
+      font-size: 10px;
+    }
+
+    .finger-label {
+      font-size: 6px;
+      color: #6a6a8e;
+      margin-top: 2px;
+    }
+
+    /* ==================== PROPOSAL 3: Split View ==================== */
+    .split-keyboard {
+      display: flex;
+      gap: 40px;
+      justify-content: center;
+    }
+
+    .keyboard-half {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+      border: 3px solid #3bceac;
+      border-radius: 8px;
+      background: rgba(59, 206, 172, 0.05);
+    }
+
+    .keyboard-half.left {
+      border-color: #ff6b35;
+      background: rgba(255, 107, 53, 0.05);
+    }
+
+    .keyboard-half.right {
+      border-color: #9d4edd;
+      background: rgba(157, 78, 221, 0.05);
+    }
+
+    .half-label {
+      font-size: 8px;
+      margin-bottom: 15px;
+    }
+
+    .half-label.left { color: #ff6b35; }
+    .half-label.right { color: #9d4edd; }
+
+    .mini-hand {
+      margin-top: 20px;
+      display: flex;
+      gap: 4px;
+    }
+
+    .mini-finger {
+      width: 12px;
+      height: 20px;
+      border-radius: 6px 6px 3px 3px;
+    }
+
+    /* ==================== PROPOSAL 4: Overhead Hands ==================== */
+    .overhead-container {
+      position: relative;
+    }
+
+    .transparent-hand {
+      position: absolute;
+      display: grid;
+      grid-template-columns: repeat(5, 44px);
+      gap: 6px;
+      opacity: 0.3;
+      pointer-events: none;
+    }
+
+    .transparent-hand.left {
+      left: 50%;
+      transform: translateX(-320px);
+      top: 0;
+    }
+
+    .transparent-hand.right {
+      left: 50%;
+      transform: translateX(70px);
+      top: 0;
+    }
+
+    .ghost-finger {
+      height: 140px;
+      background: linear-gradient(to bottom, transparent 0%, currentColor 30%, currentColor 100%);
+      border-radius: 20px 20px 8px 8px;
+      opacity: 0.4;
+    }
+
+    .ghost-finger.active {
+      opacity: 0.8;
+      animation: finger-pulse 0.5s infinite;
+    }
+
+    /* ==================== PROPOSAL 5: Tutorial Mode ==================== */
+    .tutorial-controls {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .tutorial-btn {
+      background: #1a1a2e;
+      border: 2px solid #3bceac;
+      color: #3bceac;
+      padding: 8px 16px;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 8px;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: all 0.2s;
+    }
+
+    .tutorial-btn:hover, .tutorial-btn.active {
+      background: #3bceac;
+      color: #0f0f1b;
+    }
+
+    .zone-overlay {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      opacity: 0.15;
+      pointer-events: none;
+      border-radius: 8px;
+    }
+
+    .zone-left {
+      left: 0;
+      right: 50%;
+      background: linear-gradient(to right, #ff6b35, transparent);
+    }
+
+    .zone-right {
+      left: 50%;
+      right: 0;
+      background: linear-gradient(to left, #9d4edd, transparent);
+    }
+
+    .tip-box {
+      background: rgba(255, 217, 61, 0.1);
+      border: 2px solid #ffd93d;
+      border-radius: 4px;
+      padding: 15px;
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    .tip-box .icon {
+      font-size: 16px;
+      margin-right: 10px;
+    }
+
+    .tip-box .text {
+      font-size: 8px;
+      color: #ffd93d;
+    }
+
+    /* Legend */
+    .legend {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 6px;
+    }
+
+    .legend-color {
+      width: 12px;
+      height: 12px;
+      border: 2px solid;
+      border-radius: 2px;
+    }
+
+    .description {
+      font-size: 8px;
+      color: #6a6a8e;
+      margin-top: 10px;
+      line-height: 1.8;
+    }
+  </style>
+</head>
+<body>
+  <h1>KEYBOARD FINGER VISUALIZATION PROPOSALS</h1>
+
+  <!-- ==================== PROPOSAL 1 ==================== -->
+  <div class="proposal">
+    <h2>PROPOSAL 1: PIXEL HANDS BELOW KEYBOARD</h2>
+    <p class="description">Two pixel-art hands positioned below the keyboard. Each finger is color-coded to match its assigned keys. The active finger pulses when its key is highlighted.</p>
+
+    <div class="keyboard-container">
+      <div class="keyboard-row" style="margin-left: 0">
+        <div class="key inactive">Q</div>
+        <div class="key inactive">W</div>
+        <div class="key inactive">E</div>
+        <div class="key inactive">R</div>
+        <div class="key inactive">T</div>
+        <div class="key inactive">Y</div>
+        <div class="key inactive">U</div>
+        <div class="key inactive">I</div>
+        <div class="key inactive">O</div>
+        <div class="key inactive">P</div>
+      </div>
+      <div class="keyboard-row" style="margin-left: 16px">
+        <div class="key finger-lpinky">A</div>
+        <div class="key finger-lring">S</div>
+        <div class="key finger-lmid">D</div>
+        <div class="key finger-lindex" data-key="f">
+          F
+          <div class="home-indicator" style="background: #0ead69; width: 14px; height: 4px;"></div>
+        </div>
+        <div class="key inactive" data-key="g">G</div>
+        <div class="key inactive" data-key="h">H</div>
+        <div class="key finger-rindex" data-key="j">
+          J
+          <div class="home-indicator" style="background: #3bceac; width: 14px; height: 4px;"></div>
+        </div>
+        <div class="key finger-rmid">K</div>
+        <div class="key finger-rring">L</div>
+        <div class="key finger-rpinky">;</div>
+      </div>
+      <div class="keyboard-row" style="margin-left: 32px">
+        <div class="key inactive">Z</div>
+        <div class="key inactive">X</div>
+        <div class="key inactive">C</div>
+        <div class="key inactive">V</div>
+        <div class="key inactive">B</div>
+        <div class="key inactive">N</div>
+        <div class="key inactive">M</div>
+        <div class="key inactive">,</div>
+        <div class="key inactive">.</div>
+        <div class="key inactive">/</div>
+      </div>
+      <div class="keyboard-row">
+        <div class="key space finger-thumb" style="background: rgba(108, 117, 125, 0.4) !important; border-color: #6c757d !important; box-shadow: 0 0 15px rgba(108, 117, 125, 0.5);">
+          SPACE
+          <div class="home-indicator" style="background: #6c757d; width: 40px;"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hands-container">
+      <div class="pixel-hand">
+        <div class="label">LEFT HAND</div>
+        <div class="hand-pixels">
+          <div class="finger-pixel" style="background: #e63946; height: 18px; margin-top: 6px;"></div>
+          <div class="finger-pixel" style="background: #ff6b35; height: 24px;"></div>
+          <div class="finger-pixel" style="background: #ffd93d; height: 26px; margin-top: -2px;"></div>
+          <div class="finger-pixel active" style="background: #0ead69; height: 22px; margin-top: 2px; box-shadow: 0 0 15px #0ead69;"></div>
+        </div>
+        <div class="thumb-pixel" style="width: 28px; height: 18px; background: #6c757d; border-radius: 4px; margin-top: 8px; margin-left: 50px; box-shadow: 0 0 8px #6c757d;"></div>
+        <div style="font-size: 6px; color: #6c757d; margin-top: 4px;">THUMB → SPACE</div>
+      </div>
+
+      <div class="pixel-hand">
+        <div class="label">RIGHT HAND</div>
+        <div class="hand-pixels">
+          <div class="finger-pixel" style="background: #3bceac; height: 22px; margin-top: 2px;"></div>
+          <div class="finger-pixel" style="background: #0f4c75; height: 26px; margin-top: -2px;"></div>
+          <div class="finger-pixel" style="background: #9d4edd; height: 24px;"></div>
+          <div class="finger-pixel" style="background: #ff6b9d; height: 18px; margin-top: 6px;"></div>
+        </div>
+        <div class="thumb-pixel" style="width: 28px; height: 18px; background: #6c757d; border-radius: 4px; margin-top: 8px; margin-right: 50px; box-shadow: 0 0 8px #6c757d;"></div>
+        <div style="font-size: 6px; color: #6c757d; margin-top: 4px;">SPACE ← THUMB</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== PROPOSAL 2 ==================== -->
+  <div class="proposal">
+    <h2>PROPOSAL 2: FINGER ICONS ON KEYS</h2>
+    <p class="description">Small finger icons appear directly on the home row keys showing which finger belongs there. Clear visual without taking extra space.</p>
+
+    <div class="keyboard-container">
+      <div class="keyboard-row" style="margin-left: 0">
+        <div class="key inactive">Q</div>
+        <div class="key inactive">W</div>
+        <div class="key inactive">E</div>
+        <div class="key inactive">R</div>
+        <div class="key inactive">T</div>
+        <div class="key inactive">Y</div>
+        <div class="key inactive">U</div>
+        <div class="key inactive">I</div>
+        <div class="key inactive">O</div>
+        <div class="key inactive">P</div>
+      </div>
+      <div class="keyboard-row" style="margin-left: 16px">
+        <div class="key key-with-icon finger-lpinky">
+          <span class="finger-icon">🤙</span>
+          <span class="key-label">A</span>
+        </div>
+        <div class="key key-with-icon finger-lring">
+          <span class="finger-icon">💍</span>
+          <span class="key-label">S</span>
+        </div>
+        <div class="key key-with-icon finger-lmid">
+          <span class="finger-icon">🖕</span>
+          <span class="key-label">D</span>
+        </div>
+        <div class="key key-with-icon finger-lindex highlight">
+          <span class="finger-icon">👆</span>
+          <span class="key-label">F</span>
+        </div>
+        <div class="key key-with-icon finger-lindex" style="opacity: 0.7;">
+          <span class="finger-icon">👆</span>
+          <span class="key-label">G</span>
+        </div>
+        <div class="key key-with-icon finger-rindex" style="opacity: 0.7;">
+          <span class="finger-icon">👆</span>
+          <span class="key-label">H</span>
+        </div>
+        <div class="key key-with-icon finger-rindex">
+          <span class="finger-icon">👆</span>
+          <span class="key-label">J</span>
+        </div>
+        <div class="key key-with-icon finger-rmid">
+          <span class="finger-icon">🖕</span>
+          <span class="key-label">K</span>
+        </div>
+        <div class="key key-with-icon finger-rring">
+          <span class="finger-icon">💍</span>
+          <span class="key-label">L</span>
+        </div>
+        <div class="key key-with-icon finger-rpinky">
+          <span class="finger-icon">🤙</span>
+          <span class="key-label">;</span>
+        </div>
+      </div>
+      <div class="keyboard-row" style="margin-left: 32px">
+        <div class="key inactive">Z</div>
+        <div class="key inactive">X</div>
+        <div class="key inactive">C</div>
+        <div class="key inactive">V</div>
+        <div class="key inactive">B</div>
+        <div class="key inactive">N</div>
+        <div class="key inactive">M</div>
+        <div class="key inactive">,</div>
+        <div class="key inactive">.</div>
+        <div class="key inactive">/</div>
+      </div>
+      <div class="keyboard-row">
+        <div class="key key-with-icon space" style="background: rgba(108, 117, 125, 0.2); border-color: #6c757d;">
+          <span class="finger-icon">👍</span>
+          <span class="key-label">SPACE</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="display: flex; justify-content: center; gap: 30px; margin-top: 20px; font-size: 8px;">
+      <span>👆 = INDEX</span>
+      <span>🖕 = MIDDLE</span>
+      <span>💍 = RING</span>
+      <span>🤙 = PINKY</span>
+      <span>👍 = THUMB</span>
+    </div>
+  </div>
+
+  <!-- ==================== PROPOSAL 3 ==================== -->
+  <div class="proposal">
+    <h2>PROPOSAL 3: SPLIT VIEW WITH HAND DIAGRAMS</h2>
+    <p class="description">Keyboard visually splits into left/right halves with clear ownership. Each half has a mini hand diagram showing finger responsibilities.</p>
+
+    <div class="split-keyboard">
+      <div class="keyboard-half left">
+        <div class="half-label left">LEFT HAND</div>
+        <div class="keyboard-container" style="gap: 6px;">
+          <div class="keyboard-row">
+            <div class="key" style="width: 38px; height: 38px; font-size: 10px;">Q</div>
+            <div class="key" style="width: 38px; height: 38px; font-size: 10px;">W</div>
+            <div class="key" style="width: 38px; height: 38px; font-size: 10px;">E</div>
+            <div class="key" style="width: 38px; height: 38px; font-size: 10px;">R</div>
+            <div class="key" style="width: 38px; height: 38px; font-size: 10px;">T</div>
+          </div>
+          <div class="keyboard-row">
+            <div class="key finger-lpinky" style="width: 38px; height: 38px; font-size: 10px;">A</div>
+            <div class="key finger-lring" style="width: 38px; height: 38px; font-size: 10px;">S</div>
+            <div class="key finger-lmid" style="width: 38px; height: 38px; font-size: 10px;">D</div>
+            <div class="key finger-lindex highlight" style="width: 38px; height: 38px; font-size: 10px;">F</div>
+            <div class="key finger-lindex" style="width: 38px; height: 38px; font-size: 10px;">G</div>
+          </div>
+          <div class="keyboard-row">
+            <div class="key" style="width: 38px; height: 38px; font-size: 10px;">Z</div>
+            <div class="key" style="width: 38px; height: 38px; font-size: 10px;">X</div>
+            <div class="key" style="width: 38px; height: 38px; font-size: 10px;">C</div>
+            <div class="key" style="width: 38px; height: 38px; font-size: 10px;">V</div>
+            <div class="key" style="width: 38px; height: 38px; font-size: 10px;">B</div>
+          </div>
+        </div>
+        <div class="mini-hand">
+          <div class="mini-finger" style="background: #e63946; height: 14px; margin-top: 6px;"></div>
+          <div class="mini-finger" style="background: #ff6b35;"></div>
+          <div class="mini-finger" style="background: #ffd93d; height: 22px; margin-top: -2px;"></div>
+          <div class="mini-finger" style="background: #0ead69; height: 18px; margin-top: 2px; box-shadow: 0 0 10px #0ead69;"></div>
+          <div class="mini-finger" style="background: #0ead69; height: 12px; margin-top: 8px; opacity: 0.5;"></div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 5px; margin-top: 8px;">
+          <div style="width: 16px; height: 10px; background: #6c757d; border-radius: 3px;"></div>
+          <span style="font-size: 6px; color: #6c757d;">THUMB</span>
+        </div>
+      </div>
+
+      <div class="keyboard-half right">
+        <div class="half-label right">RIGHT HAND</div>
+        <div class="keyboard-container" style="gap: 6px;">
+          <div class="keyboard-row">
+            <div class="key" style="width: 38px; height: 38px; font-size: 10px;">Y</div>
+            <div class="key" style="width: 38px; height: 38px; font-size: 10px;">U</div>
+            <div class="key" style="width: 38px; height: 38px; font-size: 10px;">I</div>
+            <div class="key" style="width: 38px; height: 38px; font-size: 10px;">O</div>
+            <div class="key" style="width: 38px; height: 38px; font-size: 10px;">P</div>
+          </div>
+          <div class="keyboard-row">
+            <div class="key finger-rindex" style="width: 38px; height: 38px; font-size: 10px;">H</div>
+            <div class="key finger-rindex" style="width: 38px; height: 38px; font-size: 10px;">J</div>
+            <div class="key finger-rmid" style="width: 38px; height: 38px; font-size: 10px;">K</div>
+            <div class="key finger-rring" style="width: 38px; height: 38px; font-size: 10px;">L</div>
+            <div class="key finger-rpinky" style="width: 38px; height: 38px; font-size: 10px;">;</div>
+          </div>
+          <div class="keyboard-row">
+            <div class="key" style="width: 38px; height: 38px; font-size: 10px;">N</div>
+            <div class="key" style="width: 38px; height: 38px; font-size: 10px;">M</div>
+            <div class="key" style="width: 38px; height: 38px; font-size: 10px;">,</div>
+            <div class="key" style="width: 38px; height: 38px; font-size: 10px;">.</div>
+            <div class="key" style="width: 38px; height: 38px; font-size: 10px;">/</div>
+          </div>
+        </div>
+        <div class="mini-hand">
+          <div class="mini-finger" style="background: #3bceac; height: 12px; margin-top: 8px; opacity: 0.5;"></div>
+          <div class="mini-finger" style="background: #3bceac; height: 18px; margin-top: 2px;"></div>
+          <div class="mini-finger" style="background: #0f4c75; height: 22px; margin-top: -2px;"></div>
+          <div class="mini-finger" style="background: #9d4edd;"></div>
+          <div class="mini-finger" style="background: #ff6b9d; height: 14px; margin-top: 6px;"></div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 5px; margin-top: 8px;">
+          <span style="font-size: 6px; color: #6c757d;">THUMB</span>
+          <div style="width: 16px; height: 10px; background: #6c757d; border-radius: 3px;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Spacebar indicator between hands -->
+    <div style="text-align: center; margin-top: 20px; padding: 10px; border: 2px dashed #6c757d; border-radius: 8px; max-width: 300px; margin-left: auto; margin-right: auto;">
+      <div style="font-size: 8px; color: #6c757d; margin-bottom: 5px;">SPACEBAR</div>
+      <div style="display: flex; justify-content: center; gap: 20px; font-size: 6px; color: #aaa;">
+        <span>👈 LEFT THUMB</span>
+        <span>or</span>
+        <span>RIGHT THUMB 👉</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== PROPOSAL 4 ==================== -->
+  <div class="proposal">
+    <h2>PROPOSAL 4: OVERHEAD TRANSPARENT HANDS</h2>
+    <p class="description">Semi-transparent hands overlay the keyboard from above, as if looking down at your own hands. The active finger glows when its key is needed.</p>
+
+    <div class="overhead-container">
+      <div class="transparent-hand left" style="top: 20px;">
+        <div class="ghost-finger" style="color: #e63946; height: 100px; margin-top: 40px;"></div>
+        <div class="ghost-finger" style="color: #ff6b35; height: 120px; margin-top: 20px;"></div>
+        <div class="ghost-finger" style="color: #ffd93d; height: 130px; margin-top: 10px;"></div>
+        <div class="ghost-finger active" style="color: #0ead69; height: 115px; margin-top: 25px;"></div>
+        <div class="ghost-finger" style="color: #0ead69; height: 80px; margin-top: 60px; opacity: 0.2;"></div>
+      </div>
+
+      <div class="transparent-hand right" style="top: 20px;">
+        <div class="ghost-finger" style="color: #3bceac; height: 80px; margin-top: 60px; opacity: 0.2;"></div>
+        <div class="ghost-finger" style="color: #3bceac; height: 115px; margin-top: 25px;"></div>
+        <div class="ghost-finger" style="color: #0f4c75; height: 130px; margin-top: 10px;"></div>
+        <div class="ghost-finger" style="color: #9d4edd; height: 120px; margin-top: 20px;"></div>
+        <div class="ghost-finger" style="color: #ff6b9d; height: 100px; margin-top: 40px;"></div>
+      </div>
+
+      <div class="keyboard-container" style="position: relative; z-index: 10;">
+        <div class="keyboard-row" style="margin-left: 0">
+          <div class="key inactive">Q</div>
+          <div class="key inactive">W</div>
+          <div class="key inactive">E</div>
+          <div class="key inactive">R</div>
+          <div class="key inactive">T</div>
+          <div class="key inactive">Y</div>
+          <div class="key inactive">U</div>
+          <div class="key inactive">I</div>
+          <div class="key inactive">O</div>
+          <div class="key inactive">P</div>
+        </div>
+        <div class="keyboard-row" style="margin-left: 16px">
+          <div class="key finger-lpinky">A</div>
+          <div class="key finger-lring">S</div>
+          <div class="key finger-lmid">D</div>
+          <div class="key finger-lindex highlight">F<div class="home-indicator"></div></div>
+          <div class="key finger-lindex">G</div>
+          <div class="key finger-rindex">H</div>
+          <div class="key finger-rindex">J<div class="home-indicator"></div></div>
+          <div class="key finger-rmid">K</div>
+          <div class="key finger-rring">L</div>
+          <div class="key finger-rpinky">;</div>
+        </div>
+        <div class="keyboard-row" style="margin-left: 32px">
+          <div class="key inactive">Z</div>
+          <div class="key inactive">X</div>
+          <div class="key inactive">C</div>
+          <div class="key inactive">V</div>
+          <div class="key inactive">B</div>
+          <div class="key inactive">N</div>
+          <div class="key inactive">M</div>
+          <div class="key inactive">,</div>
+          <div class="key inactive">.</div>
+          <div class="key inactive">/</div>
+        </div>
+        <div class="keyboard-row">
+          <div class="key space" style="background: rgba(108, 117, 125, 0.3); border-color: #6c757d; position: relative;">
+            SPACE
+            <div style="position: absolute; bottom: -25px; left: 50%; transform: translateX(-50%); display: flex; gap: 30px; font-size: 8px; color: #6c757d;">
+              <span>👍 L.THUMB</span>
+              <span>R.THUMB 👍</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== PROPOSAL 5 ==================== -->
+  <div class="proposal">
+    <h2>PROPOSAL 5: INTERACTIVE TUTORIAL MODE</h2>
+    <p class="description">Toggle-able learning modes: ghost hands, color zones, and contextual tips. Beginners see everything, advanced users can hide helpers.</p>
+
+    <div class="tutorial-controls">
+      <button class="tutorial-btn active">👐 HANDS</button>
+      <button class="tutorial-btn active">🎨 ZONES</button>
+      <button class="tutorial-btn">📊 STATS</button>
+      <button class="tutorial-btn active">💡 TIPS</button>
+    </div>
+
+    <div class="keyboard-container" style="position: relative;">
+      <div class="zone-overlay zone-left"></div>
+      <div class="zone-overlay zone-right"></div>
+
+      <div class="keyboard-row" style="margin-left: 0; position: relative; z-index: 1;">
+        <div class="key inactive">Q</div>
+        <div class="key inactive">W</div>
+        <div class="key inactive">E</div>
+        <div class="key inactive">R</div>
+        <div class="key inactive">T</div>
+        <div class="key inactive">Y</div>
+        <div class="key inactive">U</div>
+        <div class="key inactive">I</div>
+        <div class="key inactive">O</div>
+        <div class="key inactive">P</div>
+      </div>
+      <div class="keyboard-row" style="margin-left: 16px; position: relative; z-index: 1;">
+        <div class="key finger-lpinky">A</div>
+        <div class="key finger-lring">S</div>
+        <div class="key finger-lmid">D</div>
+        <div class="key finger-lindex highlight">F<div class="home-indicator"></div></div>
+        <div class="key finger-lindex">G</div>
+        <div class="key finger-rindex">H</div>
+        <div class="key finger-rindex">J<div class="home-indicator"></div></div>
+        <div class="key finger-rmid">K</div>
+        <div class="key finger-rring">L</div>
+        <div class="key finger-rpinky">;</div>
+      </div>
+      <div class="keyboard-row" style="margin-left: 32px; position: relative; z-index: 1;">
+        <div class="key inactive">Z</div>
+        <div class="key inactive">X</div>
+        <div class="key inactive">C</div>
+        <div class="key inactive">V</div>
+        <div class="key inactive">B</div>
+        <div class="key inactive">N</div>
+        <div class="key inactive">M</div>
+        <div class="key inactive">,</div>
+        <div class="key inactive">.</div>
+        <div class="key inactive">/</div>
+      </div>
+      <div class="keyboard-row" style="position: relative; z-index: 1;">
+        <div class="key space" style="background: rgba(108, 117, 125, 0.3); border-color: #6c757d;">
+          <span style="font-size: 14px; margin-right: 8px;">👍</span>
+          SPACE
+          <span style="font-size: 14px; margin-left: 8px;">👍</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="tip-box">
+      <span class="icon">💡</span>
+      <span class="text">Press F with your LEFT INDEX finger. This finger also handles G, R, T, V, and B keys.</span>
+    </div>
+
+    <div class="legend">
+      <div class="legend-item">
+        <div class="legend-color" style="border-color: #e63946; background: rgba(230, 57, 70, 0.3);"></div>
+        <span>L.PINKY</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-color" style="border-color: #ff6b35; background: rgba(255, 107, 53, 0.3);"></div>
+        <span>L.RING</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-color" style="border-color: #ffd93d; background: rgba(255, 217, 61, 0.3);"></div>
+        <span>L.MID</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-color" style="border-color: #0ead69; background: rgba(14, 173, 105, 0.3);"></div>
+        <span>L.INDEX</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-color" style="border-color: #3bceac; background: rgba(59, 206, 172, 0.3);"></div>
+        <span>R.INDEX</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-color" style="border-color: #0f4c75; background: rgba(15, 76, 117, 0.3);"></div>
+        <span>R.MID</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-color" style="border-color: #9d4edd; background: rgba(157, 78, 221, 0.3);"></div>
+        <span>R.RING</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-color" style="border-color: #ff6b9d; background: rgba(255, 107, 157, 0.3);"></div>
+        <span>R.PINKY</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-color" style="border-color: #6c757d; background: rgba(108, 117, 125, 0.3);"></div>
+        <span>THUMBS</span>
+      </div>
+    </div>
+  </div>
+
+  <div style="text-align: center; padding: 40px; font-size: 10px; color: #6a6a8e;">
+    TypeBit8 - Keyboard Finger Visualization Proposals
+  </div>
+
+  <script>
+    // Add some interactivity
+    document.querySelectorAll('.tutorial-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        btn.classList.toggle('active');
+      });
+    });
+
+    // ==================== PROPOSAL 1 INTERACTIVITY ====================
+
+    // Keyboard layout definitions (key positions for each layout)
+    const layouts = {
+      'QWERTY': {
+        row1: ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
+        row2: ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', ';'],
+        row3: ['Z', 'X', 'C', 'V', 'B', 'N', 'M', ',', '.', '/']
+      },
+      'QWERTZ': {
+        row1: ['Q', 'W', 'E', 'R', 'T', 'Z', 'U', 'I', 'O', 'P'],
+        row2: ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'Ö'],
+        row3: ['Y', 'X', 'C', 'V', 'B', 'N', 'M', ',', '.', '-']
+      },
+      'AZERTY': {
+        row1: ['A', 'Z', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
+        row2: ['Q', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'M'],
+        row3: ['W', 'X', 'C', 'V', 'B', 'N', ',', ';', ':', '!']
+      }
+    };
+
+    // Keyboard layout detection
+    let detectedLayout = 'QWERTY';
+    let currentDisplayLayout = 'QWERTY';
+    const layoutIndicator = document.createElement('div');
+    layoutIndicator.style.cssText = 'position: fixed; top: 10px; right: 10px; background: #1a1a2e; border: 2px solid #3bceac; padding: 10px 15px; font-family: "Press Start 2P", monospace; font-size: 8px; color: #3bceac; border-radius: 4px; z-index: 1000; transition: border-color 0.3s;';
+    layoutIndicator.innerHTML = `LAYOUT: <span id="layout-name">${detectedLayout}</span><br><span id="layout-status" style="font-size: 6px; color: #6a6a8e;">Press keys to detect layout</span>`;
+    document.body.appendChild(layoutIndicator);
+
+    // Map keys to fingers (works for all layouts based on physical position)
+    const keyToFinger = {
+      // Left hand
+      'q': 'l-pinky', 'a': 'l-pinky', 'z': 'l-pinky', 'w': 'l-pinky', 'y': 'l-pinky',
+      'w': 'l-ring', 's': 'l-ring', 'x': 'l-ring', 'z': 'l-ring',
+      'e': 'l-mid', 'd': 'l-mid', 'c': 'l-mid',
+      'r': 'l-index', 'f': 'l-index', 'v': 'l-index', 't': 'l-index', 'g': 'l-index', 'b': 'l-index',
+      // Right hand
+      'y': 'r-index', 'h': 'r-index', 'n': 'r-index', 'u': 'r-index', 'j': 'r-index', 'm': 'r-index', 'z': 'r-index',
+      'i': 'r-mid', 'k': 'r-mid', ',': 'r-mid',
+      'o': 'r-ring', 'l': 'r-ring', '.': 'r-ring', ';': 'r-ring',
+      'p': 'r-pinky', ';': 'r-pinky', '/': 'r-pinky', '-': 'r-pinky', ':': 'r-pinky', '!': 'r-pinky',
+      // Special chars for other layouts
+      'ö': 'r-pinky', 'ü': 'r-pinky', 'ä': 'r-pinky',
+      'é': 'r-pinky', 'è': 'r-pinky',
+      // Thumbs
+      ' ': 'thumb'
+    };
+
+    // Physical key code to finger mapping (position-based, layout-independent)
+    const codeToFinger = {
+      // Top row
+      'KeyQ': 'l-pinky', 'KeyW': 'l-ring', 'KeyE': 'l-mid',
+      'KeyR': 'l-index', 'KeyT': 'l-index',
+      'KeyY': 'r-index', 'KeyU': 'r-index',
+      'KeyI': 'r-mid', 'KeyO': 'r-ring', 'KeyP': 'r-pinky',
+      // Home row
+      'KeyA': 'l-pinky', 'KeyS': 'l-ring', 'KeyD': 'l-mid',
+      'KeyF': 'l-index', 'KeyG': 'l-index',
+      'KeyH': 'r-index', 'KeyJ': 'r-index',
+      'KeyK': 'r-mid', 'KeyL': 'r-ring', 'Semicolon': 'r-pinky',
+      // Bottom row
+      'KeyZ': 'l-pinky', 'KeyX': 'l-ring', 'KeyC': 'l-mid',
+      'KeyV': 'l-index', 'KeyB': 'l-index',
+      'KeyN': 'r-index', 'KeyM': 'r-index',
+      'Comma': 'r-mid', 'Period': 'r-ring', 'Slash': 'r-pinky',
+      // Space
+      'Space': 'thumb'
+    };
+
+    // ==================== PRP-034: INTELLIGENT LAYOUT DETECTION ====================
+
+    // Layout lock state
+    let layoutLocked = false;
+    let detectionState = 'DETECTING';
+
+    // DEFINITIVE KEYS: These immediately lock the layout (100% confidence)
+    // Format: { code: { char: layout } } - only for keys that DEFINITIVELY identify a layout
+    const definitiveKeys = {
+      // Y/Z position - definitively distinguishes QWERTY from QWERTZ
+      'KeyY': { 'z': 'QWERTZ' },  // 'y' on KeyY could be QWERTY or AZERTY, so not definitive for QWERTY
+      'KeyZ': { 'y': 'QWERTZ', 'w': 'AZERTY' },  // 'z' on KeyZ could be QWERTY or AZERTY
+
+      // German umlauts - DEFINITIVELY indicate QWERTZ
+      'Semicolon': { 'ö': 'QWERTZ' },
+      'Quote': { 'ä': 'QWERTZ' },
+      'BracketLeft': { 'ü': 'QWERTZ' },
+      'Minus': { 'ß': 'QWERTZ' },
+
+      // AZERTY-specific positions
+      'KeyQ': { 'a': 'AZERTY' },  // 'q' is shared by QWERTY and QWERTZ
+      'KeyA': { 'q': 'AZERTY' },  // 'a' is shared by QWERTY and QWERTZ
+      'KeyW': { 'z': 'AZERTY' },  // 'w' is shared by QWERTY and QWERTZ
+      'KeyM': { ',': 'AZERTY' },  // 'm' is shared by QWERTY and QWERTZ
+      'Semicolon': { 'm': 'AZERTY', 'ö': 'QWERTZ' },
+    };
+
+    // CONFIRMATORY KEYS: Add confidence but don't lock alone
+    // These help distinguish QWERTY from QWERTZ when no definitive key has been pressed
+    const confirmatoryKeys = {
+      'KeyY': { 'y': 'QWERTY' },  // y on KeyY suggests QWERTY (but could be AZERTY)
+      'KeyZ': { 'z': 'QWERTY' },  // z on KeyZ suggests QWERTY
+      'Semicolon': { ';': 'QWERTY' },
+      'Quote': { "'": 'QWERTY' },
+      'BracketLeft': { '[': 'QWERTY' },
+      'Slash': { '/': 'QWERTY', '-': 'QWERTZ' },
+    };
+
+    // NEUTRAL KEYS: These are the SAME across QWERTY and QWERTZ, so they should NEVER trigger detection
+    // (Most letter keys except Y and Z)
+    const neutralKeys = new Set([
+      'KeyA', 'KeyB', 'KeyC', 'KeyD', 'KeyE', 'KeyF', 'KeyG', 'KeyH',
+      'KeyI', 'KeyJ', 'KeyK', 'KeyL', 'KeyM', 'KeyN', 'KeyO', 'KeyP',
+      'KeyQ', 'KeyR', 'KeyS', 'KeyT', 'KeyU', 'KeyV', 'KeyW', 'KeyX'
+    ]);
+
+    // Confidence tracking
+    const layoutConfidence = { 'QWERTY': 0, 'QWERTZ': 0, 'AZERTY': 0 };
+    const CONFIDENCE_THRESHOLD = 2;  // Need 2 confirmatory votes to switch without definitive key
+
+    // Process keystroke for layout detection
+    function detectLayout(code, key) {
+      const keyLower = key.toLowerCase();
+
+      // If layout is locked, only check for CONTRADICTING definitive keys
+      if (layoutLocked) {
+        const definitive = definitiveKeys[code];
+        if (definitive && definitive[keyLower]) {
+          const newLayout = definitive[keyLower];
+          // Only unlock if this is a DIFFERENT layout
+          if (newLayout !== detectedLayout) {
+            console.log(`Layout contradiction detected: ${detectedLayout} -> ${newLayout}`);
+            layoutLocked = false;
+            detectedLayout = newLayout;
+            layoutLocked = true;
+            detectionState = 'LOCKED';
+            updateDetectionIndicator();
+            updateKeyboardLayout(newLayout);
+          }
+        }
+        return detectedLayout;
+      }
+
+      // Check if this is a neutral key (same across QWERTY/QWERTZ)
+      // Only skip if we're comparing QWERTY vs QWERTZ (not AZERTY)
+      if (neutralKeys.has(code) && !definitiveKeys[code]?.[keyLower]) {
+        // Don't change detection based on neutral keys
+        return detectedLayout;
+      }
+
+      // Check for DEFINITIVE key match - immediately lock
+      const definitive = definitiveKeys[code];
+      if (definitive && definitive[keyLower]) {
+        const newLayout = definitive[keyLower];
+        detectedLayout = newLayout;
+        layoutLocked = true;
+        detectionState = 'LOCKED';
+        layoutConfidence[newLayout] = 100;  // Max confidence
+        console.log(`Layout LOCKED: ${newLayout} (definitive key: ${code}=${keyLower})`);
+        updateDetectionIndicator();
+        updateKeyboardLayout(newLayout);
+        return newLayout;
+      }
+
+      // Check for CONFIRMATORY key match - add confidence
+      const confirmatory = confirmatoryKeys[code];
+      if (confirmatory && confirmatory[keyLower]) {
+        const suggestedLayout = confirmatory[keyLower];
+        layoutConfidence[suggestedLayout]++;
+        console.log(`Layout confidence: ${suggestedLayout} +1 (now ${layoutConfidence[suggestedLayout]})`);
+
+        // Check if we've reached threshold
+        if (layoutConfidence[suggestedLayout] >= CONFIDENCE_THRESHOLD) {
+          detectedLayout = suggestedLayout;
+          detectionState = 'DETECTED';
+          updateDetectionIndicator();
+          updateKeyboardLayout(suggestedLayout);
+          return suggestedLayout;
+        }
+      }
+
+      return detectedLayout;
+    }
+
+    // Update the detection indicator display
+    function updateDetectionIndicator() {
+      const indicator = document.getElementById('layout-name');
+      const statusEl = document.getElementById('layout-status');
+
+      indicator.textContent = detectedLayout;
+
+      if (detectionState === 'LOCKED') {
+        statusEl.textContent = 'LOCKED';
+        statusEl.style.color = '#0ead69';
+        indicator.parentElement.style.borderColor = '#0ead69';
+      } else if (detectionState === 'DETECTED') {
+        statusEl.textContent = 'detected (confirming...)';
+        statusEl.style.color = '#ffd93d';
+        indicator.parentElement.style.borderColor = '#ffd93d';
+      } else {
+        statusEl.textContent = 'Press keys to detect layout';
+        statusEl.style.color = '#6a6a8e';
+        indicator.parentElement.style.borderColor = '#3bceac';
+      }
+    }
+
+    // Get all keys in Proposal 1
+    const proposal1 = document.querySelector('.proposal');
+    const p1Keys = proposal1.querySelectorAll('.key');
+
+    // Store keyboard rows for layout switching
+    const keyboardRows = proposal1.querySelectorAll('.keyboard-row');
+    const row1Keys = keyboardRows[0].querySelectorAll('.key');
+    const row2Keys = keyboardRows[1].querySelectorAll('.key');
+    const row3Keys = keyboardRows[2].querySelectorAll('.key');
+
+    // Create key map for quick lookup (by physical key code position)
+    const keyElements = {};
+    const keyElementsByCode = {};
+
+    // Map physical positions to key elements
+    const row1Codes = ['KeyQ', 'KeyW', 'KeyE', 'KeyR', 'KeyT', 'KeyY', 'KeyU', 'KeyI', 'KeyO', 'KeyP'];
+    const row2Codes = ['KeyA', 'KeyS', 'KeyD', 'KeyF', 'KeyG', 'KeyH', 'KeyJ', 'KeyK', 'KeyL', 'Semicolon'];
+    const row3Codes = ['KeyZ', 'KeyX', 'KeyC', 'KeyV', 'KeyB', 'KeyN', 'KeyM', 'Comma', 'Period', 'Slash'];
+
+    row1Keys.forEach((keyEl, i) => keyElementsByCode[row1Codes[i]] = keyEl);
+    row2Keys.forEach((keyEl, i) => keyElementsByCode[row2Codes[i]] = keyEl);
+    row3Keys.forEach((keyEl, i) => keyElementsByCode[row3Codes[i]] = keyEl);
+    keyElementsByCode['Space'] = keyboardRows[3].querySelector('.key');
+
+    // Function to update keyboard layout display
+    function updateKeyboardLayout(layoutName) {
+      if (layoutName === currentDisplayLayout) return;
+      if (!layouts[layoutName]) return;
+
+      const layout = layouts[layoutName];
+      currentDisplayLayout = layoutName;
+
+      // Update row 1
+      layout.row1.forEach((keyLabel, i) => {
+        if (row1Keys[i]) {
+          row1Keys[i].textContent = keyLabel;
+        }
+      });
+
+      // Update row 2 (preserve home indicators for F and J positions)
+      layout.row2.forEach((keyLabel, i) => {
+        if (row2Keys[i]) {
+          const hasHomeIndicator = row2Keys[i].querySelector('.home-indicator');
+          if (hasHomeIndicator) {
+            // Preserve the home indicator
+            const indicatorHTML = hasHomeIndicator.outerHTML;
+            row2Keys[i].innerHTML = keyLabel + indicatorHTML;
+          } else {
+            row2Keys[i].textContent = keyLabel;
+          }
+        }
+      });
+
+      // Update row 3
+      layout.row3.forEach((keyLabel, i) => {
+        if (row3Keys[i]) {
+          row3Keys[i].textContent = keyLabel;
+        }
+      });
+
+      // Flash effect to show layout changed
+      const indicator = document.getElementById('layout-name');
+      indicator.style.animation = 'none';
+      indicator.offsetHeight; // Trigger reflow
+      indicator.style.animation = 'pulse 0.3s ease 3';
+
+      // Rebuild the keyElements map for the new layout
+      rebuildKeyElementsMap();
+
+      console.log('Keyboard layout switched to:', layoutName);
+    }
+
+    // Rebuild keyElements map based on current display
+    function rebuildKeyElementsMap() {
+      // Clear existing
+      Object.keys(keyElements).forEach(k => delete keyElements[k]);
+
+      p1Keys.forEach(keyEl => {
+        let keyText = keyEl.textContent.trim().toLowerCase();
+        // Handle home indicator text
+        if (keyText.includes('f') && keyEl.querySelector('.home-indicator')) {
+          keyText = keyText.replace(/[^a-z]/g, '');
+        }
+        if (keyText === 'space') {
+          keyElements[' '] = keyEl;
+        } else if (keyText.length === 1) {
+          keyElements[keyText] = keyEl;
+        }
+      });
+    }
+
+    // Initial build
+    rebuildKeyElementsMap();
+
+    // Get finger elements
+    const fingerElements = {
+      'l-pinky': proposal1.querySelector('.pixel-hand:first-child .finger-pixel:nth-child(1)'),
+      'l-ring': proposal1.querySelector('.pixel-hand:first-child .finger-pixel:nth-child(2)'),
+      'l-mid': proposal1.querySelector('.pixel-hand:first-child .finger-pixel:nth-child(3)'),
+      'l-index': proposal1.querySelector('.pixel-hand:first-child .finger-pixel:nth-child(4)'),
+      'r-index': proposal1.querySelector('.pixel-hand:last-child .finger-pixel:nth-child(1)'),
+      'r-mid': proposal1.querySelector('.pixel-hand:last-child .finger-pixel:nth-child(2)'),
+      'r-ring': proposal1.querySelector('.pixel-hand:last-child .finger-pixel:nth-child(3)'),
+      'r-pinky': proposal1.querySelector('.pixel-hand:last-child .finger-pixel:nth-child(4)'),
+      'thumb-left': proposal1.querySelector('.pixel-hand:first-child .thumb-pixel'),
+      'thumb-right': proposal1.querySelector('.pixel-hand:last-child .thumb-pixel'),
+    };
+
+    // Handle keydown
+    document.addEventListener('keydown', (e) => {
+      // Prevent spacebar from scrolling
+      if (e.key === ' ') {
+        e.preventDefault();
+      }
+
+      const key = e.key.toLowerCase();
+      const code = e.code;
+
+      // Use physical key code for finger mapping (more reliable across layouts)
+      const finger = codeToFinger[code] || keyToFinger[key];
+
+      // PRP-034: Intelligent layout detection with locking
+      detectLayout(code, e.key);
+
+      // Highlight key by physical position (code-based)
+      if (keyElementsByCode[code]) {
+        keyElementsByCode[code].style.transform = 'scale(1.15)';
+        keyElementsByCode[code].style.boxShadow = '0 0 30px currentColor';
+        keyElementsByCode[code].style.zIndex = '10';
+      }
+
+      // Highlight finger
+      if (finger === 'thumb') {
+        fingerElements['thumb-left'].style.transform = 'scale(1.4)';
+        fingerElements['thumb-left'].style.boxShadow = '0 0 25px #6c757d';
+        fingerElements['thumb-right'].style.transform = 'scale(1.4)';
+        fingerElements['thumb-right'].style.boxShadow = '0 0 25px #6c757d';
+      } else if (fingerElements[finger]) {
+        fingerElements[finger].style.transform = 'scale(1.4)';
+        fingerElements[finger].style.boxShadow = '0 0 25px currentColor';
+      }
+    });
+
+    // Handle keyup
+    document.addEventListener('keyup', (e) => {
+      const key = e.key.toLowerCase();
+      const code = e.code;
+      const finger = codeToFinger[code] || keyToFinger[key];
+
+      // Reset key by physical position
+      if (keyElementsByCode[code]) {
+        keyElementsByCode[code].style.transform = '';
+        keyElementsByCode[code].style.boxShadow = '';
+        keyElementsByCode[code].style.zIndex = '';
+      }
+
+      // Reset finger
+      if (finger === 'thumb') {
+        fingerElements['thumb-left'].style.transform = '';
+        fingerElements['thumb-left'].style.boxShadow = '0 0 8px #6c757d';
+        fingerElements['thumb-right'].style.transform = '';
+        fingerElements['thumb-right'].style.boxShadow = '0 0 8px #6c757d';
+      } else if (fingerElements[finger]) {
+        fingerElements[finger].style.transform = '';
+        fingerElements[finger].style.boxShadow = '';
+      }
+    });
+
+    // Add transition to all elements
+    p1Keys.forEach(key => {
+      key.style.transition = 'all 0.1s ease';
+    });
+    Object.values(fingerElements).forEach(finger => {
+      if (finger) finger.style.transition = 'all 0.1s ease';
+    });
+  </script>
+</body>
+</html>

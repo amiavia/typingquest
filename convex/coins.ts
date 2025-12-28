@@ -1,5 +1,6 @@
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
+import { requireAdmin, requireSelfOrAdmin } from "./auth";
 
 // Get current coin balance for a user
 export const getCoinBalance = query({
@@ -33,6 +34,8 @@ export const awardCoins = mutation({
     metadata: v.optional(v.any()),
   },
   handler: async (ctx, args) => {
+    await requireAdmin(ctx);
+
     if (args.amount <= 0) {
       throw new Error("Amount must be positive");
     }
@@ -96,6 +99,8 @@ export const spendCoins = mutation({
     itemId: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
+    await requireSelfOrAdmin(ctx, args.clerkId);
+
     if (args.amount <= 0) {
       throw new Error("Amount must be positive");
     }
