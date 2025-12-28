@@ -66,7 +66,7 @@ export function PremiumPage({ onClose }: PremiumPageProps) {
       {/* Already Premium - Show status and management */}
       {isPremium && (
         <section
-          className="max-w-2xl mx-auto mb-8 p-6"
+          className={`mx-auto mb-8 p-6 ${showManage ? 'max-w-4xl' : 'max-w-2xl'}`}
           style={{
             background: "linear-gradient(135deg, rgba(255,217,61,0.2) 0%, rgba(249,115,22,0.2) 100%)",
             border: "4px solid #ffd93d",
@@ -95,12 +95,15 @@ export function PremiumPage({ onClose }: PremiumPageProps) {
 
           {/* Clerk UserProfile for subscription management */}
           {showManage && (
-            <div className="mt-6 rounded-lg overflow-hidden" style={{ background: "#1a1a2e" }}>
+            <div className="mt-6 rounded-lg" style={{ background: "#1a1a2e", minHeight: "500px" }}>
               <UserProfile
                 appearance={{
                   elements: {
                     rootBox: { width: "100%" },
-                    card: { backgroundColor: "#1a1a2e", border: "none" },
+                    card: { backgroundColor: "#1a1a2e", border: "none", boxShadow: "none" },
+                    navbar: { backgroundColor: "#1a1a2e" },
+                    navbarButton: { color: "#eef5db" },
+                    pageScrollBox: { padding: "16px" },
                   },
                 }}
               />
