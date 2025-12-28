@@ -95,7 +95,9 @@ export function DailyChallengeView({
         value = stats.accuracy;
         break;
       case "endurance":
-        value = stats.correctChars;
+        // Convert characters to words (average word length ~5 chars + 1 space)
+        const avgWordLength = 6;
+        value = Math.floor(stats.correctChars / avgWordLength);
         break;
       case "keys":
         // Keys challenges measure accuracy on the target keys

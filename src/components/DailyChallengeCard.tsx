@@ -84,7 +84,7 @@ export function DailyChallengeCard({
       case "endurance":
         return "💪";
       case "keys":
-        return "🔑";
+        return "⌨️";
       default:
         return "📋";
     }

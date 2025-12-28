@@ -25,12 +25,39 @@ const CHALLENGE_TEMPLATES = {
   ],
 };
 
-// Tier thresholds (percentage of target)
+// Tier thresholds - percentage of target for speed/endurance, fixed values for accuracy/keys
 const TIERS = {
-  bronze: 0.5, // 50%
-  silver: 0.75, // 75%
-  gold: 1.0, // 100%
+  // For speed and endurance (percentage of target)
+  speed: { bronze: 0.5, silver: 0.75, gold: 1.0 },
+  endurance: { bronze: 0.5, silver: 0.75, gold: 1.0 },
+  // For accuracy-based challenges (fixed percentage thresholds)
+  accuracy: { bronze: 90, silver: 95, gold: 99 },
+  keys: { bronze: 85, silver: 92, gold: 98 },
 };
+
+// Helper to calculate tier based on challenge type
+function calculateTier(
+  challengeType: string,
+  value: number,
+  targetValue: number
+): string {
+  if (challengeType === "accuracy" || challengeType === "keys") {
+    // Fixed thresholds for accuracy-based challenges
+    const thresholds = TIERS[challengeType as "accuracy" | "keys"];
+    if (value >= thresholds.gold) return "gold";
+    if (value >= thresholds.silver) return "silver";
+    if (value >= thresholds.bronze) return "bronze";
+    return "pending";
+  } else {
+    // Percentage of target for speed/endurance
+    const percentage = value / targetValue;
+    const thresholds = TIERS[challengeType as "speed" | "endurance"] || TIERS.speed;
+    if (percentage >= thresholds.gold) return "gold";
+    if (percentage >= thresholds.silver) return "silver";
+    if (percentage >= thresholds.bronze) return "bronze";
+    return "pending";
+  }
+}
 
 // Get today's date in YYYY-MM-DD format
 function getTodayDate(): string {
@@ -62,7 +89,14 @@ function generateChallengeForDate(date: string) {
     const baseAccuracy = 90;
     targetValue = Math.min(98, Math.round(baseAccuracy + (dayOfMonth % 5) * 2)); // 90-98%
     targetKeys = (template as { targetKeys: string[] }).targetKeys;
+  } else if (type === "accuracy") {
+    // Accuracy challenges: cap at 100%, use smaller variation
+    const baseTarget = (template as { baseTarget: number }).baseTarget;
+    // Use smaller variation for accuracy (max +5%)
+    const accuracyVariation = 1 + (dayOfMonth % 3) * 0.02; // 1.0 to 1.04
+    targetValue = Math.min(100, Math.round(baseTarget * accuracyVariation));
   } else {
+    // Speed and endurance can use larger variation
     const baseTarget = (template as { baseTarget: number }).baseTarget;
     targetValue = Math.round(baseTarget * targetVariation);
   }
@@ -215,12 +249,12 @@ export const submitChallengeAttempt = mutation({
       )
       .first();
 
-    // Calculate tier based on value
-    const percentage = args.value / challenge.targetValue;
-    let tier = "pending";
-    if (percentage >= TIERS.gold) tier = "gold";
-    else if (percentage >= TIERS.silver) tier = "silver";
-    else if (percentage >= TIERS.bronze) tier = "bronze";
+    // Calculate tier based on value using challenge-type-specific thresholds
+    const tier = calculateTier(
+      challenge.challengeType,
+      args.value,
+      challenge.targetValue
+    );
 
     const isNewBest = !progress || args.value > progress.bestValue;
     const isNewTier = !progress || tier !== progress.status;
