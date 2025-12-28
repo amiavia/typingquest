@@ -20,6 +20,7 @@ import { CoinBalance } from './components/CoinBalance';
 import { StreakDisplay } from './components/StreakDisplay';
 import { PremiumBadge } from './components/PremiumBadge';
 import { MobileLanding } from './components/MobileLanding';
+import { SEOHead, schemas } from './components/SEOHead';
 import { useGameState } from './hooks/useGameState';
 import { useLessonProgress } from './hooks/useLessonProgress';
 import { usePremium } from './hooks/usePremium';
@@ -327,9 +328,16 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen">
-      {/* Guest Banner */}
-      <GuestBanner />
+    <>
+      <SEOHead
+        title="typebit8 - Master the Keyboard"
+        description="Learn touch typing with all 10 fingers through fun, gamified lessons. Master the keyboard with typebit8 - the retro-style typing game."
+        path="/"
+        schema={[schemas.softwareApplication, schemas.organization]}
+      />
+      <div className="min-h-screen">
+        {/* Guest Banner */}
+        <GuestBanner />
 
       {/* Migration Modal */}
       <MigrationModal />
@@ -1326,7 +1334,8 @@ function App() {
           OPERATED BY STEININGER AG, ZUG, SWITZERLAND
         </p>
       </footer>
-    </div>
+      </div>
+    </>
   );
 }
 

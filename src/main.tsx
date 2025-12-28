@@ -1,10 +1,12 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
+import { BrowserRouter } from 'react-router-dom'
+import { HelmetProvider } from 'react-helmet-async'
 import { ClerkProvider, useAuth } from '@clerk/clerk-react'
 import { ConvexProviderWithClerk } from 'convex/react-clerk'
 import { ConvexReactClient } from 'convex/react'
 import './index.css'
-import App from './App.tsx'
+import { AppRouter } from './router.tsx'
 import { AuthProvider } from './contexts/AuthContext'
 import { PremiumSyncProvider } from './providers/PremiumSyncProvider'
 import { ThemeProvider } from './providers/ThemeProvider'
@@ -54,8 +56,12 @@ function Providers({ children }: { children: React.ReactNode }) {
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <Providers>
-      <App />
-    </Providers>
+    <HelmetProvider>
+      <BrowserRouter>
+        <Providers>
+          <AppRouter />
+        </Providers>
+      </BrowserRouter>
+    </HelmetProvider>
   </StrictMode>,
 )
