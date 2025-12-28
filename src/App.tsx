@@ -470,7 +470,7 @@ function App() {
       )}
 
       {/* Header HUD */}
-      <header className="pixel-box m-2 p-2 md:m-4 md:p-4 overflow-hidden">
+      <header className="pixel-box m-2 p-2 md:m-4 md:p-4 overflow-hidden md:overflow-visible">
         <div className="flex items-center justify-between gap-1 sm:gap-2 md:gap-4">
           {/* Logo */}
           <div className="flex items-center gap-2 md:gap-4 min-w-0">
