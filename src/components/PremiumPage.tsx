@@ -5,9 +5,8 @@
  * Subscription management is handled through the UserProfile component.
  */
 
-import { PricingTable, UserProfile } from "@clerk/clerk-react";
+import { PricingTable, useClerk } from "@clerk/clerk-react";
 import { usePremium } from "../hooks/usePremium";
-import { useState } from "react";
 
 interface PremiumPageProps {
   onClose?: () => void;
@@ -25,7 +24,7 @@ const PREMIUM_BENEFITS = [
 
 export function PremiumPage({ onClose }: PremiumPageProps) {
   const { isPremium, plan, isLoading } = usePremium();
-  const [showManage, setShowManage] = useState(false);
+  const { openUserProfile } = useClerk();
 
   if (isLoading) {
     return (
@@ -66,7 +65,7 @@ export function PremiumPage({ onClose }: PremiumPageProps) {
       {/* Already Premium - Show status and management */}
       {isPremium && (
         <section
-          className={`mx-auto mb-8 p-6 ${showManage ? 'max-w-4xl' : 'max-w-2xl'}`}
+          className="mx-auto mb-8 p-6 max-w-2xl"
           style={{
             background: "linear-gradient(135deg, rgba(255,217,61,0.2) 0%, rgba(249,115,22,0.2) 100%)",
             border: "4px solid #ffd93d",
@@ -86,29 +85,16 @@ export function PremiumPage({ onClose }: PremiumPageProps) {
           </div>
 
           <button
-            onClick={() => setShowManage(!showManage)}
+            onClick={() => openUserProfile()}
             className="mt-4 px-4 py-2 border-2 border-[#3bceac] hover:bg-[#3bceac] hover:text-[#1a1a2e] transition-colors"
             style={{ fontSize: "8px", color: "#3bceac" }}
           >
-            {showManage ? "HIDE MANAGEMENT" : "MANAGE SUBSCRIPTION"}
+            MANAGE SUBSCRIPTION
           </button>
 
-          {/* Clerk UserProfile for subscription management */}
-          {showManage && (
-            <div className="mt-6 rounded-lg" style={{ background: "#1a1a2e", minHeight: "500px" }}>
-              <UserProfile
-                appearance={{
-                  elements: {
-                    rootBox: { width: "100%" },
-                    card: { backgroundColor: "#1a1a2e", border: "none", boxShadow: "none" },
-                    navbar: { backgroundColor: "#1a1a2e" },
-                    navbarButton: { color: "#eef5db" },
-                    pageScrollBox: { padding: "16px" },
-                  },
-                }}
-              />
-            </div>
-          )}
+          <p className="mt-4" style={{ fontSize: "6px", color: "#4a4a6e" }}>
+            VIEW BILLING, CANCEL, OR UPDATE PAYMENT METHOD
+          </p>
         </section>
       )}
 
