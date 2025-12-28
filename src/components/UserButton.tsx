@@ -9,6 +9,7 @@ import {
 import { useQuery } from 'convex/react';
 import { api } from '../../convex/_generated/api';
 import { useAuthContext } from '../contexts/AuthContext';
+import { usePremium } from '../hooks/usePremium';
 import { Avatar } from './Avatar';
 import { AvatarSelector } from './AvatarSelector';
 import { NicknameEditor } from './NicknameEditor';
@@ -16,11 +17,13 @@ import { NicknameEditor } from './NicknameEditor';
 interface UserButtonProps {
   userLevel?: number;
   onOpenShop?: () => void;
+  onOpenPremium?: () => void;
 }
 
-export function UserButton({ userLevel = 1, onOpenShop }: UserButtonProps) {
+export function UserButton({ userLevel = 1, onOpenShop, onOpenPremium }: UserButtonProps) {
   const { hasLocalData, migrateLocalData, migrationStatus } = useAuthContext();
   const { signOut } = useClerk();
+  const { isPremium } = usePremium();
   const { user } = useUser();
   const userAvatarId = useQuery(api.users.getAvatar);
 
@@ -187,6 +190,24 @@ export function UserButton({ userLevel = 1, onOpenShop }: UserButtonProps) {
               >
                 <span>✏️</span> EDIT NICKNAME
               </button>
+
+              {isPremium && (
+                <button
+                  onClick={() => {
+                    setShowMenu(false);
+                    onOpenPremium?.();
+                  }}
+                  className="w-full px-4 py-3 text-left hover:bg-[#2a2a3e] transition-colors flex items-center gap-2 border-t"
+                  style={{
+                    fontFamily: "'Press Start 2P'",
+                    fontSize: '6px',
+                    color: '#ffd93d',
+                    borderColor: '#2a2a3e',
+                  }}
+                >
+                  <span>👑</span> MANAGE SUBSCRIPTION
+                </button>
+              )}
 
               <button
                 onClick={() => {

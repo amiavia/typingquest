@@ -565,7 +565,7 @@ function App() {
             </div>
 
             {/* User Button (includes Avatar) */}
-            <UserButton userLevel={gameState.level} onOpenShop={() => navigateTo('shop')} />
+            <UserButton userLevel={gameState.level} onOpenShop={() => navigateTo('shop')} onOpenPremium={() => navigateTo('premium')} />
           </div>
         </div>
       </header>
