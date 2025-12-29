@@ -171,10 +171,39 @@ export function Footer() {
                 fontSize: '6px',
                 color: '#eef5db',
                 lineHeight: '2',
+                marginBottom: '16px',
               }}
             >
               MASTER THE KEYBOARD WITH RETRO GAMING VIBES
             </p>
+            <div className="flex gap-4">
+              <a
+                href="https://x.com/typebit8"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  fontFamily: "'Press Start 2P'",
+                  fontSize: '7px',
+                  color: '#eef5db',
+                }}
+                className="hover:text-[#3bceac] transition-colors"
+              >
+                X.COM
+              </a>
+              <a
+                href="https://www.tiktok.com/@typebit8"
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  fontFamily: "'Press Start 2P'",
+                  fontSize: '7px',
+                  color: '#eef5db',
+                }}
+                className="hover:text-[#3bceac] transition-colors"
+              >
+                TIKTOK
+              </a>
+            </div>
           </div>
         </div>
 
