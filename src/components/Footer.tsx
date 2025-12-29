@@ -178,7 +178,7 @@ export function Footer() {
             </p>
             <div className="flex gap-4">
               <a
-                href="https://x.com/typebit8"
+                href="https://x.com/typebit873696"
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{
