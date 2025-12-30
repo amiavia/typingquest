@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TypeBit8 Growth Strategy | PRP-046</title>
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --surface: #12121a;
+      --surface-2: #1a1a24;
+      --border: #2a2a3a;
+      --text: #e8e8ed;
+      --text-muted: #6b6b7b;
+      --accent: #3b82f6;
+      --accent-2: #8b5cf6;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 60px 24px;
+    }
+
+    /* Header */
+    header {
+      text-align: center;
+      margin-bottom: 80px;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 6px 12px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      font-size: 12px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 24px;
+    }
+
+    h1 {
+      font-size: 48px;
+      font-weight: 600;
+      letter-spacing: -1px;
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, var(--text) 0%, var(--text-muted) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .subtitle {
+      font-size: 18px;
+      color: var(--text-muted);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* Problem Statement */
+    .problem-section {
+      background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(239, 68, 68, 0.02) 100%);
+      border: 1px solid rgba(239, 68, 68, 0.2);
+      border-radius: 16px;
+      padding: 40px;
+      margin-bottom: 60px;
+    }
+
+    .problem-section h2 {
+      color: var(--danger);
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      margin-bottom: 24px;
+    }
+
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 24px;
+      margin-bottom: 32px;
+    }
+
+    .metric {
+      text-align: center;
+    }
+
+    .metric-value {
+      font-size: 36px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .metric-value.danger { color: var(--danger); }
+    .metric-value.warning { color: var(--warning); }
+    .metric-value.success { color: var(--success); }
+
+    .metric-label {
+      font-size: 12px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: 4px;
+    }
+
+    .insight-box {
+      background: var(--surface);
+      border-radius: 12px;
+      padding: 20px;
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+    }
+
+    .insight-icon {
+      font-size: 24px;
+    }
+
+    .insight-text {
+      font-size: 15px;
+      color: var(--text-muted);
+    }
+
+    .insight-text strong {
+      color: var(--text);
+    }
+
+    /* Phase Cards */
+    .phases-section {
+      margin-bottom: 60px;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 32px;
+    }
+
+    .section-header h2 {
+      font-size: 24px;
+      font-weight: 500;
+    }
+
+    .phase-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      margin-bottom: 16px;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .phase-card:hover {
+      border-color: var(--accent);
+    }
+
+    .phase-card.completed {
+      border-color: var(--success);
+    }
+
+    .phase-header {
+      padding: 24px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .phase-number {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+
+    .phase-0 .phase-number { background: rgba(239, 68, 68, 0.2); color: var(--danger); }
+    .phase-1 .phase-number { background: rgba(245, 158, 11, 0.2); color: var(--warning); }
+    .phase-2 .phase-number { background: rgba(59, 130, 246, 0.2); color: var(--accent); }
+    .phase-3 .phase-number { background: rgba(139, 92, 246, 0.2); color: var(--accent-2); }
+    .phase-4 .phase-number { background: rgba(16, 185, 129, 0.2); color: var(--success); }
+
+    .phase-info {
+      flex: 1;
+    }
+
+    .phase-title {
+      font-size: 16px;
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+
+    .phase-subtitle {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    .phase-status {
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 500;
+    }
+
+    .status-done {
+      background: rgba(16, 185, 129, 0.2);
+      color: var(--success);
+    }
+
+    .status-priority {
+      background: rgba(239, 68, 68, 0.2);
+      color: var(--danger);
+    }
+
+    .status-next {
+      background: rgba(245, 158, 11, 0.2);
+      color: var(--warning);
+    }
+
+    .status-planned {
+      background: var(--surface-2);
+      color: var(--text-muted);
+    }
+
+    .phase-toggle {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      transition: transform 0.3s ease;
+    }
+
+    .phase-card.open .phase-toggle {
+      transform: rotate(180deg);
+    }
+
+    .phase-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease;
+    }
+
+    .phase-card.open .phase-content {
+      max-height: 1000px;
+    }
+
+    .phase-body {
+      padding: 0 24px 24px;
+      border-top: 1px solid var(--border);
+      margin-top: 0;
+      padding-top: 24px;
+    }
+
+    .task-list {
+      list-style: none;
+    }
+
+    .task-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .task-item:last-child {
+      border-bottom: none;
+    }
+
+    .task-check {
+      width: 20px;
+      height: 20px;
+      border-radius: 6px;
+      border: 2px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .task-check.done {
+      background: var(--success);
+      border-color: var(--success);
+      color: white;
+    }
+
+    .task-text {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    .task-item.done .task-text {
+      text-decoration: line-through;
+      opacity: 0.6;
+    }
+
+    /* Referral Section */
+    .referral-section {
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(59, 130, 246, 0.1) 100%);
+      border: 1px solid rgba(139, 92, 246, 0.2);
+      border-radius: 16px;
+      padding: 40px;
+      margin-bottom: 60px;
+    }
+
+    .referral-section h2 {
+      font-size: 24px;
+      margin-bottom: 32px;
+    }
+
+    .referral-flow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      flex-wrap: wrap;
+      margin-bottom: 32px;
+    }
+
+    .referral-box {
+      background: var(--surface);
+      border-radius: 12px;
+      padding: 24px;
+      text-align: center;
+      min-width: 180px;
+    }
+
+    .referral-box-label {
+      font-size: 12px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+
+    .referral-box-value {
+      font-size: 24px;
+      font-weight: 600;
+      color: var(--accent-2);
+    }
+
+    .referral-arrow {
+      font-size: 24px;
+      color: var(--text-muted);
+    }
+
+    .referral-note {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    /* Targets Section */
+    .targets-section {
+      margin-bottom: 60px;
+    }
+
+    .targets-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    .target-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+    }
+
+    .target-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .target-label {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    .target-timeframe {
+      font-size: 11px;
+      padding: 4px 8px;
+      background: var(--surface-2);
+      border-radius: 4px;
+      color: var(--text-muted);
+    }
+
+    .target-value {
+      font-size: 32px;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .target-bar {
+      height: 4px;
+      background: var(--surface-2);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .target-progress {
+      height: 100%;
+      border-radius: 2px;
+      transition: width 0.5s ease;
+    }
+
+    .target-progress.accent { background: var(--accent); }
+    .target-progress.success { background: var(--success); }
+    .target-progress.warning { background: var(--warning); }
+
+    /* Timeline */
+    .timeline-section {
+      margin-bottom: 60px;
+    }
+
+    .timeline {
+      position: relative;
+      padding-left: 32px;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 7px;
+      top: 8px;
+      bottom: 8px;
+      width: 2px;
+      background: var(--border);
+    }
+
+    .timeline-item {
+      position: relative;
+      padding-bottom: 32px;
+    }
+
+    .timeline-item:last-child {
+      padding-bottom: 0;
+    }
+
+    .timeline-dot {
+      position: absolute;
+      left: -28px;
+      top: 4px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--surface);
+      border: 2px solid var(--border);
+    }
+
+    .timeline-item.done .timeline-dot {
+      background: var(--success);
+      border-color: var(--success);
+    }
+
+    .timeline-item.active .timeline-dot {
+      background: var(--accent);
+      border-color: var(--accent);
+      box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
+    }
+
+    .timeline-week {
+      font-size: 12px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 4px;
+    }
+
+    .timeline-title {
+      font-size: 16px;
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+
+    .timeline-desc {
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding-top: 40px;
+      border-top: 1px solid var(--border);
+    }
+
+    footer p {
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    /* Interactive Elements */
+    .clickable {
+      cursor: pointer;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      h1 { font-size: 32px; }
+      .container { padding: 40px 16px; }
+      .problem-section, .referral-section { padding: 24px; }
+      .referral-flow { flex-direction: column; }
+      .referral-arrow { transform: rotate(90deg); }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="badge">PRP-046 Strategy Overview</div>
+      <h1>Growth & Conversion Strategy</h1>
+      <p class="subtitle">Transform traffic into paying customers through funnel optimization, email capture, and community-driven growth.</p>
+    </header>
+
+    <!-- Problem Statement -->
+    <section class="problem-section">
+      <h2>The Problem</h2>
+      <div class="metrics-grid">
+        <div class="metric">
+          <div class="metric-value">324</div>
+          <div class="metric-label">Active Users</div>
+        </div>
+        <div class="metric">
+          <div class="metric-value success">+2,214%</div>
+          <div class="metric-label">Growth</div>
+        </div>
+        <div class="metric">
+          <div class="metric-value danger">0</div>
+          <div class="metric-label">Conversions</div>
+        </div>
+        <div class="metric">
+          <div class="metric-value warning">7.4%</div>
+          <div class="metric-label">Return Rate</div>
+        </div>
+        <div class="metric">
+          <div class="metric-value danger">0%</div>
+          <div class="metric-label">Paid Retention</div>
+        </div>
+      </div>
+      <div class="insight-box">
+        <span class="insight-icon">💡</span>
+        <p class="insight-text">
+          <strong>This is a conversion problem, not a traffic problem.</strong>
+          You have users visiting, but they're not converting or returning.
+          42% of traffic came from paid ads with 0% retention — we paused that spend.
+        </p>
+      </div>
+    </section>
+
+    <!-- Strategy Phases -->
+    <section class="phases-section">
+      <div class="section-header">
+        <h2>Strategy Phases</h2>
+      </div>
+
+      <!-- Phase 0 -->
+      <div class="phase-card phase-0 completed open" data-phase="0">
+        <div class="phase-header clickable" onclick="togglePhase(0)">
+          <div class="phase-number">0</div>
+          <div class="phase-info">
+            <div class="phase-title">Paid Ads Audit</div>
+            <div class="phase-subtitle">Stop wasteful spending immediately</div>
+          </div>
+          <span class="phase-status status-done">Done</span>
+          <div class="phase-toggle">▼</div>
+        </div>
+        <div class="phase-content">
+          <div class="phase-body">
+            <ul class="task-list">
+              <li class="task-item done">
+                <span class="task-check done">✓</span>
+                <span class="task-text">Calculate CPA — Infinite (CHF 32.35 spent, 0 conversions)</span>
+              </li>
+              <li class="task-item done">
+                <span class="task-check done">✓</span>
+                <span class="task-text">Pause Google Ads campaign "typebit8 - Learn Typing"</span>
+              </li>
+              <li class="task-item">
+                <span class="task-check"></span>
+                <span class="task-text">Set up retargeting pixels before resuming</span>
+              </li>
+              <li class="task-item">
+                <span class="task-check"></span>
+                <span class="task-text">Create dedicated landing page for ad traffic</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phase 1 -->
+      <div class="phase-card phase-1" data-phase="1">
+        <div class="phase-header clickable" onclick="togglePhase(1)">
+          <div class="phase-number">1</div>
+          <div class="phase-info">
+            <div class="phase-title">Fix the Funnel</div>
+            <div class="phase-subtitle">Optimize conversion path before driving more traffic</div>
+          </div>
+          <span class="phase-status status-priority">Priority</span>
+          <div class="phase-toggle">▼</div>
+        </div>
+        <div class="phase-content">
+          <div class="phase-body">
+            <ul class="task-list">
+              <li class="task-item">
+                <span class="task-check"></span>
+                <span class="task-text">Reduce free tier from 9 to 6 levels (create paywall urgency)</span>
+              </li>
+              <li class="task-item">
+                <span class="task-check"></span>
+                <span class="task-text">Add premium teasers during free gameplay</span>
+              </li>
+              <li class="task-item">
+                <span class="task-check"></span>
+                <span class="task-text">Show progress bar with locked content preview</span>
+              </li>
+              <li class="task-item">
+                <span class="task-check"></span>
+                <span class="task-text">Implement regional pricing ($1.99/mo for India, etc.)</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phase 2 -->
+      <div class="phase-card phase-2" data-phase="2">
+        <div class="phase-header clickable" onclick="togglePhase(2)">
+          <div class="phase-number">2</div>
+          <div class="phase-info">
+            <div class="phase-title">Email Capture & Nurture</div>
+            <div class="phase-subtitle">Capture leads, build relationships, convert via email</div>
+          </div>
+          <span class="phase-status status-next">Next</span>
+          <div class="phase-toggle">▼</div>
+        </div>
+        <div class="phase-content">
+          <div class="phase-body">
+            <ul class="task-list">
+              <li class="task-item">
+                <span class="task-check"></span>
+                <span class="task-text">Add email capture to speed test results page</span>
+              </li>
+              <li class="task-item done">
+                <span class="task-check done">✓</span>
+                <span class="task-text">Create welcome referral email template</span>
+              </li>
+              <li class="task-item">
+                <span class="task-check"></span>
+                <span class="task-text">Build 6-email nurture sequence</span>
+              </li>
+              <li class="task-item">
+                <span class="task-check"></span>
+                <span class="task-text">Set up email service (Resend/Postmark)</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phase 3 -->
+      <div class="phase-card phase-3" data-phase="3">
+        <div class="phase-header clickable" onclick="togglePhase(3)">
+          <div class="phase-number">3</div>
+          <div class="phase-info">
+            <div class="phase-title">Referral Program</div>
+            <div class="phase-subtitle">Create viral loop for organic growth</div>
+          </div>
+          <span class="phase-status status-planned">Planned</span>
+          <div class="phase-toggle">▼</div>
+        </div>
+        <div class="phase-content">
+          <div class="phase-body">
+            <ul class="task-list">
+              <li class="task-item">
+                <span class="task-check"></span>
+                <span class="task-text">Build referral code generation system</span>
+              </li>
+              <li class="task-item">
+                <span class="task-check"></span>
+                <span class="task-text">Create referral sharing UI panel</span>
+              </li>
+              <li class="task-item">
+                <span class="task-check"></span>
+                <span class="task-text">Implement Stripe coupon integration</span>
+              </li>
+              <li class="task-item">
+                <span class="task-check"></span>
+                <span class="task-text">Set up reward tracking & attribution</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Phase 4 -->
+      <div class="phase-card phase-4" data-phase="4">
+        <div class="phase-header clickable" onclick="togglePhase(4)">
+          <div class="phase-number">4</div>
+          <div class="phase-info">
+            <div class="phase-title">Community Distribution</div>
+            <div class="phase-subtitle">Reddit, Product Hunt, targeted communities</div>
+          </div>
+          <span class="phase-status status-planned">Planned</span>
+          <div class="phase-toggle">▼</div>
+        </div>
+        <div class="phase-content">
+          <div class="phase-body">
+            <ul class="task-list">
+              <li class="task-item">
+                <span class="task-check"></span>
+                <span class="task-text">Write educational Reddit posts (r/typing, r/learnprogramming)</span>
+              </li>
+              <li class="task-item">
+                <span class="task-check"></span>
+                <span class="task-text">Prepare Product Hunt launch assets</span>
+              </li>
+              <li class="task-item">
+                <span class="task-check"></span>
+                <span class="task-text">Submit to AlternativeTo</span>
+              </li>
+              <li class="task-item">
+                <span class="task-check"></span>
+                <span class="task-text">Pivot X/TikTok to engagement-first content</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Referral Program -->
+    <section class="referral-section">
+      <h2>Referral Program Structure</h2>
+      <div class="referral-flow">
+        <div class="referral-box">
+          <div class="referral-box-label">Referrer Gets</div>
+          <div class="referral-box-value">50% Off</div>
+        </div>
+        <span class="referral-arrow">→</span>
+        <div class="referral-box">
+          <div class="referral-box-label">When Friend</div>
+          <div class="referral-box-value">Pays</div>
+        </div>
+        <span class="referral-arrow">→</span>
+        <div class="referral-box">
+          <div class="referral-box-label">Friend Gets</div>
+          <div class="referral-box-value">30% Off</div>
+        </div>
+      </div>
+      <p class="referral-note">Referrer: 50% off next month (after friend pays). Friend: 30% off first month at checkout.</p>
+    </section>
+
+    <!-- Targets -->
+    <section class="targets-section">
+      <div class="section-header">
+        <h2>Success Metrics</h2>
+      </div>
+      <div class="targets-grid">
+        <div class="target-card">
+          <div class="target-header">
+            <span class="target-label">Paying Customers</span>
+            <span class="target-timeframe">30 Days</span>
+          </div>
+          <div class="target-value">10</div>
+          <div class="target-bar">
+            <div class="target-progress accent" style="width: 0%"></div>
+          </div>
+        </div>
+        <div class="target-card">
+          <div class="target-header">
+            <span class="target-label">Email Capture Rate</span>
+            <span class="target-timeframe">Speed Test</span>
+          </div>
+          <div class="target-value">15%</div>
+          <div class="target-bar">
+            <div class="target-progress success" style="width: 0%"></div>
+          </div>
+        </div>
+        <div class="target-card">
+          <div class="target-header">
+            <span class="target-label">Free→Paid Conversion</span>
+            <span class="target-timeframe">30 Days</span>
+          </div>
+          <div class="target-value">2%</div>
+          <div class="target-bar">
+            <div class="target-progress warning" style="width: 0%"></div>
+          </div>
+        </div>
+        <div class="target-card">
+          <div class="target-header">
+            <span class="target-label">Referral Users</span>
+            <span class="target-timeframe">30 Days</span>
+          </div>
+          <div class="target-value">50</div>
+          <div class="target-bar">
+            <div class="target-progress accent" style="width: 0%"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Timeline -->
+    <section class="timeline-section">
+      <div class="section-header">
+        <h2>Implementation Timeline</h2>
+      </div>
+      <div class="timeline">
+        <div class="timeline-item done">
+          <div class="timeline-dot"></div>
+          <div class="timeline-week">Immediate</div>
+          <div class="timeline-title">Pause Paid Ads</div>
+          <div class="timeline-desc">Stop wasteful spend until funnel is fixed. Saving ~$480/month.</div>
+        </div>
+        <div class="timeline-item active">
+          <div class="timeline-dot"></div>
+          <div class="timeline-week">Week 1</div>
+          <div class="timeline-title">Funnel Optimization</div>
+          <div class="timeline-desc">Reduce free tier, add premium teasers, implement regional pricing.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-week">Week 1-2</div>
+          <div class="timeline-title">Email Capture</div>
+          <div class="timeline-desc">Add email capture to speed test, build nurture sequence.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-week">Week 2-3</div>
+          <div class="timeline-title">Referral Program</div>
+          <div class="timeline-desc">Launch referral system with 50% off rewards.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-week">Week 3-4</div>
+          <div class="timeline-title">Community Launch</div>
+          <div class="timeline-desc">Product Hunt, Reddit presence, AlternativeTo listing.</div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <p>TypeBit8 Growth Strategy • PRP-046 • Last updated: December 30, 2025</p>
+    </footer>
+  </div>
+
+  <script>
+    function togglePhase(phaseNum) {
+      const card = document.querySelector(`[data-phase="${phaseNum}"]`);
+      card.classList.toggle('open');
+    }
+
+    // Animate progress bars on scroll
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const progressBars = entry.target.querySelectorAll('.target-progress');
+          progressBars.forEach((bar, index) => {
+            setTimeout(() => {
+              // Simulate current progress (0% since we're just starting)
+              bar.style.width = '0%';
+            }, index * 150);
+          });
+        }
+      });
+    }, { threshold: 0.5 });
+
+    const targetsSection = document.querySelector('.targets-section');
+    if (targetsSection) {
+      observer.observe(targetsSection);
+    }
+  </script>
+</body>
+</html>

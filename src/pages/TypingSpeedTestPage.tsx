@@ -2,6 +2,8 @@ import { useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { SEOHead, schemas } from '../components/SEOHead';
 import { SpeedTest } from '../components/SpeedTest';
+import { EmailCapture } from '../components/EmailCapture';
+import { useRegionalPricing } from '../hooks/useRegionalPricing';
 
 const faqs = [
   {
@@ -31,6 +33,7 @@ export function TypingSpeedTestPage() {
     wpm: number;
     accuracy: number;
   } | null>(null);
+  const { country } = useRegionalPricing();
 
   const handleComplete = useCallback(
     (
@@ -151,6 +154,16 @@ export function TypingSpeedTestPage() {
                       ACCURACY
                     </div>
                   </div>
+                </div>
+
+                {/* PRP-046: Email Capture */}
+                <div className="mt-6">
+                  <EmailCapture
+                    wpm={testResult.wpm}
+                    accuracy={testResult.accuracy}
+                    source="speed_test"
+                    country={country}
+                  />
                 </div>
 
                 {/* CTA to full course */}

@@ -295,6 +295,10 @@ export function LessonView({ lesson, onComplete, onQuizComplete, onBack, keyboar
       accuracy: Math.round(exerciseStats.reduce((sum, s) => sum + s.accuracy, 0) / exerciseStats.length),
     } : { wpm: 0, accuracy: 0 };
 
+    // PRP-046: Show premium teaser when completing the last free level (level 6)
+    const LAST_FREE_LEVEL = 6;
+    const showPremiumTeaser = lesson.id === LAST_FREE_LEVEL && !isPremium;
+
     return (
       <div className="max-w-2xl mx-auto text-center space-y-8">
         {/* Reward Popup */}
@@ -324,6 +328,45 @@ export function LessonView({ lesson, onComplete, onQuizComplete, onBack, keyboar
             </p>
           )}
         </div>
+
+        {/* PRP-046: Premium Teaser after completing last free level */}
+        {showPremiumTeaser && (
+          <div
+            className="pixel-box p-6"
+            style={{
+              fontFamily: "'Press Start 2P'",
+              borderColor: '#ffd93d',
+              background: 'linear-gradient(180deg, #1a1a2e 0%, #16213e 100%)',
+            }}
+          >
+            <div style={{ fontSize: '10px', color: '#ffd93d', marginBottom: '12px' }}>
+              👑 YOU'VE COMPLETED ALL FREE LEVELS!
+            </div>
+            <div style={{ fontSize: '8px', color: '#eef5db', lineHeight: '2', marginBottom: '16px' }}>
+              Unlock 44 more levels including:
+            </div>
+            <div style={{ fontSize: '7px', color: '#3bceac', lineHeight: '2.2', textAlign: 'left', maxWidth: '280px', margin: '0 auto' }}>
+              <div>• Bottom Row Mastery (Levels 11-15)</div>
+              <div>• Numbers & Symbols (Levels 16-20)</div>
+              <div>• Advanced Techniques (Levels 21-25)</div>
+              <div>• AI Prompts Theme (Levels 31-35)</div>
+              <div>• Developer Patterns (Levels 36-40)</div>
+              <div>• Business Communication (Levels 41-45)</div>
+            </div>
+            <div style={{ marginTop: '16px' }}>
+              <a
+                href="/premium"
+                className="pixel-btn pixel-btn-yellow"
+                style={{ fontSize: '10px', display: 'inline-block', textDecoration: 'none' }}
+              >
+                UNLOCK PREMIUM →
+              </a>
+            </div>
+            <div style={{ fontSize: '6px', color: '#4a4a6e', marginTop: '12px' }}>
+              Only $4.99/month • Cancel anytime
+            </div>
+          </div>
+        )}
 
         <div className="grid grid-cols-2 gap-4">
           <div className="pixel-box p-6 text-center">
@@ -359,7 +402,7 @@ export function LessonView({ lesson, onComplete, onQuizComplete, onBack, keyboar
             className="pixel-btn pixel-btn-green"
             style={{ fontSize: '10px' }}
           >
-            NEXT LEVEL →
+            {showPremiumTeaser ? 'VIEW LEVELS' : 'NEXT LEVEL →'}
           </button>
         </div>
       </div>
