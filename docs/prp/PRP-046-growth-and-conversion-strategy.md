@@ -1067,6 +1067,174 @@ export const processReferralConversion = mutation({
 });
 ```
 
+### 3.8 IMPLEMENTATION STATUS (Updated Dec 31, 2024)
+
+#### What's Implemented ✅
+
+| Component | File | Status |
+|-----------|------|--------|
+| Referral code generation | `convex/referrals.ts` | ✅ Working |
+| Code storage (Convex DB) | `convex/schema.ts` | ✅ `referralCodes`, `referralRedemptions` tables |
+| URL parameter detection | `src/hooks/useReferral.ts` | ✅ Detects `?ref=CODE` |
+| localStorage persistence | `src/hooks/useReferral.ts` | ✅ Stores code until signup |
+| Auto-redeem on signup | `src/hooks/useReferral.ts` | ✅ Redeems when user signs in |
+| Referral stats tracking | `convex/referrals.ts` | ✅ `getMyReferralStats` query |
+| ReferralPanel UI | `src/components/ReferralPanel.tsx` | ✅ Shows code, stats, sharing |
+| Discount banner | `src/components/PremiumPage.tsx` | ✅ Shows when user has referral |
+
+#### What Still Needs Setup ⚠️
+
+**1. Stripe Coupon Creation (REQUIRED)**
+
+Create in Stripe Dashboard → Products → Coupons:
+
+```
+Name: FRIEND30
+ID: FRIEND30
+Type: Percentage
+Percent off: 30%
+Duration: Once (first payment only)
+Max redemptions: Unlimited (or set limit)
+```
+
+Then create a Promotion Code:
+```
+Code: FRIEND30
+Coupon: FRIEND30 (link to above)
+Restrictions: None (or first-time customers only)
+```
+
+**2. Clerk Billing Configuration**
+
+Check Clerk Dashboard → Billing → Settings:
+- [ ] Ensure "Allow promotion codes at checkout" is enabled
+- [ ] Verify Stripe connection is active
+
+**3. Subscription Conversion Tracking (Optional Enhancement)**
+
+Currently using polling via `usePremium()`. For instant detection:
+
+Option A: Clerk Webhook
+```
+Clerk Dashboard → Webhooks → Add endpoint
+URL: https://typebit8.com/api/webhooks/clerk
+Events: user.subscription.created
+```
+
+Option B: Stripe Webhook (if direct Stripe access)
+```
+Stripe Dashboard → Webhooks → Add endpoint
+URL: https://typebit8.com/api/webhooks/stripe
+Events: customer.subscription.created
+```
+
+**4. Referrer Credit System (Manual for MVP)**
+
+Current approach:
+- Credits tracked in Convex (`totalCreditsEarned` field)
+- Apply manually via Stripe Dashboard when referrer earns 100% (2 referrals)
+
+Post-MVP automation:
+- Use Stripe Customer Balance API to auto-apply credits
+- Requires storing Stripe customer ID in Convex
+
+#### How to Test the Referral Flow
+
+1. **Generate a referral code:**
+   - Sign in to TypeBit8
+   - Code auto-generates (visible in ReferralPanel if implemented)
+   - Or check Convex Dashboard → `referralCodes` table
+
+2. **Test the referral link:**
+   ```
+   https://typebit8.com/?ref=YOURCODE
+   ```
+   - Open in incognito window
+   - Check localStorage: `typebit8_referral_code` should be set
+   - URL should clean up (remove `?ref=` param)
+
+3. **Test redemption:**
+   - Sign up as new user (in incognito)
+   - Check Convex → `referralRedemptions` table for new entry
+   - Status should be `signed_up`
+
+4. **Test discount display:**
+   - As referred user, go to Premium page
+   - Should see "FRIEND DISCOUNT ACTIVE!" banner
+   - Shows code `FRIEND30` to enter at checkout
+
+5. **Test conversion tracking:**
+   - Subscribe using `FRIEND30` code
+   - Check `referralRedemptions` → status should update
+   - Referrer's `totalCreditsEarned` should increment
+
+#### Data Flow Diagram
+
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│                    REFERRAL SYSTEM DATA FLOW                         │
+├─────────────────────────────────────────────────────────────────────┤
+│                                                                      │
+│  USER A (Referrer)                    USER B (Referee)               │
+│  ┌──────────────┐                     ┌──────────────┐               │
+│  │ Signs in     │                     │ Clicks link  │               │
+│  │ Gets code:   │ ──── shares ────►   │ ?ref=ABCD123 │               │
+│  │ ABCD1234     │     link            │              │               │
+│  └──────────────┘                     └──────┬───────┘               │
+│                                              │                       │
+│                                              ▼                       │
+│                                     ┌──────────────┐                 │
+│                                     │ localStorage │                 │
+│                                     │ stores code  │                 │
+│                                     └──────┬───────┘                 │
+│                                            │                         │
+│                                            ▼                         │
+│                                     ┌──────────────┐                 │
+│                                     │ User B signs │                 │
+│                                     │ up (Clerk)   │                 │
+│                                     └──────┬───────┘                 │
+│                                            │                         │
+│                                            ▼                         │
+│  ┌─────────────────────────────────────────────────────────────┐    │
+│  │  CONVEX DATABASE                                             │    │
+│  │  ┌─────────────────┐      ┌─────────────────────────┐       │    │
+│  │  │ referralCodes   │      │ referralRedemptions     │       │    │
+│  │  │ ─────────────── │      │ ─────────────────────── │       │    │
+│  │  │ code: ABCD1234  │◄────►│ referralCodeId          │       │    │
+│  │  │ clerkId: userA  │      │ referrerClerkId: userA  │       │    │
+│  │  │ totalReferrals  │      │ refereeClerkId: userB   │       │    │
+│  │  │ totalCredits    │      │ status: signed_up       │       │    │
+│  │  └─────────────────┘      └─────────────────────────┘       │    │
+│  └─────────────────────────────────────────────────────────────┘    │
+│                                            │                         │
+│                                            ▼                         │
+│                                     ┌──────────────┐                 │
+│                                     │ Premium Page │                 │
+│                                     │ shows banner │                 │
+│                                     │ "Use FRIEND30│                 │
+│                                     │ for 30% off" │                 │
+│                                     └──────┬───────┘                 │
+│                                            │                         │
+│                                            ▼                         │
+│                                     ┌──────────────┐                 │
+│                                     │ Clerk Billing│                 │
+│                                     │ Checkout     │                 │
+│                                     │ User enters  │                 │
+│                                     │ FRIEND30     │                 │
+│                                     └──────┬───────┘                 │
+│                                            │                         │
+│                                            ▼                         │
+│                                     ┌──────────────┐                 │
+│  ┌──────────────┐                   │ status:      │                 │
+│  │ User A gets  │◄── notification ──│ subscribed   │                 │
+│  │ 50% credit   │                   │ ────────────►│                 │
+│  │ next month   │                   │ referrer     │                 │
+│  └──────────────┘                   │ credited     │                 │
+│                                     └──────────────┘                 │
+│                                                                      │
+└─────────────────────────────────────────────────────────────────────┘
+```
+
 ---
 
 ## Phase 4: Community Distribution
