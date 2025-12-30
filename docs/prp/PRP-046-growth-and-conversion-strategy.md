@@ -1,6 +1,6 @@
 # PRP-046: Growth & Conversion Strategy
 
-**Status**: DRAFT
+**Status**: IMPLEMENTED
 **Author**: Claude + Anton
 **Date**: 2025-12-30
 **Priority**: CRITICAL
@@ -1104,13 +1104,18 @@ Coupon: FRIEND30 (link to above)
 Restrictions: None (or first-time customers only)
 ```
 
-**2. Clerk Billing Configuration**
+**2. Clerk Billing Configuration** (MANUAL - Clerk Dashboard)
 
 Check Clerk Dashboard → Billing → Settings:
 - [ ] Ensure "Allow promotion codes at checkout" is enabled
 - [ ] Verify Stripe connection is active
 
-**3. Subscription Conversion Tracking (Optional Enhancement)**
+**3. WELCOME20 Coupon** (MANUAL - Stripe Dashboard)
+
+Create in Stripe Dashboard → Products → Coupons:
+- [ ] Create coupon: WELCOME20 (20% off, once) - referenced in Day 14 nurture email
+
+**4. Subscription Conversion Tracking (Optional Enhancement)**
 
 Currently using polling via `usePremium()`. For instant detection:
 
@@ -1128,7 +1133,7 @@ URL: https://typebit8.com/api/webhooks/stripe
 Events: customer.subscription.created
 ```
 
-**4. Referrer Credit System (Manual for MVP)**
+**5. Referrer Credit System (Manual for MVP)**
 
 Current approach:
 - Credits tracked in Convex (`totalCreditsEarned` field)
@@ -1445,17 +1450,17 @@ Submit to AlternativeTo.net as alternative to:
 - [x] Add premium teaser on level 6 completion
 - [x] Add progress bar with locked content preview
 - [x] Implement regional pricing detection (useRegionalPricing hook)
-- [ ] Create emerging market Stripe prices
+- [ ] Create emerging market Stripe prices (MANUAL: Stripe Dashboard)
 - [x] Add email capture to speed test page (EmailCapture component)
-- [ ] Set up email service (Resend/Postmark)
-- [ ] Create speed test results email template
+- [x] Set up email service (Resend) - API key configured in Convex
+- [x] Create speed test results email template (convex/emails.ts)
 
 ### Week 2: Email & Early Referrals
 - [x] Design welcome referral email template (PR #2)
 - [x] Create email preview system (PR #2)
-- [ ] Build remaining nurture sequence (5 emails)
+- [x] Build remaining nurture sequence (5 emails) - All 5 templates in convex/emails.ts
 - [x] Create leads database table (convex/leads.ts)
-- [ ] Implement email scheduler
+- [x] Implement email scheduler - Cron job in convex/crons.ts (daily at 10:00 UTC)
 - [x] Design referral code system (convex/referrals.ts)
 - [x] Create referral database tables (referralCodes, referralRedemptions)
 - [x] Build basic referral UI (ReferralPanel.tsx)
@@ -1463,12 +1468,12 @@ Submit to AlternativeTo.net as alternative to:
 
 ### Week 3: Referral Program Launch
 - [x] Complete referral panel UI (ReferralPanel.tsx)
-- [ ] Implement Stripe coupon creation
+- [x] Implement Stripe coupon creation - FRIEND30 created in Stripe Dashboard
 - [x] Build referral conversion tracking (processReferralConversion mutation)
 - [x] Add referral credit system (totalCreditsEarned, pendingCredits)
-- [ ] Create referral reward emails
+- [x] Create referral reward emails - referralRewardTemplate in convex/emails.ts
 - [x] Test end-to-end referral flow
-- [ ] Launch referral program
+- [ ] Launch referral program (manual: marketing announcement)
 
 ### Week 4: Community & Launch
 - [ ] Write 3 Reddit educational posts
@@ -1756,9 +1761,9 @@ open src/emails/preview.html
 **Week 2: Email & Early Referrals**
 - [x] ~~Design referral welcome email template~~ DONE
 - [x] ~~Create email preview system~~ DONE
-- [ ] Build email nurture sequence (remaining 5 emails)
+- [x] Build email nurture sequence (remaining 5 emails) - DONE (2025-12-31)
 - [x] Create leads database table (convex/leads.ts)
-- [ ] Implement email scheduler
+- [x] Implement email scheduler - DONE (2025-12-31)
 - [x] Design referral code system (convex/referrals.ts)
 - [x] Create referral database tables (referralCodes, referralRedemptions)
 - [x] Build basic referral UI (ReferralPanel.tsx)
@@ -1851,3 +1856,87 @@ TypeBit8
 | 4 | Day 7 | "Ready to level up?" | Soft CTA |
 | 5 | Day 14 | "Special offer: 20% off first month" | Conversion push |
 | 6 | Day 21 | "Last chance: Your typing journey awaits" | Final reminder |
+
+---
+
+## Implementation Notes (2025-12-31)
+
+### Email Infrastructure Completed
+
+**Resend Integration** - 2025-12-31
+- [x] Created Resend API key: `typebit8`
+- [x] Configured `RESEND_API_KEY` in Convex environment
+- [x] Created `convex/emails.ts` with:
+  - `sendWelcomeEmail` - Sends speed test results email
+  - `sendReferralRewardEmail` - Notifies referrer of credit
+  - `triggerWelcomeEmail` - Public action for client calls
+  - `testEmail` - Debug endpoint
+- [x] Updated `src/components/EmailCapture.tsx` to trigger welcome email on capture
+
+**Email Templates Implemented:**
+1. **Welcome Email** (`welcomeEmailTemplate`) - Sends speed test results with:
+   - WPM and accuracy display
+   - Personalized improvement tips
+   - CTA to start training
+   - UTM tracking for conversion analysis
+
+2. **Referral Reward Email** (`referralRewardTemplate`) - Notifies referrer when:
+   - Friend subscribes to premium
+   - Credit is applied to their account
+   - Shows discount amount earned
+
+**Current Limitation:**
+- Using Resend test domain (`onboarding@resend.dev`) - only sends to verified emails
+- Production requires upgrading to Resend Pro ($20/mo) to add typebit8.com domain
+- Alternative: Replace existing draiv.ch domain with typebit8.com in free tier
+
+**Files Created/Modified:**
+```
+convex/emails.ts              - New: Resend email integration
+src/components/EmailCapture.tsx - Modified: Added email sending
+```
+
+**Environment Variables Set:**
+```
+RESEND_API_KEY=re_bHVo9dZy_... (configured in Convex)
+```
+
+### FRIEND30 Stripe Coupon (Previously Completed)
+
+- Coupon created: `FRIEND30`
+- Type: 30% off first month
+- Duration: Once
+- Used for referee discount in referral program
+
+### Nurture Email Sequence (2025-12-31)
+
+**5 nurture emails implemented in `convex/emails.ts`:**
+
+| Step | Day | Subject | Template Function |
+|------|-----|---------|-------------------|
+| 1 | Day 2 | "How to improve 10 WPM in just 1 week" | `improve10wpmTemplate()` |
+| 2 | Day 5 | "The 10-finger technique explained" | `tenFingerTechniqueTemplate()` |
+| 3 | Day 7 | "Ready to level up your typing?" | `readyToLevelUpTemplate()` |
+| 4 | Day 14 | "Special offer: 20% off Premium" | `specialOfferTemplate()` |
+| 5 | Day 21 | "Last chance: Your typing journey awaits" | `finalReminderTemplate()` |
+
+**Automation:**
+- Cron job: `nurture-email-processor` runs daily at 10:00 UTC
+- Processes leads with `marketingConsent: true`
+- Skips leads who converted or unsubscribed
+- Tracks progress via `emailSequenceStep` field in leads table
+
+**Schema additions:**
+- `emailSequenceStep` - Tracks current nurture step (0-5)
+- `unsubscribed` - Opt-out flag
+- New index: `by_nurture` for efficient querying
+
+### Unsubscribe System (2025-12-31)
+
+- `convex/leads.ts` - Added `unsubscribe` mutation and `getUnsubscribeStatus` query
+- `src/components/UnsubscribePage.tsx` - New unsubscribe page with pixel-art styling
+- `src/App.tsx` - Added URL-based routing for `/unsubscribe`, `/premium`, `/privacy`, `/terms`, `/impressum`
+
+**Stripe Coupon Note:**
+- WELCOME20 coupon (20% off) referenced in Day 14 nurture email needs to be created in Stripe Dashboard
+- Similar to FRIEND30, create as: 20% off, once, for new subscribers

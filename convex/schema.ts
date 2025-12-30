@@ -263,10 +263,13 @@ export default defineSchema({
     clerkId: v.optional(v.string()), // Links to user if converted
     createdAt: v.number(),
     lastEmailSent: v.optional(v.number()),
+    emailSequenceStep: v.optional(v.number()), // 0=welcome, 1-5=nurture sequence
+    unsubscribed: v.optional(v.boolean()), // User opted out of emails
   })
     .index("by_email", ["email"])
     .index("by_source", ["source"])
-    .index("by_converted", ["convertedToUser"]),
+    .index("by_converted", ["convertedToUser"])
+    .index("by_nurture", ["marketingConsent", "convertedToUser", "unsubscribed"]),
 
   // ═══════════════════════════════════════════════════════════════════
   // PRP-046: REFERRALS

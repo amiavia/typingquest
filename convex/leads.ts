@@ -126,3 +126,52 @@ export const getLeadsStats = query({
     };
   },
 });
+
+/**
+ * Unsubscribe a lead from marketing emails
+ */
+export const unsubscribe = mutation({
+  args: {
+    email: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const lead = await ctx.db
+      .query("leads")
+      .withIndex("by_email", (q) => q.eq("email", args.email.toLowerCase()))
+      .first();
+
+    if (lead) {
+      await ctx.db.patch(lead._id, {
+        unsubscribed: true,
+        marketingConsent: false,
+      });
+      return { success: true };
+    }
+
+    return { success: false, error: "Email not found" };
+  },
+});
+
+/**
+ * Get unsubscribe status for a lead
+ */
+export const getUnsubscribeStatus = query({
+  args: {
+    email: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const lead = await ctx.db
+      .query("leads")
+      .withIndex("by_email", (q) => q.eq("email", args.email.toLowerCase()))
+      .first();
+
+    if (!lead) {
+      return { found: false, unsubscribed: false };
+    }
+
+    return {
+      found: true,
+      unsubscribed: lead.unsubscribed ?? false,
+    };
+  },
+});

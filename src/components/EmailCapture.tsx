@@ -6,7 +6,7 @@
  */
 
 import { useState } from 'react';
-import { useMutation } from 'convex/react';
+import { useMutation, useAction } from 'convex/react';
 import { api } from '../../convex/_generated/api';
 
 interface EmailCaptureProps {
@@ -23,6 +23,7 @@ export function EmailCapture({ wpm, accuracy, source, country }: EmailCapturePro
   const [errorMessage, setErrorMessage] = useState('');
 
   const captureLead = useMutation(api.leads.captureLead);
+  const sendWelcomeEmail = useAction(api.emails.triggerWelcomeEmail);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -37,13 +38,22 @@ export function EmailCapture({ wpm, accuracy, source, country }: EmailCapturePro
     setErrorMessage('');
 
     try {
-      await captureLead({
+      // Capture lead first
+      const result = await captureLead({
         email,
         source,
         speedTestResult: { wpm, accuracy },
         country,
         marketingConsent: consent,
       });
+
+      // Send welcome email if new lead and consented
+      if (result.isNew && consent) {
+        sendWelcomeEmail({ email, wpm, accuracy }).catch((err) => {
+          console.error('[EmailCapture] Failed to send welcome email:', err);
+        });
+      }
+
       setStatus('success');
     } catch (err) {
       console.error('Failed to capture lead:', err);

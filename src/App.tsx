@@ -13,6 +13,7 @@ import { GuestBanner } from './components/GuestBanner';
 import { MigrationModal } from './components/MigrationModal';
 import { Leaderboard } from './components/Leaderboard';
 import { LegalPage } from './components/LegalPage';
+import { UnsubscribePage } from './components/UnsubscribePage';
 import { DailyChallengeView } from './components/DailyChallengeView';
 import { Shop } from './components/Shop';
 import { PremiumPage } from './components/PremiumPage';
@@ -32,7 +33,7 @@ import { useQuery, useMutation } from 'convex/react';
 import { api } from '../convex/_generated/api';
 import { useAuth, useClerk } from '@clerk/clerk-react';
 
-type View = 'home' | 'lesson' | 'legal' | 'shop' | 'premium' | 'daily-challenge';
+type View = 'home' | 'lesson' | 'legal' | 'shop' | 'premium' | 'daily-challenge' | 'unsubscribe';
 type LegalPageType = 'impressum' | 'privacy' | 'terms';
 
 // Loading screen duration in ms
@@ -49,6 +50,7 @@ const LOADING_MESSAGES: Record<View, string> = {
   'shop': 'OPENING SHOP...',
   'premium': 'LOADING PREMIUM...',
   'daily-challenge': 'PREPARING CHALLENGE...',
+  'unsubscribe': 'LOADING...',
 };
 
 function App() {
@@ -77,6 +79,25 @@ function App() {
       localStorage.setItem('typebit8_keyboard_verified', 'true');
     }
   }, [mobileKeyboardVerified]);
+
+  // Handle URL-based routing for special pages
+  useEffect(() => {
+    const path = window.location.pathname;
+    if (path === '/unsubscribe') {
+      setView('unsubscribe');
+    } else if (path === '/premium') {
+      setView('premium');
+    } else if (path === '/privacy') {
+      setSelectedLegalPage('privacy');
+      setView('legal');
+    } else if (path === '/terms') {
+      setSelectedLegalPage('terms');
+      setView('legal');
+    } else if (path === '/impressum') {
+      setSelectedLegalPage('impressum');
+      setView('legal');
+    }
+  }, []);
 
   // Get layout from global context
   const { layout: keyboardLayout, isLocked: keyboardLocked, lockLayout } = useKeyboardLayout();
@@ -316,6 +337,17 @@ function App() {
       <LegalPage
         page={selectedLegalPage}
         onBack={() => navigateTo('home')}
+      />
+    );
+  }
+
+  if (view === 'unsubscribe') {
+    return (
+      <UnsubscribePage
+        onBack={() => {
+          window.history.replaceState({}, '', '/');
+          navigateTo('home');
+        }}
       />
     );
   }

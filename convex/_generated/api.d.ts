@@ -13,6 +13,7 @@ import type * as auth from "../auth.js";
 import type * as coins from "../coins.js";
 import type * as crons from "../crons.js";
 import type * as dailyChallenges from "../dailyChallenges.js";
+import type * as emails from "../emails.js";
 import type * as gameState from "../gameState.js";
 import type * as http from "../http.js";
 import type * as leaderboard from "../leaderboard.js";
@@ -42,6 +43,7 @@ declare const fullApi: ApiFromModules<{
   coins: typeof coins;
   crons: typeof crons;
   dailyChallenges: typeof dailyChallenges;
+  emails: typeof emails;
   gameState: typeof gameState;
   http: typeof http;
   leaderboard: typeof leaderboard;
