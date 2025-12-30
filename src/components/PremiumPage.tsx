@@ -12,6 +12,10 @@ import { useRegionalPricing } from "../hooks/useRegionalPricing";
 
 interface PremiumPageProps {
   onClose?: () => void;
+  referralDiscount?: {
+    code: string;
+    percent: number;
+  };
 }
 
 // Premium benefits for display - PRP-046: Updated level range from 10-30 to 7-50
@@ -24,7 +28,7 @@ const PREMIUM_BENEFITS = [
   { icon: "⚡", title: "PRIORITY SUPPORT", description: "Get help faster" },
 ];
 
-export function PremiumPage({ onClose }: PremiumPageProps) {
+export function PremiumPage({ onClose, referralDiscount }: PremiumPageProps) {
   const { isPremium, plan, isLoading } = usePremium();
   const { openUserProfile } = useClerk();
   const { pricing, country, isEmergingMarket } = useRegionalPricing();
@@ -64,6 +68,30 @@ export function PremiumPage({ onClose }: PremiumPageProps) {
         </h1>
         <div /> {/* Spacer */}
       </header>
+
+      {/* PRP-046: Referral Discount Banner */}
+      {referralDiscount && !isPremium && (
+        <section
+          className="mx-auto mb-6 p-4 max-w-2xl text-center"
+          style={{
+            background: "linear-gradient(135deg, rgba(14,173,105,0.2) 0%, rgba(59,206,172,0.2) 100%)",
+            border: "3px solid #0ead69",
+            boxShadow: "0 0 20px rgba(14,173,105,0.3)",
+          }}
+        >
+          <div className="flex items-center justify-center gap-3">
+            <span style={{ fontSize: "24px" }}>🎁</span>
+            <div>
+              <p style={{ fontSize: "12px", color: "#0ead69" }}>
+                FRIEND DISCOUNT ACTIVE!
+              </p>
+              <p style={{ fontSize: "8px", color: "#eef5db", marginTop: "4px" }}>
+                USE CODE <span style={{ color: "#ffd93d" }}>{referralDiscount.code}</span> FOR {referralDiscount.percent}% OFF!
+              </p>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Already Premium - Show status and management */}
       {isPremium && (

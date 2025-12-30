@@ -26,6 +26,7 @@ import { useGameState } from './hooks/useGameState';
 import { useLessonProgress } from './hooks/useLessonProgress';
 import { usePremium } from './hooks/usePremium';
 import { useDeviceDetection, shouldShowMobileLanding } from './hooks/useDeviceDetection';
+import { useReferral } from './hooks/useReferral';
 import { LEVEL_TIERS, levels, type LevelTier } from './data/levels';
 import { useQuery, useMutation } from 'convex/react';
 import { api } from '../convex/_generated/api';
@@ -84,6 +85,7 @@ function App() {
   const { openSignUp } = useClerk();
   const gameState = useGameState();
   const { isPremium } = usePremium();
+  const { hasDiscount, discountCode } = useReferral(); // PRP-046: Referral tracking
 
   // Convex queries for new features
   const coinBalance = useQuery(
@@ -291,7 +293,10 @@ function App() {
 
   if (view === 'premium') {
     return (
-      <PremiumPage onClose={() => navigateTo('home')} />
+      <PremiumPage
+        onClose={() => navigateTo('home')}
+        referralDiscount={hasDiscount ? { code: discountCode, percent: 30 } : undefined}
+      />
     );
   }
 
