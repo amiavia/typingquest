@@ -49,8 +49,8 @@ function Impressum() {
         <p>Switzerland</p>
         <p className="mt-4">
           Email:{' '}
-          <a href="mailto:info@miavia.ai" className="text-[#3bceac] hover:underline">
-            info@miavia.ai
+          <a href="mailto:info@typebit8.com" className="text-[#3bceac] hover:underline">
+            info@typebit8.com
           </a>
         </p>
       </Section>
@@ -225,8 +225,8 @@ function PrivacyPolicy() {
         </ul>
         <p className="mt-4">
           To exercise these rights, please contact us at{' '}
-          <a href="mailto:info@miavia.ai" className="text-[#3bceac] hover:underline">
-            info@miavia.ai
+          <a href="mailto:info@typebit8.com" className="text-[#3bceac] hover:underline">
+            info@typebit8.com
           </a>
           .
         </p>
@@ -276,8 +276,8 @@ function PrivacyPolicy() {
         </p>
         <p className="mt-4">
           Email:{' '}
-          <a href="mailto:info@miavia.ai" className="text-[#3bceac] hover:underline">
-            info@miavia.ai
+          <a href="mailto:info@typebit8.com" className="text-[#3bceac] hover:underline">
+            info@typebit8.com
           </a>
         </p>
         <p className="mt-2">
@@ -407,8 +407,8 @@ function TermsOfService() {
       <Section title="11. CONTACT">
         <p>
           For questions about these Terms of Service, please contact us at{' '}
-          <a href="mailto:info@miavia.ai" className="text-[#3bceac] hover:underline">
-            info@miavia.ai
+          <a href="mailto:info@typebit8.com" className="text-[#3bceac] hover:underline">
+            info@typebit8.com
           </a>
           .
         </p>
