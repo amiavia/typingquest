@@ -6,6 +6,7 @@ import { TypingForProgrammersPage } from './pages/TypingForProgrammersPage';
 import { TypingGamesForKidsPage } from './pages/TypingGamesForKidsPage';
 import { WpmCalculatorPage } from './pages/WpmCalculatorPage';
 import { AboutPage } from './pages/AboutPage';
+import { PrivacyPage } from './pages/PrivacyPage';
 import { Footer } from './components/Footer';
 
 function Layout() {
@@ -33,6 +34,7 @@ export function AppRouter() {
         <Route path="/typing-games-for-kids" element={<TypingGamesForKidsPage />} />
         <Route path="/wpm-calculator" element={<WpmCalculatorPage />} />
         <Route path="/about" element={<AboutPage />} />
+        <Route path="/privacy" element={<PrivacyPage />} />
 
         {/* Fallback to main app for unmatched routes */}
         <Route path="*" element={<App />} />
