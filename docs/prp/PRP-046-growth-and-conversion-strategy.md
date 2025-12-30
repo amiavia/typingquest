@@ -1273,12 +1273,12 @@ Submit to AlternativeTo.net as alternative to:
 ## Implementation Phases
 
 ### Week 1: Funnel Optimization
-- [ ] Reduce free tier to 6 levels
-- [ ] Add premium teaser on level 6 completion
-- [ ] Add progress bar with locked content preview
-- [ ] Implement regional pricing detection
+- [x] Reduce free tier to 6 levels (PREMIUM_LEVEL_START = 7)
+- [x] Add premium teaser on level 6 completion
+- [x] Add progress bar with locked content preview
+- [x] Implement regional pricing detection (useRegionalPricing hook)
 - [ ] Create emerging market Stripe prices
-- [ ] Add email capture to speed test page
+- [x] Add email capture to speed test page (EmailCapture component)
 - [ ] Set up email service (Resend/Postmark)
 - [ ] Create speed test results email template
 
@@ -1286,20 +1286,20 @@ Submit to AlternativeTo.net as alternative to:
 - [x] Design welcome referral email template (PR #2)
 - [x] Create email preview system (PR #2)
 - [ ] Build remaining nurture sequence (5 emails)
-- [ ] Create leads database table
+- [x] Create leads database table (convex/leads.ts)
 - [ ] Implement email scheduler
-- [ ] Design referral code system
-- [ ] Create referral database tables
-- [ ] Build basic referral UI
-- [ ] Test referral code generation
+- [x] Design referral code system (convex/referrals.ts)
+- [x] Create referral database tables (referralCodes, referralRedemptions)
+- [x] Build basic referral UI (ReferralPanel.tsx)
+- [x] Test referral code generation
 
 ### Week 3: Referral Program Launch
-- [ ] Complete referral panel UI
+- [x] Complete referral panel UI (ReferralPanel.tsx)
 - [ ] Implement Stripe coupon creation
-- [ ] Build referral conversion tracking
-- [ ] Add referral credit system
+- [x] Build referral conversion tracking (processReferralConversion mutation)
+- [x] Add referral credit system (totalCreditsEarned, pendingCredits)
 - [ ] Create referral reward emails
-- [ ] Test end-to-end referral flow
+- [x] Test end-to-end referral flow
 - [ ] Launch referral program
 
 ### Week 4: Community & Launch
@@ -1589,12 +1589,12 @@ open src/emails/preview.html
 - [x] ~~Design referral welcome email template~~ DONE
 - [x] ~~Create email preview system~~ DONE
 - [ ] Build email nurture sequence (remaining 5 emails)
-- [ ] Create leads database table
+- [x] Create leads database table (convex/leads.ts)
 - [ ] Implement email scheduler
-- [ ] Design referral code system
-- [ ] Create referral database tables
-- [ ] Build basic referral UI
-- [ ] Test referral code generation
+- [x] Design referral code system (convex/referrals.ts)
+- [x] Create referral database tables (referralCodes, referralRedemptions)
+- [x] Build basic referral UI (ReferralPanel.tsx)
+- [x] Test referral code generation
 
 ---
 
