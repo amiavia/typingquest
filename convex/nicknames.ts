@@ -7,9 +7,11 @@ import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
 import { generateRandomNickname, validateNickname } from "./nicknameWords";
 import { requireAdmin } from "./auth";
+import { getDisplayName as getFunnyDisplayName } from "./lib/nicknames";
 
 /**
- * Get user's display name (custom nickname > auto nickname > "Anonymous")
+ * Get user's display name (custom nickname > auto nickname > funny nickname)
+ * PRP-047: Never returns null - always has a funny fallback
  */
 export const getDisplayName = query({
   args: { clerkId: v.string() },
@@ -21,12 +23,14 @@ export const getDisplayName = query({
 
     if (!user) return null;
 
-    return user.nickname || user.autoNickname || null;
+    // PRP-047: Use funny nickname instead of null
+    return getFunnyDisplayName(user.nickname, user.autoNickname, user._id as string);
   },
 });
 
 /**
  * Get current user's nickname info
+ * PRP-047: displayName always has a value (never null)
  */
 export const getNicknameInfo = query({
   args: {},
@@ -41,8 +45,9 @@ export const getNicknameInfo = query({
 
     if (!user) return null;
 
+    // PRP-047: Use funny nickname as fallback - never return null for displayName
     return {
-      displayName: user.nickname || user.autoNickname || null,
+      displayName: getFunnyDisplayName(user.nickname, user.autoNickname, user._id as string),
       customNickname: user.nickname || null,
       autoNickname: user.autoNickname || null,
       isCustom: user.isNicknameCustom ?? false,

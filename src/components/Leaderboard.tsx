@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useQuery } from 'convex/react'
 import { useAuthContext } from '../contexts/AuthContext'
 import { api } from '../../convex/_generated/api'
@@ -9,22 +10,28 @@ interface LeaderboardProps {
   showGlobal?: boolean
 }
 
+const COMPACT_LIMIT = 10
+const FULL_LIMIT = 100
+
 export function Leaderboard({
   lessonId,
-  limit = 10,
+  limit = COMPACT_LIMIT,
   showGlobal = true,
 }: LeaderboardProps) {
   const { userId, isAuthenticated } = useAuthContext()
+  const [showFull, setShowFull] = useState(false)
+
+  const currentLimit = showFull ? FULL_LIMIT : limit
 
   // Get leaderboard data
   const globalScores = useQuery(
     api.leaderboard.getGlobalTopScores,
-    showGlobal ? { limit } : 'skip'
+    showGlobal ? { limit: currentLimit } : 'skip'
   )
 
   const lessonScores = useQuery(
     api.leaderboard.getTopScores,
-    lessonId ? { lessonId, limit } : 'skip'
+    lessonId ? { lessonId, limit: currentLimit } : 'skip'
   )
 
   const userRank = useQuery(
@@ -74,7 +81,7 @@ export function Leaderboard({
 
       {/* Scores table */}
       {scores && scores.length > 0 ? (
-        <div className="space-y-2">
+        <div className="space-y-2" style={{ maxHeight: showFull ? '60vh' : 'none', overflowY: showFull ? 'auto' : 'visible' }}>
           {scores.map((entry: any, index: number) => (
             <LeaderboardEntry
               key={`${index}-${entry.lessonId || 'global'}`}
@@ -110,6 +117,26 @@ export function Leaderboard({
           >
             BE THE FIRST TO SET A RECORD!
           </p>
+        </div>
+      )}
+
+      {/* Show Full / Show Less toggle */}
+      {scores && scores.length >= limit && (
+        <div className="mt-4 text-center">
+          <button
+            onClick={() => setShowFull(!showFull)}
+            style={{
+              fontFamily: "'Press Start 2P', monospace",
+              fontSize: '7px',
+              color: '#3bceac',
+              background: 'transparent',
+              border: '2px solid #3bceac',
+              padding: '8px 16px',
+              cursor: 'pointer',
+            }}
+          >
+            {showFull ? '▲ SHOW LESS' : '▼ SHOW FULL LEADERBOARD'}
+          </button>
         </div>
       )}
 

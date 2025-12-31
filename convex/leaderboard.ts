@@ -1,5 +1,6 @@
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
+import { getDisplayName } from "./lib/nicknames";
 
 // Get top scores for a lesson
 // PRP-029: Returns displayName (nickname) instead of email
@@ -19,16 +20,16 @@ export const getTopScores = query({
     const enrichedScores = await Promise.all(
       scores.map(async (s, index) => {
         const user = await ctx.db.get(s.userId);
+        // PRP-029: Use nickname, NEVER expose real name or email
+        // PRP-047: Use funny nickname instead of "Anonymous"
+        const userId = s.userId as string;
         return {
           rank: index + 1,
-          // PRP-029: Use nickname, NEVER expose real name or email
-          // ONLY use nickname or autoNickname, never fall back to username (which may contain real name)
-          displayName: user?.nickname || user?.autoNickname || "Anonymous",
+          displayName: getDisplayName(user?.nickname, user?.autoNickname, userId),
           avatarId: user?.avatarId,
           score: s.score,
           accuracy: s.accuracy,
           timestamp: s.timestamp,
-          // Note: We keep lessonId for reference but NOT email or clerkId
         };
       })
     );
@@ -56,17 +57,17 @@ export const getGlobalTopScores = query({
     const enrichedScores = await Promise.all(
       sortedScores.map(async (s, index) => {
         const user = await ctx.db.get(s.userId);
+        // PRP-029: Use nickname, NEVER expose real name or email
+        // PRP-047: Use funny nickname instead of "Anonymous"
+        const oderId = s.userId as string;
         return {
           rank: index + 1,
-          // PRP-029: Use nickname, NEVER expose real name or email
-          // ONLY use nickname or autoNickname, never fall back to username (which may contain real name)
-          displayName: user?.nickname || user?.autoNickname || "Anonymous",
+          displayName: getDisplayName(user?.nickname, user?.autoNickname, oderId),
           avatarId: user?.avatarId,
           score: s.score,
           accuracy: s.accuracy,
           lessonId: s.lessonId,
           timestamp: s.timestamp,
-          // Note: NOT exposing email or clerkId
         };
       })
     );
@@ -90,8 +91,8 @@ export const submitScore = mutation({
     if (!user) throw new Error("User not found");
 
     // PRP-029: Use nickname, NEVER expose real name or email in leaderboard
-    // ONLY use nickname or autoNickname, never fall back to username (which may contain real name)
-    const displayName = user.nickname || user.autoNickname || "Anonymous";
+    // PRP-047: Use funny nickname instead of "Anonymous"
+    const displayName = getDisplayName(user.nickname, user.autoNickname, userId as string);
 
     // Check if user already has a score for this lesson
     const existing = await ctx.db
