@@ -13,6 +13,7 @@ import { GuestBanner } from './components/GuestBanner';
 import { MigrationModal } from './components/MigrationModal';
 import { Leaderboard } from './components/Leaderboard';
 import { LegalPage } from './components/LegalPage';
+import { UnsubscribePage } from './components/UnsubscribePage';
 import { DailyChallengeView } from './components/DailyChallengeView';
 import { Shop } from './components/Shop';
 import { PremiumPage } from './components/PremiumPage';
@@ -21,16 +22,18 @@ import { StreakDisplay } from './components/StreakDisplay';
 import { PremiumBadge } from './components/PremiumBadge';
 import { MobileLanding } from './components/MobileLanding';
 import { SEOHead, schemas } from './components/SEOHead';
+import { CookieConsent } from './components/CookieConsent';
 import { useGameState } from './hooks/useGameState';
 import { useLessonProgress } from './hooks/useLessonProgress';
 import { usePremium } from './hooks/usePremium';
 import { useDeviceDetection, shouldShowMobileLanding } from './hooks/useDeviceDetection';
+import { useReferral } from './hooks/useReferral';
 import { LEVEL_TIERS, levels, type LevelTier } from './data/levels';
 import { useQuery, useMutation } from 'convex/react';
 import { api } from '../convex/_generated/api';
 import { useAuth, useClerk } from '@clerk/clerk-react';
 
-type View = 'home' | 'lesson' | 'legal' | 'shop' | 'premium' | 'daily-challenge';
+type View = 'home' | 'lesson' | 'legal' | 'shop' | 'premium' | 'daily-challenge' | 'unsubscribe';
 type LegalPageType = 'impressum' | 'privacy' | 'terms';
 
 // Loading screen duration in ms
@@ -47,6 +50,7 @@ const LOADING_MESSAGES: Record<View, string> = {
   'shop': 'OPENING SHOP...',
   'premium': 'LOADING PREMIUM...',
   'daily-challenge': 'PREPARING CHALLENGE...',
+  'unsubscribe': 'LOADING...',
 };
 
 function App() {
@@ -76,6 +80,25 @@ function App() {
     }
   }, [mobileKeyboardVerified]);
 
+  // Handle URL-based routing for special pages
+  useEffect(() => {
+    const path = window.location.pathname;
+    if (path === '/unsubscribe') {
+      setView('unsubscribe');
+    } else if (path === '/premium') {
+      setView('premium');
+    } else if (path === '/privacy') {
+      setSelectedLegalPage('privacy');
+      setView('legal');
+    } else if (path === '/terms') {
+      setSelectedLegalPage('terms');
+      setView('legal');
+    } else if (path === '/impressum') {
+      setSelectedLegalPage('impressum');
+      setView('legal');
+    }
+  }, []);
+
   // Get layout from global context
   const { layout: keyboardLayout, isLocked: keyboardLocked, lockLayout } = useKeyboardLayout();
 
@@ -83,6 +106,7 @@ function App() {
   const { openSignUp } = useClerk();
   const gameState = useGameState();
   const { isPremium } = usePremium();
+  const { hasDiscount, discountCode } = useReferral(); // PRP-046: Referral tracking
 
   // Convex queries for new features
   const coinBalance = useQuery(
@@ -248,8 +272,9 @@ function App() {
     return progress[level]?.completed ?? false;
   };
 
-  // Premium level gating: levels 10-30 require premium
-  const PREMIUM_LEVEL_START = 10;
+  // Premium level gating: levels 7+ require premium (levels 1-6 are free)
+  // PRP-046: Changed from 10 to 7 to reduce free tier from 9 to 6 levels
+  const PREMIUM_LEVEL_START = 7;
   const requiresPremium = (lessonId: number): boolean => lessonId >= PREMIUM_LEVEL_START;
 
   // Guest level gating: levels 3+ require sign-up
@@ -289,7 +314,10 @@ function App() {
 
   if (view === 'premium') {
     return (
-      <PremiumPage onClose={() => navigateTo('home')} />
+      <PremiumPage
+        onClose={() => navigateTo('home')}
+        referralDiscount={hasDiscount ? { code: discountCode, percent: 30 } : undefined}
+      />
     );
   }
 
@@ -309,6 +337,17 @@ function App() {
       <LegalPage
         page={selectedLegalPage}
         onBack={() => navigateTo('home')}
+      />
+    );
+  }
+
+  if (view === 'unsubscribe') {
+    return (
+      <UnsubscribePage
+        onBack={() => {
+          window.history.replaceState({}, '', '/');
+          navigateTo('home');
+        }}
       />
     );
   }
@@ -1069,10 +1108,68 @@ function App() {
             </div>
           )}
 
+          {/* PRP-046: Progress Bar with Locked Content Preview */}
+          {selectedTier === 'all' && (
+            <div
+              className="mb-6 p-4"
+              style={{
+                background: 'linear-gradient(180deg, #1a1a2e 0%, #16213e 100%)',
+                border: '3px solid #3bceac',
+                fontFamily: "'Press Start 2P'",
+              }}
+            >
+              <div className="flex items-center justify-between mb-3">
+                <span style={{ fontSize: '8px', color: '#3bceac' }}>YOUR PROGRESS</span>
+                <span style={{ fontSize: '8px', color: '#eef5db' }}>
+                  {Object.values(progress).filter(p => p?.completed && p?.quizPassed).length} / 50 LEVELS
+                </span>
+              </div>
+              <div
+                style={{
+                  height: '12px',
+                  background: '#0f0f1b',
+                  border: '2px solid #3bceac',
+                  position: 'relative',
+                  overflow: 'hidden',
+                }}
+              >
+                {/* Completed progress */}
+                <div
+                  style={{
+                    position: 'absolute',
+                    left: 0,
+                    top: 0,
+                    height: '100%',
+                    width: `${(Object.values(progress).filter(p => p?.completed && p?.quizPassed).length / 50) * 100}%`,
+                    background: 'linear-gradient(90deg, #0ead69, #22c55e)',
+                    transition: 'width 0.3s ease',
+                  }}
+                />
+                {/* Free tier marker */}
+                <div
+                  style={{
+                    position: 'absolute',
+                    left: `${(6 / 50) * 100}%`,
+                    top: 0,
+                    height: '100%',
+                    width: '2px',
+                    background: '#ffd93d',
+                  }}
+                />
+              </div>
+              <div className="flex justify-between mt-2">
+                <span style={{ fontSize: '6px', color: '#22c55e' }}>6 FREE</span>
+                <span style={{ fontSize: '6px', color: '#ffd93d' }}>
+                  {isPremium ? '✓ PREMIUM UNLOCKED' : '+44 PREMIUM LEVELS'}
+                </span>
+              </div>
+            </div>
+          )}
+
           {/* PRP-041: Grouped Level View */}
           {selectedTier === 'all' ? (
             <div className="space-y-6">
-              {/* Free Levels (1-9) */}
+              {/* Free Levels (1-6) - PRP-046: Updated from 1-9 */}
               <div>
                 <h4
                   className="mb-4 flex items-center gap-2"
@@ -1082,10 +1179,10 @@ function App() {
                     color: '#22c55e',
                   }}
                 >
-                  <span>🎮</span> FREE BASICS (1-9)
+                  <span>🎮</span> FREE BASICS (1-6)
                 </h4>
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {lessons.filter(l => l.id <= 9).map(lesson => (
+                  {lessons.filter(l => l.id <= 6).map(lesson => (
                     <LessonCard
                       key={lesson.id}
                       lesson={lesson}
@@ -1107,15 +1204,15 @@ function App() {
                 </div>
               </div>
 
-              {/* Premium Levels (10-30) - Collapsed or Expanded */}
+              {/* Premium Levels (7-30) - PRP-046: Updated from 10-30 */}
               {!expandPremiumLevels ? (
                 <LevelGroupCollapsed
                   type="premium"
                   isPremium={isPremium}
                   onUpgrade={() => navigateTo('premium')}
                   onExpand={() => setExpandPremiumLevels(true)}
-                  levelRange="10-30"
-                  totalLevels={21}
+                  levelRange="7-30"
+                  totalLevels={24}
                 />
               ) : (
                 <div>
@@ -1128,7 +1225,7 @@ function App() {
                         color: '#ffd93d',
                       }}
                     >
-                      <span>⭐</span> PREMIUM LEVELS (10-30)
+                      <span>⭐</span> PREMIUM LEVELS (7-30)
                     </h4>
                     <button
                       onClick={() => setExpandPremiumLevels(false)}
@@ -1146,7 +1243,7 @@ function App() {
                     </button>
                   </div>
                   <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {lessons.filter(l => l.id >= 10 && l.id <= 30).map(lesson => (
+                    {lessons.filter(l => l.id >= 7 && l.id <= 30).map(lesson => (
                       <LessonCard
                         key={lesson.id}
                         lesson={lesson}
@@ -1335,6 +1432,9 @@ function App() {
         </p>
       </footer>
       </div>
+
+      {/* PRP-046: Cookie Consent Banner */}
+      <CookieConsent />
     </>
   );
 }

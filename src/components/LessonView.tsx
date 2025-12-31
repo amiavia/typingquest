@@ -91,13 +91,30 @@ export function LessonView({ lesson, onComplete, onQuizComplete, onBack, keyboar
     if (currentExercise < lesson.exercises.length - 1) {
       setCurrentExercise(prev => prev + 1);
     } else {
+      // Calculate totals
+      const totalCorrectChars = newStats.reduce((sum, s) => sum + s.correctChars, 0);
+      const totalIncorrectChars = newStats.reduce((sum, s) => sum + s.incorrectChars, 0);
+      const totalChars = newStats.reduce((sum, s) => sum + s.totalChars, 0);
+      const totalTimeElapsed = newStats.reduce((sum, s) => sum + s.timeElapsed, 0);
+
+      // Calculate WPM from total chars / total time (correct formula)
+      const wpm = totalTimeElapsed > 0
+        ? Math.round((totalCorrectChars / 5) / (totalTimeElapsed / 60))
+        : 0;
+
+      // Calculate accuracy from total correct / total typed
+      const totalTyped = totalCorrectChars + totalIncorrectChars;
+      const accuracy = totalTyped > 0
+        ? Math.round((totalCorrectChars / totalTyped) * 100)
+        : 100;
+
       const avgStats: TypingStats = {
-        wpm: Math.round(newStats.reduce((sum, s) => sum + s.wpm, 0) / newStats.length),
-        accuracy: Math.round(newStats.reduce((sum, s) => sum + s.accuracy, 0) / newStats.length),
-        correctChars: newStats.reduce((sum, s) => sum + s.correctChars, 0),
-        incorrectChars: newStats.reduce((sum, s) => sum + s.incorrectChars, 0),
-        totalChars: newStats.reduce((sum, s) => sum + s.totalChars, 0),
-        timeElapsed: newStats.reduce((sum, s) => sum + s.timeElapsed, 0),
+        wpm,
+        accuracy,
+        correctChars: totalCorrectChars,
+        incorrectChars: totalIncorrectChars,
+        totalChars,
+        timeElapsed: totalTimeElapsed,
       };
       onComplete(avgStats);
       setPhase('quiz');
@@ -290,10 +307,25 @@ export function LessonView({ lesson, onComplete, onQuizComplete, onBack, keyboar
   }
 
   if (phase === 'complete') {
-    const avgStats = exerciseStats.length > 0 ? {
-      wpm: Math.round(exerciseStats.reduce((sum, s) => sum + s.wpm, 0) / exerciseStats.length),
-      accuracy: Math.round(exerciseStats.reduce((sum, s) => sum + s.accuracy, 0) / exerciseStats.length),
-    } : { wpm: 0, accuracy: 0 };
+    // Calculate WPM from total chars / total time (correct formula)
+    const totalCorrectChars = exerciseStats.reduce((sum, s) => sum + s.correctChars, 0);
+    const totalIncorrectChars = exerciseStats.reduce((sum, s) => sum + s.incorrectChars, 0);
+    const totalTimeElapsed = exerciseStats.reduce((sum, s) => sum + s.timeElapsed, 0);
+
+    const wpm = exerciseStats.length > 0 && totalTimeElapsed > 0
+      ? Math.round((totalCorrectChars / 5) / (totalTimeElapsed / 60))
+      : 0;
+
+    const totalTyped = totalCorrectChars + totalIncorrectChars;
+    const accuracy = exerciseStats.length > 0 && totalTyped > 0
+      ? Math.round((totalCorrectChars / totalTyped) * 100)
+      : 0;
+
+    const avgStats = { wpm, accuracy };
+
+    // PRP-046: Show premium teaser when completing the last free level (level 6)
+    const LAST_FREE_LEVEL = 6;
+    const showPremiumTeaser = lesson.id === LAST_FREE_LEVEL && !isPremium;
 
     return (
       <div className="max-w-2xl mx-auto text-center space-y-8">
@@ -324,6 +356,45 @@ export function LessonView({ lesson, onComplete, onQuizComplete, onBack, keyboar
             </p>
           )}
         </div>
+
+        {/* PRP-046: Premium Teaser after completing last free level */}
+        {showPremiumTeaser && (
+          <div
+            className="pixel-box p-6"
+            style={{
+              fontFamily: "'Press Start 2P'",
+              borderColor: '#ffd93d',
+              background: 'linear-gradient(180deg, #1a1a2e 0%, #16213e 100%)',
+            }}
+          >
+            <div style={{ fontSize: '10px', color: '#ffd93d', marginBottom: '12px' }}>
+              👑 YOU'VE COMPLETED ALL FREE LEVELS!
+            </div>
+            <div style={{ fontSize: '8px', color: '#eef5db', lineHeight: '2', marginBottom: '16px' }}>
+              Unlock 44 more levels including:
+            </div>
+            <div style={{ fontSize: '7px', color: '#3bceac', lineHeight: '2.2', textAlign: 'left', maxWidth: '280px', margin: '0 auto' }}>
+              <div>• Bottom Row Mastery (Levels 11-15)</div>
+              <div>• Numbers & Symbols (Levels 16-20)</div>
+              <div>• Advanced Techniques (Levels 21-25)</div>
+              <div>• AI Prompts Theme (Levels 31-35)</div>
+              <div>• Developer Patterns (Levels 36-40)</div>
+              <div>• Business Communication (Levels 41-45)</div>
+            </div>
+            <div style={{ marginTop: '16px' }}>
+              <a
+                href="/premium"
+                className="pixel-btn pixel-btn-yellow"
+                style={{ fontSize: '10px', display: 'inline-block', textDecoration: 'none' }}
+              >
+                UNLOCK PREMIUM →
+              </a>
+            </div>
+            <div style={{ fontSize: '6px', color: '#4a4a6e', marginTop: '12px' }}>
+              Only $4.99/month • Cancel anytime
+            </div>
+          </div>
+        )}
 
         <div className="grid grid-cols-2 gap-4">
           <div className="pixel-box p-6 text-center">
@@ -359,7 +430,7 @@ export function LessonView({ lesson, onComplete, onQuizComplete, onBack, keyboar
             className="pixel-btn pixel-btn-green"
             style={{ fontSize: '10px' }}
           >
-            NEXT LEVEL →
+            {showPremiumTeaser ? 'VIEW LEVELS' : 'NEXT LEVEL →'}
           </button>
         </div>
       </div>

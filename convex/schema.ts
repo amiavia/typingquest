@@ -242,4 +242,62 @@ export default defineSchema({
   })
     .index("by_clerk_id", ["clerkId"])
     .index("by_clerk_type", ["clerkId", "powerUpType"]),
+
+  // ═══════════════════════════════════════════════════════════════════
+  // PRP-046: LEADS / EMAIL CAPTURE
+  // ═══════════════════════════════════════════════════════════════════
+
+  leads: defineTable({
+    email: v.string(),
+    source: v.string(), // "speed_test" | "landing_page" | "level_complete" | "referral"
+    speedTestResult: v.optional(
+      v.object({
+        wpm: v.number(),
+        accuracy: v.number(),
+      })
+    ),
+    referralCode: v.optional(v.string()), // If they came via referral
+    country: v.optional(v.string()), // Detected country for regional pricing
+    marketingConsent: v.boolean(), // GDPR compliance
+    convertedToUser: v.boolean(), // Tracks if they signed up
+    clerkId: v.optional(v.string()), // Links to user if converted
+    createdAt: v.number(),
+    lastEmailSent: v.optional(v.number()),
+    emailSequenceStep: v.optional(v.number()), // 0=welcome, 1-5=nurture sequence
+    unsubscribed: v.optional(v.boolean()), // User opted out of emails
+  })
+    .index("by_email", ["email"])
+    .index("by_source", ["source"])
+    .index("by_converted", ["convertedToUser"])
+    .index("by_nurture", ["marketingConsent", "convertedToUser", "unsubscribed"]),
+
+  // ═══════════════════════════════════════════════════════════════════
+  // PRP-046: REFERRALS
+  // ═══════════════════════════════════════════════════════════════════
+
+  referralCodes: defineTable({
+    clerkId: v.string(), // Owner of the referral code
+    code: v.string(), // Unique referral code (e.g., "JOHN50")
+    totalReferrals: v.number(), // Count of successful referrals
+    totalCreditsEarned: v.number(), // Total credits earned from referrals
+    createdAt: v.number(),
+  })
+    .index("by_clerk_id", ["clerkId"])
+    .index("by_code", ["code"]),
+
+  referralRedemptions: defineTable({
+    referralCodeId: v.id("referralCodes"), // Link to the referral code used
+    referrerClerkId: v.string(), // Who referred
+    refereeClerkId: v.optional(v.string()), // Who was referred (once they sign up)
+    refereeEmail: v.optional(v.string()), // Email if not signed up yet
+    status: v.string(), // "pending" | "signed_up" | "subscribed" | "credit_applied"
+    referrerCreditApplied: v.boolean(), // Has the referrer received their 50% credit?
+    refereeCouponUsed: v.boolean(), // Has the referee used their 30% off?
+    createdAt: v.number(),
+    subscribedAt: v.optional(v.number()),
+  })
+    .index("by_referrer", ["referrerClerkId"])
+    .index("by_referee", ["refereeClerkId"])
+    .index("by_code", ["referralCodeId"])
+    .index("by_status", ["status"]),
 });

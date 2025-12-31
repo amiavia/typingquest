@@ -1,5 +1,6 @@
 /**
  * PRP-030: Clerk Billing Premium Page
+ * PRP-046: Regional Pricing Detection
  *
  * Uses Clerk's PricingTable component for subscription management.
  * Subscription management is handled through the UserProfile component.
@@ -7,14 +8,19 @@
 
 import { PricingTable, useClerk } from "@clerk/clerk-react";
 import { usePremium } from "../hooks/usePremium";
+import { useRegionalPricing } from "../hooks/useRegionalPricing";
 
 interface PremiumPageProps {
   onClose?: () => void;
+  referralDiscount?: {
+    code: string;
+    percent: number;
+  };
 }
 
-// Premium benefits for display
+// Premium benefits for display - PRP-046: Updated level range from 10-30 to 7-50
 const PREMIUM_BENEFITS = [
-  { icon: "🎮", title: "ADVANCED LEVELS", description: "Unlock levels 10-30 with premium" },
+  { icon: "🎮", title: "44 EXTRA LEVELS", description: "Unlock levels 7-50 with premium" },
   { icon: "💰", title: "2X COINS", description: "Double coin earnings on all activities" },
   { icon: "🧊", title: "STREAK FREEZES", description: "3 free freezes every month" },
   { icon: "🏪", title: "EXCLUSIVE ITEMS", description: "Access premium-only shop items" },
@@ -22,9 +28,10 @@ const PREMIUM_BENEFITS = [
   { icon: "⚡", title: "PRIORITY SUPPORT", description: "Get help faster" },
 ];
 
-export function PremiumPage({ onClose }: PremiumPageProps) {
+export function PremiumPage({ onClose, referralDiscount }: PremiumPageProps) {
   const { isPremium, plan, isLoading } = usePremium();
   const { openUserProfile } = useClerk();
+  const { pricing, country, isEmergingMarket } = useRegionalPricing();
 
   if (isLoading) {
     return (
@@ -61,6 +68,30 @@ export function PremiumPage({ onClose }: PremiumPageProps) {
         </h1>
         <div /> {/* Spacer */}
       </header>
+
+      {/* PRP-046: Referral Discount Banner */}
+      {referralDiscount && !isPremium && (
+        <section
+          className="mx-auto mb-6 p-4 max-w-2xl text-center"
+          style={{
+            background: "linear-gradient(135deg, rgba(14,173,105,0.2) 0%, rgba(59,206,172,0.2) 100%)",
+            border: "3px solid #0ead69",
+            boxShadow: "0 0 20px rgba(14,173,105,0.3)",
+          }}
+        >
+          <div className="flex items-center justify-center gap-3">
+            <span style={{ fontSize: "24px" }}>🎁</span>
+            <div>
+              <p style={{ fontSize: "12px", color: "#0ead69" }}>
+                FRIEND DISCOUNT ACTIVE!
+              </p>
+              <p style={{ fontSize: "8px", color: "#eef5db", marginTop: "4px" }}>
+                USE CODE <span style={{ color: "#ffd93d" }}>{referralDiscount.code}</span> FOR {referralDiscount.percent}% OFF!
+              </p>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Already Premium - Show status and management */}
       {isPremium && (
@@ -331,13 +362,13 @@ export function PremiumPage({ onClose }: PremiumPageProps) {
               </p>
             </div>
 
-            {/* Levels 10-30 */}
+            {/* Levels 7-30 - PRP-046: Updated from 10-30 */}
             <div className="mb-6">
               <div className="flex items-start gap-2 mb-2">
                 <span style={{ fontSize: "10px", color: "#3bceac" }}>✓</span>
                 <div>
                   <p style={{ fontSize: "9px", color: "#eef5db" }}>
-                    LEVELS 10-30: ADVANCED TYPING MASTERY
+                    LEVELS 7-30: ADVANCED TYPING MASTERY
                   </p>
                   <p style={{ fontSize: "7px", color: "#3bceac", marginTop: "4px", lineHeight: "1.6" }}>
                     BUILD SPEED TO 80+ WPM WITH ADVANCED EXERCISES
@@ -449,6 +480,29 @@ export function PremiumPage({ onClose }: PremiumPageProps) {
           >
             CHOOSE YOUR PLAN
           </h2>
+
+          {/* PRP-046: Emerging Market Pricing Banner */}
+          {isEmergingMarket && (
+            <div
+              className="mb-6 p-4 text-center"
+              style={{
+                background: "linear-gradient(135deg, rgba(14,173,105,0.2) 0%, rgba(59,206,172,0.2) 100%)",
+                border: "2px solid #0ead69",
+                fontFamily: "'Press Start 2P'",
+              }}
+            >
+              <span style={{ fontSize: "12px" }}>🌍</span>
+              <p style={{ fontSize: "8px", color: "#0ead69", marginTop: "8px" }}>
+                SPECIAL PRICING FOR {country}
+              </p>
+              <p style={{ fontSize: "10px", color: "#eef5db", marginTop: "4px" }}>
+                {pricing.monthly.display}/month
+              </p>
+              <p style={{ fontSize: "6px", color: "#3bceac", marginTop: "4px" }}>
+                ENJOY PREMIUM AT AN ACCESSIBLE PRICE
+              </p>
+            </div>
+          )}
 
           {/* Clerk PricingTable handles all checkout logic */}
           <div className="pixel-box p-6" style={{ background: "#1a1a2e" }}>

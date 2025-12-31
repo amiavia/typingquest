@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Email Preview - TypeBit8 Welcome Referral</title>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Press Start 2P', monospace;
+      background: linear-gradient(135deg, #0a0a12 0%, #1a1a2e 50%, #0a0a12 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .preview-header {
+      max-width: 700px;
+      margin: 0 auto 20px;
+      background-color: #1a1a2e;
+      border: 4px solid #ffd93d;
+      padding: 20px;
+      box-shadow: 8px 8px 0 #000;
+    }
+
+    .preview-header h1 {
+      color: #ffd93d;
+      font-size: 12px;
+      margin-bottom: 12px;
+      text-shadow: 0 0 10px #ffd93d;
+    }
+
+    .preview-header p {
+      color: #eef5db;
+      font-size: 8px;
+      line-height: 2;
+      margin-bottom: 8px;
+    }
+
+    .preview-controls {
+      display: flex;
+      gap: 12px;
+      margin-top: 16px;
+      flex-wrap: wrap;
+    }
+
+    .preview-btn {
+      background: linear-gradient(180deg, #3bceac, #0ead69);
+      color: #0f0f1b;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 8px;
+      padding: 12px 20px;
+      border: none;
+      cursor: pointer;
+      box-shadow: 4px 4px 0 #000;
+      transition: all 0.1s ease;
+    }
+
+    .preview-btn:hover {
+      transform: translate(2px, 2px);
+      box-shadow: 2px 2px 0 #000;
+    }
+
+    .preview-btn.active {
+      background: linear-gradient(180deg, #ffd93d, #ff6b35);
+    }
+
+    .device-frame {
+      max-width: 700px;
+      margin: 0 auto;
+      background-color: #2a2a3e;
+      border: 4px solid #3bceac;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 12px 12px 0 #000;
+      transition: all 0.3s ease;
+    }
+
+    .device-frame.mobile {
+      max-width: 375px;
+    }
+
+    .device-bar {
+      background-color: #1a1a2e;
+      padding: 8px 16px;
+      border-bottom: 2px solid #3bceac;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .device-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background-color: #e63946;
+    }
+
+    .device-dot:nth-child(2) { background-color: #ffd93d; }
+    .device-dot:nth-child(3) { background-color: #0ead69; }
+
+    .device-title {
+      color: #4a4a6e;
+      font-size: 7px;
+      margin-left: auto;
+    }
+
+    .email-frame {
+      width: 100%;
+      border: none;
+      background-color: #0f0f1b;
+      min-height: 800px;
+    }
+
+    .template-vars {
+      max-width: 700px;
+      margin: 20px auto;
+      background-color: #1a1a2e;
+      border: 4px solid #3bceac;
+      padding: 20px;
+      box-shadow: 8px 8px 0 #000;
+    }
+
+    .template-vars h2 {
+      color: #3bceac;
+      font-size: 10px;
+      margin-bottom: 16px;
+    }
+
+    .var-row {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 12px;
+      align-items: center;
+    }
+
+    .var-label {
+      color: #ffd93d;
+      font-size: 8px;
+      min-width: 140px;
+    }
+
+    .var-input {
+      flex: 1;
+      background-color: #0f0f1b;
+      border: 2px solid #3bceac;
+      color: #eef5db;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 8px;
+      padding: 8px 12px;
+    }
+
+    .var-input:focus {
+      outline: none;
+      border-color: #ffd93d;
+      box-shadow: 0 0 10px rgba(255, 217, 61, 0.3);
+    }
+  </style>
+</head>
+<body>
+  <div class="preview-header">
+    <h1>📧 EMAIL TEMPLATE PREVIEW</h1>
+    <p>Welcome Referral Email - TypeBit8 Style</p>
+    <p style="color: #3bceac;">Preview the email template below. Edit variables to test personalization.</p>
+
+    <div class="preview-controls">
+      <button class="preview-btn active" onclick="setDevice('desktop')">DESKTOP</button>
+      <button class="preview-btn" onclick="setDevice('mobile')">MOBILE</button>
+      <button class="preview-btn" onclick="refreshPreview()">REFRESH</button>
+      <button class="preview-btn" onclick="openInNewTab()">OPEN FULL</button>
+    </div>
+  </div>
+
+  <div class="template-vars">
+    <h2>TEMPLATE VARIABLES</h2>
+    <div class="var-row">
+      <span class="var-label">{{FIRST_NAME}}</span>
+      <input type="text" class="var-input" id="firstName" value="SRIJAN" onchange="refreshPreview()">
+    </div>
+    <div class="var-row">
+      <span class="var-label">{{REFERRAL_CODE}}</span>
+      <input type="text" class="var-input" id="referralCode" value="SRIJAN7X2" onchange="refreshPreview()">
+    </div>
+    <div class="var-row">
+      <span class="var-label">{{UNSUBSCRIBE_URL}}</span>
+      <input type="text" class="var-input" id="unsubscribeUrl" value="https://typebit8.com/unsubscribe?token=xxx" onchange="refreshPreview()">
+    </div>
+  </div>
+
+  <div class="device-frame" id="deviceFrame">
+    <div class="device-bar">
+      <div class="device-dot"></div>
+      <div class="device-dot"></div>
+      <div class="device-dot"></div>
+      <span class="device-title">welcome-referral.html</span>
+    </div>
+    <iframe id="emailFrame" class="email-frame" srcdoc=""></iframe>
+  </div>
+
+  <script>
+    // Email template with placeholders
+    const emailTemplate = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome to TypeBit8 - Your Referral Code Inside!</title>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Press Start 2P', monospace;
+      background-color: #0f0f1b;
+      color: #eef5db;
+      line-height: 2;
+      -webkit-font-smoothing: antialiased;
+    }
+    .email-container {
+      max-width: 600px;
+      margin: 0 auto;
+      background-color: #0f0f1b;
+      padding: 20px;
+    }
+    .pixel-box {
+      background-color: #1a1a2e;
+      border: 4px solid #3bceac;
+      box-shadow: 8px 8px 0 #000;
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+    .pixel-box-yellow { border-color: #ffd93d; }
+    .pixel-box-green { border-color: #0ead69; }
+    .header {
+      text-align: center;
+      padding: 30px 20px;
+      background: linear-gradient(180deg, #1a1a2e 0%, #0f0f1b 100%);
+      border-bottom: 4px solid #3bceac;
+    }
+    .logo {
+      display: inline-block;
+      background-color: #1a1a2e;
+      border: 4px solid #ffd93d;
+      padding: 12px 16px;
+      font-size: 24px;
+      margin-bottom: 16px;
+      box-shadow: 4px 4px 0 #000;
+    }
+    .brand-name {
+      font-size: 20px;
+      color: #ffd93d;
+      text-shadow: 0 0 10px #ffd93d, 0 0 20px #ffd93d;
+      letter-spacing: 2px;
+    }
+    h1 { font-size: 16px; color: #ffd93d; margin-bottom: 16px; text-shadow: 0 0 10px #ffd93d; }
+    h2 { font-size: 12px; color: #3bceac; margin-bottom: 12px; text-shadow: 0 0 8px #3bceac; }
+    h3 { font-size: 10px; color: #ffd93d; margin-bottom: 8px; }
+    p { font-size: 9px; line-height: 2.2; margin-bottom: 16px; color: #eef5db; }
+    .text-cyan { color: #3bceac; }
+    .text-yellow { color: #ffd93d; }
+    .text-green { color: #0ead69; }
+    .text-pink { color: #ff6b9d; }
+    .referral-code-container {
+      text-align: center;
+      padding: 30px 20px;
+      background: linear-gradient(180deg, #2a2a3e 0%, #1a1a2e 100%);
+      border: 4px solid #ffd93d;
+      box-shadow: 8px 8px 0 #000, inset 0 0 30px rgba(255, 217, 61, 0.1);
+      margin: 24px 0;
+    }
+    .referral-code {
+      display: inline-block;
+      background: linear-gradient(180deg, #ffd93d, #ff6b35);
+      color: #0f0f1b;
+      font-size: 18px;
+      padding: 16px 32px;
+      border: none;
+      box-shadow: 6px 6px 0 #000;
+      letter-spacing: 3px;
+      margin: 16px 0;
+    }
+    .referral-link {
+      font-size: 8px;
+      color: #3bceac;
+      word-break: break-all;
+      background-color: #0f0f1b;
+      padding: 12px;
+      border: 2px solid #3bceac;
+      display: block;
+      margin-top: 16px;
+    }
+    .cta-button {
+      display: inline-block;
+      background: linear-gradient(180deg, #3bceac, #0ead69);
+      color: #0f0f1b;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 10px;
+      padding: 16px 32px;
+      text-decoration: none;
+      border: none;
+      box-shadow: 6px 6px 0 #000;
+      margin: 8px;
+    }
+    .cta-button-yellow { background: linear-gradient(180deg, #ffd93d, #ff6b35); }
+    .timeline { position: relative; padding-left: 30px; }
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 8px;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: linear-gradient(180deg, #3bceac, #0ead69, #ffd93d);
+    }
+    .timeline-item { position: relative; margin-bottom: 24px; padding-left: 20px; }
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -26px;
+      top: 4px;
+      width: 16px;
+      height: 16px;
+      background-color: #3bceac;
+      border: 3px solid #0f0f1b;
+      box-shadow: 0 0 10px #3bceac;
+    }
+    .timeline-item.milestone::before { background-color: #ffd93d; box-shadow: 0 0 10px #ffd93d; }
+    .week-label { font-size: 10px; color: #ffd93d; margin-bottom: 4px; }
+    .week-content { font-size: 8px; color: #eef5db; line-height: 2; }
+    .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 20px 0; }
+    .stat-box { background-color: #2a2a3e; border: 3px solid #3bceac; padding: 16px 8px; text-align: center; }
+    .stat-number { font-size: 16px; color: #ffd93d; display: block; margin-bottom: 8px; text-shadow: 0 0 10px #ffd93d; }
+    .stat-label { font-size: 7px; color: #3bceac; }
+    .reward-box {
+      background: linear-gradient(135deg, #1a1a2e 0%, #2a2a3e 100%);
+      border: 4px solid #0ead69;
+      padding: 24px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .reward-badge {
+      display: inline-block;
+      background: linear-gradient(180deg, #0ead69, #3bceac);
+      color: #0f0f1b;
+      font-size: 14px;
+      padding: 12px 24px;
+      margin-bottom: 16px;
+      box-shadow: 4px 4px 0 #000;
+    }
+    .footer { text-align: center; padding: 30px 20px; border-top: 4px solid #3bceac; margin-top: 30px; }
+    .footer p { font-size: 7px; color: #4a4a6e; margin-bottom: 8px; }
+    .social-links { margin: 20px 0; }
+    .social-link { display: inline-block; color: #3bceac; font-size: 8px; margin: 0 12px; text-decoration: none; }
+    .pixel-divider { height: 4px; background: repeating-linear-gradient(90deg, #3bceac, #3bceac 8px, transparent 8px, transparent 16px); margin: 24px 0; }
+    .glow-text { text-shadow: 0 0 10px currentColor, 0 0 20px currentColor; }
+    @media (max-width: 480px) {
+      .email-container { padding: 10px; }
+      .pixel-box { padding: 16px; }
+      .stats-grid { grid-template-columns: 1fr; }
+      .referral-code { font-size: 14px; padding: 12px 20px; }
+      h1 { font-size: 12px; }
+      h2 { font-size: 10px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="email-container">
+    <div class="header">
+      <div class="logo">⌨️</div>
+      <div class="brand-name">TYPEBIT8</div>
+      <p style="font-size: 7px; color: #3bceac; margin-top: 8px;">LEVEL UP YOUR TYPING</p>
+    </div>
+    <div class="pixel-box">
+      <h1>WELCOME TO THE GAME, {{FIRST_NAME}}!</h1>
+      <p>You've just joined <span class="text-cyan">thousands of players</span> on the path to <span class="text-yellow">typing mastery</span>. Get ready to transform your keyboard skills with retro gaming vibes!</p>
+      <p>But first... we have something special for you. <span class="text-pink glow-text">Keep reading!</span></p>
+    </div>
+    <div class="pixel-box">
+      <h2>YOUR JOURNEY TO TYPING PRO</h2>
+      <p style="font-size: 8px; margin-bottom: 20px;">Based on <span class="text-cyan">10,000+ players</span>, here's what to expect:</p>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="week-label">WEEK 1-2</div>
+          <div class="week-content">Build muscle memory for home row keys. <span class="text-cyan">+15 WPM average gain</span></div>
+        </div>
+        <div class="timeline-item">
+          <div class="week-label">WEEK 3-4</div>
+          <div class="week-content">Master all letter keys without looking. <span class="text-cyan">+25 WPM total</span></div>
+        </div>
+        <div class="timeline-item">
+          <div class="week-label">WEEK 5-8</div>
+          <div class="week-content">Conquer numbers, symbols & special keys. <span class="text-cyan">+40 WPM total</span></div>
+        </div>
+        <div class="timeline-item milestone">
+          <div class="week-label">WEEK 9-12</div>
+          <div class="week-content"><span class="text-yellow">TYPING PRO STATUS!</span> 60-80+ WPM with 95%+ accuracy. <span class="text-green">Ready for any keyboard challenge!</span></div>
+        </div>
+      </div>
+      <p style="font-size: 8px; text-align: center; margin-top: 20px;"><span class="text-yellow">15 MINUTES A DAY</span> is all it takes.<br>That's just <span class="text-cyan">ONE LEVEL</span> in TypeBit8!</p>
+    </div>
+    <div class="stats-grid">
+      <div class="stat-box"><span class="stat-number">12</span><span class="stat-label">WEEKS TO PRO</span></div>
+      <div class="stat-box"><span class="stat-number">50</span><span class="stat-label">LEVELS</span></div>
+      <div class="stat-box"><span class="stat-number">2X</span><span class="stat-label">SKILLS LEARNED</span></div>
+    </div>
+    <div class="referral-code-container">
+      <h2 style="margin-bottom: 8px;">YOUR PERSONAL REFERRAL CODE</h2>
+      <p style="font-size: 8px; margin-bottom: 16px;">Share with friends & <span class="text-green glow-text">GET REWARDED!</span></p>
+      <div class="referral-code">{{REFERRAL_CODE}}</div>
+      <div class="referral-link">https://typebit8.com/?ref={{REFERRAL_CODE}}</div>
+    </div>
+    <div class="reward-box">
+      <div class="reward-badge">50% OFF</div>
+      <h2 style="color: #0ead69; margin-bottom: 16px;">HERE'S THE DEAL</h2>
+      <p style="font-size: 8px; margin-bottom: 16px;">When a friend signs up with your code<br><span class="text-yellow">AND</span> gets a Premium account...</p>
+      <p style="font-size: 10px; color: #0ead69; margin-bottom: 16px;">YOU GET <span class="text-yellow glow-text">50% OFF</span><br>YOUR NEXT MONTH OF PREMIUM!</p>
+      <p style="font-size: 7px; color: #4a4a6e;">No limits. Refer 2 friends = 1 FREE month!</p>
+    </div>
+    <div class="pixel-divider"></div>
+    <div class="pixel-box pixel-box-yellow">
+      <h2 style="color: #ffd93d;">WHAT'S IN PREMIUM?</h2>
+      <p style="font-size: 8px;"><span class="text-yellow">►</span> All 50 Levels Unlocked<br><span class="text-yellow">►</span> 2X Coin Multiplier<br><span class="text-yellow">►</span> 1.5X XP Boost<br><span class="text-yellow">►</span> Exclusive Shop Items<br><span class="text-yellow">►</span> Ad-Free Experience<br><span class="text-yellow">►</span> Priority Support</p>
+      <p style="font-size: 8px; margin-top: 16px; text-align: center;">Only <span class="text-yellow">$4.99/month</span> or <span class="text-green">$39.99/year</span></p>
+    </div>
+    <div style="text-align: center; margin: 30px 0;">
+      <a href="https://typebit8.com" class="cta-button">START TYPING NOW</a><br><br>
+      <a href="https://typebit8.com/premium" class="cta-button cta-button-yellow">VIEW PREMIUM</a>
+    </div>
+    <div class="pixel-box pixel-box-green">
+      <h3>PRO TIPS TO LEVEL UP FASTER</h3>
+      <p style="font-size: 8px;"><span class="text-green">1.</span> Practice daily - streaks = bonus rewards!<br><span class="text-green">2.</span> Focus on accuracy first, speed follows<br><span class="text-green">3.</span> Complete lessons without looking at keyboard<br><span class="text-green">4.</span> Challenge friends on the leaderboard</p>
+    </div>
+    <div class="footer">
+      <div class="social-links">
+        <a href="https://x.com/typebit873696" class="social-link">X (TWITTER)</a>
+        <a href="https://www.tiktok.com/@typebit8" class="social-link">TIKTOK</a>
+      </div>
+      <p>TYPEBIT8 © 2025. LEVEL UP YOUR TYPING.</p>
+      <p>STEININGER AG, ZUG, SWITZERLAND</p>
+      <div class="pixel-divider" style="margin: 20px auto; max-width: 200px;"></div>
+      <p style="font-size: 6px;">You received this email because you signed up for TypeBit8.<br><a href="{{UNSUBSCRIBE_URL}}" style="color: #3bceac;">Unsubscribe</a> | <a href="mailto:info@typebit8.com" style="color: #3bceac;">Contact Us</a></p>
+    </div>
+  </div>
+</body>
+</html>`;
+
+    function getVariables() {
+      return {
+        '{{FIRST_NAME}}': document.getElementById('firstName').value,
+        '{{REFERRAL_CODE}}': document.getElementById('referralCode').value,
+        '{{UNSUBSCRIBE_URL}}': document.getElementById('unsubscribeUrl').value,
+      };
+    }
+
+    function renderEmail() {
+      const vars = getVariables();
+      let html = emailTemplate;
+      for (const [key, value] of Object.entries(vars)) {
+        html = html.split(key).join(value);
+      }
+      return html;
+    }
+
+    function refreshPreview() {
+      const iframe = document.getElementById('emailFrame');
+      iframe.srcdoc = renderEmail();
+    }
+
+    function setDevice(device) {
+      const frame = document.getElementById('deviceFrame');
+      const buttons = document.querySelectorAll('.preview-btn');
+
+      buttons.forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+
+      if (device === 'mobile') {
+        frame.classList.add('mobile');
+      } else {
+        frame.classList.remove('mobile');
+      }
+    }
+
+    function openInNewTab() {
+      const html = renderEmail();
+      const blob = new Blob([html], { type: 'text/html' });
+      const url = URL.createObjectURL(blob);
+      window.open(url, '_blank');
+    }
+
+    // Initial load
+    refreshPreview();
+  </script>
+</body>
+</html>

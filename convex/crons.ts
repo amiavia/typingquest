@@ -16,4 +16,12 @@ crons.daily(
   internal.analytics.sendDailyReport
 );
 
+// Nurture email processor - runs daily at 10:00 UTC (11:00 AM Zurich)
+// Sends scheduled nurture emails to leads based on their signup date
+crons.daily(
+  "nurture-email-processor",
+  { hourUTC: 10, minuteUTC: 0 },
+  internal.emails.processNurtureQueue
+);
+
 export default crons;
