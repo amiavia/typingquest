@@ -121,10 +121,10 @@ export function Leaderboard({
       )}
 
       {/* Show Full / Show Less toggle */}
-      {scores && scores.length >= limit && (
+      {scores && leaderboardStats && leaderboardStats.totalPlayers > scores.length && !showFull && (
         <div className="mt-4 text-center">
           <button
-            onClick={() => setShowFull(!showFull)}
+            onClick={() => setShowFull(true)}
             style={{
               fontFamily: "'Press Start 2P', monospace",
               fontSize: '7px',
@@ -135,7 +135,25 @@ export function Leaderboard({
               cursor: 'pointer',
             }}
           >
-            {showFull ? '▲ SHOW LESS' : '▼ SHOW FULL LEADERBOARD'}
+            ▼ SHOW ALL {leaderboardStats.totalPlayers} PLAYERS
+          </button>
+        </div>
+      )}
+      {showFull && (
+        <div className="mt-4 text-center">
+          <button
+            onClick={() => setShowFull(false)}
+            style={{
+              fontFamily: "'Press Start 2P', monospace",
+              fontSize: '7px',
+              color: '#9a9ab0',
+              background: 'transparent',
+              border: '2px solid #9a9ab0',
+              padding: '8px 16px',
+              cursor: 'pointer',
+            }}
+          >
+            ▲ SHOW LESS
           </button>
         </div>
       )}
