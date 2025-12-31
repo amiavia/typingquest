@@ -8,7 +8,6 @@ import { ConvexReactClient } from 'convex/react'
 import './index.css'
 import { AppRouter } from './router.tsx'
 import { AuthProvider } from './contexts/AuthContext'
-import { PremiumSyncProvider } from './providers/PremiumSyncProvider'
 import { ThemeProvider } from './providers/ThemeProvider'
 import { KeyboardSkinProvider } from './providers/KeyboardSkinProvider'
 import { PowerUpProvider } from './providers/PowerUpProvider'
@@ -37,17 +36,15 @@ function Providers({ children }: { children: React.ReactNode }) {
     <ClerkProvider publishableKey={clerkPubKey}>
       <ConvexProviderWithClerk client={convex} useAuth={useAuth}>
         <AuthProvider>
-          <PremiumSyncProvider>
-            <ThemeProvider>
-              <KeyboardSkinProvider>
-                <KeyboardLayoutProvider>
-                  <PowerUpProvider>
-                    {children}
-                  </PowerUpProvider>
-                </KeyboardLayoutProvider>
-              </KeyboardSkinProvider>
-            </ThemeProvider>
-          </PremiumSyncProvider>
+          <ThemeProvider>
+            <KeyboardSkinProvider>
+              <KeyboardLayoutProvider>
+                <PowerUpProvider>
+                  {children}
+                </PowerUpProvider>
+              </KeyboardLayoutProvider>
+            </KeyboardSkinProvider>
+          </ThemeProvider>
         </AuthProvider>
       </ConvexProviderWithClerk>
     </ClerkProvider>

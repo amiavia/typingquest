@@ -1,12 +1,13 @@
 /**
- * PRP-030: HTTP Routes
+ * PRP-030/048: HTTP Routes
  *
- * Simplified HTTP router - Stripe webhook handling is now done by Clerk Billing.
+ * HTTP router with Stripe webhook handling for direct Stripe integration.
  */
 
 import { httpRouter } from "convex/server";
 import { httpAction } from "./_generated/server";
-import { api } from "./_generated/api";
+import { api, internal } from "./_generated/api";
+import Stripe from "stripe";
 
 const http = httpRouter();
 
@@ -24,8 +25,152 @@ http.route({
   }),
 });
 
-// Note: Stripe webhook endpoint removed - now handled by Clerk Billing internally
-// The /stripe-webhook route is no longer needed as Clerk manages all Stripe webhooks
+// ═══════════════════════════════════════════════════════════════════
+// PRP-048: STRIPE WEBHOOK HANDLER
+// ═══════════════════════════════════════════════════════════════════
+
+http.route({
+  path: "/stripe-webhook",
+  method: "POST",
+  handler: httpAction(async (ctx, request) => {
+    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+
+    const signature = request.headers.get("stripe-signature");
+    if (!signature) {
+      console.error("[Stripe Webhook] No signature provided");
+      return new Response("No signature", { status: 400 });
+    }
+
+    const body = await request.text();
+
+    let event: Stripe.Event;
+    try {
+      // Use constructEventAsync for Convex's async SubtleCrypto environment
+      event = await stripe.webhooks.constructEventAsync(
+        body,
+        signature,
+        process.env.STRIPE_WEBHOOK_SECRET!
+      );
+    } catch (err) {
+      console.error("[Stripe Webhook] Signature verification failed:", err);
+      return new Response("Invalid signature", { status: 400 });
+    }
+
+    console.log("[Stripe Webhook] Event received:", event.type);
+
+    try {
+      switch (event.type) {
+        case "checkout.session.completed": {
+          const session = event.data.object as Stripe.Checkout.Session;
+          const clerkId = session.metadata?.clerkId || "";
+
+          if (clerkId && session.subscription) {
+            await ctx.runMutation(internal.stripeWebhooks.handleCheckoutComplete, {
+              sessionId: session.id,
+              customerId: session.customer as string,
+              subscriptionId: session.subscription as string,
+              clerkId,
+            });
+          }
+          break;
+        }
+
+        case "customer.subscription.created":
+        case "customer.subscription.updated": {
+          // Type assertion for webhook data which may have fields not in the SDK types
+          const subscription = event.data.object as Stripe.Subscription & {
+            current_period_start?: number;
+            current_period_end?: number;
+          };
+          let clerkId: string | undefined = subscription.metadata?.clerkId;
+
+          // If no clerkId in metadata, try to find from customer
+          if (!clerkId) {
+            const foundClerkId = await ctx.runMutation(
+              internal.stripeWebhooks.getClerkIdFromCustomer,
+              { stripeCustomerId: subscription.customer as string }
+            );
+            clerkId = foundClerkId || undefined;
+          }
+
+          if (clerkId) {
+            // Get period from subscription items if not on main object
+            const periodStart = subscription.current_period_start ||
+              subscription.items.data[0]?.created ||
+              Math.floor(Date.now() / 1000);
+            const periodEnd = subscription.current_period_end ||
+              (subscription.cancel_at || Math.floor(Date.now() / 1000) + 30 * 24 * 60 * 60);
+
+            await ctx.runMutation(internal.stripeWebhooks.handleSubscriptionUpdate, {
+              subscriptionId: subscription.id,
+              customerId: subscription.customer as string,
+              status: subscription.status,
+              currentPeriodStart: periodStart,
+              currentPeriodEnd: periodEnd,
+              cancelAtPeriodEnd: subscription.cancel_at_period_end,
+              priceId: subscription.items.data[0]?.price.id || "",
+              clerkId,
+            });
+          } else {
+            console.warn("[Stripe Webhook] No clerkId found for subscription:", subscription.id);
+          }
+          break;
+        }
+
+        case "customer.subscription.deleted": {
+          const subscription = event.data.object as Stripe.Subscription;
+          let clerkId: string | undefined = subscription.metadata?.clerkId;
+
+          if (!clerkId) {
+            const foundClerkId = await ctx.runMutation(
+              internal.stripeWebhooks.getClerkIdFromCustomer,
+              { stripeCustomerId: subscription.customer as string }
+            );
+            clerkId = foundClerkId || undefined;
+          }
+
+          if (clerkId) {
+            await ctx.runMutation(internal.stripeWebhooks.handleSubscriptionDeleted, {
+              subscriptionId: subscription.id,
+              clerkId,
+            });
+          }
+          break;
+        }
+
+        case "invoice.payment_failed": {
+          const invoice = event.data.object as Stripe.Invoice;
+          // Access subscription from subscription_details if available
+          const subscriptionDetails = invoice.parent?.subscription_details;
+          const subscriptionId = subscriptionDetails?.subscription
+            ? (typeof subscriptionDetails.subscription === 'string'
+                ? subscriptionDetails.subscription
+                : subscriptionDetails.subscription.id)
+            : undefined;
+          await ctx.runMutation(internal.stripeWebhooks.handlePaymentFailed, {
+            customerId: invoice.customer as string,
+            subscriptionId,
+          });
+          break;
+        }
+
+        default:
+          console.log("[Stripe Webhook] Unhandled event type:", event.type);
+      }
+
+      return new Response(JSON.stringify({ received: true }), {
+        status: 200,
+        headers: { "Content-Type": "application/json" },
+      });
+    } catch (error) {
+      console.error("[Stripe Webhook] Error processing event:", error);
+      return new Response(JSON.stringify({ error: String(error) }), {
+        status: 500,
+        headers: { "Content-Type": "application/json" },
+      });
+    }
+  }),
+});
 
 // Manual trigger for daily analytics report
 http.route({

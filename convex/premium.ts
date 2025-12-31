@@ -1,13 +1,13 @@
 /**
- * PRP-030: Clerk Billing Premium Module
+ * PRP-030/048: Premium Module
  *
- * Simplified premium module - subscription management is now handled by Clerk Billing.
- * This file only contains helper queries for benefits display and streak freeze grants.
+ * Helper queries for benefits display and coin multipliers.
  *
- * MIGRATION NOTE:
- * - isPremium/getPremiumStatus: Now checked via Clerk's has() in frontend
- * - Checkout/Cancel/Reactivate: Now handled by Clerk PricingTable and UserProfile
- * - Webhooks: Now handled internally by Clerk
+ * MIGRATION NOTE (PRP-048):
+ * - Subscription management: Now handled by direct Stripe integration (stripe.ts, stripeWebhooks.ts)
+ * - Premium status: Synced via Stripe webhooks to Convex subscriptions table
+ * - Checkout: Custom Stripe Checkout Session (PremiumPage.tsx)
+ * - Portal: Stripe Customer Portal for subscription management
  */
 
 import { v } from "convex/values";
@@ -80,9 +80,8 @@ export const isPremiumByClerkId = query({
 });
 
 /**
- * Sync premium status from Clerk
- * This can be called from a Clerk webhook handler if needed
- * to keep the local database in sync with Clerk's subscription status
+ * @deprecated PRP-048: No longer needed - premium status now synced via Stripe webhooks
+ * See stripeWebhooks.ts handleSubscriptionUpdate for the new implementation
  */
 export const syncPremiumStatus = mutation({
   args: {
@@ -164,23 +163,15 @@ export const getCoinMultiplier = query({
 });
 
 // ═══════════════════════════════════════════════════════════════════
-// DEPRECATED - Kept for reference during migration
-// These functions are no longer needed with Clerk Billing
+// PRP-048: MIGRATION TO DIRECT STRIPE
+// These functions have been replaced by direct Stripe integration
 // ═══════════════════════════════════════════════════════════════════
 
 /*
-REMOVED FUNCTIONS (now handled by Clerk Billing):
-- isPremium: Use Clerk's has({ plan: 'premium_monthly' }) or has({ plan: 'premium_yearly' })
-- getPremiumStatus: Subscription details available in Clerk session
-- updatePremiumStatus: Clerk handles subscription state
-- upsertSubscription: Clerk manages subscriptions
-- getSubscriptionByStripeId: No longer needed
-- getSubscriptionByClerkId: No longer needed
-- cancelSubscription: Use Clerk's UserProfile component
-- reactivateSubscription: Use Clerk's UserProfile component
-- getUserByStripeCustomerId: Clerk links Stripe customers automatically
-- handleCheckoutComplete: Clerk handles checkout webhooks
-- handleSubscriptionUpdate: Clerk handles subscription webhooks
-- handleSubscriptionCanceled: Clerk handles cancellation webhooks
-- handlePaymentFailed: Clerk handles payment failure webhooks
+MIGRATED FUNCTIONS (PRP-048):
+- Subscription queries: See subscriptions.ts (getActiveSubscription, isPremium)
+- Checkout: See stripe.ts (createCheckoutSession)
+- Portal: See stripe.ts (createPortalSession)
+- Webhooks: See stripeWebhooks.ts (handleSubscriptionUpdate, etc.)
+- Premium sync: Now automatic via Stripe webhooks (no PremiumSyncProvider needed)
 */

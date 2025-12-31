@@ -1,11 +1,13 @@
 /**
- * PRP-030: Clerk Billing Integration Hook
+ * PRP-048: Direct Stripe Premium Hook
  *
- * Uses Clerk's has() helper to check premium status.
- * Replaces the previous Convex-based premium checking.
+ * Uses Convex subscription data (populated by Stripe webhooks) to check premium status.
+ * Replaces the previous Clerk Billing-based checking.
  */
 
 import { useAuth } from "@clerk/clerk-react";
+import { useQuery } from "convex/react";
+import { api } from "../../convex/_generated/api";
 
 export interface PremiumBenefits {
   coinMultiplier: number;
@@ -16,11 +18,19 @@ export interface PremiumBenefits {
   prioritySupport: boolean;
 }
 
+export interface SubscriptionInfo {
+  status: string;
+  plan: string;
+  currentPeriodEnd: number;
+  cancelAtPeriodEnd: boolean;
+}
+
 export interface UsePremiumResult {
   isPremium: boolean;
   isLoading: boolean;
-  plan: "free" | "premium_monthly" | null;
+  plan: "free" | "monthly" | "yearly" | null;
   benefits: PremiumBenefits;
+  subscription: SubscriptionInfo | null;
   applyMultiplier: (coins: number) => number;
 }
 
@@ -43,16 +53,26 @@ const PREMIUM_BENEFITS: PremiumBenefits = {
 };
 
 export function usePremium(): UsePremiumResult {
-  const { has, isLoaded } = useAuth();
+  const { userId, isLoaded: authLoaded } = useAuth();
 
-  // Check premium plan using Clerk Billing's has() helper
-  // Clerk uses a single plan with both monthly and annual billing options
-  // Plan key: premium_monthly (covers both billing frequencies)
-  const isPremium = has?.({ plan: "premium_monthly" }) ?? false;
+  // Query subscription from Convex (populated by Stripe webhooks)
+  const subscription = useQuery(
+    api.subscriptions.getActiveSubscription,
+    userId ? { clerkId: userId } : "skip"
+  );
 
-  // Note: Clerk's single plan covers both monthly and annual billing
-  // The plan key is the same regardless of billing frequency
-  const plan = isPremium ? "premium_monthly" : "free";
+  const isLoading = !authLoaded || subscription === undefined;
+
+  // Check if subscription is active
+  const isPremium =
+    subscription !== null &&
+    subscription !== undefined &&
+    ["active", "trialing"].includes(subscription.status);
+
+  // Get plan type
+  const plan = isPremium
+    ? (subscription?.plan as "monthly" | "yearly")
+    : "free";
 
   const benefits = isPremium ? PREMIUM_BENEFITS : FREE_BENEFITS;
 
@@ -62,18 +82,36 @@ export function usePremium(): UsePremiumResult {
 
   return {
     isPremium,
-    isLoading: !isLoaded,
+    isLoading,
     plan,
     benefits,
+    subscription: subscription
+      ? {
+          status: subscription.status,
+          plan: subscription.plan,
+          currentPeriodEnd: subscription.currentPeriodEnd,
+          cancelAtPeriodEnd: subscription.cancelAtPeriodEnd,
+        }
+      : null,
     applyMultiplier,
   };
 }
 
 /**
- * Helper to check specific premium features
- * Usage: const hasDoubleCoins = usePremiumFeature('double_coins');
+ * Simple boolean check for premium status
+ * For use in components that only need to know if user is premium
  */
-export function usePremiumFeature(feature: string): boolean {
-  const { has } = useAuth();
-  return has?.({ feature }) ?? false;
+export function useIsPremium(): boolean {
+  const { isPremium } = usePremium();
+  return isPremium;
+}
+
+/**
+ * Helper to check specific premium features
+ * Returns true if user has premium access
+ */
+export function usePremiumFeature(_feature: string): boolean {
+  const { isPremium } = usePremium();
+  // All premium features are included in subscription
+  return isPremium;
 }
