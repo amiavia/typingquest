@@ -91,13 +91,30 @@ export function LessonView({ lesson, onComplete, onQuizComplete, onBack, keyboar
     if (currentExercise < lesson.exercises.length - 1) {
       setCurrentExercise(prev => prev + 1);
     } else {
+      // Calculate totals
+      const totalCorrectChars = newStats.reduce((sum, s) => sum + s.correctChars, 0);
+      const totalIncorrectChars = newStats.reduce((sum, s) => sum + s.incorrectChars, 0);
+      const totalChars = newStats.reduce((sum, s) => sum + s.totalChars, 0);
+      const totalTimeElapsed = newStats.reduce((sum, s) => sum + s.timeElapsed, 0);
+
+      // Calculate WPM from total chars / total time (correct formula)
+      const wpm = totalTimeElapsed > 0
+        ? Math.round((totalCorrectChars / 5) / (totalTimeElapsed / 60))
+        : 0;
+
+      // Calculate accuracy from total correct / total typed
+      const totalTyped = totalCorrectChars + totalIncorrectChars;
+      const accuracy = totalTyped > 0
+        ? Math.round((totalCorrectChars / totalTyped) * 100)
+        : 100;
+
       const avgStats: TypingStats = {
-        wpm: Math.round(newStats.reduce((sum, s) => sum + s.wpm, 0) / newStats.length),
-        accuracy: Math.round(newStats.reduce((sum, s) => sum + s.accuracy, 0) / newStats.length),
-        correctChars: newStats.reduce((sum, s) => sum + s.correctChars, 0),
-        incorrectChars: newStats.reduce((sum, s) => sum + s.incorrectChars, 0),
-        totalChars: newStats.reduce((sum, s) => sum + s.totalChars, 0),
-        timeElapsed: newStats.reduce((sum, s) => sum + s.timeElapsed, 0),
+        wpm,
+        accuracy,
+        correctChars: totalCorrectChars,
+        incorrectChars: totalIncorrectChars,
+        totalChars,
+        timeElapsed: totalTimeElapsed,
       };
       onComplete(avgStats);
       setPhase('quiz');
@@ -290,10 +307,21 @@ export function LessonView({ lesson, onComplete, onQuizComplete, onBack, keyboar
   }
 
   if (phase === 'complete') {
-    const avgStats = exerciseStats.length > 0 ? {
-      wpm: Math.round(exerciseStats.reduce((sum, s) => sum + s.wpm, 0) / exerciseStats.length),
-      accuracy: Math.round(exerciseStats.reduce((sum, s) => sum + s.accuracy, 0) / exerciseStats.length),
-    } : { wpm: 0, accuracy: 0 };
+    // Calculate WPM from total chars / total time (correct formula)
+    const totalCorrectChars = exerciseStats.reduce((sum, s) => sum + s.correctChars, 0);
+    const totalIncorrectChars = exerciseStats.reduce((sum, s) => sum + s.incorrectChars, 0);
+    const totalTimeElapsed = exerciseStats.reduce((sum, s) => sum + s.timeElapsed, 0);
+
+    const wpm = exerciseStats.length > 0 && totalTimeElapsed > 0
+      ? Math.round((totalCorrectChars / 5) / (totalTimeElapsed / 60))
+      : 0;
+
+    const totalTyped = totalCorrectChars + totalIncorrectChars;
+    const accuracy = exerciseStats.length > 0 && totalTyped > 0
+      ? Math.round((totalCorrectChars / totalTyped) * 100)
+      : 0;
+
+    const avgStats = { wpm, accuracy };
 
     // PRP-046: Show premium teaser when completing the last free level (level 6)
     const LAST_FREE_LEVEL = 6;

@@ -36,24 +36,42 @@ export function Quiz({ lesson, quizWords, layoutKeys, onComplete, onCancel, keyb
   };
 
   const handleWordComplete = (stats: TypingStats) => {
-    setTotalStats(prev => ({
-      wpm: Math.round((prev.wpm * currentWordIndex + stats.wpm) / (currentWordIndex + 1)),
-      accuracy: Math.round((prev.accuracy * currentWordIndex + stats.accuracy) / (currentWordIndex + 1)),
-      correctChars: prev.correctChars + stats.correctChars,
-      incorrectChars: prev.incorrectChars + stats.incorrectChars,
-      totalChars: prev.totalChars + stats.totalChars,
-      timeElapsed: prev.timeElapsed + stats.timeElapsed,
-    }));
+    // Calculate cumulative totals
+    const newCorrectChars = totalStats.correctChars + stats.correctChars;
+    const newIncorrectChars = totalStats.incorrectChars + stats.incorrectChars;
+    const newTotalChars = totalStats.totalChars + stats.totalChars;
+    const newTimeElapsed = totalStats.timeElapsed + stats.timeElapsed;
+
+    // Calculate WPM from total chars / total time (correct formula)
+    const newWpm = newTimeElapsed > 0
+      ? Math.round((newCorrectChars / 5) / (newTimeElapsed / 60))
+      : 0;
+
+    // Calculate accuracy from total correct / total typed
+    const totalTyped = newCorrectChars + newIncorrectChars;
+    const newAccuracy = totalTyped > 0
+      ? Math.round((newCorrectChars / totalTyped) * 100)
+      : 100;
+
+    setTotalStats({
+      wpm: newWpm,
+      accuracy: newAccuracy,
+      correctChars: newCorrectChars,
+      incorrectChars: newIncorrectChars,
+      totalChars: newTotalChars,
+      timeElapsed: newTimeElapsed,
+    });
 
     if (currentWordIndex < quizWords.length - 1) {
       setCurrentWordIndex(prev => prev + 1);
     } else {
       const finalStats = {
-        ...totalStats,
-        wpm: Math.round((totalStats.wpm * currentWordIndex + stats.wpm) / (currentWordIndex + 1)),
-        accuracy: Math.round((totalStats.accuracy * currentWordIndex + stats.accuracy) / (currentWordIndex + 1)),
-        correctChars: totalStats.correctChars + stats.correctChars,
-        incorrectChars: totalStats.incorrectChars + stats.incorrectChars,
+        wpm: newWpm,
+        accuracy: newAccuracy,
+        correctChars: newCorrectChars,
+        incorrectChars: newIncorrectChars,
+        totalChars: newTotalChars,
+        timeElapsed: newTimeElapsed,
       };
       const passed = finalStats.wpm >= lesson.minWPM && finalStats.accuracy >= lesson.minAccuracy;
       onComplete(passed, finalStats);
