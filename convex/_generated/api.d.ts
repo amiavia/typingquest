@@ -19,6 +19,7 @@ import type * as http from "../http.js";
 import type * as leaderboard from "../leaderboard.js";
 import type * as leads from "../leads.js";
 import type * as lessonProgress from "../lessonProgress.js";
+import type * as lib_nicknames from "../lib/nicknames.js";
 import type * as migrations from "../migrations.js";
 import type * as nicknameWords from "../nicknameWords.js";
 import type * as nicknames from "../nicknames.js";
@@ -49,6 +50,7 @@ declare const fullApi: ApiFromModules<{
   leaderboard: typeof leaderboard;
   leads: typeof leads;
   lessonProgress: typeof lessonProgress;
+  "lib/nicknames": typeof lib_nicknames;
   migrations: typeof migrations;
   nicknameWords: typeof nicknameWords;
   nicknames: typeof nicknames;
