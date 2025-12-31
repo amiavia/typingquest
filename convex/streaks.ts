@@ -1,6 +1,7 @@
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
 import { requireAdmin } from "./auth";
+import { getDisplayName } from "./lib/nicknames";
 
 // Get today's date in YYYY-MM-DD format
 function getTodayDate(): string {
@@ -348,10 +349,12 @@ export const getStreakLeaderboard = query({
           .withIndex("by_clerk_id", (q) => q.eq("clerkId", streak.clerkId))
           .first();
 
+        // PRP-029: Use nickname, NEVER expose real name or email
+        // PRP-047: Use funny nickname instead of "Anonymous"
+        const oderId = user?._id as string || streak.clerkId;
         return {
           clerkId: streak.clerkId,
-          // PRP-029: Use nickname, NEVER expose real name or email
-          username: user?.nickname || user?.autoNickname || "Anonymous",
+          username: getDisplayName(user?.nickname, user?.autoNickname, oderId),
           imageUrl: user?.imageUrl,
           currentStreak: streak.currentStreak,
           longestStreak: streak.longestStreak,
