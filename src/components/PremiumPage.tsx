@@ -15,9 +15,9 @@ import { usePremium } from "../hooks/usePremium";
 import { useRegionalPricing } from "../hooks/useRegionalPricing";
 
 // PRP-051: New Year Promotion Configuration
-const PROMO_END_DATE = new Date('2025-01-14T23:59:59Z').getTime();
-const PROMO_START_DATE = new Date('2025-01-01T00:00:00Z').getTime();
-const PROMO_CODE = 'NEWYEAR25';
+const PROMO_END_DATE = new Date('2026-01-14T23:59:59Z').getTime();
+const PROMO_START_DATE = new Date('2026-01-01T00:00:00Z').getTime();
+const PROMO_CODE = 'NEWYEAR26';
 const PROMO_DISCOUNT = 0.5; // 50% off
 
 function isPromoActive(): boolean {

@@ -1,16 +1,16 @@
 /**
- * PRP-051: New Year 2025 Promotion Banner
+ * PRP-051: New Year 2026 Promotion Banner
  *
- * Displays a promotional banner for the New Year sale (Jan 1-14, 2025)
+ * Displays a promotional banner for the New Year sale (Jan 1-14, 2026)
  * with countdown timer and link to premium page.
  */
 
 import { useState, useEffect } from 'react';
 
-// Promotion end date: Jan 14, 2025 23:59:59 UTC
-const PROMO_END_DATE = new Date('2025-01-14T23:59:59Z').getTime();
-const PROMO_START_DATE = new Date('2025-01-01T00:00:00Z').getTime();
-const PROMO_CODE = 'NEWYEAR25';
+// Promotion end date: Jan 14, 2026 23:59:59 UTC
+const PROMO_END_DATE = new Date('2026-01-14T23:59:59Z').getTime();
+const PROMO_START_DATE = new Date('2026-01-01T00:00:00Z').getTime();
+const PROMO_CODE = 'NEWYEAR26';
 
 interface TimeLeft {
   days: number;
