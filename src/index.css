@@ -102,6 +102,30 @@
   --accent-cyan-rgb: 59, 206, 172;
   --accent-green-rgb: 14, 173, 105;
   --accent-yellow-rgb: 255, 217, 61;
+
+  /* PRP-051: Card backgrounds with text colors for marketing pages (dark mode) */
+  --card-green-bg: rgba(14, 173, 105, 0.15);
+  --card-green-text: #3bceac;
+  --card-pink-bg: rgba(255, 107, 157, 0.15);
+  --card-pink-text: #ff6b9d;
+  --card-yellow-bg: rgba(255, 217, 61, 0.15);
+  --card-yellow-text: #ffd93d;
+  --card-purple-bg: rgba(168, 85, 247, 0.15);
+  --card-purple-text: #a855f7;
+  --card-orange-bg: rgba(249, 115, 22, 0.15);
+  --card-orange-text: #f97316;
+  --card-cyan-bg: rgba(59, 206, 172, 0.15);
+  --card-cyan-text: #3bceac;
+
+  /* Marketing page section heading colors (dark mode) */
+  --heading-cyan: #3bceac;
+  --heading-pink: #ff6b9d;
+  --heading-yellow: #ffd93d;
+  --heading-purple: #a855f7;
+
+  /* Body text for marketing pages (dark mode) */
+  --marketing-body: #eef5db;
+  --marketing-body-muted: #a0a0c0;
 }
 
 /* PRP-049: Cream Light Theme - Enhanced Readability */
@@ -173,6 +197,30 @@
   --accent-cyan-rgb: 10, 90, 74;
   --accent-green-rgb: 8, 106, 58;
   --accent-yellow-rgb: 90, 64, 8;
+
+  /* PRP-051: Card backgrounds with HIGH CONTRAST text for marketing pages */
+  --card-green-bg: #e8f5e8;
+  --card-green-text: #1a4a2a;
+  --card-pink-bg: #f5e8ef;
+  --card-pink-text: #5a1a3a;
+  --card-yellow-bg: #f5f0e0;
+  --card-yellow-text: #4a3a0a;
+  --card-purple-bg: #f0e8f5;
+  --card-purple-text: #3a1a4a;
+  --card-orange-bg: #f5ebe0;
+  --card-orange-text: #5a2a0a;
+  --card-cyan-bg: #e0f5f0;
+  --card-cyan-text: #0a3a3a;
+
+  /* Marketing page section heading colors - high contrast */
+  --heading-cyan: #0a4a3a;
+  --heading-pink: #6a1a3a;
+  --heading-yellow: #5a4008;
+  --heading-purple: #4a1a6a;
+
+  /* Body text for marketing pages - must be dark */
+  --marketing-body: #2a2a3a;
+  --marketing-body-muted: #4a4a5a;
 }
 
 /* Disable glow effects in light theme */

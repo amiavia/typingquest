@@ -42,7 +42,7 @@ export function TenFingerCoursePage() {
             <Link
               to="/"
               className="inline-flex items-center gap-2 mb-6 transition-colors hover:opacity-80"
-              style={{ fontFamily: "'Press Start 2P'", fontSize: '10px', color: '#3bceac' }}
+              style={{ fontFamily: "'Press Start 2P'", fontSize: '10px', color: 'var(--accent-cyan)' }}
             >
               ← BACK TO APP
             </Link>
@@ -50,7 +50,7 @@ export function TenFingerCoursePage() {
               style={{
                 fontFamily: "'Press Start 2P'",
                 fontSize: '20px',
-                color: '#ffd93d',
+                color: 'var(--accent-yellow)',
                 lineHeight: '1.8',
               }}
               className="text-glow-yellow"
@@ -61,7 +61,7 @@ export function TenFingerCoursePage() {
               style={{
                 fontFamily: "'Press Start 2P'",
                 fontSize: '10px',
-                color: '#3bceac',
+                color: 'var(--accent-cyan)',
                 marginTop: '8px',
               }}
             >
@@ -75,7 +75,7 @@ export function TenFingerCoursePage() {
               style={{
                 fontFamily: "'Press Start 2P'",
                 fontSize: '12px',
-                color: '#ffd93d',
+                color: 'var(--accent-yellow)',
                 marginBottom: '16px',
                 textAlign: 'center',
               }}
@@ -90,8 +90,8 @@ export function TenFingerCoursePage() {
             <p
               style={{
                 fontFamily: "'Press Start 2P'",
-                fontSize: '8px',
-                color: '#eef5db',
+                fontSize: '10px',
+                color: 'var(--text-primary)',
                 textAlign: 'center',
                 marginTop: '16px',
                 lineHeight: '2',
@@ -107,7 +107,7 @@ export function TenFingerCoursePage() {
               style={{
                 fontFamily: "'Press Start 2P'",
                 fontSize: '14px',
-                color: '#3bceac',
+                color: 'var(--accent-cyan)',
                 marginBottom: '24px',
               }}
             >
@@ -118,15 +118,15 @@ export function TenFingerCoursePage() {
               <div
                 className="p-6"
                 style={{
-                  background: 'rgba(34, 197, 94, 0.1)',
-                  border: '3px solid #22c55e',
+                  background: 'var(--card-green-bg)',
+                  border: '3px solid var(--accent-green)',
                 }}
               >
                 <h3
                   style={{
                     fontFamily: "'Press Start 2P'",
                     fontSize: '10px',
-                    color: '#22c55e',
+                    color: 'var(--accent-green)',
                     marginBottom: '12px',
                   }}
                 >
@@ -135,8 +135,8 @@ export function TenFingerCoursePage() {
                 <p
                   style={{
                     fontFamily: "'Press Start 2P'",
-                    fontSize: '7px',
-                    color: '#eef5db',
+                    fontSize: '10px',
+                    color: 'var(--text-primary)',
                     lineHeight: '2',
                   }}
                 >
@@ -149,15 +149,15 @@ export function TenFingerCoursePage() {
               <div
                 className="p-6"
                 style={{
-                  background: 'rgba(59, 206, 172, 0.1)',
-                  border: '3px solid #3bceac',
+                  background: 'var(--card-cyan-bg)',
+                  border: '3px solid var(--accent-cyan)',
                 }}
               >
                 <h3
                   style={{
                     fontFamily: "'Press Start 2P'",
                     fontSize: '10px',
-                    color: '#3bceac',
+                    color: 'var(--accent-cyan)',
                     marginBottom: '12px',
                   }}
                 >
@@ -166,8 +166,8 @@ export function TenFingerCoursePage() {
                 <p
                   style={{
                     fontFamily: "'Press Start 2P'",
-                    fontSize: '7px',
-                    color: '#eef5db',
+                    fontSize: '10px',
+                    color: 'var(--text-primary)',
                     lineHeight: '2',
                   }}
                 >
@@ -179,15 +179,15 @@ export function TenFingerCoursePage() {
               <div
                 className="p-6"
                 style={{
-                  background: 'rgba(255, 217, 61, 0.1)',
-                  border: '3px solid #ffd93d',
+                  background: 'var(--card-yellow-bg)',
+                  border: '3px solid var(--accent-yellow)',
                 }}
               >
                 <h3
                   style={{
                     fontFamily: "'Press Start 2P'",
                     fontSize: '10px',
-                    color: '#ffd93d',
+                    color: 'var(--accent-yellow)',
                     marginBottom: '12px',
                   }}
                 >
@@ -196,8 +196,8 @@ export function TenFingerCoursePage() {
                 <p
                   style={{
                     fontFamily: "'Press Start 2P'",
-                    fontSize: '7px',
-                    color: '#eef5db',
+                    fontSize: '10px',
+                    color: 'var(--text-primary)',
                     lineHeight: '2',
                   }}
                 >
@@ -209,15 +209,15 @@ export function TenFingerCoursePage() {
               <div
                 className="p-6"
                 style={{
-                  background: 'rgba(139, 92, 246, 0.1)',
-                  border: '3px solid #8b5cf6',
+                  background: 'var(--card-purple-bg)',
+                  border: '3px solid var(--accent-purple)',
                 }}
               >
                 <h3
                   style={{
                     fontFamily: "'Press Start 2P'",
                     fontSize: '10px',
-                    color: '#8b5cf6',
+                    color: 'var(--accent-purple)',
                     marginBottom: '12px',
                   }}
                 >
@@ -226,8 +226,8 @@ export function TenFingerCoursePage() {
                 <p
                   style={{
                     fontFamily: "'Press Start 2P'",
-                    fontSize: '7px',
-                    color: '#eef5db',
+                    fontSize: '10px',
+                    color: 'var(--text-primary)',
                     lineHeight: '2',
                   }}
                 >
@@ -240,15 +240,15 @@ export function TenFingerCoursePage() {
             <div
               className="mt-4 p-6"
               style={{
-                background: 'rgba(255, 107, 157, 0.1)',
-                border: '3px solid #ff6b9d',
+                background: 'var(--card-pink-bg)',
+                border: '3px solid var(--accent-pink)',
               }}
             >
               <h3
                 style={{
                   fontFamily: "'Press Start 2P'",
                   fontSize: '10px',
-                  color: '#ff6b9d',
+                  color: 'var(--accent-pink)',
                   marginBottom: '12px',
                 }}
               >
@@ -257,8 +257,8 @@ export function TenFingerCoursePage() {
               <p
                 style={{
                   fontFamily: "'Press Start 2P'",
-                  fontSize: '7px',
-                  color: '#eef5db',
+                  fontSize: '10px',
+                  color: 'var(--text-primary)',
                   lineHeight: '2',
                 }}
               >
@@ -274,7 +274,7 @@ export function TenFingerCoursePage() {
               style={{
                 fontFamily: "'Press Start 2P'",
                 fontSize: '14px',
-                color: '#3bceac',
+                color: 'var(--accent-cyan)',
                 marginBottom: '16px',
               }}
             >
@@ -285,8 +285,8 @@ export function TenFingerCoursePage() {
                 <h3
                   style={{
                     fontFamily: "'Press Start 2P'",
-                    fontSize: '9px',
-                    color: '#ffd93d',
+                    fontSize: '10px',
+                    color: 'var(--accent-yellow)',
                     marginBottom: '8px',
                   }}
                 >
@@ -295,8 +295,8 @@ export function TenFingerCoursePage() {
                 <p
                   style={{
                     fontFamily: "'Press Start 2P'",
-                    fontSize: '7px',
-                    color: '#eef5db',
+                    fontSize: '10px',
+                    color: 'var(--text-primary)',
                     lineHeight: '2',
                   }}
                 >
@@ -308,8 +308,8 @@ export function TenFingerCoursePage() {
                 <h3
                   style={{
                     fontFamily: "'Press Start 2P'",
-                    fontSize: '9px',
-                    color: '#ffd93d',
+                    fontSize: '10px',
+                    color: 'var(--accent-yellow)',
                     marginBottom: '8px',
                   }}
                 >
@@ -318,8 +318,8 @@ export function TenFingerCoursePage() {
                 <p
                   style={{
                     fontFamily: "'Press Start 2P'",
-                    fontSize: '7px',
-                    color: '#eef5db',
+                    fontSize: '10px',
+                    color: 'var(--text-primary)',
                     lineHeight: '2',
                   }}
                 >
@@ -330,8 +330,8 @@ export function TenFingerCoursePage() {
                 <h3
                   style={{
                     fontFamily: "'Press Start 2P'",
-                    fontSize: '9px',
-                    color: '#ffd93d',
+                    fontSize: '10px',
+                    color: 'var(--accent-yellow)',
                     marginBottom: '8px',
                   }}
                 >
@@ -340,8 +340,8 @@ export function TenFingerCoursePage() {
                 <p
                   style={{
                     fontFamily: "'Press Start 2P'",
-                    fontSize: '7px',
-                    color: '#eef5db',
+                    fontSize: '10px',
+                    color: 'var(--text-primary)',
                     lineHeight: '2',
                   }}
                 >
@@ -353,8 +353,8 @@ export function TenFingerCoursePage() {
                 <h3
                   style={{
                     fontFamily: "'Press Start 2P'",
-                    fontSize: '9px',
-                    color: '#ffd93d',
+                    fontSize: '10px',
+                    color: 'var(--accent-yellow)',
                     marginBottom: '8px',
                   }}
                 >
@@ -363,8 +363,8 @@ export function TenFingerCoursePage() {
                 <p
                   style={{
                     fontFamily: "'Press Start 2P'",
-                    fontSize: '7px',
-                    color: '#eef5db',
+                    fontSize: '10px',
+                    color: 'var(--text-primary)',
                     lineHeight: '2',
                   }}
                 >
@@ -380,7 +380,7 @@ export function TenFingerCoursePage() {
               style={{
                 fontFamily: "'Press Start 2P'",
                 fontSize: '12px',
-                color: '#3bceac',
+                color: 'var(--accent-cyan)',
                 marginBottom: '16px',
               }}
             >
@@ -392,8 +392,8 @@ export function TenFingerCoursePage() {
                   <h3
                     style={{
                       fontFamily: "'Press Start 2P'",
-                      fontSize: '9px',
-                      color: '#ffd93d',
+                      fontSize: '10px',
+                      color: 'var(--accent-yellow)',
                       marginBottom: '8px',
                     }}
                   >
@@ -402,8 +402,8 @@ export function TenFingerCoursePage() {
                   <p
                     style={{
                       fontFamily: "'Press Start 2P'",
-                      fontSize: '7px',
-                      color: '#eef5db',
+                      fontSize: '10px',
+                      color: 'var(--text-primary)',
                       lineHeight: '2.2',
                     }}
                   >
@@ -422,9 +422,9 @@ export function TenFingerCoursePage() {
               style={{
                 fontFamily: "'Press Start 2P'",
                 fontSize: '12px',
-                background: 'linear-gradient(180deg, #3bceac, #0ead69)',
-                color: '#0f0f1b',
-                boxShadow: '0 4px 0 #0a8a54',
+                background: 'var(--btn-primary-bg)',
+                color: 'var(--btn-primary-text)',
+                boxShadow: '0 4px 0 var(--accent-green)',
               }}
             >
               START LESSON 1 FREE

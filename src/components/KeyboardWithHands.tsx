@@ -192,11 +192,11 @@ export function KeyboardWithHands({
             <span
               style={{
                 fontFamily: "'Press Start 2P'",
-                fontSize: '8px',
-                color: '#3bceac',
+                fontSize: '10px',
+                color: 'var(--accent-cyan)',
                 padding: '4px 8px',
-                border: '2px solid #3bceac',
-                backgroundColor: 'rgba(59, 206, 172, 0.1)'
+                border: '2px solid var(--accent-cyan)',
+                backgroundColor: 'var(--card-cyan-bg)'
               }}
             >
               {layoutConfig.name}
@@ -264,7 +264,7 @@ export function KeyboardWithHands({
             style={{
               marginTop: '16px',
               paddingTop: '16px',
-              borderTop: '2px solid #3bceac',
+              borderTop: '2px solid var(--accent-cyan)',
             }}
           >
             <FingerLegend />
@@ -302,7 +302,7 @@ function FingerLegend() {
             alignItems: 'center',
             gap: '4px',
             fontFamily: "'Press Start 2P', monospace",
-            fontSize: '6px',
+            fontSize: '10px',
           }}
         >
           <div
@@ -316,7 +316,7 @@ function FingerLegend() {
               boxShadow: `0 0 5px ${PIXEL_FINGER_COLORS[finger]}`,
             }}
           />
-          <span style={{ color: '#eef5db' }}>{label}</span>
+          <span style={{ color: 'var(--text-primary)' }}>{label}</span>
         </div>
       ))}
     </div>

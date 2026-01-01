@@ -57,7 +57,7 @@ export function LevelGroupCollapsed({
             <span
               style={{
                 fontFamily: "'Press Start 2P', monospace",
-                fontSize: '7px',
+                fontSize: '10px',
                 color: 'var(--text-muted)',
               }}
             >
@@ -107,7 +107,7 @@ export function LevelGroupCollapsed({
                 className="text-center"
                 style={{
                   fontFamily: "'Press Start 2P', monospace",
-                  fontSize: '7px',
+                  fontSize: '10px',
                   color: 'var(--text-primary)',
                   lineHeight: '1.8',
                   maxWidth: '400px',
@@ -137,7 +137,7 @@ export function LevelGroupCollapsed({
                     <span
                       style={{
                         fontFamily: "'Press Start 2P', monospace",
-                        fontSize: '5px',
+                        fontSize: '10px',
                         color: 'var(--text-primary)',
                       }}
                     >
@@ -208,7 +208,7 @@ export function LevelGroupCollapsed({
           <span
             style={{
               fontFamily: "'Press Start 2P', monospace",
-              fontSize: '7px',
+              fontSize: '10px',
               color: 'var(--text-muted)',
             }}
           >
@@ -227,7 +227,7 @@ export function LevelGroupCollapsed({
               className="cursor-pointer transition-all hover:scale-105"
               style={{
                 fontFamily: "'Press Start 2P', monospace",
-                fontSize: '8px',
+                fontSize: '10px',
                 color: 'var(--accent-purple)',
                 background: 'rgba(var(--accent-purple-rgb, 139, 92, 246), 0.1)',
                 border: '2px solid var(--accent-purple)',
@@ -258,7 +258,7 @@ export function LevelGroupCollapsed({
               className="text-center"
               style={{
                 fontFamily: "'Press Start 2P', monospace",
-                fontSize: '6px',
+                fontSize: '10px',
                 color: 'var(--text-primary)',
                 lineHeight: '2',
                 maxWidth: '450px',
@@ -288,7 +288,7 @@ export function LevelGroupCollapsed({
                   <h4
                     style={{
                       fontFamily: "'Press Start 2P', monospace",
-                      fontSize: '6px',
+                      fontSize: '10px',
                       color: 'var(--accent-cyan)',
                       marginTop: '8px',
                     }}
@@ -298,7 +298,7 @@ export function LevelGroupCollapsed({
                   <p
                     style={{
                       fontFamily: "'Press Start 2P', monospace",
-                      fontSize: '4px',
+                      fontSize: '10px',
                       color: 'var(--text-muted)',
                       marginTop: '4px',
                     }}
@@ -320,7 +320,7 @@ export function LevelGroupCollapsed({
               <p
                 style={{
                   fontFamily: "'Press Start 2P', monospace",
-                  fontSize: '7px',
+                  fontSize: '10px',
                   color: 'var(--accent-yellow)',
                   fontStyle: 'italic',
                 }}
@@ -330,7 +330,7 @@ export function LevelGroupCollapsed({
               <p
                 style={{
                   fontFamily: "'Press Start 2P', monospace",
-                  fontSize: '5px',
+                  fontSize: '10px',
                   color: 'var(--text-muted)',
                   marginTop: '8px',
                 }}

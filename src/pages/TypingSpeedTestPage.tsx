@@ -75,7 +75,7 @@ export function TypingSpeedTestPage() {
             <Link
               to="/"
               className="inline-flex items-center gap-2 mb-6 transition-colors hover:opacity-80"
-              style={{ fontFamily: "'Press Start 2P'", fontSize: '10px', color: '#3bceac' }}
+              style={{ fontFamily: "'Press Start 2P'", fontSize: '10px', color: 'var(--accent-cyan)' }}
             >
               ← BACK TO APP
             </Link>
@@ -83,7 +83,7 @@ export function TypingSpeedTestPage() {
               style={{
                 fontFamily: "'Press Start 2P'",
                 fontSize: '20px',
-                color: '#ffd93d',
+                color: 'var(--accent-yellow)',
                 lineHeight: '1.8',
               }}
               className="text-glow-yellow"
@@ -94,7 +94,7 @@ export function TypingSpeedTestPage() {
               style={{
                 fontFamily: "'Press Start 2P'",
                 fontSize: '10px',
-                color: '#3bceac',
+                color: 'var(--accent-cyan)',
                 marginTop: '8px',
               }}
             >
@@ -113,7 +113,7 @@ export function TypingSpeedTestPage() {
                   style={{
                     fontFamily: "'Press Start 2P'",
                     fontSize: '14px',
-                    color: '#ffd93d',
+                    color: 'var(--accent-yellow)',
                     marginBottom: '16px',
                   }}
                 >
@@ -125,14 +125,14 @@ export function TypingSpeedTestPage() {
                       style={{
                         fontFamily: "'Press Start 2P'",
                         fontSize: '32px',
-                        color: '#3bceac',
+                        color: 'var(--accent-cyan)',
                       }}
                       className="text-glow-cyan"
                     >
                       {testResult.wpm}
                     </div>
                     <div
-                      style={{ fontFamily: "'Press Start 2P'", fontSize: '8px', color: '#eef5db' }}
+                      style={{ fontFamily: "'Press Start 2P'", fontSize: '10px', color: 'var(--text-primary)' }}
                     >
                       WPM
                     </div>
@@ -142,14 +142,14 @@ export function TypingSpeedTestPage() {
                       style={{
                         fontFamily: "'Press Start 2P'",
                         fontSize: '32px',
-                        color: '#0ead69',
+                        color: 'var(--accent-green)',
                       }}
                       className="text-glow-green"
                     >
                       {testResult.accuracy}%
                     </div>
                     <div
-                      style={{ fontFamily: "'Press Start 2P'", fontSize: '8px', color: '#eef5db' }}
+                      style={{ fontFamily: "'Press Start 2P'", fontSize: '10px', color: 'var(--text-primary)' }}
                     >
                       ACCURACY
                     </div>
@@ -167,12 +167,12 @@ export function TypingSpeedTestPage() {
                 </div>
 
                 {/* CTA to full course */}
-                <div className="mt-8 pt-6 border-t-2 border-[#2a2a4e]">
+                <div className="mt-8 pt-6 border-t-2" style={{ borderColor: 'var(--border-color)' }}>
                   <p
                     style={{
                       fontFamily: "'Press Start 2P'",
                       fontSize: '10px',
-                      color: '#eef5db',
+                      color: 'var(--text-primary)',
                       marginBottom: '16px',
                     }}
                   >
@@ -184,9 +184,9 @@ export function TypingSpeedTestPage() {
                     style={{
                       fontFamily: "'Press Start 2P'",
                       fontSize: '10px',
-                      background: 'linear-gradient(180deg, #3bceac, #0ead69)',
-                      color: '#0f0f1b',
-                      boxShadow: '0 4px 0 #0a8a54',
+                      background: 'var(--btn-primary-bg)',
+                      color: 'var(--btn-primary-text)',
+                      boxShadow: '0 4px 0 var(--accent-green)',
                     }}
                   >
                     START FREE TYPING COURSE
@@ -204,7 +204,7 @@ export function TypingSpeedTestPage() {
                 style={{
                   fontFamily: "'Press Start 2P'",
                   fontSize: '12px',
-                  color: '#3bceac',
+                  color: 'var(--heading-cyan)',
                   marginBottom: '16px',
                 }}
               >
@@ -213,8 +213,8 @@ export function TypingSpeedTestPage() {
               <div
                 style={{
                   fontFamily: "'Press Start 2P'",
-                  fontSize: '8px',
-                  color: '#eef5db',
+                  fontSize: '10px',
+                  color: 'var(--text-primary)',
                   lineHeight: '2.5',
                 }}
               >
@@ -225,35 +225,35 @@ export function TypingSpeedTestPage() {
                 <div className="overflow-x-auto">
                   <table className="w-full mt-4">
                     <thead>
-                      <tr style={{ borderBottom: '2px solid #3bceac' }}>
-                        <th className="py-2 text-left" style={{ color: '#ffd93d' }}>
+                      <tr style={{ borderBottom: '2px solid var(--accent-cyan)' }}>
+                        <th className="py-2 text-left" style={{ color: 'var(--accent-yellow)' }}>
                           LEVEL
                         </th>
-                        <th className="py-2 text-left" style={{ color: '#ffd93d' }}>
+                        <th className="py-2 text-left" style={{ color: 'var(--accent-yellow)' }}>
                           WPM RANGE
                         </th>
-                        <th className="py-2 text-left" style={{ color: '#ffd93d' }}>
+                        <th className="py-2 text-left" style={{ color: 'var(--accent-yellow)' }}>
                           DESCRIPTION
                         </th>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr style={{ borderBottom: '1px solid #2a2a4e' }}>
+                      <tr style={{ borderBottom: '1px solid var(--border-color)' }}>
                         <td className="py-2">BEGINNER</td>
                         <td className="py-2">20-30</td>
                         <td className="py-2">HUNT AND PECK</td>
                       </tr>
-                      <tr style={{ borderBottom: '1px solid #2a2a4e' }}>
+                      <tr style={{ borderBottom: '1px solid var(--border-color)' }}>
                         <td className="py-2">AVERAGE</td>
                         <td className="py-2">40-50</td>
                         <td className="py-2">CASUAL TYPIST</td>
                       </tr>
-                      <tr style={{ borderBottom: '1px solid #2a2a4e' }}>
+                      <tr style={{ borderBottom: '1px solid var(--border-color)' }}>
                         <td className="py-2">FAST</td>
                         <td className="py-2">60-80</td>
                         <td className="py-2">PROFICIENT</td>
                       </tr>
-                      <tr style={{ borderBottom: '1px solid #2a2a4e' }}>
+                      <tr style={{ borderBottom: '1px solid var(--border-color)' }}>
                         <td className="py-2">EXPERT</td>
                         <td className="py-2">80-100</td>
                         <td className="py-2">PROFESSIONAL</td>
@@ -275,7 +275,7 @@ export function TypingSpeedTestPage() {
                 style={{
                   fontFamily: "'Press Start 2P'",
                   fontSize: '12px',
-                  color: '#3bceac',
+                  color: 'var(--heading-cyan)',
                   marginBottom: '16px',
                 }}
               >
@@ -284,8 +284,8 @@ export function TypingSpeedTestPage() {
               <ul
                 style={{
                   fontFamily: "'Press Start 2P'",
-                  fontSize: '8px',
-                  color: '#eef5db',
+                  fontSize: '10px',
+                  color: 'var(--text-primary)',
                   lineHeight: '3',
                 }}
               >
@@ -305,7 +305,7 @@ export function TypingSpeedTestPage() {
                 style={{
                   fontFamily: "'Press Start 2P'",
                   fontSize: '12px',
-                  color: '#3bceac',
+                  color: 'var(--heading-cyan)',
                   marginBottom: '16px',
                 }}
               >
@@ -317,8 +317,8 @@ export function TypingSpeedTestPage() {
                     <h3
                       style={{
                         fontFamily: "'Press Start 2P'",
-                        fontSize: '9px',
-                        color: '#ffd93d',
+                        fontSize: '10px',
+                        color: 'var(--accent-yellow)',
                         marginBottom: '8px',
                       }}
                     >
@@ -327,8 +327,8 @@ export function TypingSpeedTestPage() {
                     <p
                       style={{
                         fontFamily: "'Press Start 2P'",
-                        fontSize: '7px',
-                        color: '#eef5db',
+                        fontSize: '10px',
+                        color: 'var(--text-primary)',
                         lineHeight: '2.2',
                       }}
                     >
@@ -347,9 +347,9 @@ export function TypingSpeedTestPage() {
                 style={{
                   fontFamily: "'Press Start 2P'",
                   fontSize: '12px',
-                  background: 'linear-gradient(180deg, #3bceac, #0ead69)',
-                  color: '#0f0f1b',
-                  boxShadow: '0 4px 0 #0a8a54',
+                  background: 'var(--btn-primary-bg)',
+                  color: 'var(--btn-primary-text)',
+                  boxShadow: '0 4px 0 var(--accent-green)',
                 }}
               >
                 START FREE TYPING COURSE

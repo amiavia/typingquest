@@ -63,7 +63,7 @@ export function TypingForProgrammersPage() {
             <Link
               to="/"
               className="inline-flex items-center gap-2 mb-6 transition-colors hover:opacity-80"
-              style={{ fontFamily: "'Press Start 2P'", fontSize: '10px', color: '#3bceac' }}
+              style={{ fontFamily: "'Press Start 2P'", fontSize: '10px', color: 'var(--accent-cyan)' }}
             >
               ← BACK TO APP
             </Link>
@@ -71,7 +71,7 @@ export function TypingForProgrammersPage() {
               style={{
                 fontFamily: "'Press Start 2P'",
                 fontSize: '18px',
-                color: '#ffd93d',
+                color: 'var(--accent-yellow)',
                 lineHeight: '1.8',
               }}
               className="text-glow-yellow"
@@ -82,7 +82,7 @@ export function TypingForProgrammersPage() {
               style={{
                 fontFamily: "'Press Start 2P'",
                 fontSize: '10px',
-                color: '#3bceac',
+                color: 'var(--accent-cyan)',
                 marginTop: '8px',
               }}
             >
@@ -96,7 +96,7 @@ export function TypingForProgrammersPage() {
               style={{
                 fontFamily: "'Press Start 2P'",
                 fontSize: '12px',
-                color: '#ffd93d',
+                color: 'var(--accent-yellow)',
                 marginBottom: '16px',
               }}
             >
@@ -105,11 +105,11 @@ export function TypingForProgrammersPage() {
             <div
               className="p-4"
               style={{
-                background: '#0f0f1b',
-                border: '2px solid #3bceac',
+                background: 'var(--bg-tertiary)',
+                border: '2px solid var(--accent-cyan)',
                 fontFamily: 'monospace',
                 fontSize: '14px',
-                color: '#eef5db',
+                color: 'var(--text-primary)',
                 lineHeight: '1.8',
               }}
             >
@@ -127,8 +127,8 @@ export function TypingForProgrammersPage() {
             <p
               style={{
                 fontFamily: "'Press Start 2P'",
-                fontSize: '8px',
-                color: '#3bceac',
+                fontSize: '10px',
+                color: 'var(--accent-cyan)',
                 marginTop: '12px',
                 textAlign: 'center',
               }}
@@ -143,7 +143,7 @@ export function TypingForProgrammersPage() {
               style={{
                 fontFamily: "'Press Start 2P'",
                 fontSize: '14px',
-                color: '#3bceac',
+                color: 'var(--accent-cyan)',
                 marginBottom: '24px',
               }}
             >
@@ -155,8 +155,8 @@ export function TypingForProgrammersPage() {
                 <h3
                   style={{
                     fontFamily: "'Press Start 2P'",
-                    fontSize: '9px',
-                    color: '#ffd93d',
+                    fontSize: '10px',
+                    color: 'var(--accent-yellow)',
                     marginBottom: '8px',
                   }}
                 >
@@ -165,8 +165,8 @@ export function TypingForProgrammersPage() {
                 <p
                   style={{
                     fontFamily: "'Press Start 2P'",
-                    fontSize: '7px',
-                    color: '#eef5db',
+                    fontSize: '10px',
+                    color: 'var(--text-primary)',
                     lineHeight: '2',
                   }}
                 >
@@ -179,8 +179,8 @@ export function TypingForProgrammersPage() {
                 <h3
                   style={{
                     fontFamily: "'Press Start 2P'",
-                    fontSize: '9px',
-                    color: '#ffd93d',
+                    fontSize: '10px',
+                    color: 'var(--accent-yellow)',
                     marginBottom: '8px',
                   }}
                 >
@@ -189,8 +189,8 @@ export function TypingForProgrammersPage() {
                 <p
                   style={{
                     fontFamily: "'Press Start 2P'",
-                    fontSize: '7px',
-                    color: '#eef5db',
+                    fontSize: '10px',
+                    color: 'var(--text-primary)',
                     lineHeight: '2',
                   }}
                 >
@@ -203,8 +203,8 @@ export function TypingForProgrammersPage() {
                 <h3
                   style={{
                     fontFamily: "'Press Start 2P'",
-                    fontSize: '9px',
-                    color: '#ffd93d',
+                    fontSize: '10px',
+                    color: 'var(--accent-yellow)',
                     marginBottom: '8px',
                   }}
                 >
@@ -213,8 +213,8 @@ export function TypingForProgrammersPage() {
                 <p
                   style={{
                     fontFamily: "'Press Start 2P'",
-                    fontSize: '7px',
-                    color: '#eef5db',
+                    fontSize: '10px',
+                    color: 'var(--text-primary)',
                     lineHeight: '2',
                   }}
                 >
@@ -227,8 +227,8 @@ export function TypingForProgrammersPage() {
                 <h3
                   style={{
                     fontFamily: "'Press Start 2P'",
-                    fontSize: '9px',
-                    color: '#ffd93d',
+                    fontSize: '10px',
+                    color: 'var(--accent-yellow)',
                     marginBottom: '8px',
                   }}
                 >
@@ -237,8 +237,8 @@ export function TypingForProgrammersPage() {
                 <p
                   style={{
                     fontFamily: "'Press Start 2P'",
-                    fontSize: '7px',
-                    color: '#eef5db',
+                    fontSize: '10px',
+                    color: 'var(--text-primary)',
                     lineHeight: '2',
                   }}
                 >
@@ -254,7 +254,7 @@ export function TypingForProgrammersPage() {
               style={{
                 fontFamily: "'Press Start 2P'",
                 fontSize: '14px',
-                color: '#3bceac',
+                color: 'var(--accent-cyan)',
                 marginBottom: '16px',
               }}
             >
@@ -263,8 +263,8 @@ export function TypingForProgrammersPage() {
             <ul
               style={{
                 fontFamily: "'Press Start 2P'",
-                fontSize: '8px',
-                color: '#eef5db',
+                fontSize: '10px',
+                color: 'var(--text-primary)',
                 lineHeight: '3',
               }}
             >
@@ -285,7 +285,7 @@ export function TypingForProgrammersPage() {
               style={{
                 fontFamily: "'Press Start 2P'",
                 fontSize: '12px',
-                color: '#ffd93d',
+                color: 'var(--accent-yellow)',
                 marginBottom: '16px',
               }}
             >
@@ -303,11 +303,11 @@ export function TypingForProgrammersPage() {
                   key={i}
                   className="p-3"
                   style={{
-                    background: '#0f0f1b',
-                    border: '1px solid #2a2a4e',
+                    background: 'var(--bg-tertiary)',
+                    border: '1px solid var(--border-color-muted)',
                     fontFamily: 'monospace',
                     fontSize: '12px',
-                    color: '#3bceac',
+                    color: 'var(--accent-cyan)',
                   }}
                 >
                   $ {cmd}
@@ -322,7 +322,7 @@ export function TypingForProgrammersPage() {
               style={{
                 fontFamily: "'Press Start 2P'",
                 fontSize: '12px',
-                color: '#3bceac',
+                color: 'var(--accent-cyan)',
                 marginBottom: '16px',
               }}
             >
@@ -334,8 +334,8 @@ export function TypingForProgrammersPage() {
                   <h3
                     style={{
                       fontFamily: "'Press Start 2P'",
-                      fontSize: '9px',
-                      color: '#ffd93d',
+                      fontSize: '10px',
+                      color: 'var(--accent-yellow)',
                       marginBottom: '8px',
                     }}
                   >
@@ -344,8 +344,8 @@ export function TypingForProgrammersPage() {
                   <p
                     style={{
                       fontFamily: "'Press Start 2P'",
-                      fontSize: '7px',
-                      color: '#eef5db',
+                      fontSize: '10px',
+                      color: 'var(--text-primary)',
                       lineHeight: '2.2',
                     }}
                   >
@@ -364,9 +364,9 @@ export function TypingForProgrammersPage() {
               style={{
                 fontFamily: "'Press Start 2P'",
                 fontSize: '12px',
-                background: 'linear-gradient(180deg, #3bceac, #0ead69)',
-                color: '#0f0f1b',
-                boxShadow: '0 4px 0 #0a8a54',
+                background: 'var(--btn-primary-bg)',
+                color: 'var(--btn-primary-text)',
+                boxShadow: '0 4px 0 var(--accent-green)',
               }}
             >
               START FREE COURSE
