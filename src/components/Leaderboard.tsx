@@ -275,8 +275,8 @@ function LeaderboardEntry({
         <div
           style={{
             fontFamily: "'Press Start 2P', monospace",
-            fontSize: '6px',
-            color: '#6a6a7a',
+            fontSize: '10px',
+            color: 'var(--text-muted)',
           }}
         >
           LV{lessonId}
@@ -287,16 +287,16 @@ function LeaderboardEntry({
       <div
         style={{
           fontFamily: "'Press Start 2P', monospace",
-          fontSize: '10px',
-          color: '#ffd93d',
+          fontSize: '12px',
+          color: 'var(--accent-yellow)',
         }}
       >
         {score}
         <span
           style={{
-            fontSize: '6px',
-            color: '#9a9ab0',
-            marginLeft: '2px',
+            fontSize: '10px',
+            color: 'var(--text-muted)',
+            marginLeft: '4px',
           }}
         >
           WPM
@@ -307,8 +307,8 @@ function LeaderboardEntry({
       <div
         style={{
           fontFamily: "'Press Start 2P', monospace",
-          fontSize: '8px',
-          color: accuracy >= 95 ? '#0ead69' : accuracy >= 80 ? '#ffd93d' : '#ff6b6b',
+          fontSize: '10px',
+          color: accuracy >= 95 ? 'var(--accent-green)' : accuracy >= 80 ? 'var(--accent-yellow)' : 'var(--accent-red)',
         }}
       >
         {accuracy}%

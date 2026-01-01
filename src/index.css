@@ -4,6 +4,16 @@
 @theme {
   --font-pixel: 'Press Start 2P', monospace;
 
+  /* PRP-049: Font size scale - minimum 10px for readability */
+  --font-size-min: 10px;    /* Absolute floor for Press Start 2P */
+  --font-size-xs: 10px;     /* Smallest readable - stats, labels */
+  --font-size-sm: 11px;     /* Small text - secondary info */
+  --font-size-md: 12px;     /* Body text - default */
+  --font-size-lg: 14px;     /* Emphasis - subheadings */
+  --font-size-xl: 16px;     /* Section titles */
+  --font-size-2xl: 20px;    /* Page headings */
+  --font-size-3xl: 24px;    /* Hero text */
+
   /* 8-bit color palette */
   --color-retro-black: #0f0f1b;
   --color-retro-dark: #1a1a2e;
@@ -94,7 +104,7 @@
   --accent-yellow-rgb: 255, 217, 61;
 }
 
-/* PRP-049: Cream Light Theme */
+/* PRP-049: Cream Light Theme - Enhanced Readability */
 [data-theme="light"] {
   /* Core backgrounds - warm cream tones */
   --bg-primary: #faf6eb;
@@ -105,18 +115,18 @@
   /* Text colors - maximum contrast for readability */
   --text-primary: #1a1a28;  /* Near-black for best contrast */
   --text-secondary: #0a4a3a; /* Darker teal */
-  --text-muted: #4a4a5a;  /* Darker muted for 7:1+ contrast */
+  --text-muted: #3a3a4a;  /* PRP-049: Darkened from #4a4a5a for 7:1+ contrast */
   --text-on-accent: #faf6eb;
 
-  /* Accent colors - high contrast for light bg */
-  --accent-yellow: #9a7209;  /* Darker gold */
-  --accent-cyan: #0a6a5a;   /* Darker teal */
+  /* Accent colors - HIGH CONTRAST for light bg */
+  --accent-yellow: #5a4008;  /* PRP-049: Dark bronze - 8:1 contrast (was #9a7209) */
+  --accent-cyan: #0a5a4a;   /* Darker teal */
   --accent-green: #086a3a;  /* Darker green */
-  --accent-pink: #a8325a;   /* Darker pink */
-  --accent-red: #9a2238;    /* Darker red */
-  --accent-orange: #a84a1a; /* Darker orange */
-  --accent-purple: #5b21b6; /* Darker purple */
-  --accent-blue: #0a4a7a;   /* Darker blue */
+  --accent-pink: #8a2a4a;   /* Darker pink */
+  --accent-red: #8a1a28;    /* Darker red */
+  --accent-orange: #8a3a0a; /* Darker orange */
+  --accent-purple: #4a1a96; /* Darker purple */
+  --accent-blue: #0a3a6a;   /* Darker blue */
 
   /* UI element colors */
   --border-color: #1a5a4a;
@@ -124,7 +134,7 @@
   --key-bg: #f0ebe0;
   --key-border: #1a5a4a;
   --key-text: #2a2a3e;
-  --key-highlight: #b8860b;
+  --key-highlight: #5a4008;  /* Dark bronze for highlights */
 
   /* Card/box backgrounds - subtle cream variations */
   --card-bg: #f5f0e5;
@@ -135,21 +145,21 @@
   --gradient-feature: linear-gradient(135deg, #f5f0e5 0%, #ebe5da 50%, #e5dfd2 100%);
   --gradient-premium: linear-gradient(135deg, #fff5e6 0%, #ffe8cc 50%, #ffd9b3 100%);
   --gradient-cyan-box: linear-gradient(135deg, rgba(26, 138, 122, 0.1) 0%, rgba(26, 138, 122, 0.05) 100%);
-  --gradient-yellow-box: linear-gradient(135deg, rgba(184, 134, 11, 0.1) 0%, rgba(196, 92, 38, 0.1) 100%);
+  --gradient-yellow-box: linear-gradient(135deg, rgba(90, 64, 8, 0.08) 0%, rgba(138, 58, 10, 0.08) 100%);
   --gradient-green-box: linear-gradient(135deg, rgba(10, 138, 80, 0.15) 0%, rgba(26, 138, 122, 0.15) 100%);
 
   /* Button backgrounds */
-  --btn-primary-bg: #1a8a7a;
+  --btn-primary-bg: #0a5a4a;
   --btn-primary-text: #faf6eb;
-  --btn-secondary-bg: #b8860b;
+  --btn-secondary-bg: #5a4008;  /* Dark bronze */
   --btn-secondary-text: #faf6eb;
-  --btn-premium-bg: linear-gradient(135deg, #b8860b 0%, #c45c26 100%);
+  --btn-premium-bg: linear-gradient(135deg, #5a4008 0%, #8a3a0a 100%);
 
   /* Shadow/glow variables - softer for light theme */
-  --shadow-color: rgba(42, 42, 62, 0.12);
-  --shadow-soft: rgba(42, 42, 62, 0.08);
-  --glow-cyan: rgba(26, 138, 122, 0.2);
-  --glow-yellow: rgba(184, 134, 11, 0.2);
+  --shadow-color: rgba(42, 42, 62, 0.15);
+  --shadow-soft: rgba(42, 42, 62, 0.1);
+  --glow-cyan: rgba(10, 90, 74, 0.15);
+  --glow-yellow: rgba(90, 64, 8, 0.15);
   --glow-opacity: 0;
 
   /* Header specific */
@@ -158,11 +168,11 @@
 
   /* RGB values for rgba() usage - high contrast */
   --bg-primary-rgb: 250, 246, 235;
-  --accent-pink-rgb: 168, 50, 90;
-  --accent-purple-rgb: 91, 33, 182;
-  --accent-cyan-rgb: 10, 106, 90;
+  --accent-pink-rgb: 138, 42, 74;
+  --accent-purple-rgb: 74, 26, 150;
+  --accent-cyan-rgb: 10, 90, 74;
   --accent-green-rgb: 8, 106, 58;
-  --accent-yellow-rgb: 154, 114, 9;
+  --accent-yellow-rgb: 90, 64, 8;
 }
 
 /* Disable glow effects in light theme */

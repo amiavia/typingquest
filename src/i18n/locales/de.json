@@ -84,6 +84,7 @@
     "wpmCalculator": "WPM-RECHNER",
     "company": "UNTERNEHMEN",
     "aboutUs": "ÜBER UNS",
+    "about": "ÜBER UNS",
     "home": "START",
     "tagline": "TASTATUR MEISTERN MIT RETRO-GAMING-VIBES",
     "levelUp": "LEVEL UP DEIN TIPPEN"
@@ -312,7 +313,8 @@
     "showAll": "▼ ALLE {{count}} SPIELER ZEIGEN",
     "showLess": "▲ WENIGER ZEIGEN",
     "signInToJoin": "ANMELDEN UM DER RANGLISTE BEIZUTRETEN",
-    "showFullLeaderboard": "VOLLSTÄNDIGE RANGLISTE ZEIGEN"
+    "showFullLeaderboard": "VOLLSTÄNDIGE RANGLISTE ZEIGEN",
+    "playersCount": "{{count}} SPIELER"
   },
   "shop": {
     "title": "SHOP",

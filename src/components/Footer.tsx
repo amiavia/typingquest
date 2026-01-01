@@ -9,8 +9,8 @@ export function Footer() {
     <footer
       className="mt-auto py-8 px-4"
       style={{
-        borderTop: '3px solid #3bceac',
-        background: 'rgba(15, 15, 27, 0.95)',
+        borderTop: '3px solid var(--border-color)',
+        background: 'var(--bg-secondary)',
       }}
     >
       <div className="max-w-6xl mx-auto">
@@ -20,8 +20,8 @@ export function Footer() {
             <h3
               style={{
                 fontFamily: "'Press Start 2P'",
-                fontSize: '9px',
-                color: '#ffd93d',
+                fontSize: '10px',
+                color: 'var(--accent-yellow)',
                 marginBottom: '16px',
               }}
             >
@@ -33,10 +33,10 @@ export function Footer() {
                   to="/10-finger-typing-course"
                   style={{
                     fontFamily: "'Press Start 2P'",
-                    fontSize: '7px',
-                    color: '#eef5db',
+                    fontSize: '10px',
+                    color: 'var(--text-primary)',
                   }}
-                  className="hover:text-[#3bceac] transition-colors"
+                  className="hover:text-[var(--accent-cyan)] transition-colors"
                 >
                   {t('footer.tenFingerCourse')}
                 </Link>
@@ -46,10 +46,10 @@ export function Footer() {
                   to="/learn-typing-for-programmers"
                   style={{
                     fontFamily: "'Press Start 2P'",
-                    fontSize: '7px',
-                    color: '#eef5db',
+                    fontSize: '10px',
+                    color: 'var(--text-primary)',
                   }}
-                  className="hover:text-[#3bceac] transition-colors"
+                  className="hover:text-[var(--accent-cyan)] transition-colors"
                 >
                   {t('footer.typingForDevs')}
                 </Link>
@@ -59,10 +59,10 @@ export function Footer() {
                   to="/typing-games-for-kids"
                   style={{
                     fontFamily: "'Press Start 2P'",
-                    fontSize: '7px',
-                    color: '#eef5db',
+                    fontSize: '10px',
+                    color: 'var(--text-primary)',
                   }}
-                  className="hover:text-[#3bceac] transition-colors"
+                  className="hover:text-[var(--accent-cyan)] transition-colors"
                 >
                   {t('footer.gamesForKids')}
                 </Link>
@@ -75,8 +75,8 @@ export function Footer() {
             <h3
               style={{
                 fontFamily: "'Press Start 2P'",
-                fontSize: '9px',
-                color: '#ffd93d',
+                fontSize: '10px',
+                color: 'var(--accent-yellow)',
                 marginBottom: '16px',
               }}
             >
@@ -88,10 +88,10 @@ export function Footer() {
                   to="/typing-speed-test"
                   style={{
                     fontFamily: "'Press Start 2P'",
-                    fontSize: '7px',
-                    color: '#eef5db',
+                    fontSize: '10px',
+                    color: 'var(--text-primary)',
                   }}
-                  className="hover:text-[#3bceac] transition-colors"
+                  className="hover:text-[var(--accent-cyan)] transition-colors"
                 >
                   {t('footer.speedTest')}
                 </Link>
@@ -101,10 +101,10 @@ export function Footer() {
                   to="/wpm-calculator"
                   style={{
                     fontFamily: "'Press Start 2P'",
-                    fontSize: '7px',
-                    color: '#eef5db',
+                    fontSize: '10px',
+                    color: 'var(--text-primary)',
                   }}
-                  className="hover:text-[#3bceac] transition-colors"
+                  className="hover:text-[var(--accent-cyan)] transition-colors"
                 >
                   {t('footer.wpmCalculator')}
                 </Link>
@@ -117,8 +117,8 @@ export function Footer() {
             <h3
               style={{
                 fontFamily: "'Press Start 2P'",
-                fontSize: '9px',
-                color: '#ffd93d',
+                fontSize: '10px',
+                color: 'var(--accent-yellow)',
                 marginBottom: '16px',
               }}
             >
@@ -130,10 +130,10 @@ export function Footer() {
                   to="/about"
                   style={{
                     fontFamily: "'Press Start 2P'",
-                    fontSize: '7px',
-                    color: '#eef5db',
+                    fontSize: '10px',
+                    color: 'var(--text-primary)',
                   }}
-                  className="hover:text-[#3bceac] transition-colors"
+                  className="hover:text-[var(--accent-cyan)] transition-colors"
                 >
                   {t('footer.about')}
                 </Link>
@@ -143,10 +143,10 @@ export function Footer() {
                   to="/"
                   style={{
                     fontFamily: "'Press Start 2P'",
-                    fontSize: '7px',
-                    color: '#eef5db',
+                    fontSize: '10px',
+                    color: 'var(--text-primary)',
                   }}
-                  className="hover:text-[#3bceac] transition-colors"
+                  className="hover:text-[var(--accent-cyan)] transition-colors"
                 >
                   {t('footer.home')}
                 </Link>
@@ -160,7 +160,7 @@ export function Footer() {
               style={{
                 fontFamily: "'Press Start 2P'",
                 fontSize: '12px',
-                color: '#3bceac',
+                color: 'var(--accent-cyan)',
                 marginBottom: '8px',
               }}
               className="text-glow"
@@ -170,8 +170,8 @@ export function Footer() {
             <p
               style={{
                 fontFamily: "'Press Start 2P'",
-                fontSize: '6px',
-                color: '#eef5db',
+                fontSize: '10px',
+                color: 'var(--text-primary)',
                 lineHeight: '2',
                 marginBottom: '16px',
               }}
@@ -185,10 +185,10 @@ export function Footer() {
                 rel="noopener noreferrer"
                 style={{
                   fontFamily: "'Press Start 2P'",
-                  fontSize: '7px',
-                  color: '#eef5db',
+                  fontSize: '10px',
+                  color: 'var(--text-primary)',
                 }}
-                className="hover:text-[#3bceac] transition-colors"
+                className="hover:text-[var(--accent-cyan)] transition-colors"
               >
                 X.COM
               </a>
@@ -198,10 +198,10 @@ export function Footer() {
                 rel="noopener noreferrer"
                 style={{
                   fontFamily: "'Press Start 2P'",
-                  fontSize: '7px',
-                  color: '#eef5db',
+                  fontSize: '10px',
+                  color: 'var(--text-primary)',
                 }}
-                className="hover:text-[#3bceac] transition-colors"
+                className="hover:text-[var(--accent-cyan)] transition-colors"
               >
                 TIKTOK
               </a>
@@ -212,14 +212,13 @@ export function Footer() {
         {/* Bottom bar */}
         <div
           className="pt-6 text-center"
-          style={{ borderTop: '1px solid rgba(59, 206, 172, 0.3)' }}
+          style={{ borderTop: '1px solid var(--border-color-muted)' }}
         >
           <p
             style={{
               fontFamily: "'Press Start 2P'",
-              fontSize: '6px',
-              color: '#eef5db',
-              opacity: 0.7,
+              fontSize: '10px',
+              color: 'var(--text-muted)',
             }}
           >
             {currentYear} TYPEBIT8. {t('footer.levelUp')}

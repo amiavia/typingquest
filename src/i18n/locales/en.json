@@ -84,6 +84,7 @@
     "wpmCalculator": "WPM CALCULATOR",
     "company": "COMPANY",
     "aboutUs": "ABOUT US",
+    "about": "ABOUT US",
     "home": "HOME",
     "tagline": "MASTER THE KEYBOARD WITH RETRO GAMING VIBES",
     "levelUp": "LEVEL UP YOUR TYPING"
@@ -312,7 +313,8 @@
     "showAll": "▼ SHOW ALL {{count}} PLAYERS",
     "showLess": "▲ SHOW LESS",
     "signInToJoin": "SIGN IN TO JOIN THE LEADERBOARD",
-    "showFullLeaderboard": "SHOW FULL LEADERBOARD"
+    "showFullLeaderboard": "SHOW FULL LEADERBOARD",
+    "playersCount": "{{count}} PLAYERS"
   },
   "shop": {
     "title": "SHOP",

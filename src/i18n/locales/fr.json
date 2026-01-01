@@ -84,6 +84,7 @@
     "wpmCalculator": "CALCULATEUR MPM",
     "company": "ENTREPRISE",
     "aboutUs": "À PROPOS",
+    "about": "À PROPOS",
     "home": "ACCUEIL",
     "tagline": "MAÎTRISEZ LE CLAVIER AVEC UN STYLE RÉTRO",
     "levelUp": "AMÉLIOREZ VOTRE FRAPPE"
@@ -312,7 +313,8 @@
     "showAll": "▼ AFFICHER LES {{count}} JOUEURS",
     "showLess": "▲ AFFICHER MOINS",
     "signInToJoin": "CONNECTEZ-VOUS POUR REJOINDRE LE CLASSEMENT",
-    "showFullLeaderboard": "AFFICHER CLASSEMENT COMPLET"
+    "showFullLeaderboard": "AFFICHER CLASSEMENT COMPLET",
+    "playersCount": "{{count}} JOUEURS"
   },
   "shop": {
     "title": "BOUTIQUE",

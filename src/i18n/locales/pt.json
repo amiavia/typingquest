@@ -84,6 +84,7 @@
     "wpmCalculator": "CALCULADORA PPM",
     "company": "EMPRESA",
     "aboutUs": "SOBRE NÓS",
+    "about": "SOBRE NÓS",
     "home": "INÍCIO",
     "tagline": "DOMINE O TECLADO COM ESTILO RETRO GAMING",
     "levelUp": "MELHORE SUA DIGITAÇÃO"
@@ -312,7 +313,8 @@
     "showAll": "▼ MOSTRAR TODOS OS {{count}} JOGADORES",
     "showLess": "▲ MOSTRAR MENOS",
     "signInToJoin": "FAÇA LOGIN PARA ENTRAR NA CLASSIFICAÇÃO",
-    "showFullLeaderboard": "MOSTRAR CLASSIFICAÇÃO COMPLETA"
+    "showFullLeaderboard": "MOSTRAR CLASSIFICAÇÃO COMPLETA",
+    "playersCount": "{{count}} JOGADORES"
   },
   "shop": {
     "title": "LOJA",

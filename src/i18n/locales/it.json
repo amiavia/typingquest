@@ -84,6 +84,7 @@
     "wpmCalculator": "CALCOLATORE PPM",
     "company": "AZIENDA",
     "aboutUs": "CHI SIAMO",
+    "about": "CHI SIAMO",
     "home": "HOME",
     "tagline": "PADRONEGGIA LA TASTIERA CON STILE RETRO GAMING",
     "levelUp": "MIGLIORA LA TUA DIGITAZIONE"
@@ -312,7 +313,8 @@
     "showAll": "▼ MOSTRA TUTTI I {{count}} GIOCATORI",
     "showLess": "▲ MOSTRA MENO",
     "signInToJoin": "ACCEDI PER UNIRTI ALLA CLASSIFICA",
-    "showFullLeaderboard": "MOSTRA CLASSIFICA COMPLETA"
+    "showFullLeaderboard": "MOSTRA CLASSIFICA COMPLETA",
+    "playersCount": "{{count}} GIOCATORI"
   },
   "shop": {
     "title": "NEGOZIO",

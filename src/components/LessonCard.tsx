@@ -83,7 +83,7 @@ export function LessonCard({ lesson, progress, isLocked = false, isPremiumLocked
             {tier && (
               <span
                 style={{
-                  fontSize: '6px',
+                  fontSize: '10px',
                   color: isPremiumLocked ? 'var(--accent-yellow)' : isLocked ? 'var(--text-muted)' : tierColor,
                 }}
               >
@@ -99,7 +99,7 @@ export function LessonCard({ lesson, progress, isLocked = false, isPremiumLocked
             <span
               className="px-2 py-0.5"
               style={{
-                fontSize: '6px',
+                fontSize: '8px',
                 backgroundColor: 'var(--accent-cyan)',
                 color: 'var(--bg-secondary)',
               }}
@@ -113,7 +113,7 @@ export function LessonCard({ lesson, progress, isLocked = false, isPremiumLocked
             <span
               className="px-2 py-0.5"
               style={{
-                fontSize: '6px',
+                fontSize: '8px',
                 backgroundColor: 'var(--accent-yellow)',
                 color: 'var(--bg-secondary)',
               }}
@@ -127,7 +127,7 @@ export function LessonCard({ lesson, progress, isLocked = false, isPremiumLocked
             <span
               className="px-2 py-0.5"
               style={{
-                fontSize: '6px',
+                fontSize: '8px',
                 backgroundColor: 'var(--accent-pink)',
                 color: 'var(--bg-secondary)',
                 animation: 'pulse 1s infinite',
@@ -159,7 +159,7 @@ export function LessonCard({ lesson, progress, isLocked = false, isPremiumLocked
 
       <p
         style={{
-          fontSize: '8px',
+          fontSize: '10px',
           color: isLocked ? 'var(--text-muted)' : 'var(--accent-cyan)',
           marginBottom: '12px',
           lineHeight: '1.8'
@@ -172,9 +172,9 @@ export function LessonCard({ lesson, progress, isLocked = false, isPremiumLocked
         {lesson.keys.slice(0, 8).map(key => (
           <span
             key={key}
-            className="w-6 h-6 flex items-center justify-center border-2"
+            className="w-7 h-7 flex items-center justify-center border-2"
             style={{
-              fontSize: '8px',
+              fontSize: '10px',
               borderColor: isLocked ? 'var(--text-muted)' : 'var(--accent-cyan)',
               backgroundColor: isLocked ? 'transparent' : 'var(--gradient-cyan-box)',
               color: isLocked ? 'var(--text-muted)' : 'var(--text-primary)'
@@ -185,9 +185,9 @@ export function LessonCard({ lesson, progress, isLocked = false, isPremiumLocked
         ))}
         {lesson.keys.length > 8 && (
           <span
-            className="w-6 h-6 flex items-center justify-center border-2"
+            className="w-7 h-7 flex items-center justify-center border-2"
             style={{
-              fontSize: '6px',
+              fontSize: '10px',
               borderColor: 'var(--text-muted)',
               color: 'var(--text-muted)'
             }}
@@ -202,16 +202,16 @@ export function LessonCard({ lesson, progress, isLocked = false, isPremiumLocked
         style={{ borderColor: isLocked ? 'var(--bg-tertiary)' : 'var(--accent-cyan)' }}
       >
         <div className="flex gap-4">
-          <span style={{ fontSize: '6px', color: 'var(--accent-yellow)' }}>
+          <span style={{ fontSize: '10px', color: 'var(--accent-yellow)' }}>
             {lesson.minWPM} WPM
           </span>
-          <span style={{ fontSize: '6px', color: 'var(--accent-green)' }}>
+          <span style={{ fontSize: '10px', color: 'var(--accent-green)' }}>
             {lesson.minAccuracy}% ACC
           </span>
         </div>
 
         {progress && progress.bestWPM > 0 && (
-          <span style={{ fontSize: '6px', color: 'var(--accent-pink)' }}>
+          <span style={{ fontSize: '10px', color: 'var(--accent-pink)' }}>
             BEST: {progress.bestWPM}
           </span>
         )}
@@ -221,7 +221,7 @@ export function LessonCard({ lesson, progress, isLocked = false, isPremiumLocked
         <div
           className="mt-3 pt-2"
           style={{
-            fontSize: '6px',
+            fontSize: '10px',
             color: 'var(--accent-yellow)',
             borderTop: '2px solid var(--accent-yellow)',
           }}
