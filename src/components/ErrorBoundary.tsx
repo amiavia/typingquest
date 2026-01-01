@@ -5,8 +5,9 @@
  */
 
 import { Component, type ErrorInfo, type ReactNode } from "react";
+import { withTranslation, type WithTranslation } from "react-i18next";
 
-interface Props {
+interface Props extends WithTranslation {
   children: ReactNode;
   fallback?: ReactNode;
 }
@@ -16,7 +17,7 @@ interface State {
   error: Error | null;
 }
 
-export class ErrorBoundary extends Component<Props, State> {
+class ErrorBoundaryComponent extends Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = { hasError: false, error: null };
@@ -35,6 +36,8 @@ export class ErrorBoundary extends Component<Props, State> {
   };
 
   render(): ReactNode {
+    const { t } = this.props;
+
     if (this.state.hasError) {
       if (this.props.fallback) {
         return this.props.fallback;
@@ -50,7 +53,7 @@ export class ErrorBoundary extends Component<Props, State> {
             <h1
               style={{ fontSize: "16px", color: "#ff6b9d", marginBottom: "16px" }}
             >
-              OOPS! SOMETHING BROKE
+              {t('error.title')}
             </h1>
             <p
               style={{
@@ -60,9 +63,9 @@ export class ErrorBoundary extends Component<Props, State> {
                 marginBottom: "24px",
               }}
             >
-              DON'T WORRY, YOUR PROGRESS IS SAFE.
+              {t('error.message')}
               <br />
-              TRY REFRESHING OR CLICK RETRY.
+              {t('error.instruction')}
             </p>
 
             {this.state.error && (
@@ -70,7 +73,7 @@ export class ErrorBoundary extends Component<Props, State> {
                 <summary
                   style={{ fontSize: "6px", color: "#4a4a6e", cursor: "pointer" }}
                 >
-                  TECHNICAL DETAILS
+                  {t('error.technicalDetails')}
                 </summary>
                 <pre
                   className="mt-2 p-3 bg-[#16213e] overflow-auto"
@@ -91,14 +94,14 @@ export class ErrorBoundary extends Component<Props, State> {
                 className="pixel-btn"
                 style={{ fontSize: "10px" }}
               >
-                ↻ RETRY
+                ↻ {t('common.retry')}
               </button>
               <button
                 onClick={() => window.location.reload()}
                 className="pixel-btn pixel-btn-yellow"
                 style={{ fontSize: "10px" }}
               >
-                REFRESH PAGE
+                {t('common.refreshPage')}
               </button>
             </div>
 
@@ -109,14 +112,14 @@ export class ErrorBoundary extends Component<Props, State> {
                 marginTop: "24px",
               }}
             >
-              IF THIS KEEPS HAPPENING, PLEASE{" "}
+              {t('error.reportIssue')}{" "}
               <a
                 href="https://github.com/typequests/typebit8/issues"
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{ color: "#3bceac" }}
               >
-                REPORT THE ISSUE
+                {t('error.reportLink')}
               </a>
             </p>
           </div>
@@ -127,3 +130,5 @@ export class ErrorBoundary extends Component<Props, State> {
     return this.props.children;
   }
 }
+
+export const ErrorBoundary = withTranslation()(ErrorBoundaryComponent);

@@ -1,0 +1,68 @@
+#!/bin/bash
+# Social media engagement workflow
+# Usage: engage -x typebit8    (X.com for typebit8)
+#        engage -x draiv       (X.com for draiv)
+#        engage                (defaults to X.com + typebit8)
+
+PLATFORM="x"
+PROJECT="typebit8"
+
+# Parse arguments
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        -x|--twitter)
+            PLATFORM="x"
+            shift
+            ;;
+        -l|--linkedin)
+            PLATFORM="linkedin"
+            shift
+            ;;
+        *)
+            PROJECT="$1"
+            shift
+            ;;
+    esac
+done
+
+# Project configs
+case $PROJECT in
+    typebit8)
+        ACCOUNT="@typebit8"
+        DESCRIPTION="touch typing practice app"
+        QUERIES='"typing speed" OR "touch typing", "learn to code" beginners, "productivity tips" developers, "mechanical keyboard" typing, "WPM" words per minute'
+        WORKDIR="/Users/antonsteininger/Workspaces/typebit8"
+        ;;
+    draiv)
+        ACCOUNT="@draiv_ch"
+        DESCRIPTION="24/7 keyless car rental"
+        QUERIES='"car sharing" OR "car rental", "mobility" urban, "keyless" car, "flexible rental", "travel" switzerland'
+        WORKDIR="/Users/antonsteininger/Workspaces/draiv"
+        ;;
+    supatent)
+        ACCOUNT="@supatent"
+        DESCRIPTION="CMS for the age of AI"
+        QUERIES='"AI content" creation, "headless CMS", "AI writing" publishing, "content management" AI, "AI-first" website, "Claude" OR "ChatGPT" content workflow'
+        WORKDIR="/Users/antonsteininger/Workspaces/supatent"
+        ;;
+    *)
+        echo "Unknown project: $PROJECT"
+        echo "Available: typebit8, draiv, supatent"
+        exit 1
+        ;;
+esac
+
+cd "$WORKDIR" 2>/dev/null || cd ~
+
+PROMPT="Run X.com engagement workflow:
+- Project: $PROJECT ($DESCRIPTION)
+- Account: $ACCOUNT
+- Search queries: $QUERIES
+
+Use the Chrome browser tools to:
+1. Open X.com and search for relevant posts
+2. Find 3-5 recent posts with engagement potential
+3. Draft witty value-add replies (no em dashes, only hyphens)
+4. Show drafts for approval, then post them one by one"
+
+claude --dangerously-skip-permissions --chrome "$PROMPT"

@@ -25,22 +25,188 @@
 
 /* Dynamic theme variables (set by ThemeProvider) */
 :root {
+  /* Core backgrounds */
   --bg-primary: #0f0f1b;
   --bg-secondary: #1a1a2e;
   --bg-tertiary: #2a2a3e;
-  --text-primary: #eef5db;
-  --text-secondary: #3bceac;
-  --text-muted: #4a4a6e;
+  --bg-elevated: #16213e;
+
+  /* Text colors - high contrast */
+  --text-primary: #f5f8e8;  /* Brighter for better contrast */
+  --text-secondary: #4dd8b8; /* Brighter cyan */
+  --text-muted: #a0a0c0; /* PRP-049: Increased from #8080a0 to #a0a0c0 for 7:1 contrast */
+  --text-on-accent: #0f0f1b;
+
+  /* Accent colors */
   --accent-yellow: #ffd93d;
   --accent-cyan: #3bceac;
   --accent-green: #0ead69;
   --accent-pink: #ff6b9d;
   --accent-red: #e63946;
+  --accent-orange: #f97316;
+  --accent-purple: #a855f7;
+  --accent-blue: #0f4c75;
+
+  /* UI element colors */
   --border-color: #3bceac;
+  --border-color-muted: rgba(59, 206, 172, 0.3);
   --key-bg: #1a1a2e;
   --key-border: #3bceac;
   --key-text: #eef5db;
   --key-highlight: #ffd93d;
+
+  /* Card/box backgrounds */
+  --card-bg: #1a1a2e;
+  --card-bg-alt: #16213e;
+  --card-border: #3bceac;
+
+  /* Feature box gradients (for hero sections) */
+  --gradient-feature: linear-gradient(135deg, #0f3460 0%, #16213e 50%, #1a1a2e 100%);
+  --gradient-premium: linear-gradient(135deg, #1a1a2e 0%, #0f3460 50%, #16213e 100%);
+  --gradient-cyan-box: linear-gradient(135deg, rgba(59, 206, 172, 0.1) 0%, rgba(59, 206, 172, 0.05) 100%);
+  --gradient-yellow-box: linear-gradient(135deg, rgba(255, 217, 61, 0.1) 0%, rgba(249, 115, 22, 0.1) 100%);
+  --gradient-green-box: linear-gradient(135deg, rgba(14, 173, 105, 0.2) 0%, rgba(59, 206, 172, 0.2) 100%);
+
+  /* Button backgrounds */
+  --btn-primary-bg: #3bceac;
+  --btn-primary-text: #1a1a2e;
+  --btn-secondary-bg: #ffd93d;
+  --btn-secondary-text: #1a1a2e;
+  --btn-premium-bg: linear-gradient(135deg, #ffd93d 0%, #f97316 100%);
+
+  /* Shadow/glow variables */
+  --shadow-color: rgba(0, 0, 0, 0.5);
+  --shadow-soft: rgba(0, 0, 0, 0.3);
+  --glow-cyan: rgba(59, 206, 172, 0.3);
+  --glow-yellow: rgba(255, 217, 61, 0.3);
+  --glow-opacity: 1;
+
+  /* Header specific */
+  --header-bg: #1a1a2e;
+  --header-border: #3bceac;
+
+  /* RGB values for rgba() usage */
+  --bg-primary-rgb: 15, 15, 27;
+  --accent-pink-rgb: 255, 107, 157;
+  --accent-purple-rgb: 139, 92, 246;
+  --accent-cyan-rgb: 59, 206, 172;
+  --accent-green-rgb: 14, 173, 105;
+  --accent-yellow-rgb: 255, 217, 61;
+}
+
+/* PRP-049: Cream Light Theme */
+[data-theme="light"] {
+  /* Core backgrounds - warm cream tones */
+  --bg-primary: #faf6eb;
+  --bg-secondary: #f0ebe0;
+  --bg-tertiary: #e5dfd2;
+  --bg-elevated: #fff9f0;
+
+  /* Text colors - maximum contrast for readability */
+  --text-primary: #1a1a28;  /* Near-black for best contrast */
+  --text-secondary: #0a4a3a; /* Darker teal */
+  --text-muted: #4a4a5a;  /* Darker muted for 7:1+ contrast */
+  --text-on-accent: #faf6eb;
+
+  /* Accent colors - high contrast for light bg */
+  --accent-yellow: #9a7209;  /* Darker gold */
+  --accent-cyan: #0a6a5a;   /* Darker teal */
+  --accent-green: #086a3a;  /* Darker green */
+  --accent-pink: #a8325a;   /* Darker pink */
+  --accent-red: #9a2238;    /* Darker red */
+  --accent-orange: #a84a1a; /* Darker orange */
+  --accent-purple: #5b21b6; /* Darker purple */
+  --accent-blue: #0a4a7a;   /* Darker blue */
+
+  /* UI element colors */
+  --border-color: #1a5a4a;
+  --border-color-muted: rgba(26, 90, 74, 0.3);
+  --key-bg: #f0ebe0;
+  --key-border: #1a5a4a;
+  --key-text: #2a2a3e;
+  --key-highlight: #b8860b;
+
+  /* Card/box backgrounds - subtle cream variations */
+  --card-bg: #f5f0e5;
+  --card-bg-alt: #ebe5da;
+  --card-border: #1a5a4a;
+
+  /* Feature box gradients - light warm tones */
+  --gradient-feature: linear-gradient(135deg, #f5f0e5 0%, #ebe5da 50%, #e5dfd2 100%);
+  --gradient-premium: linear-gradient(135deg, #fff5e6 0%, #ffe8cc 50%, #ffd9b3 100%);
+  --gradient-cyan-box: linear-gradient(135deg, rgba(26, 138, 122, 0.1) 0%, rgba(26, 138, 122, 0.05) 100%);
+  --gradient-yellow-box: linear-gradient(135deg, rgba(184, 134, 11, 0.1) 0%, rgba(196, 92, 38, 0.1) 100%);
+  --gradient-green-box: linear-gradient(135deg, rgba(10, 138, 80, 0.15) 0%, rgba(26, 138, 122, 0.15) 100%);
+
+  /* Button backgrounds */
+  --btn-primary-bg: #1a8a7a;
+  --btn-primary-text: #faf6eb;
+  --btn-secondary-bg: #b8860b;
+  --btn-secondary-text: #faf6eb;
+  --btn-premium-bg: linear-gradient(135deg, #b8860b 0%, #c45c26 100%);
+
+  /* Shadow/glow variables - softer for light theme */
+  --shadow-color: rgba(42, 42, 62, 0.12);
+  --shadow-soft: rgba(42, 42, 62, 0.08);
+  --glow-cyan: rgba(26, 138, 122, 0.2);
+  --glow-yellow: rgba(184, 134, 11, 0.2);
+  --glow-opacity: 0;
+
+  /* Header specific */
+  --header-bg: #f5f0e5;
+  --header-border: #1a5a4a;
+
+  /* RGB values for rgba() usage - high contrast */
+  --bg-primary-rgb: 250, 246, 235;
+  --accent-pink-rgb: 168, 50, 90;
+  --accent-purple-rgb: 91, 33, 182;
+  --accent-cyan-rgb: 10, 106, 90;
+  --accent-green-rgb: 8, 106, 58;
+  --accent-yellow-rgb: 154, 114, 9;
+}
+
+/* Disable glow effects in light theme */
+[data-theme="light"] .text-glow-cyan,
+[data-theme="light"] .text-glow-yellow,
+[data-theme="light"] .text-glow-green {
+  text-shadow: none;
+}
+
+/* Adjust pixel-box for light theme */
+[data-theme="light"] .pixel-box {
+  box-shadow:
+    4px 4px 0 var(--shadow-color),
+    inset -2px -2px 0 rgba(0, 0, 0, 0.08),
+    inset 2px 2px 0 rgba(255, 255, 255, 0.5);
+}
+
+/* Adjust pixel-btn for light theme */
+[data-theme="light"] .pixel-btn {
+  box-shadow:
+    4px 4px 0 var(--shadow-color),
+    inset -3px -3px 0 rgba(0, 0, 0, 0.1),
+    inset 3px 3px 0 rgba(255, 255, 255, 0.4);
+}
+
+[data-theme="light"] .pixel-btn:hover {
+  box-shadow:
+    2px 2px 0 var(--shadow-color),
+    inset -3px -3px 0 rgba(0, 0, 0, 0.1),
+    inset 3px 3px 0 rgba(255, 255, 255, 0.4);
+}
+
+[data-theme="light"] .pixel-btn:active {
+  box-shadow:
+    0px 0px 0 var(--shadow-color),
+    inset -3px -3px 0 rgba(0, 0, 0, 0.1),
+    inset 3px 3px 0 rgba(255, 255, 255, 0.4);
+}
+
+/* Theme transition for smooth switching */
+body,
+.pixel-box,
+.pixel-btn {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 body {

@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { KeyboardLayoutType } from '../data/keyboardLayouts';
 import { KEYBOARD_LAYOUTS, detectLayoutFromInput, getPossibleLayouts } from '../data/keyboardLayouts';
 
@@ -10,6 +11,7 @@ interface LayoutDetectorProps {
 type DetectionPhase = 'home-row' | 'disambiguation' | 'confirmed';
 
 export function LayoutDetector({ onLayoutDetected, onCancel }: LayoutDetectorProps) {
+  const { t } = useTranslation();
   const [phase, setPhase] = useState<DetectionPhase>('home-row');
   const [input, setInput] = useState('');
   const [possibleLayouts, setPossibleLayouts] = useState<KeyboardLayoutType[]>([]);
@@ -80,17 +82,17 @@ export function LayoutDetector({ onLayoutDetected, onCancel }: LayoutDetectorPro
         <div className="relative pixel-box p-6 max-w-lg w-full">
           <div className="text-center mb-6">
             <h2 style={{ fontFamily: "'Press Start 2P'", fontSize: '14px', color: '#ffd93d' }}>
-              DETECT KEYBOARD
+              {t('keyboard.detectKeyboard')}
             </h2>
             <p style={{ fontFamily: "'Press Start 2P'", fontSize: '8px', color: '#3bceac', marginTop: '12px', lineHeight: '2' }}>
-              TYPE YOUR HOME ROW KEYS FROM LEFT TO RIGHT
+              {t('keyboard.typeHomeRow')}
             </p>
           </div>
 
           {/* Visual guide showing physical keyboard positions */}
           <div className="pixel-box pixel-box-yellow p-4 mb-6">
             <p style={{ fontFamily: "'Press Start 2P'", fontSize: '8px', color: '#eef5db', textAlign: 'center', lineHeight: '2' }}>
-              PLACE YOUR FINGERS ON THE MIDDLE ROW AND TYPE ALL 10 KEYS
+              {t('keyboard.placeMiddleRow')}
             </p>
             <div className="flex justify-center gap-1 mt-4">
               {['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', '?'].map((key, idx) => (
@@ -126,7 +128,7 @@ export function LayoutDetector({ onLayoutDetected, onCancel }: LayoutDetectorPro
                 color: '#eef5db',
                 letterSpacing: '4px'
               }}
-              placeholder="TYPE HERE..."
+              placeholder={t('keyboard.typeHere')}
               autoComplete="off"
               autoCapitalize="off"
               spellCheck={false}
@@ -137,7 +139,7 @@ export function LayoutDetector({ onLayoutDetected, onCancel }: LayoutDetectorPro
             className="mt-4 text-center animate-blink"
             style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: '#4a4a6e' }}
           >
-            {input.length < 10 ? `${10 - input.length} MORE KEYS...` : 'ANALYZING...'}
+            {input.length < 10 ? t('keyboard.moreKeys', { count: 10 - input.length }) : t('keyboard.analyzing')}
           </p>
 
           <div className="flex justify-center mt-6">
@@ -146,7 +148,7 @@ export function LayoutDetector({ onLayoutDetected, onCancel }: LayoutDetectorPro
               className="pixel-btn pixel-btn-red"
               style={{ fontSize: '10px' }}
             >
-              CANCEL
+              {t('buttons.cancel')}
             </button>
           </div>
         </div>
@@ -163,19 +165,19 @@ export function LayoutDetector({ onLayoutDetected, onCancel }: LayoutDetectorPro
         <div className="relative pixel-box p-6 max-w-lg w-full">
           <div className="text-center mb-6">
             <h2 style={{ fontFamily: "'Press Start 2P'", fontSize: '14px', color: '#ffd93d' }}>
-              {detectedFamily ? `${detectedFamily.toUpperCase()} DETECTED!` : 'WHICH LAYOUT?'}
+              {detectedFamily ? t('keyboard.layoutDetected', { family: detectedFamily.toUpperCase() }) : t('keyboard.whichLayout')}
             </h2>
             <p style={{ fontFamily: "'Press Start 2P'", fontSize: '8px', color: '#3bceac', marginTop: '12px', lineHeight: '2' }}>
               {detectedFamily
-                ? 'SELECT YOUR SPECIFIC VARIANT'
-                : 'WE DETECTED MULTIPLE POSSIBLE LAYOUTS'}
+                ? t('keyboard.selectVariant')
+                : t('keyboard.multiplePossible')}
             </p>
           </div>
 
           {detectedFamily && (
             <div className="pixel-box pixel-box-green p-3 mb-4 text-center">
               <p style={{ fontFamily: "'Press Start 2P'", fontSize: '8px', color: '#0ead69' }}>
-                YOUR INPUT: {input.toUpperCase()}
+                {t('keyboard.yourInput', { input: input.toUpperCase() })}
               </p>
             </div>
           )}
@@ -232,14 +234,14 @@ export function LayoutDetector({ onLayoutDetected, onCancel }: LayoutDetectorPro
               className="pixel-btn"
               style={{ fontSize: '10px' }}
             >
-              RETRY
+              {t('common.retry')}
             </button>
             <button
               onClick={onCancel}
               className="pixel-btn pixel-btn-red"
               style={{ fontSize: '10px' }}
             >
-              CANCEL
+              {t('buttons.cancel')}
             </button>
           </div>
         </div>
@@ -258,7 +260,7 @@ export function LayoutDetector({ onLayoutDetected, onCancel }: LayoutDetectorPro
           <div className="text-center mb-6">
             <div className="text-4xl mb-4">✓</div>
             <h2 style={{ fontFamily: "'Press Start 2P'", fontSize: '14px', color: '#0ead69' }}>
-              LAYOUT DETECTED!
+              {t('keyboard.detected')}
             </h2>
           </div>
 
@@ -297,14 +299,14 @@ export function LayoutDetector({ onLayoutDetected, onCancel }: LayoutDetectorPro
               className="pixel-btn"
               style={{ fontSize: '10px' }}
             >
-              RETRY
+              {t('common.retry')}
             </button>
             <button
               onClick={handleConfirm}
               className="pixel-btn pixel-btn-green"
               style={{ fontSize: '10px' }}
             >
-              CONFIRM
+              {t('keyboard.confirm')}
             </button>
           </div>
         </div>

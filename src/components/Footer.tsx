@@ -1,6 +1,8 @@
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 export function Footer() {
+  const { t } = useTranslation();
   const currentYear = new Date().getFullYear();
 
   return (
@@ -23,7 +25,7 @@ export function Footer() {
                 marginBottom: '16px',
               }}
             >
-              LEARN
+              {t('footer.learn')}
             </h3>
             <ul className="space-y-3">
               <li>
@@ -36,7 +38,7 @@ export function Footer() {
                   }}
                   className="hover:text-[#3bceac] transition-colors"
                 >
-                  10-FINGER COURSE
+                  {t('footer.tenFingerCourse')}
                 </Link>
               </li>
               <li>
@@ -49,7 +51,7 @@ export function Footer() {
                   }}
                   className="hover:text-[#3bceac] transition-colors"
                 >
-                  TYPING FOR DEVS
+                  {t('footer.typingForDevs')}
                 </Link>
               </li>
               <li>
@@ -62,7 +64,7 @@ export function Footer() {
                   }}
                   className="hover:text-[#3bceac] transition-colors"
                 >
-                  GAMES FOR KIDS
+                  {t('footer.gamesForKids')}
                 </Link>
               </li>
             </ul>
@@ -78,7 +80,7 @@ export function Footer() {
                 marginBottom: '16px',
               }}
             >
-              TOOLS
+              {t('footer.tools')}
             </h3>
             <ul className="space-y-3">
               <li>
@@ -91,7 +93,7 @@ export function Footer() {
                   }}
                   className="hover:text-[#3bceac] transition-colors"
                 >
-                  SPEED TEST
+                  {t('footer.speedTest')}
                 </Link>
               </li>
               <li>
@@ -104,7 +106,7 @@ export function Footer() {
                   }}
                   className="hover:text-[#3bceac] transition-colors"
                 >
-                  WPM CALCULATOR
+                  {t('footer.wpmCalculator')}
                 </Link>
               </li>
             </ul>
@@ -120,7 +122,7 @@ export function Footer() {
                 marginBottom: '16px',
               }}
             >
-              COMPANY
+              {t('footer.company')}
             </h3>
             <ul className="space-y-3">
               <li>
@@ -133,7 +135,7 @@ export function Footer() {
                   }}
                   className="hover:text-[#3bceac] transition-colors"
                 >
-                  ABOUT US
+                  {t('footer.about')}
                 </Link>
               </li>
               <li>
@@ -146,7 +148,7 @@ export function Footer() {
                   }}
                   className="hover:text-[#3bceac] transition-colors"
                 >
-                  HOME
+                  {t('footer.home')}
                 </Link>
               </li>
             </ul>
@@ -174,7 +176,7 @@ export function Footer() {
                 marginBottom: '16px',
               }}
             >
-              MASTER THE KEYBOARD WITH RETRO GAMING VIBES
+              {t('footer.tagline')}
             </p>
             <div className="flex gap-4">
               <a
@@ -220,7 +222,7 @@ export function Footer() {
               opacity: 0.7,
             }}
           >
-            {currentYear} TYPEBIT8. LEVEL UP YOUR TYPING.
+            {currentYear} TYPEBIT8. {t('footer.levelUp')}
           </p>
         </div>
       </div>

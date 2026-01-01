@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useQuery, useMutation } from "convex/react";
+import { useTranslation } from "react-i18next";
 import { api } from "../../convex/_generated/api";
 import { useAuth } from "@clerk/clerk-react";
 import { CoinBalance } from "./CoinBalance";
@@ -15,6 +16,7 @@ interface ShopProps {
 }
 
 export function Shop({ onClose, onUpgrade }: ShopProps) {
+  const { t } = useTranslation();
   const { userId } = useAuth();
   const [category, setCategory] = useState<ShopCategory>("all");
   const [rarity, setRarity] = useState<ShopRarity>("all");
@@ -70,13 +72,13 @@ export function Shop({ onClose, onUpgrade }: ShopProps) {
       if (result.success) {
         setPurchaseResult({
           success: true,
-          message: `Purchased ${result.item?.name}!`,
+          message: t('shop.purchased', { name: result.item?.name }),
         });
       } else {
-        setPurchaseResult({ success: false, message: result.reason || "Failed" });
+        setPurchaseResult({ success: false, message: result.reason || t('shop.failed') });
       }
     } catch (error) {
-      setPurchaseResult({ success: false, message: "Purchase failed" });
+      setPurchaseResult({ success: false, message: t('shop.purchaseFailed') });
     }
     setPurchaseItemId(null);
 
@@ -108,11 +110,11 @@ export function Shop({ onClose, onUpgrade }: ShopProps) {
 
   // Categories config
   const categories: { id: ShopCategory; label: string; icon: string }[] = [
-    { id: "all", label: "ALL", icon: "🏪" },
-    { id: "avatar", label: "AVATARS", icon: "👤" },
-    { id: "theme", label: "THEMES", icon: "🎨" },
-    { id: "keyboard-skin", label: "SKINS", icon: "⌨️" },
-    { id: "power-up", label: "POWER-UPS", icon: "⚡" },
+    { id: "all", label: t('shop.all'), icon: "🏪" },
+    { id: "avatar", label: t('shop.avatars'), icon: "👤" },
+    { id: "theme", label: t('shop.themes'), icon: "🎨" },
+    { id: "keyboard-skin", label: t('shop.skins'), icon: "⌨️" },
+    { id: "power-up", label: t('shop.powerups'), icon: "⚡" },
   ];
 
   return (
@@ -129,10 +131,10 @@ export function Shop({ onClose, onUpgrade }: ShopProps) {
               className="pixel-btn"
               style={{ fontSize: "12px" }}
             >
-              ← BACK
+              {t('shop.back')}
             </button>
           )}
-          <h1 style={{ fontSize: "16px", color: "#ffd93d" }}>🏪 SHOP</h1>
+          <h1 style={{ fontSize: "16px", color: "#ffd93d" }}>🏪 {t('shop.title')}</h1>
         </div>
         <CoinBalance balance={coinBalance ?? 0} size="lg" />
       </header>
@@ -158,7 +160,7 @@ export function Shop({ onClose, onUpgrade }: ShopProps) {
             className="mb-4 flex items-center gap-2"
             style={{ fontSize: "12px", color: "#ff6b9d" }}
           >
-            <span>⭐</span> FEATURED
+            <span>⭐</span> {t('shop.featured')}
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
             {featuredItems.map((item) => (
@@ -199,7 +201,7 @@ export function Shop({ onClose, onUpgrade }: ShopProps) {
 
       {/* Rarity Filter */}
       <div className="flex flex-wrap gap-2 mb-6">
-        <span style={{ fontSize: "8px", color: "#4a4a6e" }}>RARITY:</span>
+        <span style={{ fontSize: "8px", color: "#4a4a6e" }}>{t('shop.rarity')}</span>
         {(["all", "common", "rare", "epic", "legendary"] as ShopRarity[]).map(
           (r) => (
             <button
@@ -240,7 +242,7 @@ export function Shop({ onClose, onUpgrade }: ShopProps) {
       {/* Empty state */}
       {(!filteredItems || filteredItems.length === 0) && (
         <div className="text-center py-12">
-          <p style={{ fontSize: "10px", color: "#4a4a6e" }}>NO ITEMS FOUND</p>
+          <p style={{ fontSize: "10px", color: "#4a4a6e" }}>{t('shop.noItems')}</p>
         </div>
       )}
     </div>
@@ -285,6 +287,7 @@ function ShopItemCard({
   onEquip,
   onUpgrade,
 }: ShopItemCardProps) {
+  const { t } = useTranslation();
   const getRarityColor = (r: string) => {
     switch (r) {
       case "common":
@@ -337,7 +340,7 @@ function ShopItemCard({
             color: "#1a1a2e",
           }}
         >
-          SALE
+          {t('common.sale')}
         </span>
       )}
 
@@ -417,7 +420,7 @@ function ShopItemCard({
           }`}
           style={{ fontSize: "7px", color: equipped ? "#1a1a2e" : "#3bceac" }}
         >
-          {equipped ? "EQUIPPED" : item.isConsumable ? "OWNED" : "EQUIP"}
+          {equipped ? t('buttons.equipped') : item.isConsumable ? t('buttons.owned') : t('buttons.equip')}
         </button>
       ) : (
         <button
@@ -448,7 +451,7 @@ function ShopItemCard({
                   {item.price}
                 </span>
               )}
-              {price === 0 ? "FREE" : `${price}$`}
+              {price === 0 ? t('common.free') : `${price}$`}
             </>
           )}
         </button>

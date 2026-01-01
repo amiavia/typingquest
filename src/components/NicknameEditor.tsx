@@ -5,6 +5,7 @@
 
 import { useState, useEffect } from 'react';
 import { useQuery, useMutation } from 'convex/react';
+import { useTranslation } from 'react-i18next';
 import { api } from '../../convex/_generated/api';
 
 interface NicknameEditorProps {
@@ -13,6 +14,7 @@ interface NicknameEditorProps {
 }
 
 export function NicknameEditor({ isOpen, onClose }: NicknameEditorProps) {
+  const { t } = useTranslation();
   const [nickname, setNickname] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
@@ -106,7 +108,7 @@ export function NicknameEditor({ isOpen, onClose }: NicknameEditorProps) {
               color: '#ffd93d',
             }}
           >
-            EDIT NICKNAME
+            {t('nickname.edit')}
           </h3>
           <button
             onClick={onClose}
@@ -130,7 +132,7 @@ export function NicknameEditor({ isOpen, onClose }: NicknameEditorProps) {
               marginBottom: '4px',
             }}
           >
-            CURRENT NAME
+            {t('nickname.current')}
           </p>
           <p
             style={{
@@ -166,7 +168,7 @@ export function NicknameEditor({ isOpen, onClose }: NicknameEditorProps) {
               marginBottom: '8px',
             }}
           >
-            NEW NICKNAME
+            {t('nickname.new')}
           </label>
           <input
             type="text"
@@ -177,7 +179,7 @@ export function NicknameEditor({ isOpen, onClose }: NicknameEditorProps) {
               setSuccess(null);
             }}
             maxLength={20}
-            placeholder="Enter nickname..."
+            placeholder={t('nickname.placeholder')}
             className="w-full p-3"
             style={{
               fontFamily: "'Press Start 2P', monospace",
@@ -198,7 +200,7 @@ export function NicknameEditor({ isOpen, onClose }: NicknameEditorProps) {
               marginTop: '4px',
             }}
           >
-            3-20 CHARS, LETTERS/NUMBERS/UNDERSCORES
+            {t('nickname.maxChars')}
           </p>
         </div>
 
@@ -260,7 +262,7 @@ export function NicknameEditor({ isOpen, onClose }: NicknameEditorProps) {
                 cursor: isLoading ? 'not-allowed' : 'pointer',
               }}
             >
-              RESET
+              {t('nickname.resetToDefault')}
             </button>
           )}
         </div>

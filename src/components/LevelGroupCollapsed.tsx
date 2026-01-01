@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface LevelGroupCollapsedProps {
   type: 'premium' | 'themed';
@@ -17,6 +18,7 @@ export function LevelGroupCollapsed({
   levelRange,
   totalLevels,
 }: LevelGroupCollapsedProps) {
+  const { t } = useTranslation();
   const [isHovered, setIsHovered] = useState(false);
 
   if (type === 'premium') {
@@ -24,9 +26,9 @@ export function LevelGroupCollapsed({
       <div
         className="relative overflow-hidden transition-all duration-300"
         style={{
-          background: 'linear-gradient(135deg, rgba(255, 217, 61, 0.05) 0%, rgba(255, 217, 61, 0.02) 100%)',
-          border: '3px solid #ffd93d',
-          boxShadow: isHovered ? '0 0 30px rgba(255, 217, 61, 0.3)' : '0 0 15px rgba(255, 217, 61, 0.1)',
+          background: 'var(--gradient-yellow-box)',
+          border: '3px solid var(--accent-yellow)',
+          boxShadow: isHovered ? '0 0 30px var(--glow-yellow)' : 'none',
         }}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
@@ -35,8 +37,8 @@ export function LevelGroupCollapsed({
         <div
           className="px-4 py-3 flex items-center justify-between"
           style={{
-            background: 'rgba(255, 217, 61, 0.1)',
-            borderBottom: '2px solid rgba(255, 217, 61, 0.3)',
+            background: 'var(--gradient-yellow-box)',
+            borderBottom: '2px solid var(--accent-yellow)',
           }}
         >
           <div className="flex items-center gap-3">
@@ -45,11 +47,10 @@ export function LevelGroupCollapsed({
               style={{
                 fontFamily: "'Press Start 2P', monospace",
                 fontSize: '10px',
-                color: '#ffd93d',
-                textShadow: '0 0 10px rgba(255, 217, 61, 0.5)',
+                color: 'var(--accent-yellow)',
               }}
             >
-              PREMIUM LEVELS {levelRange}
+              {t('levelGroup.premiumLevels', { range: levelRange })}
             </span>
           </div>
           {!isPremium && (
@@ -57,10 +58,10 @@ export function LevelGroupCollapsed({
               style={{
                 fontFamily: "'Press Start 2P', monospace",
                 fontSize: '7px',
-                color: '#4a4a6e',
+                color: 'var(--text-muted)',
               }}
             >
-              🔒 LOCKED
+              🔒 {t('levelGroup.locked')}
             </span>
           )}
         </div>
@@ -76,13 +77,13 @@ export function LevelGroupCollapsed({
                 style={{
                   fontFamily: "'Press Start 2P', monospace",
                   fontSize: '8px',
-                  color: '#3bceac',
-                  background: 'rgba(59, 206, 172, 0.1)',
-                  border: '2px solid #3bceac',
+                  color: 'var(--accent-cyan)',
+                  background: 'var(--gradient-cyan-box)',
+                  border: '2px solid var(--accent-cyan)',
                   padding: '12px 24px',
                 }}
               >
-                ▼ SHOW {totalLevels} ADVANCED LEVELS
+                ▼ {t('levelGroup.showAdvanced', { count: totalLevels })}
               </button>
             </div>
           ) : (
@@ -94,12 +95,11 @@ export function LevelGroupCollapsed({
                   style={{
                     fontFamily: "'Press Start 2P', monospace",
                     fontSize: '12px',
-                    color: '#ffd93d',
+                    color: 'var(--accent-yellow)',
                     marginTop: '12px',
-                    textShadow: '0 0 15px rgba(255, 217, 61, 0.3)',
                   }}
                 >
-                  UNLOCK {totalLevels} ADVANCED LEVELS
+                  {t('levelGroup.unlockAdvanced', { count: totalLevels })}
                 </h3>
               </div>
 
@@ -108,29 +108,29 @@ export function LevelGroupCollapsed({
                 style={{
                   fontFamily: "'Press Start 2P', monospace",
                   fontSize: '7px',
-                  color: '#eef5db',
+                  color: 'var(--text-primary)',
                   lineHeight: '1.8',
                   maxWidth: '400px',
                   margin: '0 auto',
                 }}
               >
-                Master advanced typing patterns and build your speed to 80+ WPM
+                {t('levelGroup.masterAdvanced')}
               </p>
 
               {/* Benefits grid */}
               <div className="grid grid-cols-2 gap-3 mt-6 max-w-md mx-auto">
                 {[
-                  { icon: '🎯', text: 'Advanced finger training' },
-                  { icon: '⚡', text: 'Speed building exercises' },
-                  { icon: '📝', text: 'Real-world text practice' },
-                  { icon: '🎮', text: 'Accuracy challenges' },
+                  { icon: '🎯', text: t('levelGroup.advancedFinger') },
+                  { icon: '⚡', text: t('levelGroup.speedBuilding') },
+                  { icon: '📝', text: t('levelGroup.realWorld') },
+                  { icon: '🎮', text: t('levelGroup.accuracyChallenges') },
                 ].map((benefit, i) => (
                   <div
                     key={i}
                     className="flex items-center gap-2 p-2"
                     style={{
-                      background: 'rgba(255, 217, 61, 0.05)',
-                      border: '1px solid rgba(255, 217, 61, 0.2)',
+                      background: 'var(--gradient-yellow-box)',
+                      border: '1px solid var(--accent-yellow)',
                     }}
                   >
                     <span style={{ fontSize: '14px' }}>{benefit.icon}</span>
@@ -138,7 +138,7 @@ export function LevelGroupCollapsed({
                       style={{
                         fontFamily: "'Press Start 2P', monospace",
                         fontSize: '5px',
-                        color: '#eef5db',
+                        color: 'var(--text-primary)',
                       }}
                     >
                       {benefit.text}
@@ -155,14 +155,14 @@ export function LevelGroupCollapsed({
                   style={{
                     fontFamily: "'Press Start 2P', monospace",
                     fontSize: '9px',
-                    color: '#1a1a2e',
-                    background: 'linear-gradient(135deg, #ffd93d 0%, #ffb800 100%)',
+                    color: 'var(--btn-secondary-text)',
+                    background: 'var(--btn-secondary-bg)',
                     border: 'none',
                     padding: '14px 28px',
-                    boxShadow: '0 4px 20px rgba(255, 217, 61, 0.4)',
+                    boxShadow: '0 4px 20px var(--glow-yellow)',
                   }}
                 >
-                  👑 UPGRADE TO PREMIUM
+                  👑 {t('levelGroup.upgradeToPremium')}
                 </button>
               </div>
             </div>
@@ -177,9 +177,9 @@ export function LevelGroupCollapsed({
     <div
       className="relative overflow-hidden transition-all duration-300"
       style={{
-        background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.05) 0%, rgba(59, 206, 172, 0.05) 100%)',
-        border: '3px solid #8b5cf6',
-        boxShadow: isHovered ? '0 0 30px rgba(139, 92, 246, 0.3)' : '0 0 15px rgba(139, 92, 246, 0.1)',
+        background: 'var(--gradient-premium)',
+        border: '3px solid var(--accent-purple)',
+        boxShadow: isHovered ? '0 0 30px rgba(var(--accent-purple-rgb, 139, 92, 246), 0.3)' : 'none',
       }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
@@ -188,8 +188,8 @@ export function LevelGroupCollapsed({
       <div
         className="px-4 py-3 flex items-center justify-between"
         style={{
-          background: 'linear-gradient(90deg, rgba(139, 92, 246, 0.15) 0%, rgba(59, 206, 172, 0.15) 100%)',
-          borderBottom: '2px solid rgba(139, 92, 246, 0.3)',
+          background: 'rgba(var(--accent-purple-rgb, 139, 92, 246), 0.15)',
+          borderBottom: '2px solid var(--accent-purple)',
         }}
       >
         <div className="flex items-center gap-3">
@@ -198,11 +198,10 @@ export function LevelGroupCollapsed({
             style={{
               fontFamily: "'Press Start 2P', monospace",
               fontSize: '10px',
-              color: '#8b5cf6',
-              textShadow: '0 0 10px rgba(139, 92, 246, 0.5)',
+              color: 'var(--accent-purple)',
             }}
           >
-            THEMED LEVELS {levelRange}
+            {t('levelGroup.themedLevels', { range: levelRange })}
           </span>
         </div>
         {!isPremium && (
@@ -210,10 +209,10 @@ export function LevelGroupCollapsed({
             style={{
               fontFamily: "'Press Start 2P', monospace",
               fontSize: '7px',
-              color: '#4a4a6e',
+              color: 'var(--text-muted)',
             }}
           >
-            🔒 LOCKED
+            🔒 {t('levelGroup.locked')}
           </span>
         )}
       </div>
@@ -229,13 +228,13 @@ export function LevelGroupCollapsed({
               style={{
                 fontFamily: "'Press Start 2P', monospace",
                 fontSize: '8px',
-                color: '#8b5cf6',
-                background: 'rgba(139, 92, 246, 0.1)',
-                border: '2px solid #8b5cf6',
+                color: 'var(--accent-purple)',
+                background: 'rgba(var(--accent-purple-rgb, 139, 92, 246), 0.1)',
+                border: '2px solid var(--accent-purple)',
                 padding: '12px 24px',
               }}
             >
-              ▼ SHOW {totalLevels} THEMED LEVELS
+              ▼ {t('levelGroup.showThemed', { count: totalLevels })}
             </button>
           </div>
         ) : (
@@ -247,12 +246,11 @@ export function LevelGroupCollapsed({
                 style={{
                   fontFamily: "'Press Start 2P', monospace",
                   fontSize: '11px',
-                  color: '#8b5cf6',
+                  color: 'var(--accent-purple)',
                   marginTop: '12px',
-                  textShadow: '0 0 15px rgba(139, 92, 246, 0.3)',
                 }}
               >
-                TYPE AT THE SPEED OF THOUGHT
+                {t('levelGroup.speedOfThought')}
               </h3>
             </div>
 
@@ -261,30 +259,29 @@ export function LevelGroupCollapsed({
               style={{
                 fontFamily: "'Press Start 2P', monospace",
                 fontSize: '6px',
-                color: '#eef5db',
+                color: 'var(--text-primary)',
                 lineHeight: '2',
                 maxWidth: '450px',
                 margin: '0 auto',
               }}
             >
-              Unlock the secrets of outstanding prompting while building lightning-fast typing skills.
-              Learn expert techniques through muscle memory.
+              {t('levelGroup.unlockSecrets')}
             </p>
 
             {/* Theme cards */}
             <div className="grid grid-cols-2 gap-4 mt-6 max-w-lg mx-auto">
               {[
-                { emoji: '🤖', name: 'AI PROMPTS', desc: 'Master ChatGPT & Claude techniques' },
-                { emoji: '💻', name: 'DEVELOPER', desc: 'Code patterns, terminal fluency' },
-                { emoji: '📧', name: 'BUSINESS', desc: 'Professional communication' },
-                { emoji: '🔮', name: 'COMING SOON', desc: 'Legal, Medical, Academic' },
+                { emoji: '🤖', name: t('levelGroup.themeAI'), desc: t('levelGroup.themeAIDesc') },
+                { emoji: '💻', name: t('levelGroup.themeDev'), desc: t('levelGroup.themeDevDesc') },
+                { emoji: '📧', name: t('levelGroup.themeBusiness'), desc: t('levelGroup.themeBusinessDesc') },
+                { emoji: '🔮', name: t('levelGroup.themeComingSoon'), desc: t('levelGroup.themeComingSoonDesc') },
               ].map((theme, i) => (
                 <div
                   key={i}
                   className="p-3 text-center"
                   style={{
-                    background: 'rgba(139, 92, 246, 0.05)',
-                    border: '1px solid rgba(139, 92, 246, 0.2)',
+                    background: 'rgba(var(--accent-purple-rgb, 139, 92, 246), 0.05)',
+                    border: '1px solid var(--accent-purple)',
                   }}
                 >
                   <span style={{ fontSize: '24px' }}>{theme.emoji}</span>
@@ -292,7 +289,7 @@ export function LevelGroupCollapsed({
                     style={{
                       fontFamily: "'Press Start 2P', monospace",
                       fontSize: '6px',
-                      color: '#3bceac',
+                      color: 'var(--accent-cyan)',
                       marginTop: '8px',
                     }}
                   >
@@ -302,7 +299,7 @@ export function LevelGroupCollapsed({
                     style={{
                       fontFamily: "'Press Start 2P', monospace",
                       fontSize: '4px',
-                      color: '#4a4a6e',
+                      color: 'var(--text-muted)',
                       marginTop: '4px',
                     }}
                   >
@@ -316,29 +313,29 @@ export function LevelGroupCollapsed({
             <div
               className="text-center py-4 mt-4"
               style={{
-                borderTop: '1px solid rgba(139, 92, 246, 0.2)',
-                borderBottom: '1px solid rgba(139, 92, 246, 0.2)',
+                borderTop: '1px solid var(--accent-purple)',
+                borderBottom: '1px solid var(--accent-purple)',
               }}
             >
               <p
                 style={{
                   fontFamily: "'Press Start 2P', monospace",
                   fontSize: '7px',
-                  color: '#ffd93d',
+                  color: 'var(--accent-yellow)',
                   fontStyle: 'italic',
                 }}
               >
-                "Type it. Learn it. Never forget it."
+                "{t('levelGroup.tagline')}"
               </p>
               <p
                 style={{
                   fontFamily: "'Press Start 2P', monospace",
                   fontSize: '5px',
-                  color: '#4a4a6e',
+                  color: 'var(--text-muted)',
                   marginTop: '8px',
                 }}
               >
-                Ultimate efficiency: Faster typing + Better prompts
+                {t('levelGroup.efficiency')}
               </p>
             </div>
 
@@ -350,14 +347,14 @@ export function LevelGroupCollapsed({
                 style={{
                   fontFamily: "'Press Start 2P', monospace",
                   fontSize: '8px',
-                  color: '#1a1a2e',
-                  background: 'linear-gradient(135deg, #8b5cf6 0%, #3bceac 100%)',
+                  color: 'var(--text-on-accent)',
+                  background: 'var(--btn-premium-bg)',
                   border: 'none',
                   padding: '12px 24px',
-                  boxShadow: '0 4px 20px rgba(139, 92, 246, 0.4)',
+                  boxShadow: '0 4px 20px rgba(var(--accent-purple-rgb, 139, 92, 246), 0.4)',
                 }}
               >
-                ⚡ INCLUDED WITH PREMIUM
+                ⚡ {t('levelGroup.includedPremium')}
               </button>
             </div>
           </div>

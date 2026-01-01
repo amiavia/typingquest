@@ -372,6 +372,265 @@ export function detectCountry(): string {
 - Create separate Price objects for emerging markets
 - Use Stripe Checkout with dynamic price selection based on location
 
+### 1.5 Regional Pricing Implementation (UPDATED 2025-12-31)
+
+> **CRITICAL DISCOVERY**: Clerk Billing has significant limitations that affect our regional pricing strategy.
+
+#### Clerk Billing Limitations
+
+| Limitation | Impact |
+|------------|--------|
+| **Blocked Countries** | Brazil, India, Malaysia, Mexico, Singapore, Thailand |
+| **Currency** | USD only (no multi-currency) |
+| **Plan Creation** | Dashboard only (no API/CLI) |
+| **Plan Filtering** | No `filter` prop on PricingTable |
+
+**Source**: [Clerk Billing Overview](https://clerk.com/docs/guides/billing/overview)
+
+#### Why This Matters
+
+India is TypeBit8's **#1 traffic source** - and Clerk Billing doesn't work there at all. Users in blocked countries will see checkout errors or be unable to subscribe.
+
+#### Recommended Architecture
+
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│  REGIONAL CHECKOUT FLOW                                              │
+├─────────────────────────────────────────────────────────────────────┤
+│                                                                      │
+│  User visits /premium                                                │
+│         │                                                            │
+│         ▼                                                            │
+│  ┌──────────────────┐                                               │
+│  │ useRegionalPricing│ → Detect country via locale/timezone         │
+│  └────────┬─────────┘                                               │
+│           │                                                          │
+│           ▼                                                          │
+│  ┌────────────────────────────────────────────┐                     │
+│  │ Is country in CLERK_BLOCKED_COUNTRIES?     │                     │
+│  │ (IN, BR, MY, MX, SG, TH)                   │                     │
+│  └────────┬───────────────────┬───────────────┘                     │
+│           │                   │                                      │
+│      YES  │                   │ NO                                   │
+│           ▼                   ▼                                      │
+│  ┌─────────────────┐   ┌─────────────────┐                          │
+│  │ STRIPE DIRECT   │   │ CLERK BILLING   │                          │
+│  │ CHECKOUT        │   │ <PricingTable/> │                          │
+│  │                 │   │                 │                          │
+│  │ $1.99/mo        │   │ $4.99/mo        │                          │
+│  │ Emerging price  │   │ Standard price  │                          │
+│  └─────────────────┘   └─────────────────┘                          │
+│                                                                      │
+└─────────────────────────────────────────────────────────────────────┘
+```
+
+#### Implementation Steps
+
+**Step 1: Create Stripe Products & Prices**
+
+```bash
+# Using Stripe CLI with live key from /Workspaces/.secrets/typebit8-stripe-live.key
+
+# First, create the product (or use existing)
+STRIPE_KEY=$(cat /Users/antonsteininger/Workspaces/.secrets/typebit8-stripe-live.key)
+
+# Create emerging market prices
+stripe prices create --api-key "$STRIPE_KEY" \
+  --currency=usd \
+  --unit-amount=199 \
+  --recurring-interval=month \
+  --product-data-name="TypeBit8 Premium (Emerging)" \
+  --lookup-key=premium_emerging_monthly
+
+stripe prices create --api-key "$STRIPE_KEY" \
+  --currency=usd \
+  --unit-amount=1499 \
+  --recurring-interval=year \
+  --product-data-name="TypeBit8 Premium (Emerging)" \
+  --lookup-key=premium_emerging_yearly
+```
+
+**Step 2: Add Stripe Checkout Action (Convex)**
+
+```typescript
+// convex/stripe.ts
+import Stripe from 'stripe';
+import { action } from './_generated/server';
+import { v } from 'convex/values';
+
+export const createCheckoutSession = action({
+  args: {
+    priceId: v.string(),
+    successUrl: v.string(),
+    cancelUrl: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
+
+    const session = await stripe.checkout.sessions.create({
+      mode: 'subscription',
+      payment_method_types: ['card'],
+      line_items: [{ price: args.priceId, quantity: 1 }],
+      success_url: args.successUrl,
+      cancel_url: args.cancelUrl,
+      allow_promotion_codes: true, // Enable FRIEND30, WELCOME20
+    });
+
+    return { url: session.url };
+  },
+});
+```
+
+**Step 3: Update PremiumPage.tsx**
+
+```tsx
+// src/components/PremiumPage.tsx
+import { PricingTable } from "@clerk/clerk-react";
+import { useRegionalPricing } from "../hooks/useRegionalPricing";
+import { useAction } from "convex/react";
+import { api } from "../../convex/_generated/api";
+
+const CLERK_BLOCKED_COUNTRIES = ['IN', 'BR', 'MY', 'MX', 'SG', 'TH'];
+
+// Stripe Price IDs (from Stripe Dashboard after creation)
+const STRIPE_PRICES = {
+  emerging_monthly: 'price_xxx', // Replace with actual ID
+  emerging_yearly: 'price_yyy',  // Replace with actual ID
+};
+
+export function PremiumPage() {
+  const { country, isEmergingMarket, pricing } = useRegionalPricing();
+  const createCheckout = useAction(api.stripe.createCheckoutSession);
+
+  const isClerkBlocked = CLERK_BLOCKED_COUNTRIES.includes(country);
+
+  const handleStripeCheckout = async (interval: 'monthly' | 'yearly') => {
+    const priceId = interval === 'monthly'
+      ? STRIPE_PRICES.emerging_monthly
+      : STRIPE_PRICES.emerging_yearly;
+
+    const { url } = await createCheckout({
+      priceId,
+      successUrl: `${window.location.origin}/premium?success=true`,
+      cancelUrl: `${window.location.origin}/premium?canceled=true`,
+    });
+
+    if (url) window.location.href = url;
+  };
+
+  return (
+    <div>
+      {/* Show appropriate checkout based on country */}
+      {isClerkBlocked ? (
+        // Direct Stripe checkout for blocked countries
+        <div className="stripe-checkout">
+          <h3>SPECIAL PRICING FOR {country}</h3>
+
+          <button onClick={() => handleStripeCheckout('monthly')}>
+            {pricing.monthly.display}/MONTH
+          </button>
+
+          <button onClick={() => handleStripeCheckout('yearly')}>
+            {pricing.yearly.display}/YEAR (SAVE 37%)
+          </button>
+
+          <p>Use code FRIEND30 for 30% off at checkout!</p>
+        </div>
+      ) : (
+        // Clerk PricingTable for supported countries
+        <PricingTable />
+      )}
+    </div>
+  );
+}
+```
+
+**Step 4: Handle Stripe Webhooks**
+
+```typescript
+// convex/http.ts - Add Stripe webhook handler
+import { httpRouter } from 'convex/server';
+import { internal } from './_generated/api';
+
+const http = httpRouter();
+
+http.route({
+  path: '/webhooks/stripe',
+  method: 'POST',
+  handler: async (ctx, request) => {
+    const body = await request.text();
+    const sig = request.headers.get('stripe-signature');
+
+    // Verify webhook signature
+    // Process subscription events
+    // Sync premium status to Convex
+
+    return new Response('OK', { status: 200 });
+  },
+});
+
+export default http;
+```
+
+**Step 5: Sync Stripe Subscriptions to Convex**
+
+The existing `PremiumSyncProvider` works with Clerk. For Stripe-direct subscriptions, we need to:
+1. Store Stripe customer ID in users table
+2. Check subscription status on login
+3. Sync via webhook events
+
+#### Clerk Billing: Programmatic Access
+
+**What's Available (API):**
+- `GET /v1/commerce/plans` - Fetch plans (read-only)
+- `client.billing.getPlanList()` - SDK method
+
+**What's NOT Available:**
+- Creating plans via API
+- Updating plan prices via API
+- Filtering PricingTable by plan
+
+**To create plans in Clerk:**
+1. Go to [Clerk Dashboard](https://dashboard.clerk.com) → Billing → Plans
+2. Create plans manually with desired pricing
+3. Connect to Stripe (Clerk creates Stripe products automatically)
+
+#### Environment Variables Needed
+
+```bash
+# .env.local
+STRIPE_SECRET_KEY=sk_live_xxx           # For server-side Stripe API
+STRIPE_WEBHOOK_SECRET=whsec_xxx         # For webhook verification
+VITE_STRIPE_PUBLISHABLE_KEY=pk_live_xxx # For client-side (if needed)
+
+# Already configured
+VITE_CLERK_PUBLISHABLE_KEY=xxx
+```
+
+#### Task Checklist
+
+- [ ] Create Stripe product for emerging markets
+- [ ] Create Stripe prices ($1.99/mo, $14.99/yr)
+- [ ] Add `convex/stripe.ts` with checkout action
+- [ ] Update `PremiumPage.tsx` with dual checkout flow
+- [ ] Set up Stripe webhook endpoint
+- [ ] Add webhook handler for subscription events
+- [ ] Sync Stripe subscriptions to Convex users table
+- [ ] Test checkout flow for India (blocked country)
+- [ ] Test checkout flow for US (Clerk country)
+- [ ] Verify FRIEND30/WELCOME20 coupons work in both flows
+
+#### Alternative: Skip Regional Pricing (MVP)
+
+If implementation complexity is too high for MVP:
+
+1. **Accept Clerk limitations** - Users in blocked countries can't subscribe
+2. **Show message** - "Premium not available in your region yet"
+3. **Capture email** - Offer to notify when available
+4. **Focus on supported markets** - US, EU, UK, Canada, Australia
+
+This is a valid MVP approach. Regional pricing can be Phase 2.
+
 ---
 
 ## Phase 2: Email Capture & Nurture
@@ -1450,7 +1709,7 @@ Submit to AlternativeTo.net as alternative to:
 - [x] Add premium teaser on level 6 completion
 - [x] Add progress bar with locked content preview
 - [x] Implement regional pricing detection (useRegionalPricing hook)
-- [ ] Create emerging market Stripe prices (MANUAL: Stripe Dashboard)
+- [ ] Implement regional pricing (see Phase 1.5 below for details)
 - [x] Add email capture to speed test page (EmailCapture component)
 - [x] Set up email service (Resend) - API key configured in Convex
 - [x] Create speed test results email template (convex/emails.ts)

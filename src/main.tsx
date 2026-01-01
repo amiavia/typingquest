@@ -6,12 +6,15 @@ import { ClerkProvider, useAuth } from '@clerk/clerk-react'
 import { ConvexProviderWithClerk } from 'convex/react-clerk'
 import { ConvexReactClient } from 'convex/react'
 import './index.css'
+import './i18n'  // PRP-050: Initialize i18n
 import { AppRouter } from './router.tsx'
 import { AuthProvider } from './contexts/AuthContext'
 import { ThemeProvider } from './providers/ThemeProvider'
 import { KeyboardSkinProvider } from './providers/KeyboardSkinProvider'
 import { PowerUpProvider } from './providers/PowerUpProvider'
 import { KeyboardLayoutProvider } from './providers/KeyboardLayoutProvider'
+import { ColorModeProvider } from './providers/ColorModeProvider'
+import { LanguageProvider } from './i18n/LanguageProvider'
 import { initializeGoogleTags } from './lib/gtag'
 
 // Initialize Google Analytics & Ads (for visitor tracking and retargeting)
@@ -54,11 +57,15 @@ function Providers({ children }: { children: React.ReactNode }) {
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <HelmetProvider>
-      <BrowserRouter>
-        <Providers>
-          <AppRouter />
-        </Providers>
-      </BrowserRouter>
+      <LanguageProvider>
+        <ColorModeProvider>
+          <BrowserRouter>
+            <Providers>
+              <AppRouter />
+            </Providers>
+          </BrowserRouter>
+        </ColorModeProvider>
+      </LanguageProvider>
     </HelmetProvider>
   </StrictMode>,
 )

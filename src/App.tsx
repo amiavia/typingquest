@@ -1,4 +1,5 @@
 import { useState, useCallback, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { Lesson, TypingStats } from './types';
 import { LessonCard } from './components/LessonCard';
 import { LessonView } from './components/LessonView';
@@ -20,6 +21,8 @@ import { PremiumPage } from './components/PremiumPage';
 import { CoinBalance } from './components/CoinBalance';
 import { StreakDisplay } from './components/StreakDisplay';
 import { PremiumBadge } from './components/PremiumBadge';
+import { ColorModeToggleIcon } from './components/ColorModeToggle';
+import { LanguageSwitcher } from './components/LanguageSwitcher';
 import { MobileLanding } from './components/MobileLanding';
 import { SEOHead, schemas } from './components/SEOHead';
 import { CookieConsent } from './components/CookieConsent';
@@ -54,6 +57,7 @@ const LOADING_MESSAGES: Record<View, string> = {
 };
 
 function App() {
+  const { t } = useTranslation();
   const [view, setView] = useState<View>('home');
   const [selectedLesson, setSelectedLesson] = useState<Lesson | null>(null);
   const [selectedLegalPage, setSelectedLegalPage] = useState<LegalPageType>('impressum');
@@ -387,7 +391,7 @@ function App() {
           {/* Backdrop */}
           <div
             className="absolute inset-0"
-            style={{ background: 'rgba(14, 14, 18, 0.95)' }}
+            style={{ background: 'rgba(var(--bg-primary-rgb, 15, 15, 27), 0.95)' }}
             onClick={() => setShowSignUpModal(false)}
           />
 
@@ -395,8 +399,8 @@ function App() {
           <div
             className="relative pixel-box p-8 max-w-md w-full text-center"
             style={{
-              background: '#1a1a2e',
-              border: '4px solid #3bceac',
+              background: 'var(--bg-secondary)',
+              border: '4px solid var(--border-color)',
             }}
           >
             {/* Close button */}
@@ -406,7 +410,7 @@ function App() {
               style={{
                 fontFamily: "'Press Start 2P'",
                 fontSize: '14px',
-                color: '#4a4a6e',
+                color: 'var(--text-muted)',
                 background: 'none',
                 border: 'none',
                 cursor: 'pointer',
@@ -423,12 +427,12 @@ function App() {
               style={{
                 fontFamily: "'Press Start 2P'",
                 fontSize: '14px',
-                color: '#ffd93d',
+                color: 'var(--accent-yellow)',
                 marginBottom: '16px',
               }}
               className="text-glow-yellow"
             >
-              UNLOCK MORE LEVELS!
+              {t('signup.unlockLevels')}
             </h2>
 
             {/* Description */}
@@ -436,47 +440,46 @@ function App() {
               style={{
                 fontFamily: "'Press Start 2P'",
                 fontSize: '8px',
-                color: '#eef5db',
+                color: 'var(--text-primary)',
                 lineHeight: '2.2',
                 marginBottom: '24px',
               }}
             >
-              CREATE A FREE ACCOUNT TO<br />
-              CONTINUE YOUR TYPING JOURNEY
+              {t('signup.createFree')}
             </p>
 
             {/* Benefits */}
             <div
               className="p-4 mb-6"
               style={{
-                background: 'rgba(59, 206, 172, 0.1)',
-                border: '2px solid rgba(59, 206, 172, 0.3)',
+                background: 'var(--gradient-cyan-box)',
+                border: '2px solid var(--border-color-muted)',
                 borderRadius: '4px',
               }}
             >
               <div className="grid grid-cols-2 gap-3 text-left">
                 <div className="flex items-center gap-2">
                   <span>🎯</span>
-                  <span style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: '#3bceac' }}>
-                    30 LEVELS
+                  <span style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: 'var(--accent-cyan)' }}>
+                    {t('benefits.levels')}
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
                   <span>📊</span>
-                  <span style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: '#3bceac' }}>
-                    TRACK PROGRESS
+                  <span style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: 'var(--accent-cyan)' }}>
+                    {t('benefits.trackProgress')}
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
                   <span>🏆</span>
-                  <span style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: '#3bceac' }}>
-                    LEADERBOARDS
+                  <span style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: 'var(--accent-cyan)' }}>
+                    {t('benefits.leaderboards')}
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
                   <span>🔥</span>
-                  <span style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: '#3bceac' }}>
-                    DAILY STREAKS
+                  <span style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: 'var(--accent-cyan)' }}>
+                    {t('benefits.dailyStreaks')}
                   </span>
                 </div>
               </div>
@@ -492,14 +495,14 @@ function App() {
               style={{
                 fontFamily: "'Press Start 2P'",
                 fontSize: '12px',
-                background: 'linear-gradient(180deg, #3bceac, #0ead69)',
-                color: '#0f0f1b',
+                background: 'var(--btn-primary-bg)',
+                color: 'var(--btn-primary-text)',
                 border: 'none',
                 cursor: 'pointer',
-                boxShadow: '0 4px 0 #0a8a54',
+                boxShadow: '0 4px 0 var(--shadow-color)',
               }}
             >
-              SIGN UP FREE
+              {t('signup.signUpFree')}
             </button>
 
             {/* Guest note */}
@@ -507,10 +510,10 @@ function App() {
               style={{
                 fontFamily: "'Press Start 2P'",
                 fontSize: '6px',
-                color: '#4a4a6e',
+                color: 'var(--text-muted)',
               }}
             >
-              GUEST ACCESS: LEVELS 1-2 ONLY
+              {t('signup.guestAccess')}
             </p>
           </div>
         </div>
@@ -522,17 +525,21 @@ function App() {
           {/* Logo */}
           <div className="flex items-center gap-2 md:gap-4 min-w-0">
             <div
-              className="w-10 h-10 md:w-12 md:h-12 border-4 border-[#ffd93d] bg-[#1a1a2e] flex items-center justify-center flex-shrink-0"
-              style={{ boxShadow: '4px 4px 0 #0f0f1b, 0 0 15px rgba(255, 217, 61, 0.3)' }}
+              className="w-10 h-10 md:w-12 md:h-12 flex items-center justify-center flex-shrink-0"
+              style={{
+                border: '4px solid var(--accent-yellow)',
+                background: 'var(--bg-secondary)',
+                boxShadow: '4px 4px 0 var(--bg-primary), 0 0 15px var(--glow-yellow)',
+              }}
             >
-              <span style={{ fontFamily: "'Press Start 2P'", fontSize: '16px', color: '#ffd93d' }} className="md:text-xl">⌨</span>
+              <span style={{ fontFamily: "'Press Start 2P'", fontSize: '16px', color: 'var(--accent-yellow)' }} className="md:text-xl">⌨</span>
             </div>
             <div className="hidden sm:block">
-              <h1 style={{ fontFamily: "'Press Start 2P'", fontSize: '14px', color: '#ffd93d' }} className="text-glow-yellow">
-                TYPEBIT8
+              <h1 style={{ fontFamily: "'Press Start 2P'", fontSize: '14px', color: 'var(--accent-yellow)' }} className="text-glow-yellow">
+                {t('header.title')}
               </h1>
-              <p style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: '#3bceac' }}>
-                MASTER THE KEYBOARD
+              <p style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: 'var(--accent-cyan)' }}>
+                {t('header.subtitle')}
               </p>
             </div>
             {/* Premium Badge - hidden on mobile */}
@@ -580,8 +587,13 @@ function App() {
             {!isPremium && (
               <button
                 onClick={() => navigateTo('premium')}
-                className="hidden md:block px-3 py-2 border-2 border-[#ffd93d] hover:bg-[#ffd93d] hover:text-[#1a1a2e] transition-colors"
-                style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: '#ffd93d' }}
+                className="hidden md:block px-3 py-2 border-2 transition-colors"
+                style={{
+                  fontFamily: "'Press Start 2P'",
+                  fontSize: '6px',
+                  color: 'var(--accent-yellow)',
+                  borderColor: 'var(--accent-yellow)',
+                }}
               >
                 👑 PREMIUM
               </button>
@@ -589,15 +601,15 @@ function App() {
 
             {/* Level - compact on mobile */}
             <div className="text-center">
-              <div style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: '#3bceac' }} className="hidden md:block">LEVEL</div>
-              <div style={{ fontFamily: "'Press Start 2P'", fontSize: '16px', color: '#ffd93d' }} className="text-glow-yellow md:text-xl">
+              <div style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: 'var(--accent-cyan)' }} className="hidden md:block">LEVEL</div>
+              <div style={{ fontFamily: "'Press Start 2P'", fontSize: '16px', color: 'var(--accent-yellow)' }} className="text-glow-yellow md:text-xl">
                 {gameState.level}
               </div>
             </div>
 
             {/* XP Bar - hidden on mobile */}
             <div className="hidden md:block w-24 md:w-32">
-              <div style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: '#3bceac', marginBottom: '4px' }}>
+              <div style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: 'var(--accent-cyan)', marginBottom: '4px' }}>
                 XP: {gameState.xp}/{gameState.XP_PER_LEVEL}
               </div>
               <div className="pixel-bar h-4">
@@ -605,11 +617,17 @@ function App() {
                   className="pixel-bar-fill"
                   style={{
                     width: `${gameState.getXpProgress()}%`,
-                    background: 'linear-gradient(90deg, #3bceac, #0ead69)',
+                    background: 'var(--gradient-green-box)',
                   }}
                 />
               </div>
             </div>
+
+            {/* Language Switcher - PRP-050 */}
+            <LanguageSwitcher compact />
+
+            {/* Color Mode Toggle - PRP-049 */}
+            <ColorModeToggleIcon />
 
             {/* User Button (includes Avatar) */}
             <UserButton userLevel={gameState.level} onOpenShop={() => navigateTo('shop')} onOpenPremium={() => navigateTo('premium')} />
@@ -627,13 +645,13 @@ function App() {
               {/* Title */}
               <div className="mb-8">
                 <h2
-                  style={{ fontFamily: "'Press Start 2P'", fontSize: '24px', color: '#eef5db', lineHeight: '2' }}
+                  style={{ fontFamily: "'Press Start 2P'", fontSize: '24px', color: 'var(--text-primary)', lineHeight: '2' }}
                   className="mb-4"
                 >
                   LEARN TO TYPE WITH
                 </h2>
                 <h2
-                  style={{ fontFamily: "'Press Start 2P'", fontSize: '32px', color: '#3bceac', lineHeight: '1.5' }}
+                  style={{ fontFamily: "'Press Start 2P'", fontSize: '32px', color: 'var(--accent-cyan)', lineHeight: '1.5' }}
                   className="text-glow-cyan"
                 >
                   ALL 10 FINGERS
@@ -643,22 +661,22 @@ function App() {
               {/* Stats boxes */}
               <div className="flex flex-wrap gap-4 justify-center mb-8">
                 <div className="pixel-box p-4 text-center">
-                  <div style={{ fontFamily: "'Press Start 2P'", fontSize: '24px', color: '#ffd93d' }} className="text-glow-yellow">
+                  <div style={{ fontFamily: "'Press Start 2P'", fontSize: '24px', color: 'var(--accent-yellow)' }} className="text-glow-yellow">
                     {lessons.length}
                   </div>
-                  <div style={{ fontFamily: "'Press Start 2P'", fontSize: '8px', color: '#3bceac' }}>LEVELS</div>
+                  <div style={{ fontFamily: "'Press Start 2P'", fontSize: '8px', color: 'var(--accent-cyan)' }}>LEVELS</div>
                 </div>
                 <div className="pixel-box p-4 text-center">
-                  <div style={{ fontFamily: "'Press Start 2P'", fontSize: '24px', color: '#0ead69' }} className="text-glow-green">
+                  <div style={{ fontFamily: "'Press Start 2P'", fontSize: '24px', color: 'var(--accent-green)' }} className="text-glow-green">
                     {totalCompleted}
                   </div>
-                  <div style={{ fontFamily: "'Press Start 2P'", fontSize: '8px', color: '#3bceac' }}>CLEARED</div>
+                  <div style={{ fontFamily: "'Press Start 2P'", fontSize: '8px', color: 'var(--accent-cyan)' }}>CLEARED</div>
                 </div>
                 <div className="pixel-box p-4 text-center">
-                  <div style={{ fontFamily: "'Press Start 2P'", fontSize: '24px', color: '#ff6b9d' }}>
+                  <div style={{ fontFamily: "'Press Start 2P'", fontSize: '24px', color: 'var(--accent-pink)' }}>
                     {gameState.maxCombo}x
                   </div>
-                  <div style={{ fontFamily: "'Press Start 2P'", fontSize: '8px', color: '#3bceac' }}>BEST COMBO</div>
+                  <div style={{ fontFamily: "'Press Start 2P'", fontSize: '8px', color: 'var(--accent-cyan)' }}>BEST COMBO</div>
                 </div>
               </div>
 
@@ -677,33 +695,33 @@ function App() {
             <div
               className="pixel-box p-8 text-center"
               style={{
-                background: 'linear-gradient(135deg, rgba(59, 206, 172, 0.15), rgba(255, 217, 61, 0.1))',
-                border: '4px solid #3bceac',
+                background: 'var(--gradient-feature)',
+                border: '4px solid var(--border-color)',
               }}
             >
               {/* Keyboard Confirmed Badge */}
               <div
                 className="inline-block px-4 py-2 mb-6"
                 style={{
-                  background: 'rgba(14, 173, 105, 0.2)',
-                  border: '2px solid #0ead69',
+                  background: 'var(--gradient-green-box)',
+                  border: '2px solid var(--accent-green)',
                   borderRadius: '4px',
                 }}
               >
-                <span style={{ fontFamily: "'Press Start 2P'", fontSize: '8px', color: '#0ead69' }}>
+                <span style={{ fontFamily: "'Press Start 2P'", fontSize: '8px', color: 'var(--accent-green)' }}>
                   ✓ KEYBOARD SETUP COMPLETE
                 </span>
               </div>
 
               <h2
-                style={{ fontFamily: "'Press Start 2P'", fontSize: '18px', color: '#ffd93d' }}
+                style={{ fontFamily: "'Press Start 2P'", fontSize: '18px', color: 'var(--accent-yellow)' }}
                 className="mb-4 text-glow-yellow"
               >
                 CREATE FREE ACCOUNT
               </h2>
 
               <p
-                style={{ fontFamily: "'Press Start 2P'", fontSize: '10px', color: '#eef5db', lineHeight: '2.2' }}
+                style={{ fontFamily: "'Press Start 2P'", fontSize: '10px', color: 'var(--text-primary)', lineHeight: '2.2' }}
                 className="mb-8"
               >
                 UNLOCK THE FULL TYPING EXPERIENCE!
@@ -714,52 +732,52 @@ function App() {
                 <div
                   className="p-4 text-center"
                   style={{
-                    background: 'rgba(59, 206, 172, 0.2)',
-                    border: '3px solid rgba(59, 206, 172, 0.5)',
+                    background: 'var(--gradient-cyan-box)',
+                    border: '3px solid var(--border-color-muted)',
                     borderRadius: '8px',
                   }}
                 >
                   <span className="text-3xl">📊</span>
-                  <p style={{ fontFamily: "'Press Start 2P'", fontSize: '8px', color: '#3bceac', marginTop: '8px' }}>
+                  <p style={{ fontFamily: "'Press Start 2P'", fontSize: '8px', color: 'var(--accent-cyan)', marginTop: '8px' }}>
                     TRACK YOUR<br />PROGRESS
                   </p>
                 </div>
                 <div
                   className="p-4 text-center"
                   style={{
-                    background: 'rgba(255, 217, 61, 0.2)',
-                    border: '3px solid rgba(255, 217, 61, 0.5)',
+                    background: 'var(--gradient-yellow-box)',
+                    border: '3px solid var(--accent-yellow)',
                     borderRadius: '8px',
                   }}
                 >
                   <span className="text-3xl">🎮</span>
-                  <p style={{ fontFamily: "'Press Start 2P'", fontSize: '8px', color: '#ffd93d', marginTop: '8px' }}>
+                  <p style={{ fontFamily: "'Press Start 2P'", fontSize: '8px', color: 'var(--accent-yellow)', marginTop: '8px' }}>
                     30 LEVELS<br />UNLOCKED
                   </p>
                 </div>
                 <div
                   className="p-4 text-center"
                   style={{
-                    background: 'rgba(14, 173, 105, 0.2)',
-                    border: '3px solid rgba(14, 173, 105, 0.5)',
+                    background: 'var(--gradient-green-box)',
+                    border: '3px solid var(--accent-green)',
                     borderRadius: '8px',
                   }}
                 >
                   <span className="text-3xl">🏆</span>
-                  <p style={{ fontFamily: "'Press Start 2P'", fontSize: '8px', color: '#0ead69', marginTop: '8px' }}>
+                  <p style={{ fontFamily: "'Press Start 2P'", fontSize: '8px', color: 'var(--accent-green)', marginTop: '8px' }}>
                     COMPETE ON<br />LEADERBOARDS
                   </p>
                 </div>
                 <div
                   className="p-4 text-center"
                   style={{
-                    background: 'rgba(255, 107, 157, 0.2)',
-                    border: '3px solid rgba(255, 107, 157, 0.5)',
+                    background: 'rgba(var(--accent-pink-rgb, 255, 107, 157), 0.2)',
+                    border: '3px solid var(--accent-pink)',
                     borderRadius: '8px',
                   }}
                 >
                   <span className="text-3xl">🔥</span>
-                  <p style={{ fontFamily: "'Press Start 2P'", fontSize: '8px', color: '#ff6b9d', marginTop: '8px' }}>
+                  <p style={{ fontFamily: "'Press Start 2P'", fontSize: '8px', color: 'var(--accent-pink)', marginTop: '8px' }}>
                     BUILD DAILY<br />STREAKS
                   </p>
                 </div>
@@ -772,19 +790,19 @@ function App() {
                 style={{
                   fontFamily: "'Press Start 2P'",
                   fontSize: '14px',
-                  background: 'linear-gradient(180deg, #3bceac, #0ead69)',
-                  color: '#0f0f1b',
+                  background: 'var(--btn-primary-bg)',
+                  color: 'var(--btn-primary-text)',
                   border: 'none',
                   cursor: 'pointer',
-                  boxShadow: '0 6px 0 #0a8a54',
+                  boxShadow: '0 6px 0 var(--shadow-color)',
                 }}
               >
                 SIGN UP FREE
               </button>
 
               {/* Guest Option */}
-              <div className="pt-4 border-t-2 border-[#2a2a4e]">
-                <p style={{ fontFamily: "'Press Start 2P'", fontSize: '7px', color: '#4a4a6e', marginBottom: '12px' }}>
+              <div className="pt-4" style={{ borderTop: '2px solid var(--bg-tertiary)' }}>
+                <p style={{ fontFamily: "'Press Start 2P'", fontSize: '7px', color: 'var(--text-muted)', marginBottom: '12px' }}>
                   WANT TO TRY FIRST?
                 </p>
                 <button
@@ -793,15 +811,15 @@ function App() {
                   style={{
                     fontFamily: "'Press Start 2P'",
                     fontSize: '10px',
-                    color: '#4a4a6e',
+                    color: 'var(--text-muted)',
                     background: 'transparent',
-                    border: '2px solid #4a4a6e',
+                    border: '2px solid var(--text-muted)',
                     cursor: 'pointer',
                   }}
                 >
                   CONTINUE AS GUEST
                 </button>
-                <p style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: '#4a4a6e', marginTop: '8px' }}>
+                <p style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: 'var(--text-muted)', marginTop: '8px' }}>
                   (LEVELS 1-2 ONLY)
                 </p>
               </div>
@@ -832,19 +850,19 @@ function App() {
                 <div
                   className="pixel-box p-6 text-center"
                   style={{
-                    background: 'linear-gradient(135deg, rgba(59, 206, 172, 0.1), rgba(255, 217, 61, 0.05))',
-                    border: '2px solid #3bceac',
+                    background: 'var(--gradient-feature)',
+                    border: '2px solid var(--border-color)',
                   }}
                 >
                   <div className="flex flex-col md:flex-row items-center justify-between gap-4">
                     <div className="text-left">
                       <h3
-                        style={{ fontFamily: "'Press Start 2P'", fontSize: '10px', color: '#ffd93d' }}
+                        style={{ fontFamily: "'Press Start 2P'", fontSize: '10px', color: 'var(--accent-yellow)' }}
                         className="mb-2"
                       >
                         SIGN UP TO UNLOCK ALL LEVELS
                       </h3>
-                      <p style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: '#4a4a6e' }}>
+                      <p style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: 'var(--text-muted)' }}>
                         GUEST ACCESS: LEVELS 1-2 ONLY
                       </p>
                     </div>
@@ -854,11 +872,11 @@ function App() {
                       style={{
                         fontFamily: "'Press Start 2P'",
                         fontSize: '10px',
-                        background: 'linear-gradient(180deg, #3bceac, #0ead69)',
-                        color: '#0f0f1b',
+                        background: 'var(--btn-primary-bg)',
+                        color: 'var(--btn-primary-text)',
                         border: 'none',
                         cursor: 'pointer',
-                        boxShadow: '0 4px 0 #0a8a54',
+                        boxShadow: '0 4px 0 var(--shadow-color)',
                       }}
                     >
                       SIGN UP FREE
@@ -875,9 +893,9 @@ function App() {
               <div
                 className="pixel-box p-8 text-center"
                 style={{
-                  background: 'linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(59, 206, 172, 0.1))',
-                  border: '4px solid #8b5cf6',
-                  boxShadow: '0 0 30px rgba(139, 92, 246, 0.2)',
+                  background: 'var(--gradient-premium)',
+                  border: '4px solid var(--accent-purple)',
+                  boxShadow: '0 0 30px rgba(var(--accent-purple-rgb, 139, 92, 246), 0.2)',
                 }}
               >
                 {/* Title */}
@@ -885,13 +903,13 @@ function App() {
                   style={{
                     fontFamily: "'Press Start 2P'",
                     fontSize: '16px',
-                    color: '#ffd93d',
+                    color: 'var(--accent-yellow)',
                     marginBottom: '24px',
                     lineHeight: '1.8',
                   }}
                   className="text-glow-yellow"
                 >
-                  LEARN TWO SKILLS AT ONCE
+                  {t('marketing.learnTwoSkills')}
                 </h2>
 
                 {/* Subtitle */}
@@ -899,11 +917,11 @@ function App() {
                   style={{
                     fontFamily: "'Press Start 2P'",
                     fontSize: '10px',
-                    color: '#eef5db',
+                    color: 'var(--text-primary)',
                     marginBottom: '24px',
                   }}
                 >
-                  MASTER TYPING SPEED WHILE LEARNING:
+                  {t('marketing.masterTypingWhile')}
                 </p>
 
                 {/* Skills Grid */}
@@ -911,40 +929,40 @@ function App() {
                   <div
                     className="p-4"
                     style={{
-                      background: 'rgba(59, 206, 172, 0.1)',
-                      border: '2px solid rgba(59, 206, 172, 0.4)',
+                      background: 'var(--gradient-cyan-box)',
+                      border: '2px solid var(--border-color-muted)',
                       borderRadius: '4px',
                     }}
                   >
                     <div className="text-3xl mb-2">🤖</div>
-                    <p style={{ fontFamily: "'Press Start 2P'", fontSize: '7px', color: '#3bceac', lineHeight: '2' }}>
-                      EXPERT AI PROMPTING<br />TECHNIQUES
+                    <p style={{ fontFamily: "'Press Start 2P'", fontSize: '7px', color: 'var(--accent-cyan)', lineHeight: '2' }}>
+                      {t('marketing.aiPrompting')}
                     </p>
                   </div>
                   <div
                     className="p-4"
                     style={{
-                      background: 'rgba(255, 217, 61, 0.1)',
-                      border: '2px solid rgba(255, 217, 61, 0.4)',
+                      background: 'var(--gradient-yellow-box)',
+                      border: '2px solid var(--accent-yellow)',
                       borderRadius: '4px',
                     }}
                   >
                     <div className="text-3xl mb-2">💻</div>
-                    <p style={{ fontFamily: "'Press Start 2P'", fontSize: '7px', color: '#ffd93d', lineHeight: '2' }}>
-                      PROFESSIONAL CODING<br />PATTERNS
+                    <p style={{ fontFamily: "'Press Start 2P'", fontSize: '7px', color: 'var(--accent-yellow)', lineHeight: '2' }}>
+                      {t('marketing.codingPatterns')}
                     </p>
                   </div>
                   <div
                     className="p-4"
                     style={{
-                      background: 'rgba(139, 92, 246, 0.1)',
-                      border: '2px solid rgba(139, 92, 246, 0.4)',
+                      background: 'rgba(var(--accent-purple-rgb, 139, 92, 246), 0.1)',
+                      border: '2px solid var(--accent-purple)',
                       borderRadius: '4px',
                     }}
                   >
                     <div className="text-3xl mb-2">📧</div>
-                    <p style={{ fontFamily: "'Press Start 2P'", fontSize: '7px', color: '#8b5cf6', lineHeight: '2' }}>
-                      BUSINESS<br />COMMUNICATION
+                    <p style={{ fontFamily: "'Press Start 2P'", fontSize: '7px', color: 'var(--accent-purple)', lineHeight: '2' }}>
+                      {t('marketing.businessComm')}
                     </p>
                   </div>
                 </div>
@@ -954,12 +972,12 @@ function App() {
                   style={{
                     fontFamily: "'Press Start 2P'",
                     fontSize: '9px',
-                    color: '#3bceac',
+                    color: 'var(--accent-cyan)',
                     marginBottom: '24px',
                     fontStyle: 'italic',
                   }}
                 >
-                  "TYPE IT. LEARN IT. NEVER FORGET IT."
+                  "{t('marketing.tagline')}"
                 </p>
 
                 {/* CTA Button */}
@@ -969,14 +987,14 @@ function App() {
                   style={{
                     fontFamily: "'Press Start 2P'",
                     fontSize: '10px',
-                    background: 'linear-gradient(180deg, #8b5cf6, #6d28d9)',
-                    color: '#ffffff',
+                    background: 'var(--btn-premium-bg)',
+                    color: 'var(--text-on-accent)',
                     border: 'none',
                     cursor: 'pointer',
-                    boxShadow: '0 4px 0 #4c1d95, 0 0 20px rgba(139, 92, 246, 0.4)',
+                    boxShadow: '0 4px 0 var(--shadow-color)',
                   }}
                 >
-                  ⚡ UNLOCK SPEED OF THOUGHT TYPING
+                  ⚡ {t('marketing.unlockSpeed')}
                 </button>
               </div>
             </div>
@@ -989,40 +1007,40 @@ function App() {
         <section className="p-4 md:p-8">
           <div className="max-w-4xl mx-auto">
             <h3
-              style={{ fontFamily: "'Press Start 2P'", fontSize: '14px', color: '#ffd93d', marginBottom: '24px' }}
+              style={{ fontFamily: "'Press Start 2P'", fontSize: '14px', color: 'var(--accent-yellow)', marginBottom: '24px' }}
               className="text-center"
             >
-              HOW TO PLAY
+              {t('howToPlay.title')}
             </h3>
 
             <div className="grid md:grid-cols-3 gap-4">
               <div className="pixel-box p-6 text-center">
                 <div className="text-4xl mb-4">📖</div>
-                <h4 style={{ fontFamily: "'Press Start 2P'", fontSize: '10px', color: '#eef5db', marginBottom: '8px' }}>
-                  1. LEARN
+                <h4 style={{ fontFamily: "'Press Start 2P'", fontSize: '10px', color: 'var(--text-primary)', marginBottom: '8px' }}>
+                  1. {t('howToPlay.learn')}
                 </h4>
-                <p style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: '#3bceac', lineHeight: '2' }}>
-                  EACH LEVEL TEACHES NEW KEYS AND FINGER POSITIONS
+                <p style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: 'var(--accent-cyan)', lineHeight: '2' }}>
+                  {t('howToPlay.learnDesc')}
                 </p>
               </div>
 
               <div className="pixel-box pixel-box-yellow p-6 text-center">
                 <div className="text-4xl mb-4">⚔️</div>
-                <h4 style={{ fontFamily: "'Press Start 2P'", fontSize: '10px', color: '#eef5db', marginBottom: '8px' }}>
-                  2. BATTLE
+                <h4 style={{ fontFamily: "'Press Start 2P'", fontSize: '10px', color: 'var(--text-primary)', marginBottom: '8px' }}>
+                  2. {t('howToPlay.battle')}
                 </h4>
-                <p style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: '#3bceac', lineHeight: '2' }}>
-                  TYPE FAST AND BUILD COMBOS TO DEFEAT THE BOSS
+                <p style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: 'var(--accent-cyan)', lineHeight: '2' }}>
+                  {t('howToPlay.battleDesc')}
                 </p>
               </div>
 
               <div className="pixel-box pixel-box-green p-6 text-center">
                 <div className="text-4xl mb-4">🏆</div>
-                <h4 style={{ fontFamily: "'Press Start 2P'", fontSize: '10px', color: '#eef5db', marginBottom: '8px' }}>
-                  3. VICTORY
+                <h4 style={{ fontFamily: "'Press Start 2P'", fontSize: '10px', color: 'var(--text-primary)', marginBottom: '8px' }}>
+                  3. {t('howToPlay.victory')}
                 </h4>
-                <p style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: '#3bceac', lineHeight: '2' }}>
-                  EARN XP, COINS AND UNLOCK NEW LEVELS
+                <p style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: 'var(--accent-cyan)', lineHeight: '2' }}>
+                  {t('howToPlay.victoryDesc')}
                 </p>
               </div>
             </div>
@@ -1034,11 +1052,11 @@ function App() {
       <section id="lessons-section" className="p-4 md:p-8">
         <div className="max-w-6xl mx-auto">
           <div className="flex items-center justify-between mb-6 flex-wrap gap-4">
-            <h3 style={{ fontFamily: "'Press Start 2P'", fontSize: '14px', color: '#ffd93d' }}>
-              SELECT LEVEL
+            <h3 style={{ fontFamily: "'Press Start 2P'", fontSize: '14px', color: 'var(--accent-yellow)' }}>
+              {t('home.selectLevel')}
             </h3>
-            <span style={{ fontFamily: "'Press Start 2P'", fontSize: '10px', color: '#3bceac' }}>
-              {totalCompleted}/{lessons.length} COMPLETE
+            <span style={{ fontFamily: "'Press Start 2P'", fontSize: '10px', color: 'var(--accent-cyan)' }}>
+              {totalCompleted}/{lessons.length} {t('home.complete')}
             </span>
           </div>
 
@@ -1046,12 +1064,14 @@ function App() {
           <div className="flex flex-wrap gap-2 mb-6">
             <button
               onClick={() => setSelectedTier('all')}
-              className={`px-3 py-2 border-2 transition-colors ${
-                selectedTier === 'all'
-                  ? 'border-[#3bceac] bg-[#3bceac] text-[#1a1a2e]'
-                  : 'border-[#4a4a6e] hover:border-[#3bceac]'
-              }`}
-              style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: selectedTier === 'all' ? '#1a1a2e' : '#eef5db' }}
+              className="px-3 py-2 border-2 transition-colors"
+              style={{
+                fontFamily: "'Press Start 2P'",
+                fontSize: '6px',
+                borderColor: selectedTier === 'all' ? 'var(--accent-cyan)' : 'var(--text-muted)',
+                backgroundColor: selectedTier === 'all' ? 'var(--accent-cyan)' : 'transparent',
+                color: selectedTier === 'all' ? 'var(--bg-secondary)' : 'var(--text-primary)',
+              }}
             >
               ALL TIERS
             </button>
@@ -1062,19 +1082,15 @@ function App() {
                   key={tier.id}
                   onClick={() => unlocked && setSelectedTier(tier.id)}
                   disabled={!unlocked}
-                  className={`px-3 py-2 border-2 transition-colors ${
-                    !unlocked
-                      ? 'border-[#2a2a3e] opacity-50 cursor-not-allowed'
-                      : selectedTier === tier.id
-                        ? 'bg-opacity-100'
-                        : 'hover:brightness-125'
-                  }`}
+                  className="px-3 py-2 border-2 transition-colors"
                   style={{
                     fontFamily: "'Press Start 2P'",
                     fontSize: '6px',
-                    borderColor: unlocked ? tier.color : '#2a2a3e',
+                    borderColor: unlocked ? tier.color : 'var(--bg-tertiary)',
                     backgroundColor: selectedTier === tier.id ? tier.color : 'transparent',
-                    color: selectedTier === tier.id ? '#1a1a2e' : (unlocked ? tier.color : '#4a4a6e'),
+                    color: selectedTier === tier.id ? 'var(--bg-secondary)' : (unlocked ? tier.color : 'var(--text-muted)'),
+                    opacity: unlocked ? 1 : 0.5,
+                    cursor: unlocked ? 'pointer' : 'not-allowed',
                   }}
                 >
                   {!unlocked && '🔒 '}{tier.name}
@@ -1088,21 +1104,21 @@ function App() {
             <div
               className="mb-6 p-4 border-2"
               style={{
-                borderColor: LEVEL_TIERS.find(t => t.id === selectedTier)?.color ?? '#4a4a6e',
-                backgroundColor: 'rgba(26, 26, 46, 0.8)',
+                borderColor: LEVEL_TIERS.find(t => t.id === selectedTier)?.color ?? 'var(--text-muted)',
+                backgroundColor: 'var(--card-bg)',
               }}
             >
               <h4
                 style={{
                   fontFamily: "'Press Start 2P'",
                   fontSize: '10px',
-                  color: LEVEL_TIERS.find(t => t.id === selectedTier)?.color ?? '#eef5db',
+                  color: LEVEL_TIERS.find(t => t.id === selectedTier)?.color ?? 'var(--text-primary)',
                   marginBottom: '8px',
                 }}
               >
                 TIER {selectedTier}: {LEVEL_TIERS.find(t => t.id === selectedTier)?.name}
               </h4>
-              <p style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: '#3bceac' }}>
+              <p style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: 'var(--accent-cyan)' }}>
                 {LEVEL_TIERS.find(t => t.id === selectedTier)?.description.toUpperCase()}
               </p>
             </div>
@@ -1113,22 +1129,22 @@ function App() {
             <div
               className="mb-6 p-4"
               style={{
-                background: 'linear-gradient(180deg, #1a1a2e 0%, #16213e 100%)',
-                border: '3px solid #3bceac',
+                background: 'var(--gradient-feature)',
+                border: '3px solid var(--border-color)',
                 fontFamily: "'Press Start 2P'",
               }}
             >
               <div className="flex items-center justify-between mb-3">
-                <span style={{ fontSize: '8px', color: '#3bceac' }}>YOUR PROGRESS</span>
-                <span style={{ fontSize: '8px', color: '#eef5db' }}>
+                <span style={{ fontSize: '8px', color: 'var(--accent-cyan)' }}>YOUR PROGRESS</span>
+                <span style={{ fontSize: '8px', color: 'var(--text-primary)' }}>
                   {Object.values(progress).filter(p => p?.completed && p?.quizPassed).length} / 50 LEVELS
                 </span>
               </div>
               <div
                 style={{
                   height: '12px',
-                  background: '#0f0f1b',
-                  border: '2px solid #3bceac',
+                  background: 'var(--bg-primary)',
+                  border: '2px solid var(--border-color)',
                   position: 'relative',
                   overflow: 'hidden',
                 }}
@@ -1141,7 +1157,7 @@ function App() {
                     top: 0,
                     height: '100%',
                     width: `${(Object.values(progress).filter(p => p?.completed && p?.quizPassed).length / 50) * 100}%`,
-                    background: 'linear-gradient(90deg, #0ead69, #22c55e)',
+                    background: 'var(--gradient-green-box)',
                     transition: 'width 0.3s ease',
                   }}
                 />
@@ -1153,13 +1169,13 @@ function App() {
                     top: 0,
                     height: '100%',
                     width: '2px',
-                    background: '#ffd93d',
+                    background: 'var(--accent-yellow)',
                   }}
                 />
               </div>
               <div className="flex justify-between mt-2">
-                <span style={{ fontSize: '6px', color: '#22c55e' }}>6 FREE</span>
-                <span style={{ fontSize: '6px', color: '#ffd93d' }}>
+                <span style={{ fontSize: '6px', color: 'var(--accent-green)' }}>6 FREE</span>
+                <span style={{ fontSize: '6px', color: 'var(--accent-yellow)' }}>
                   {isPremium ? '✓ PREMIUM UNLOCKED' : '+44 PREMIUM LEVELS'}
                 </span>
               </div>
@@ -1176,7 +1192,7 @@ function App() {
                   style={{
                     fontFamily: "'Press Start 2P'",
                     fontSize: '10px',
-                    color: '#22c55e',
+                    color: 'var(--accent-green)',
                   }}
                 >
                   <span>🎮</span> FREE BASICS (1-6)
@@ -1222,7 +1238,7 @@ function App() {
                       style={{
                         fontFamily: "'Press Start 2P'",
                         fontSize: '10px',
-                        color: '#ffd93d',
+                        color: 'var(--accent-yellow)',
                       }}
                     >
                       <span>⭐</span> PREMIUM LEVELS (7-30)
@@ -1233,9 +1249,9 @@ function App() {
                       style={{
                         fontFamily: "'Press Start 2P'",
                         fontSize: '7px',
-                        color: '#4a4a6e',
+                        color: 'var(--text-muted)',
                         background: 'transparent',
-                        border: '1px solid #4a4a6e',
+                        border: '1px solid var(--text-muted)',
                         padding: '6px 12px',
                       }}
                     >
@@ -1288,7 +1304,7 @@ function App() {
                       style={{
                         fontFamily: "'Press Start 2P'",
                         fontSize: '10px',
-                        color: '#8b5cf6',
+                        color: 'var(--accent-purple)',
                       }}
                     >
                       <span>⚡</span> SPEED OF THOUGHT (31-50)
@@ -1299,9 +1315,9 @@ function App() {
                       style={{
                         fontFamily: "'Press Start 2P'",
                         fontSize: '7px',
-                        color: '#4a4a6e',
+                        color: 'var(--text-muted)',
                         background: 'transparent',
-                        border: '1px solid #4a4a6e',
+                        border: '1px solid var(--text-muted)',
                         padding: '6px 12px',
                       }}
                     >
@@ -1378,57 +1394,62 @@ function App() {
 
       {/* Footer */}
       <footer className="p-8 text-center">
-        <p style={{ fontFamily: "'Press Start 2P'", fontSize: '8px', color: '#4a4a6e' }}>
-          TYPEBIT8 © 2025
+        <p style={{ fontFamily: "'Press Start 2P'", fontSize: '8px', color: 'var(--text-muted)' }}>
+          {t('footer.copyright')}
         </p>
-        <p style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: '#4a4a6e', marginTop: '8px' }}>
-          PRACTICE DAILY FOR BEST RESULTS
+        <p style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: 'var(--text-muted)', marginTop: '8px' }}>
+          {t('footer.practiceDaily')}
         </p>
 
         {/* Legal Links */}
         <div className="mt-6 flex justify-center gap-6 flex-wrap">
           <button
             onClick={() => handleLegalPage('impressum')}
-            style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: '#3bceac' }}
+            style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: 'var(--accent-cyan)' }}
             className="hover:underline cursor-pointer bg-transparent border-none"
           >
-            IMPRESSUM
+            {t('footer.impressum')}
           </button>
           <button
             onClick={() => handleLegalPage('privacy')}
-            style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: '#3bceac' }}
+            style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: 'var(--accent-cyan)' }}
             className="hover:underline cursor-pointer bg-transparent border-none"
           >
-            PRIVACY POLICY
+            {t('footer.privacy')}
           </button>
           <button
             onClick={() => handleLegalPage('terms')}
-            style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: '#3bceac' }}
+            style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: 'var(--accent-cyan)' }}
             className="hover:underline cursor-pointer bg-transparent border-none"
           >
-            TERMS OF SERVICE
+            {t('footer.terms')}
           </button>
         </div>
 
         {/* Feedback Section */}
         <div className="mt-8 pixel-box p-4 max-w-md mx-auto">
-          <p style={{ fontFamily: "'Press Start 2P'", fontSize: '8px', color: '#ffd93d', marginBottom: '12px' }}>
-            GOT FEEDBACK OR IDEAS?
+          <p style={{ fontFamily: "'Press Start 2P'", fontSize: '8px', color: 'var(--accent-yellow)', marginBottom: '12px' }}>
+            {t('footer.feedback')}
           </p>
-          <p style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: '#eef5db', lineHeight: '2', marginBottom: '12px' }}>
-            WE'D LOVE TO HEAR FROM YOU! SEND US YOUR SUGGESTIONS, BUG REPORTS, OR FEATURE REQUESTS.
+          <p style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: 'var(--text-primary)', lineHeight: '2', marginBottom: '12px' }}>
+            {t('footer.feedbackDesc')}
           </p>
           <a
             href="mailto:info@typebit8.com"
-            className="inline-block px-4 py-3 border-2 border-[#3bceac] hover:bg-[#3bceac] hover:text-[#1a1a2e] transition-colors"
-            style={{ fontFamily: "'Press Start 2P'", fontSize: '8px', color: '#3bceac' }}
+            className="inline-block px-4 py-3 border-2 transition-colors"
+            style={{
+              fontFamily: "'Press Start 2P'",
+              fontSize: '8px',
+              color: 'var(--accent-cyan)',
+              borderColor: 'var(--accent-cyan)',
+            }}
           >
             ✉ INFO@TYPEBIT8.COM
           </a>
         </div>
 
-        <p style={{ fontFamily: "'Press Start 2P'", fontSize: '5px', color: '#4a4a6e', marginTop: '16px' }}>
-          OPERATED BY STEININGER AG, ZUG, SWITZERLAND
+        <p style={{ fontFamily: "'Press Start 2P'", fontSize: '5px', color: 'var(--text-muted)', marginTop: '16px' }}>
+          {t('footer.operator')}
         </p>
       </footer>
       </div>

@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useQuery } from 'convex/react'
+import { useTranslation } from 'react-i18next'
 import { useAuthContext } from '../contexts/AuthContext'
 import { api } from '../../convex/_generated/api'
 import { Avatar } from './Avatar'
@@ -18,6 +19,7 @@ export function Leaderboard({
   limit = COMPACT_LIMIT,
   showGlobal = true,
 }: LeaderboardProps) {
+  const { t } = useTranslation()
   const { userId, isAuthenticated } = useAuthContext()
   const [showFull, setShowFull] = useState(false)
 
@@ -63,7 +65,7 @@ export function Leaderboard({
             color: '#ffd93d',
           }}
         >
-          🏆 {lessonId ? `LEVEL ${lessonId}` : 'GLOBAL'} LEADERBOARD
+          🏆 {lessonId ? t('leaderboard.level', { level: lessonId }) : t('leaderboard.global')} {t('leaderboard.title')}
         </h3>
 
         {leaderboardStats && (
@@ -74,7 +76,7 @@ export function Leaderboard({
               color: '#9a9ab0',
             }}
           >
-            {leaderboardStats.totalPlayers} PLAYERS
+            {t('leaderboard.playersCount', { count: leaderboardStats.totalPlayers })}
           </span>
         )}
       </div>
@@ -105,7 +107,7 @@ export function Leaderboard({
               color: '#9a9ab0',
             }}
           >
-            NO SCORES YET
+            {t('leaderboard.noScores')}
           </p>
           <p
             style={{
@@ -115,7 +117,7 @@ export function Leaderboard({
               marginTop: '8px',
             }}
           >
-            BE THE FIRST TO SET A RECORD!
+            {t('leaderboard.beFirst')}
           </p>
         </div>
       )}
@@ -135,7 +137,7 @@ export function Leaderboard({
               cursor: 'pointer',
             }}
           >
-            ▼ SHOW ALL {leaderboardStats.totalPlayers} PLAYERS
+            ▼ {t('leaderboard.showAll', { count: leaderboardStats.totalPlayers })}
           </button>
         </div>
       )}
@@ -153,7 +155,7 @@ export function Leaderboard({
               cursor: 'pointer',
             }}
           >
-            ▲ SHOW LESS
+            ▲ {t('leaderboard.showLess')}
           </button>
         </div>
       )}
@@ -166,7 +168,7 @@ export function Leaderboard({
         >
           <LeaderboardEntry
             rank={userRank.rank}
-            displayName="YOU"
+            displayName={t('leaderboard.you')}
             score={userRank.score}
             accuracy={userRank.accuracy}
             isCurrentUser={true}
@@ -187,7 +189,7 @@ export function Leaderboard({
               color: '#ffd93d',
             }}
           >
-            SIGN IN TO JOIN THE LEADERBOARD
+            {t('leaderboard.signInToJoin')}
           </p>
         </div>
       )}

@@ -17,7 +17,7 @@ export function LessonCard({ lesson, progress, isLocked = false, isPremiumLocked
 
   // Get tier info for this lesson
   const tier = getTierForLevel(lesson.id);
-  const tierColor = tier?.color ?? '#3bceac';
+  const tierColor = tier?.color ?? 'var(--accent-cyan)';
 
   // Calculate stars based on performance
   const getStars = () => {
@@ -52,30 +52,19 @@ export function LessonCard({ lesson, progress, isLocked = false, isPremiumLocked
       `}
       style={{
         fontFamily: "'Press Start 2P', monospace",
-        borderColor: isGuestLocked ? '#3bceac' : isPremiumLocked ? '#ffd93d' : undefined,
+        borderColor: isGuestLocked ? 'var(--accent-cyan)' : isPremiumLocked ? 'var(--accent-yellow)' : undefined,
       }}
     >
       <div className="flex items-start justify-between mb-3">
         <div className="flex items-center gap-3">
           <div
-            className={`
-              w-10 h-10 flex items-center justify-center border-4
-              ${isCompleted
-                ? 'border-[#0ead69] bg-[#0ead69] text-[#0f0f1b]'
-                : isGuestLocked
-                  ? 'border-[#3bceac] bg-[#16213e]'
-                  : isPremiumLocked
-                    ? 'border-[#ffd93d] bg-[#16213e]'
-                    : isLocked
-                      ? 'border-[#4a4a6e] bg-[#16213e] text-[#4a4a6e]'
-                      : 'bg-[#1a1a2e]'
-              }
-            `}
+            className="w-10 h-10 flex items-center justify-center border-4"
             style={{
               fontSize: '14px',
-              boxShadow: isCompleted ? '0 0 15px #0ead69' : isGuestLocked ? '0 0 10px rgba(59,206,172,0.3)' : isPremiumLocked ? '0 0 10px rgba(255,217,61,0.3)' : 'none',
-              borderColor: isCompleted ? '#0ead69' : isGuestLocked ? '#3bceac' : isPremiumLocked ? '#ffd93d' : isLocked ? '#4a4a6e' : tierColor,
-              color: isCompleted ? '#0f0f1b' : isGuestLocked ? '#3bceac' : isPremiumLocked ? '#ffd93d' : isLocked ? '#4a4a6e' : tierColor,
+              backgroundColor: isCompleted ? 'var(--accent-green)' : 'var(--bg-elevated)',
+              boxShadow: isCompleted ? '0 0 15px var(--accent-green)' : isGuestLocked ? '0 0 10px var(--glow-cyan)' : isPremiumLocked ? '0 0 10px var(--glow-yellow)' : 'none',
+              borderColor: isCompleted ? 'var(--accent-green)' : isGuestLocked ? 'var(--accent-cyan)' : isPremiumLocked ? 'var(--accent-yellow)' : isLocked ? 'var(--text-muted)' : tierColor,
+              color: isCompleted ? 'var(--bg-primary)' : isGuestLocked ? 'var(--accent-cyan)' : isPremiumLocked ? 'var(--accent-yellow)' : isLocked ? 'var(--text-muted)' : tierColor,
             }}
           >
             {isCompleted ? '★' : isGuestLocked ? '🔐' : isPremiumLocked ? '👑' : isLocked ? '🔒' : lesson.id}
@@ -84,7 +73,7 @@ export function LessonCard({ lesson, progress, isLocked = false, isPremiumLocked
             <h3
               style={{
                 fontSize: '10px',
-                color: isGuestLocked ? '#3bceac' : isPremiumLocked ? '#ffd93d' : isLocked ? '#4a4a6e' : '#eef5db',
+                color: isGuestLocked ? 'var(--accent-cyan)' : isPremiumLocked ? 'var(--accent-yellow)' : isLocked ? 'var(--text-muted)' : 'var(--text-primary)',
                 lineHeight: '1.5'
               }}
             >
@@ -95,7 +84,7 @@ export function LessonCard({ lesson, progress, isLocked = false, isPremiumLocked
               <span
                 style={{
                   fontSize: '6px',
-                  color: isPremiumLocked ? '#ffd93d' : isLocked ? '#4a4a6e' : tierColor,
+                  color: isPremiumLocked ? 'var(--accent-yellow)' : isLocked ? 'var(--text-muted)' : tierColor,
                 }}
               >
                 {tier.name}
@@ -111,8 +100,8 @@ export function LessonCard({ lesson, progress, isLocked = false, isPremiumLocked
               className="px-2 py-0.5"
               style={{
                 fontSize: '6px',
-                backgroundColor: '#3bceac',
-                color: '#1a1a2e',
+                backgroundColor: 'var(--accent-cyan)',
+                color: 'var(--bg-secondary)',
               }}
             >
               SIGN UP
@@ -125,8 +114,8 @@ export function LessonCard({ lesson, progress, isLocked = false, isPremiumLocked
               className="px-2 py-0.5"
               style={{
                 fontSize: '6px',
-                backgroundColor: '#ffd93d',
-                color: '#1a1a2e',
+                backgroundColor: 'var(--accent-yellow)',
+                color: 'var(--bg-secondary)',
               }}
             >
               PREMIUM
@@ -139,8 +128,8 @@ export function LessonCard({ lesson, progress, isLocked = false, isPremiumLocked
               className="px-2 py-0.5"
               style={{
                 fontSize: '6px',
-                backgroundColor: '#ff6b9d',
-                color: '#1a1a2e',
+                backgroundColor: 'var(--accent-pink)',
+                color: 'var(--bg-secondary)',
                 animation: 'pulse 1s infinite',
               }}
             >
@@ -156,8 +145,8 @@ export function LessonCard({ lesson, progress, isLocked = false, isPremiumLocked
                   key={i}
                   style={{
                     fontSize: '12px',
-                    color: i <= stars ? '#ffd93d' : '#4a4a6e',
-                    textShadow: i <= stars ? '0 0 10px #ffd93d' : 'none',
+                    color: i <= stars ? 'var(--accent-yellow)' : 'var(--text-muted)',
+                    textShadow: i <= stars ? '0 0 10px var(--accent-yellow)' : 'none',
                   }}
                 >
                   ★
@@ -171,7 +160,7 @@ export function LessonCard({ lesson, progress, isLocked = false, isPremiumLocked
       <p
         style={{
           fontSize: '8px',
-          color: isLocked ? '#4a4a6e' : '#3bceac',
+          color: isLocked ? 'var(--text-muted)' : 'var(--accent-cyan)',
           marginBottom: '12px',
           lineHeight: '1.8'
         }}
@@ -186,9 +175,9 @@ export function LessonCard({ lesson, progress, isLocked = false, isPremiumLocked
             className="w-6 h-6 flex items-center justify-center border-2"
             style={{
               fontSize: '8px',
-              borderColor: isLocked ? '#4a4a6e' : '#3bceac',
-              backgroundColor: isLocked ? 'transparent' : 'rgba(59, 206, 172, 0.1)',
-              color: isLocked ? '#4a4a6e' : '#eef5db'
+              borderColor: isLocked ? 'var(--text-muted)' : 'var(--accent-cyan)',
+              backgroundColor: isLocked ? 'transparent' : 'var(--gradient-cyan-box)',
+              color: isLocked ? 'var(--text-muted)' : 'var(--text-primary)'
             }}
           >
             {key === ' ' ? '⎵' : key.toUpperCase()}
@@ -199,8 +188,8 @@ export function LessonCard({ lesson, progress, isLocked = false, isPremiumLocked
             className="w-6 h-6 flex items-center justify-center border-2"
             style={{
               fontSize: '6px',
-              borderColor: '#4a4a6e',
-              color: '#4a4a6e'
+              borderColor: 'var(--text-muted)',
+              color: 'var(--text-muted)'
             }}
           >
             +{lesson.keys.length - 8}
@@ -210,19 +199,19 @@ export function LessonCard({ lesson, progress, isLocked = false, isPremiumLocked
 
       <div
         className="flex items-center justify-between border-t-2 pt-2"
-        style={{ borderColor: isLocked ? '#2a2a4e' : '#3bceac' }}
+        style={{ borderColor: isLocked ? 'var(--bg-tertiary)' : 'var(--accent-cyan)' }}
       >
         <div className="flex gap-4">
-          <span style={{ fontSize: '6px', color: '#ffd93d' }}>
+          <span style={{ fontSize: '6px', color: 'var(--accent-yellow)' }}>
             {lesson.minWPM} WPM
           </span>
-          <span style={{ fontSize: '6px', color: '#0ead69' }}>
+          <span style={{ fontSize: '6px', color: 'var(--accent-green)' }}>
             {lesson.minAccuracy}% ACC
           </span>
         </div>
 
         {progress && progress.bestWPM > 0 && (
-          <span style={{ fontSize: '6px', color: '#ff6b9d' }}>
+          <span style={{ fontSize: '6px', color: 'var(--accent-pink)' }}>
             BEST: {progress.bestWPM}
           </span>
         )}
@@ -230,8 +219,12 @@ export function LessonCard({ lesson, progress, isLocked = false, isPremiumLocked
 
       {isStarted && !isCompleted && (
         <div
-          className="mt-3 pt-2 border-t-2 border-[#ffd93d]"
-          style={{ fontSize: '6px', color: '#ffd93d' }}
+          className="mt-3 pt-2"
+          style={{
+            fontSize: '6px',
+            color: 'var(--accent-yellow)',
+            borderTop: '2px solid var(--accent-yellow)',
+          }}
         >
           ▶ IN PROGRESS
         </div>

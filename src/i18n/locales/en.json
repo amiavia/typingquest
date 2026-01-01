@@ -1,8 +1,175 @@
 {
-  "app": {
-    "title": "Type Quest",
-    "subtitle": "Master touch typing with retro flair",
-    "tagline": "Level up your typing skills!"
+  "header": {
+    "title": "TYPEBIT8",
+    "subtitle": "MASTER THE KEYBOARD",
+    "challenge": "CHALLENGE",
+    "premium": "PREMIUM",
+    "level": "LEVEL",
+    "xp": "XP"
+  },
+  "hero": {
+    "learnWith": "LEARN TO TYPE WITH",
+    "allFingers": "ALL 10 FINGERS",
+    "levels": "LEVELS",
+    "cleared": "CLEARED",
+    "bestCombo": "BEST COMBO"
+  },
+  "home": {
+    "selectLevel": "SELECT LEVEL",
+    "complete": "COMPLETE",
+    "allTiers": "ALL TIERS",
+    "yourProgress": "YOUR PROGRESS",
+    "freeLevels": "FREE BASICS",
+    "premiumLevels": "PREMIUM LEVELS",
+    "themedLevels": "SPEED OF THOUGHT",
+    "freeLabel": "FREE",
+    "premiumUnlocked": "PREMIUM UNLOCKED"
+  },
+  "marketing": {
+    "learnTwoSkills": "LEARN TWO SKILLS AT ONCE",
+    "masterTypingWhile": "MASTER TYPING SPEED WHILE LEARNING:",
+    "aiPrompting": "EXPERT AI PROMPTING TECHNIQUES",
+    "codingPatterns": "PROFESSIONAL CODING PATTERNS",
+    "businessComm": "BUSINESS COMMUNICATION",
+    "tagline": "TYPE IT. LEARN IT. NEVER FORGET IT.",
+    "unlockSpeed": "UNLOCK SPEED OF THOUGHT TYPING"
+  },
+  "howToPlay": {
+    "title": "HOW TO PLAY",
+    "learn": "LEARN",
+    "learnDesc": "EACH LEVEL TEACHES NEW KEYS AND FINGER POSITIONS",
+    "battle": "BATTLE",
+    "battleDesc": "TYPE FAST AND BUILD COMBOS TO DEFEAT THE BOSS",
+    "victory": "VICTORY",
+    "victoryDesc": "EARN XP, COINS AND UNLOCK NEW LEVELS"
+  },
+  "signup": {
+    "unlockLevels": "UNLOCK MORE LEVELS!",
+    "createFree": "CREATE A FREE ACCOUNT TO CONTINUE YOUR TYPING JOURNEY",
+    "signUpFree": "SIGN UP FREE",
+    "guestAccess": "GUEST ACCESS: LEVELS 1-2 ONLY",
+    "signUpToUnlock": "SIGN UP TO UNLOCK ALL LEVELS",
+    "wantToTry": "WANT TO TRY FIRST?",
+    "continueAsGuest": "CONTINUE AS GUEST",
+    "levelsOnly": "(LEVELS 1-2 ONLY)",
+    "keyboardSetupComplete": "KEYBOARD SETUP COMPLETE",
+    "createFreeAccount": "CREATE FREE ACCOUNT",
+    "unlockFullExperience": "UNLOCK THE FULL TYPING EXPERIENCE!",
+    "trackProgress": "TRACK YOUR PROGRESS",
+    "levelsUnlocked": "30 LEVELS UNLOCKED",
+    "competeLeaderboards": "COMPETE ON LEADERBOARDS",
+    "buildStreaks": "BUILD DAILY STREAKS"
+  },
+  "benefits": {
+    "levels": "30 LEVELS",
+    "trackProgress": "TRACK PROGRESS",
+    "leaderboards": "LEADERBOARDS",
+    "dailyStreaks": "DAILY STREAKS"
+  },
+  "footer": {
+    "copyright": "TYPEBIT8 © {{year}}",
+    "practiceDaily": "PRACTICE DAILY FOR BEST RESULTS",
+    "impressum": "IMPRESSUM",
+    "privacy": "PRIVACY POLICY",
+    "terms": "TERMS OF SERVICE",
+    "feedback": "GOT FEEDBACK OR IDEAS?",
+    "feedbackDesc": "WE'D LOVE TO HEAR FROM YOU! SEND US YOUR SUGGESTIONS, BUG REPORTS, OR FEATURE REQUESTS.",
+    "operator": "OPERATED BY STEININGER AG, ZUG, SWITZERLAND",
+    "learn": "LEARN",
+    "tenFingerCourse": "10-FINGER COURSE",
+    "typingForDevs": "TYPING FOR DEVS",
+    "gamesForKids": "GAMES FOR KIDS",
+    "tools": "TOOLS",
+    "speedTest": "SPEED TEST",
+    "wpmCalculator": "WPM CALCULATOR",
+    "company": "COMPANY",
+    "aboutUs": "ABOUT US",
+    "home": "HOME",
+    "tagline": "MASTER THE KEYBOARD WITH RETRO GAMING VIBES",
+    "levelUp": "LEVEL UP YOUR TYPING"
+  },
+  "keyboard": {
+    "title": "KEYBOARD",
+    "change": "CHANGE",
+    "layout": "KEYBOARD LAYOUT",
+    "current": "CURRENT:",
+    "selectRegion": "SELECT REGION:",
+    "verified": "KEYBOARD VERIFIED!",
+    "verify": "VERIFY KEYBOARD",
+    "placeFingers": "PLACE YOUR FINGERS ON THE HOME ROW AND PRESS:",
+    "selectLayout": "SELECT YOUR KEYBOARD LAYOUT:",
+    "startingSpeed": "STARTING SPEED",
+    "retake": "RETAKE",
+    "detectKeyboard": "DETECT KEYBOARD",
+    "typeHomeRow": "TYPE YOUR HOME ROW KEYS FROM LEFT TO RIGHT",
+    "placeMiddleRow": "PLACE YOUR FINGERS ON THE MIDDLE ROW AND TYPE ALL 10 KEYS",
+    "typeHere": "TYPE HERE...",
+    "moreKeys": "{{count}} MORE KEYS...",
+    "analyzing": "ANALYZING...",
+    "layoutDetected": "{{family}} DETECTED!",
+    "whichLayout": "WHICH LAYOUT?",
+    "selectVariant": "SELECT YOUR SPECIFIC VARIANT",
+    "multiplePossible": "WE DETECTED MULTIPLE POSSIBLE LAYOUTS",
+    "yourInput": "YOUR INPUT: {{input}}",
+    "detected": "LAYOUT DETECTED!",
+    "confirm": "CONFIRM"
+  },
+  "buttons": {
+    "startPracticing": "START PRACTICING",
+    "back": "← BACK",
+    "close": "✕",
+    "save": "SAVE",
+    "cancel": "CANCEL",
+    "retry": "↻ RETRY",
+    "refresh": "REFRESH PAGE",
+    "copy": "COPY",
+    "copied": "COPIED!",
+    "share": "SHARE",
+    "equip": "EQUIP",
+    "equipped": "EQUIPPED",
+    "owned": "OWNED"
+  },
+  "user": {
+    "signIn": "SIGN IN",
+    "signOut": "SIGN OUT",
+    "syncData": "SYNC DATA",
+    "syncing": "SYNCING...",
+    "synced": "SYNCED!",
+    "error": "ERROR",
+    "player": "PLAYER",
+    "changeAvatar": "CHANGE AVATAR",
+    "editNickname": "EDIT NICKNAME",
+    "manageSubscription": "MANAGE SUBSCRIPTION"
+  },
+  "loading": {
+    "returningToBase": "RETURNING TO BASE...",
+    "loadingLevel": "LOADING LEVEL...",
+    "loadingDocs": "LOADING DOCS...",
+    "openingShop": "OPENING SHOP...",
+    "loadingPremium": "LOADING PREMIUM...",
+    "preparingChallenge": "PREPARING CHALLENGE...",
+    "loading": "LOADING...",
+    "loadingTypebit8": "LOADING TYPEBIT8...",
+    "sending": "SENDING...",
+    "warmingUp": "WARMING UP FINGERS...",
+    "loadingPixels": "LOADING PIXELS...",
+    "calibrating": "CALIBRATING KEYBOARD...",
+    "poweringUp": "POWERING UP...",
+    "insertingCoin": "INSERTING COIN...",
+    "bufferingAwesome": "BUFFERING AWESOMENESS...",
+    "compilingFun": "COMPILING FUN...",
+    "initTypingMode": "INITIALIZING TYPING MODE..."
+  },
+  "tips": {
+    "homeRow": "TIP: Keep your fingers on the home row!",
+    "dontLook": "TIP: Don't look at your keyboard!",
+    "practice": "TIP: Practice makes perfect!",
+    "speedAccuracy": "TIP: Speed comes with accuracy!",
+    "takeBreaks": "TIP: Take breaks to avoid fatigue!",
+    "allFingers": "TIP: Use all 10 fingers for max speed!",
+    "avgSpeed": "FUN FACT: The average typing speed is 40 WPM",
+    "worldRecord": "FUN FACT: The world record is 216 WPM!",
+    "rhythm": "PRO TIP: Rhythm is key to fast typing!"
   },
   "nav": {
     "home": "Home",
@@ -23,28 +190,6 @@
     "save": "Save Settings",
     "reset": "Reset to Defaults"
   },
-  "languages": {
-    "en": "English",
-    "de": "German",
-    "fr": "French",
-    "es": "Spanish",
-    "pt": "Portuguese",
-    "it": "Italian",
-    "nl": "Dutch",
-    "sv": "Swedish",
-    "pl": "Polish",
-    "tr": "Turkish"
-  },
-  "layouts": {
-    "qwerty-us": "QWERTY (US)",
-    "qwerty-uk": "QWERTY (UK)",
-    "qwertz-de": "QWERTZ (German)",
-    "qwertz-ch": "QWERTZ (Swiss)",
-    "azerty-fr": "AZERTY (French)",
-    "azerty-be": "AZERTY (Belgian)",
-    "dvorak": "Dvorak",
-    "colemak": "Colemak"
-  },
   "lesson": {
     "title": "Lesson {{number}}",
     "start": "Start Lesson",
@@ -57,81 +202,8 @@
     "newKeys": "New Keys",
     "targetWPM": "Target WPM",
     "targetAccuracy": "Target Accuracy",
-    "home_row_basic": {
-      "title": "Home Row Basics",
-      "description": "Learn the foundation keys under your fingers",
-      "concept": "Place your fingers on the home row keys. Your left hand covers A, S, D, F and your right hand covers J, K, L, ;. The small bumps on F and J help you find these keys without looking."
-    },
-    "home_row_extended": {
-      "title": "Home Row Extended",
-      "description": "Add G and H to complete the home row",
-      "concept": "The G and H keys are typed with your index fingers by moving them inward from F and J. Practice smooth transitions between these keys."
-    },
-    "top_row_vowels": {
-      "title": "Top Row Vowels",
-      "description": "Learn E and I - essential vowels",
-      "concept": "E is typed with your left middle finger moving up from D. I is typed with your right middle finger moving up from K. These are among the most common letters."
-    },
-    "top_row_index": {
-      "title": "Top Row Index",
-      "description": "Add R and U with your index fingers",
-      "concept": "R and U are typed by reaching up with your index fingers. R from F position, U from J position. Keep your other fingers on the home row."
-    },
-    "top_row_ring": {
-      "title": "Top Row Ring",
-      "description": "Learn W and O with ring fingers",
-      "concept": "W and O require your ring fingers to reach up from S and L. This movement takes practice - focus on returning to home position."
-    },
-    "top_row_pinky": {
-      "title": "Top Row Pinky",
-      "description": "Challenge your pinkies with Q and P",
-      "concept": "Q and P are pinky stretches. Q from A position, P from ; position. Pinkies are weaker, so take your time building strength and accuracy."
-    },
-    "top_row_complete": {
-      "title": "Top Row Complete",
-      "description": "Master T and Y to complete the top row",
-      "concept": "T and Y are central keys typed with index fingers. T reaches up-right from F, Y reaches up-left from J. You now know the entire top row!"
-    },
-    "bottom_row_middle_index": {
-      "title": "Bottom Row Start",
-      "description": "Begin the bottom row with C and M",
-      "concept": "C and M introduce the bottom row. C is typed with your left middle finger reaching down from D. M is typed with your right index finger reaching down from J."
-    },
-    "bottom_row_index": {
-      "title": "Bottom Row Index",
-      "description": "Add V and N with index fingers",
-      "concept": "V and N are typed with index fingers reaching down. V from F position, N from J position. The bottom row requires a downward curl of your fingers."
-    },
-    "bottom_row_ring": {
-      "title": "Bottom Row Ring",
-      "description": "Learn X and comma with ring fingers",
-      "concept": "X and the comma key use your ring fingers. These require a longer reach down from S and L. Practice smooth, controlled movements."
-    },
-    "bottom_row_pinky": {
-      "title": "Bottom Row Pinky",
-      "description": "Complete with Z and period",
-      "concept": "Z and period are the final regular keys. Z is the ultimate pinky stretch. Period ends sentences - get comfortable with this punctuation."
-    },
-    "complete_keyboard": {
-      "title": "Complete Keyboard",
-      "description": "Add B and master the spacebar",
-      "concept": "B is typed with your left index finger reaching down and right. The spacebar should be typed with your thumb. You now have access to the full keyboard!"
-    },
-    "full_practice": {
-      "title": "Full Practice",
-      "description": "Practice with all keys together",
-      "concept": "Time to put it all together. Practice typing real words and sentences using every key you've learned. Focus on smooth, rhythmic typing."
-    },
-    "speed_building": {
-      "title": "Speed Building",
-      "description": "Increase your typing speed",
-      "concept": "Now that accuracy is solid, let's build speed. Try to type faster while maintaining at least 95% accuracy. Speed will come naturally with practice."
-    },
-    "mastery": {
-      "title": "Mastery",
-      "description": "Achieve typing mastery",
-      "concept": "You've learned all the keys. Continue practicing to build muscle memory. The goal is to type without thinking about key positions."
-    }
+    "stages": "STAGES",
+    "level": "LEVEL"
   },
   "quiz": {
     "title": "Quick Quiz",
@@ -145,12 +217,16 @@
   },
   "typing": {
     "start": "Click here or press any key to start",
+    "pressAnyKey": ">>> PRESS ANY KEY TO START <<<",
     "placeholder": "Type the text above...",
     "wpm": "WPM",
     "accuracy": "Accuracy",
     "time": "Time",
     "errors": "Errors",
-    "progress": "Progress"
+    "progress": "Progress",
+    "speed": "SPEED",
+    "combo": "COMBO",
+    "hitRate": "HIT RATE"
   },
   "results": {
     "title": "Results",
@@ -162,77 +238,256 @@
     "newRecord": "New Record!",
     "passed": "Lesson Passed!",
     "failed": "Keep Practicing",
-    "requirements": "Requirements"
-  },
-  "progress": {
-    "title": "Your Progress",
-    "level": "Level",
-    "xp": "XP",
-    "totalLessons": "Lessons Completed",
-    "totalTime": "Total Practice Time",
-    "averageWPM": "Average WPM",
-    "averageAccuracy": "Average Accuracy"
-  },
-  "themes": {
-    "christmas": {
-      "name": "Christmas",
-      "description": "Holiday cheer with festive words"
-    },
-    "easter": {
-      "name": "Easter",
-      "description": "Spring celebration vocabulary"
-    },
-    "halloween": {
-      "name": "Halloween",
-      "description": "Spooky season words"
-    },
-    "summer": {
-      "name": "Summer",
-      "description": "Beach and vacation vibes"
-    },
-    "vibe-coding": {
-      "name": "Vibe Coding",
-      "description": "Developer and programming terms"
-    },
-    "gaming": {
-      "name": "Gaming",
-      "description": "Video game vocabulary"
-    },
-    "science": {
-      "name": "Science",
-      "description": "STEM and scientific terms"
-    },
-    "nature": {
-      "name": "Nature",
-      "description": "Outdoors and wildlife words"
-    },
-    "food": {
-      "name": "Food",
-      "description": "Culinary vocabulary"
-    },
-    "sports": {
-      "name": "Sports",
-      "description": "Athletic terminology"
-    },
-    "music": {
-      "name": "Music",
-      "description": "Musical terms and instruments"
-    },
-    "travel": {
-      "name": "Travel",
-      "description": "Adventure and exploration words"
-    }
+    "requirements": "Requirements",
+    "saved": "RESULTS SAVED!",
+    "checkEmail": "CHECK YOUR EMAIL FOR TIPS TO IMPROVE"
   },
   "common": {
     "loading": "Loading...",
     "error": "An error occurred",
-    "retry": "Retry",
+    "retry": "RETRY",
+    "refreshPage": "REFRESH PAGE",
     "back": "Back",
     "next": "Next",
     "save": "Save",
     "cancel": "Cancel",
     "close": "Close",
     "yes": "Yes",
-    "no": "No"
+    "no": "No",
+    "you": "YOU",
+    "free": "FREE",
+    "sale": "SALE",
+    "days": "DAYS",
+    "players": "PLAYERS",
+    "coins": "COINS",
+    "items": "ITEMS",
+    "custom": "(CUSTOM)"
+  },
+  "cookie": {
+    "message": "WE USE COOKIES TO IMPROVE YOUR EXPERIENCE AND ANALYZE SITE USAGE.",
+    "accept": "GOT IT",
+    "learnMore": "LEARN MORE"
+  },
+  "reward": {
+    "title": "REWARDS!",
+    "coins": "COINS",
+    "xp": "XP",
+    "streak": "STREAK",
+    "daysCount": "{{count}} DAYS",
+    "items": "ITEMS",
+    "tapToContinue": "TAP ANYWHERE TO CONTINUE"
+  },
+  "email": {
+    "invalidEmail": "PLEASE ENTER A VALID EMAIL",
+    "errorTryAgain": "SOMETHING WENT WRONG. TRY AGAIN.",
+    "getResults": "GET YOUR RESULTS + IMPROVEMENT TIPS",
+    "yourEmail": "YOUR EMAIL",
+    "agreeToReceive": "I AGREE TO RECEIVE TYPING TIPS AND UPDATES.",
+    "canUnsubscribe": "YOU CAN UNSUBSCRIBE ANYTIME.",
+    "sendResults": "SEND MY RESULTS",
+    "neverSpam": "WE NEVER SPAM. UNSUBSCRIBE ANYTIME."
+  },
+  "guest": {
+    "mode": "GUEST MODE - PROGRESS WON'T BE SAVED",
+    "signInToSave": "SIGN IN TO SAVE"
+  },
+  "powerups": {
+    "xpBoost": "XP BOOST",
+    "coinMagnet": "COIN MAGNET",
+    "hints": "HINTS",
+    "streakFreeze": "STREAK FREEZE",
+    "xpMultiplier": "XP x{{multiplier}}",
+    "coinMultiplier": "COINS x{{multiplier}}",
+    "xpBoostActive": "XP Boost Active (x{{multiplier}})",
+    "coinMagnetActive": "Coin Magnet Active (x{{multiplier}})",
+    "hintTokens": "{{count}} Hint Tokens",
+    "streakFreezeAvailable": "Streak Freeze Available"
+  },
+  "leaderboard": {
+    "title": "LEADERBOARD",
+    "global": "GLOBAL",
+    "level": "LEVEL",
+    "noScores": "NO SCORES YET",
+    "beFirst": "BE THE FIRST TO SET A RECORD!",
+    "showAll": "▼ SHOW ALL {{count}} PLAYERS",
+    "showLess": "▲ SHOW LESS",
+    "signInToJoin": "SIGN IN TO JOIN THE LEADERBOARD",
+    "showFullLeaderboard": "SHOW FULL LEADERBOARD"
+  },
+  "shop": {
+    "title": "SHOP",
+    "back": "← BACK",
+    "featured": "FEATURED",
+    "all": "ALL",
+    "avatars": "AVATARS",
+    "themes": "THEMES",
+    "skins": "SKINS",
+    "powerups": "POWER-UPS",
+    "rarity": "RARITY:",
+    "common": "COMMON",
+    "rare": "RARE",
+    "epic": "EPIC",
+    "legendary": "LEGENDARY",
+    "noItems": "NO ITEMS FOUND",
+    "seasonal": "Seasonal",
+    "topical": "Topical",
+    "purchased": "Purchased {{name}}!",
+    "purchaseFailed": "Purchase failed",
+    "failed": "Failed"
+  },
+  "challenge": {
+    "daily": "DAILY CHALLENGE",
+    "newToday": "NEW TODAY",
+    "signInToSave": "SIGN IN TO SAVE YOUR PROGRESS",
+    "timeLeft": "{{time}} LEFT",
+    "endsIn": "ENDS IN",
+    "progress": "PROGRESS",
+    "rewards": "REWARDS",
+    "bronze": "BRONZE",
+    "silver": "SILVER",
+    "gold": "GOLD"
+  },
+  "nickname": {
+    "edit": "EDIT NICKNAME",
+    "current": "CURRENT NAME",
+    "new": "NEW NICKNAME",
+    "placeholder": "Enter nickname...",
+    "maxChars": "(MAX 20 CHARACTERS)",
+    "resetToDefault": "RESET TO DEFAULT"
+  },
+  "streak": {
+    "title": "STREAK",
+    "current": "CURRENT",
+    "longest": "LONGEST",
+    "total": "TOTAL",
+    "next": "NEXT: {{target}} DAYS",
+    "toGo": "{{count}} TO GO",
+    "freezes": "STREAK FREEZES: {{count}}",
+    "buyFreeze": "BUY (75$)",
+    "hideDetails": "HIDE DETAILS",
+    "showDetails": "SHOW DETAILS",
+    "keepItUp": "Keep it up!",
+    "onFire": "You're on fire!",
+    "amazing": "Amazing streak!",
+    "unstoppable": "Unstoppable!",
+    "legendary": "Legendary!",
+    "milestone2x": "2x coins",
+    "milestone3x": "3x coins",
+    "milestoneBadge": "Special badge",
+    "milestoneLegend": "Legend status"
+  },
+  "referral": {
+    "signInRequired": "SIGN IN TO ACCESS REFERRALS",
+    "inviteFriends": "INVITE FRIENDS",
+    "shareAndEarn": "SHARE TYPEBIT8 AND EARN REWARDS",
+    "yourCode": "YOUR REFERRAL CODE",
+    "copyLink": "COPY LINK",
+    "howItWorks": "HOW IT WORKS",
+    "step1": "FRIEND SIGNS UP WITH YOUR CODE",
+    "step2": "THEY GET 30% OFF FIRST MONTH",
+    "step3": "YOU GET 50% OFF NEXT MONTH",
+    "referrals": "REFERRALS",
+    "creditsEarned": "CREDITS EARNED",
+    "creditsPending": "{{percent}}% CREDITS PENDING!",
+    "appliedToNext": "APPLIED TO YOUR NEXT BILLING"
+  },
+  "premium": {
+    "title": "PREMIUM",
+    "back": "← BACK",
+    "friendDiscount": "FRIEND DISCOUNT ACTIVE!",
+    "discountOff": "30% OFF FIRST MONTH",
+    "manageSubscription": "MANAGE SUBSCRIPTION",
+    "subscribe": "SUBSCRIBE",
+    "benefits": {
+      "allLevels": "ALL 50+ LEVELS",
+      "noAds": "AD-FREE EXPERIENCE",
+      "themes": "EXCLUSIVE THEMES",
+      "stats": "DETAILED STATISTICS",
+      "support": "PRIORITY SUPPORT"
+    }
+  },
+  "levelGroup": {
+    "premiumLevels": "PREMIUM LEVELS {{range}}",
+    "themedLevels": "THEMED LEVELS {{range}}",
+    "locked": "LOCKED",
+    "showAdvanced": "SHOW {{count}} ADVANCED LEVELS",
+    "showThemed": "SHOW {{count}} THEMED LEVELS",
+    "unlockAdvanced": "UNLOCK {{count}} ADVANCED LEVELS",
+    "masterAdvanced": "Master advanced typing patterns and build your speed to 80+ WPM",
+    "advancedFinger": "Advanced finger training",
+    "speedBuilding": "Speed building exercises",
+    "realWorld": "Real-world text practice",
+    "accuracyChallenges": "Accuracy challenges",
+    "upgradeToPremium": "UPGRADE TO PREMIUM",
+    "speedOfThought": "TYPE AT THE SPEED OF THOUGHT",
+    "unlockSecrets": "Unlock the secrets of outstanding prompting while building lightning-fast typing skills. Learn expert techniques through muscle memory.",
+    "themeAI": "AI PROMPTS",
+    "themeAIDesc": "Master ChatGPT & Claude techniques",
+    "themeDev": "DEVELOPER",
+    "themeDevDesc": "Code patterns, terminal fluency",
+    "themeBusiness": "BUSINESS",
+    "themeBusinessDesc": "Professional communication",
+    "themeComingSoon": "COMING SOON",
+    "themeComingSoonDesc": "Legal, Medical, Academic",
+    "tagline": "Type it. Learn it. Never forget it.",
+    "efficiency": "Ultimate efficiency: Faster typing + Better prompts",
+    "includedPremium": "INCLUDED WITH PREMIUM"
+  },
+  "mobile": {
+    "title": "TYPEBIT8",
+    "subtitle": "MASTER TOUCH TYPING",
+    "keyboardRequired": "PHYSICAL KEYBOARD REQUIRED",
+    "keyboardExplanation": "TYPEBIT8 IS DESIGNED FOR PHYSICAL KEYBOARDS TO TEACH PROPER TOUCH TYPING TECHNIQUE.",
+    "openOnDesktop": "OPEN ON YOUR DESKTOP",
+    "scanQR": "SCAN TO OPEN",
+    "copyLink": "COPY LINK",
+    "sendEmail": "SEND TO EMAIL"
+  },
+  "error": {
+    "title": "OOPS! SOMETHING BROKE",
+    "message": "DON'T WORRY, YOUR PROGRESS IS SAFE.",
+    "instruction": "TRY REFRESHING OR CLICK RETRY.",
+    "technicalDetails": "TECHNICAL DETAILS",
+    "reportIssue": "IF THIS KEEPS HAPPENING, PLEASE",
+    "reportLink": "REPORT THE ISSUE"
+  },
+  "migration": {
+    "title": "SAVE DATA FOUND!",
+    "message": "WE FOUND EXISTING PROGRESS ON THIS DEVICE.",
+    "question": "WOULD YOU LIKE TO SYNC IT TO YOUR ACCOUNT?",
+    "syncIt": "SYNC IT",
+    "startFresh": "START FRESH",
+    "noStats": "NO STATS AVAILABLE"
+  },
+  "speedTest": {
+    "title": "SPEED TEST",
+    "subtitle": "30 SECONDS TO SHOW YOUR SKILLS",
+    "detectKeyboard": "DETECT YOUR KEYBOARD",
+    "measureSpeed": "MEASURE YOUR SPEED",
+    "trackProgress": "TRACK YOUR PROGRESS",
+    "startTest": "START TEST",
+    "skipForNow": "SKIP FOR NOW",
+    "getReady": "GET READY...",
+    "detecting": "DETECTING KEYBOARD LAYOUT...",
+    "detected": "{{layout}} DETECTED",
+    "checkingVariant": "CHECKING VARIANT...",
+    "clickToFocus": "CLICK HERE OR START TYPING",
+    "phase2German": "PHASE 2: GERMAN TEXT (VARIANT DETECTION)",
+    "wpm": "WPM",
+    "accuracy": "ACCURACY",
+    "seconds": "SECONDS",
+    "testComplete": "TEST COMPLETE!",
+    "wordsPerMinute": "WORDS PER MINUTE",
+    "selectLayout": "SELECT YOUR KEYBOARD LAYOUT:",
+    "detectedLayout": "DETECTED: {{layout}}",
+    "confirm": "CONFIRM",
+    "retake": "RETAKE",
+    "charsTyped": "CHARS TYPED",
+    "errors": "ERRORS",
+    "createFreeAccount": "CREATE FREE ACCOUNT",
+    "trackOverTime": "TRACK YOUR PROGRESS OVER TIME AND EARN CREDITS FOR NEW LEVELS",
+    "signUpFree": "SIGN UP FREE",
+    "baselineSaved": "YOUR BASELINE WILL BE SAVED AFTER CONFIRMATION",
+    "signUpToSave": "SIGN UP TO SAVE YOUR PROGRESS"
   }
 }

@@ -1,8 +1,175 @@
 {
-  "app": {
-    "title": "Type Quest",
-    "subtitle": "Maîtrisez la dactylo avec un style rétro",
-    "tagline": "Améliorez vos compétences en frappe!"
+  "header": {
+    "title": "TYPEBIT8",
+    "subtitle": "MAÎTRISEZ LE CLAVIER",
+    "challenge": "DÉFI",
+    "premium": "PREMIUM",
+    "level": "NIVEAU",
+    "xp": "XP"
+  },
+  "hero": {
+    "learnWith": "APPRENEZ À TAPER AVEC",
+    "allFingers": "LES 10 DOIGTS",
+    "levels": "NIVEAUX",
+    "cleared": "TERMINÉS",
+    "bestCombo": "MEILLEUR COMBO"
+  },
+  "home": {
+    "selectLevel": "SÉLECTIONNER NIVEAU",
+    "complete": "TERMINÉ",
+    "allTiers": "TOUS LES NIVEAUX",
+    "yourProgress": "VOTRE PROGRESSION",
+    "freeLevels": "BASES GRATUITES",
+    "premiumLevels": "NIVEAUX PREMIUM",
+    "themedLevels": "VITESSE DE PENSÉE",
+    "freeLabel": "GRATUIT",
+    "premiumUnlocked": "PREMIUM DÉBLOQUÉ"
+  },
+  "marketing": {
+    "learnTwoSkills": "APPRENEZ DEUX COMPÉTENCES À LA FOIS",
+    "masterTypingWhile": "MAÎTRISEZ LA VITESSE DE FRAPPE EN APPRENANT:",
+    "aiPrompting": "TECHNIQUES EXPERTES DE AI PROMPTING",
+    "codingPatterns": "PATTERNS DE PROGRAMMATION PROFESSIONNELS",
+    "businessComm": "COMMUNICATION D'AFFAIRES",
+    "tagline": "TAPEZ-LE. APPRENEZ-LE. NE L'OUBLIEZ JAMAIS.",
+    "unlockSpeed": "DÉBLOQUEZ LA FRAPPE À LA VITESSE DE LA PENSÉE"
+  },
+  "howToPlay": {
+    "title": "COMMENT JOUER",
+    "learn": "APPRENDRE",
+    "learnDesc": "CHAQUE NIVEAU ENSEIGNE DE NOUVELLES TOUCHES ET POSITIONS DE DOIGTS",
+    "battle": "COMBAT",
+    "battleDesc": "TAPEZ VITE ET CONSTRUISEZ DES COMBOS POUR VAINCRE LE BOSS",
+    "victory": "VICTOIRE",
+    "victoryDesc": "GAGNEZ XP, PIÈCES ET DÉBLOQUEZ DE NOUVEAUX NIVEAUX"
+  },
+  "signup": {
+    "unlockLevels": "DÉBLOQUEZ PLUS DE NIVEAUX!",
+    "createFree": "CRÉEZ UN COMPTE GRATUIT POUR CONTINUER VOTRE AVENTURE DE FRAPPE",
+    "signUpFree": "INSCRIPTION GRATUITE",
+    "guestAccess": "ACCÈS INVITÉ: NIVEAUX 1-2 UNIQUEMENT",
+    "signUpToUnlock": "INSCRIVEZ-VOUS POUR TOUT DÉBLOQUER",
+    "wantToTry": "VOUS VOULEZ ESSAYER D'ABORD?",
+    "continueAsGuest": "CONTINUER COMME INVITÉ",
+    "levelsOnly": "(NIVEAUX 1-2 UNIQUEMENT)",
+    "keyboardSetupComplete": "CONFIGURATION DU CLAVIER TERMINÉE",
+    "createFreeAccount": "CRÉER UN COMPTE GRATUIT",
+    "unlockFullExperience": "DÉBLOQUEZ L'EXPÉRIENCE COMPLÈTE!",
+    "trackProgress": "SUIVEZ VOS PROGRÈS",
+    "levelsUnlocked": "30 NIVEAUX DÉBLOQUÉS",
+    "competeLeaderboards": "CONCOUREZ DANS LES CLASSEMENTS",
+    "buildStreaks": "CONSTRUISEZ DES SÉRIES QUOTIDIENNES"
+  },
+  "benefits": {
+    "levels": "30 NIVEAUX",
+    "trackProgress": "SUIVRE PROGRÈS",
+    "leaderboards": "CLASSEMENTS",
+    "dailyStreaks": "SÉRIES QUOTIDIENNES"
+  },
+  "footer": {
+    "copyright": "TYPEBIT8 © {{year}}",
+    "practiceDaily": "PRATIQUEZ QUOTIDIENNEMENT POUR DE MEILLEURS RÉSULTATS",
+    "impressum": "MENTIONS LÉGALES",
+    "privacy": "CONFIDENTIALITÉ",
+    "terms": "CONDITIONS",
+    "feedback": "DES COMMENTAIRES OU DES IDÉES?",
+    "feedbackDesc": "NOUS SERIONS RAVIS DE VOUS ENTENDRE! ENVOYEZ-NOUS VOS SUGGESTIONS, RAPPORTS DE BUGS OU DEMANDES DE FONCTIONNALITÉS.",
+    "operator": "OPÉRÉ PAR STEININGER AG, ZUG, SUISSE",
+    "learn": "APPRENDRE",
+    "tenFingerCourse": "COURS 10 DOIGTS",
+    "typingForDevs": "FRAPPE POUR DEVS",
+    "gamesForKids": "JEUX POUR ENFANTS",
+    "tools": "OUTILS",
+    "speedTest": "TEST DE VITESSE",
+    "wpmCalculator": "CALCULATEUR MPM",
+    "company": "ENTREPRISE",
+    "aboutUs": "À PROPOS",
+    "home": "ACCUEIL",
+    "tagline": "MAÎTRISEZ LE CLAVIER AVEC UN STYLE RÉTRO",
+    "levelUp": "AMÉLIOREZ VOTRE FRAPPE"
+  },
+  "keyboard": {
+    "title": "CLAVIER",
+    "change": "CHANGER",
+    "layout": "DISPOSITION DU CLAVIER",
+    "current": "ACTUEL:",
+    "selectRegion": "SÉLECTIONNER RÉGION:",
+    "verified": "CLAVIER VÉRIFIÉ!",
+    "verify": "VÉRIFIER CLAVIER",
+    "placeFingers": "PLACEZ VOS DOIGTS SUR LA RANGÉE DE BASE ET APPUYEZ:",
+    "selectLayout": "SÉLECTIONNEZ VOTRE DISPOSITION:",
+    "startingSpeed": "VITESSE DE DÉPART",
+    "retake": "REFAIRE",
+    "detectKeyboard": "DÉTECTER LE CLAVIER",
+    "typeHomeRow": "TAPEZ LES TOUCHES DE LA RANGÉE DE BASE DE GAUCHE À DROITE",
+    "placeMiddleRow": "PLACEZ VOS DOIGTS SUR LA RANGÉE DU MILIEU ET TAPEZ LES 10 TOUCHES",
+    "typeHere": "TAPEZ ICI...",
+    "moreKeys": "{{count}} TOUCHES DE PLUS...",
+    "analyzing": "ANALYSE EN COURS...",
+    "layoutDetected": "{{family}} DÉTECTÉ!",
+    "whichLayout": "QUELLE DISPOSITION?",
+    "selectVariant": "SÉLECTIONNEZ VOTRE VARIANTE SPÉCIFIQUE",
+    "multiplePossible": "NOUS AVONS DÉTECTÉ PLUSIEURS DISPOSITIONS POSSIBLES",
+    "yourInput": "VOTRE SAISIE: {{input}}",
+    "detected": "DISPOSITION DÉTECTÉE!",
+    "confirm": "CONFIRMER"
+  },
+  "buttons": {
+    "startPracticing": "COMMENCER LA PRATIQUE",
+    "back": "← RETOUR",
+    "close": "✕",
+    "save": "ENREGISTRER",
+    "cancel": "ANNULER",
+    "retry": "↻ RÉESSAYER",
+    "refresh": "ACTUALISER LA PAGE",
+    "copy": "COPIER",
+    "copied": "COPIÉ!",
+    "share": "PARTAGER",
+    "equip": "ÉQUIPER",
+    "equipped": "ÉQUIPÉ",
+    "owned": "POSSÉDÉ"
+  },
+  "loading": {
+    "returningToBase": "RETOUR À LA BASE...",
+    "loadingLevel": "CHARGEMENT DU NIVEAU...",
+    "loadingDocs": "CHARGEMENT DES DOCS...",
+    "openingShop": "OUVERTURE DE LA BOUTIQUE...",
+    "loadingPremium": "CHARGEMENT PREMIUM...",
+    "preparingChallenge": "PRÉPARATION DU DÉFI...",
+    "loading": "CHARGEMENT...",
+    "loadingTypebit8": "CHARGEMENT TYPEBIT8...",
+    "sending": "ENVOI...",
+    "warmingUp": "ÉCHAUFFEMENT DES DOIGTS...",
+    "loadingPixels": "CHARGEMENT DES PIXELS...",
+    "calibrating": "CALIBRATION DU CLAVIER...",
+    "poweringUp": "MISE EN MARCHE...",
+    "insertingCoin": "INSERTION DE PIÈCE...",
+    "bufferingAwesome": "CHARGEMENT DU GÉNIAL...",
+    "compilingFun": "COMPILATION DU FUN...",
+    "initTypingMode": "INITIALISATION DU MODE FRAPPE..."
+  },
+  "tips": {
+    "homeRow": "ASTUCE: Gardez vos doigts sur la rangée de base!",
+    "dontLook": "ASTUCE: Ne regardez pas votre clavier!",
+    "practice": "ASTUCE: C'est en forgeant qu'on devient forgeron!",
+    "speedAccuracy": "ASTUCE: La vitesse vient avec la précision!",
+    "takeBreaks": "ASTUCE: Faites des pauses pour éviter la fatigue!",
+    "allFingers": "ASTUCE: Utilisez les 10 doigts pour une vitesse max!",
+    "avgSpeed": "FUN FACT: La vitesse moyenne de frappe est 40 MPM",
+    "worldRecord": "FUN FACT: Le record du monde est de 216 MPM!",
+    "rhythm": "ASTUCE PRO: Le rythme est la clé de la frappe rapide!"
+  },
+  "user": {
+    "signIn": "CONNEXION",
+    "signOut": "DÉCONNEXION",
+    "syncData": "SYNC DONNÉES",
+    "syncing": "SYNC...",
+    "synced": "SYNCHRONISÉ!",
+    "error": "ERREUR",
+    "player": "JOUEUR",
+    "changeAvatar": "CHANGER AVATAR",
+    "editNickname": "MODIFIER PSEUDO",
+    "manageSubscription": "GÉRER ABONNEMENT"
   },
   "nav": {
     "home": "Accueil",
@@ -23,28 +190,6 @@
     "save": "Enregistrer",
     "reset": "Réinitialiser"
   },
-  "languages": {
-    "en": "Anglais",
-    "de": "Allemand",
-    "fr": "Français",
-    "es": "Espagnol",
-    "pt": "Portugais",
-    "it": "Italien",
-    "nl": "Néerlandais",
-    "sv": "Suédois",
-    "pl": "Polonais",
-    "tr": "Turc"
-  },
-  "layouts": {
-    "qwerty-us": "QWERTY (US)",
-    "qwerty-uk": "QWERTY (UK)",
-    "qwertz-de": "QWERTZ (Allemand)",
-    "qwertz-ch": "QWERTZ (Suisse)",
-    "azerty-fr": "AZERTY (Français)",
-    "azerty-be": "AZERTY (Belge)",
-    "dvorak": "Dvorak",
-    "colemak": "Colemak"
-  },
   "lesson": {
     "title": "Leçon {{number}}",
     "start": "Commencer",
@@ -57,81 +202,8 @@
     "newKeys": "Nouvelles touches",
     "targetWPM": "Objectif MPM",
     "targetAccuracy": "Objectif précision",
-    "home_row_basic": {
-      "title": "Rangée de base",
-      "description": "Apprenez les touches fondamentales sous vos doigts",
-      "concept": "Placez vos doigts sur la rangée de base. Votre main gauche couvre Q, S, D, F et votre main droite J, K, L, M. Les petits repères sur F et J vous aident à trouver ces touches."
-    },
-    "home_row_extended": {
-      "title": "Rangée de base étendue",
-      "description": "Ajoutez G et H",
-      "concept": "Les touches G et H sont tapées avec vos index en les déplaçant vers l'intérieur depuis F et J."
-    },
-    "top_row_vowels": {
-      "title": "Rangée supérieure voyelles",
-      "description": "Apprenez E et I - voyelles essentielles",
-      "concept": "E est tapé avec le majeur gauche en montant depuis D. I avec le majeur droit depuis K. Ce sont des lettres très courantes."
-    },
-    "top_row_index": {
-      "title": "Rangée supérieure index",
-      "description": "Ajoutez R et U",
-      "concept": "R et U sont tapés en atteignant vers le haut avec vos index. R depuis F, U depuis J."
-    },
-    "top_row_ring": {
-      "title": "Rangée supérieure annulaires",
-      "description": "Apprenez Z et O",
-      "concept": "Z et O nécessitent que vos annulaires atteignent vers le haut depuis S et L."
-    },
-    "top_row_pinky": {
-      "title": "Rangée supérieure auriculaires",
-      "description": "Défiez vos auriculaires avec A et P",
-      "concept": "A et P sont des étirements pour les auriculaires. A depuis Q, P depuis M."
-    },
-    "top_row_complete": {
-      "title": "Rangée supérieure complète",
-      "description": "Maîtrisez T et Y",
-      "concept": "T et Y sont des touches centrales. T atteint vers le haut-droite depuis F, Y vers le haut-gauche depuis J."
-    },
-    "bottom_row_middle_index": {
-      "title": "Rangée inférieure début",
-      "description": "Commencez avec C et virgule",
-      "concept": "C et la virgule introduisent la rangée inférieure. C est tapé avec le majeur gauche depuis D."
-    },
-    "bottom_row_index": {
-      "title": "Rangée inférieure index",
-      "description": "Ajoutez V et N",
-      "concept": "V et N sont tapés avec les index vers le bas. V depuis F, N depuis J."
-    },
-    "bottom_row_ring": {
-      "title": "Rangée inférieure annulaires",
-      "description": "Apprenez X et point-virgule",
-      "concept": "X et le point-virgule utilisent vos annulaires pour une plus longue portée vers le bas."
-    },
-    "bottom_row_pinky": {
-      "title": "Rangée inférieure auriculaires",
-      "description": "Complétez avec W et deux-points",
-      "concept": "W et les deux-points sont les dernières touches régulières."
-    },
-    "complete_keyboard": {
-      "title": "Clavier complet",
-      "description": "Ajoutez B et maîtrisez la barre d'espace",
-      "concept": "B est tapé avec l'index gauche vers le bas-droite. La barre d'espace doit être tapée avec le pouce."
-    },
-    "full_practice": {
-      "title": "Pratique complète",
-      "description": "Pratiquez avec toutes les touches",
-      "concept": "Le moment de tout assembler. Pratiquez des mots et phrases réels avec chaque touche apprise."
-    },
-    "speed_building": {
-      "title": "Développer la vitesse",
-      "description": "Augmentez votre vitesse de frappe",
-      "concept": "Maintenant que la précision est solide, développons la vitesse. Essayez de taper plus vite tout en maintenant 95% de précision."
-    },
-    "mastery": {
-      "title": "Maîtrise",
-      "description": "Atteignez la maîtrise de la frappe",
-      "concept": "Vous avez appris toutes les touches. Continuez à pratiquer pour développer la mémoire musculaire."
-    }
+    "stages": "ÉTAPES",
+    "level": "NIVEAU"
   },
   "quiz": {
     "title": "Quiz rapide",
@@ -145,12 +217,16 @@
   },
   "typing": {
     "start": "Cliquez ici ou appuyez sur une touche pour commencer",
+    "pressAnyKey": ">>> APPUYEZ SUR UNE TOUCHE POUR COMMENCER <<<",
     "placeholder": "Tapez le texte ci-dessus...",
     "wpm": "MPM",
     "accuracy": "Précision",
     "time": "Temps",
     "errors": "Erreurs",
-    "progress": "Progression"
+    "progress": "Progression",
+    "speed": "VITESSE",
+    "combo": "COMBO",
+    "hitRate": "TAUX DE RÉUSSITE"
   },
   "results": {
     "title": "Résultats",
@@ -162,77 +238,256 @@
     "newRecord": "Nouveau record!",
     "passed": "Leçon réussie!",
     "failed": "Continuez à pratiquer",
-    "requirements": "Exigences"
-  },
-  "progress": {
-    "title": "Votre progression",
-    "level": "Niveau",
-    "xp": "XP",
-    "totalLessons": "Leçons terminées",
-    "totalTime": "Temps total de pratique",
-    "averageWPM": "MPM moyen",
-    "averageAccuracy": "Précision moyenne"
-  },
-  "themes": {
-    "christmas": {
-      "name": "Noël",
-      "description": "Vocabulaire festif des fêtes"
-    },
-    "easter": {
-      "name": "Pâques",
-      "description": "Vocabulaire de célébration printanière"
-    },
-    "halloween": {
-      "name": "Halloween",
-      "description": "Mots effrayants"
-    },
-    "summer": {
-      "name": "Été",
-      "description": "Ambiance plage et vacances"
-    },
-    "vibe-coding": {
-      "name": "Vibe Coding",
-      "description": "Termes de développeur et programmation"
-    },
-    "gaming": {
-      "name": "Gaming",
-      "description": "Vocabulaire de jeux vidéo"
-    },
-    "science": {
-      "name": "Science",
-      "description": "Termes STEM et scientifiques"
-    },
-    "nature": {
-      "name": "Nature",
-      "description": "Mots de plein air et faune"
-    },
-    "food": {
-      "name": "Cuisine",
-      "description": "Vocabulaire culinaire"
-    },
-    "sports": {
-      "name": "Sports",
-      "description": "Terminologie athlétique"
-    },
-    "music": {
-      "name": "Musique",
-      "description": "Termes musicaux et instruments"
-    },
-    "travel": {
-      "name": "Voyage",
-      "description": "Mots d'aventure et exploration"
-    }
+    "requirements": "Exigences",
+    "saved": "RÉSULTATS ENREGISTRÉS!",
+    "checkEmail": "CONSULTEZ VOTRE EMAIL POUR DES CONSEILS"
   },
   "common": {
     "loading": "Chargement...",
     "error": "Une erreur s'est produite",
-    "retry": "Réessayer",
+    "retry": "RÉESSAYER",
+    "refreshPage": "ACTUALISER LA PAGE",
     "back": "Retour",
     "next": "Suivant",
     "save": "Enregistrer",
     "cancel": "Annuler",
     "close": "Fermer",
     "yes": "Oui",
-    "no": "Non"
+    "no": "Non",
+    "you": "VOUS",
+    "free": "GRATUIT",
+    "sale": "PROMO",
+    "days": "JOURS",
+    "players": "JOUEURS",
+    "coins": "PIÈCES",
+    "items": "OBJETS",
+    "custom": "(PERSONNALISÉ)"
+  },
+  "cookie": {
+    "message": "NOUS UTILISONS DES COOKIES POUR AMÉLIORER VOTRE EXPÉRIENCE ET ANALYSER L'UTILISATION.",
+    "accept": "COMPRIS",
+    "learnMore": "EN SAVOIR PLUS"
+  },
+  "reward": {
+    "title": "RÉCOMPENSES!",
+    "coins": "PIÈCES",
+    "xp": "XP",
+    "streak": "SÉRIE",
+    "daysCount": "{{count}} JOURS",
+    "items": "OBJETS",
+    "tapToContinue": "TOUCHEZ POUR CONTINUER"
+  },
+  "email": {
+    "invalidEmail": "VEUILLEZ ENTRER UN EMAIL VALIDE",
+    "errorTryAgain": "QUELQUE CHOSE S'EST MAL PASSÉ. RÉESSAYEZ.",
+    "getResults": "RECEVEZ VOS RÉSULTATS + CONSEILS",
+    "yourEmail": "VOTRE EMAIL",
+    "agreeToReceive": "J'ACCEPTE DE RECEVOIR DES CONSEILS ET MISES À JOUR.",
+    "canUnsubscribe": "VOUS POUVEZ VOUS DÉSABONNER À TOUT MOMENT.",
+    "sendResults": "ENVOYER MES RÉSULTATS",
+    "neverSpam": "JAMAIS DE SPAM. DÉSABONNEMENT À TOUT MOMENT."
+  },
+  "guest": {
+    "mode": "MODE INVITÉ - PROGRESSION NON SAUVEGARDÉE",
+    "signInToSave": "CONNECTEZ-VOUS POUR SAUVEGARDER"
+  },
+  "powerups": {
+    "xpBoost": "BOOST XP",
+    "coinMagnet": "AIMANT À PIÈCES",
+    "hints": "INDICES",
+    "streakFreeze": "GEL DE SÉRIE",
+    "xpMultiplier": "XP x{{multiplier}}",
+    "coinMultiplier": "PIÈCES x{{multiplier}}",
+    "xpBoostActive": "Boost XP Actif (x{{multiplier}})",
+    "coinMagnetActive": "Aimant à Pièces Actif (x{{multiplier}})",
+    "hintTokens": "{{count}} Jetons d'Indices",
+    "streakFreezeAvailable": "Gel de Série Disponible"
+  },
+  "leaderboard": {
+    "title": "CLASSEMENT",
+    "global": "GLOBAL",
+    "level": "NIVEAU",
+    "noScores": "PAS ENCORE DE SCORES",
+    "beFirst": "SOYEZ LE PREMIER À ÉTABLIR UN RECORD!",
+    "showAll": "▼ AFFICHER LES {{count}} JOUEURS",
+    "showLess": "▲ AFFICHER MOINS",
+    "signInToJoin": "CONNECTEZ-VOUS POUR REJOINDRE LE CLASSEMENT",
+    "showFullLeaderboard": "AFFICHER CLASSEMENT COMPLET"
+  },
+  "shop": {
+    "title": "BOUTIQUE",
+    "back": "← RETOUR",
+    "featured": "EN VEDETTE",
+    "all": "TOUT",
+    "avatars": "AVATARS",
+    "themes": "THÈMES",
+    "skins": "SKINS",
+    "powerups": "POWER-UPS",
+    "rarity": "RARETÉ:",
+    "common": "COMMUN",
+    "rare": "RARE",
+    "epic": "ÉPIQUE",
+    "legendary": "LÉGENDAIRE",
+    "noItems": "AUCUN OBJET TROUVÉ",
+    "seasonal": "Saisonnier",
+    "topical": "Thématique",
+    "purchased": "{{name}} acheté!",
+    "purchaseFailed": "Achat échoué",
+    "failed": "Échoué"
+  },
+  "levelGroup": {
+    "premiumLevels": "NIVEAUX PREMIUM {{range}}",
+    "themedLevels": "NIVEAUX THÉMATIQUES {{range}}",
+    "locked": "VERROUILLÉ",
+    "showAdvanced": "AFFICHER {{count}} NIVEAUX AVANCÉS",
+    "showThemed": "AFFICHER {{count}} NIVEAUX THÉMATIQUES",
+    "unlockAdvanced": "DÉBLOQUER {{count}} NIVEAUX AVANCÉS",
+    "masterAdvanced": "Maîtrisez les patterns de frappe avancés et atteignez 80+ MPM",
+    "advancedFinger": "Entraînement avancé des doigts",
+    "speedBuilding": "Exercices de vitesse",
+    "realWorld": "Pratique avec textes réels",
+    "accuracyChallenges": "Défis de précision",
+    "upgradeToPremium": "PASSER À PREMIUM",
+    "speedOfThought": "TAPEZ À LA VITESSE DE LA PENSÉE",
+    "unlockSecrets": "Découvrez les secrets des prompts exceptionnels tout en développant des compétences de frappe ultra-rapides. Apprenez les techniques d'experts par la mémoire musculaire.",
+    "themeAI": "PROMPTS IA",
+    "themeAIDesc": "Maîtrisez les techniques ChatGPT & Claude",
+    "themeDev": "DÉVELOPPEUR",
+    "themeDevDesc": "Patterns de code, fluidité terminal",
+    "themeBusiness": "BUSINESS",
+    "themeBusinessDesc": "Communication professionnelle",
+    "themeComingSoon": "BIENTÔT",
+    "themeComingSoonDesc": "Juridique, Médical, Académique",
+    "tagline": "Tapez-le. Apprenez-le. Ne l'oubliez jamais.",
+    "efficiency": "Efficacité ultime: Frappe plus rapide + Meilleurs prompts",
+    "includedPremium": "INCLUS AVEC PREMIUM"
+  },
+  "challenge": {
+    "daily": "DÉFI QUOTIDIEN",
+    "newToday": "NOUVEAU AUJOURD'HUI",
+    "signInToSave": "CONNECTEZ-VOUS POUR SAUVEGARDER",
+    "timeLeft": "{{time}} RESTANT",
+    "endsIn": "SE TERMINE DANS",
+    "progress": "PROGRESSION",
+    "rewards": "RÉCOMPENSES",
+    "bronze": "BRONZE",
+    "silver": "ARGENT",
+    "gold": "OR"
+  },
+  "nickname": {
+    "edit": "MODIFIER PSEUDO",
+    "current": "NOM ACTUEL",
+    "new": "NOUVEAU PSEUDO",
+    "placeholder": "Entrez pseudo...",
+    "maxChars": "(MAX 20 CARACTÈRES)",
+    "resetToDefault": "RÉINITIALISER PAR DÉFAUT"
+  },
+  "streak": {
+    "title": "SÉRIE",
+    "current": "ACTUELLE",
+    "longest": "LA PLUS LONGUE",
+    "total": "TOTAL",
+    "next": "SUIVANT: {{target}} JOURS",
+    "toGo": "{{count}} RESTANTS",
+    "freezes": "GELS DE SÉRIE: {{count}}",
+    "buyFreeze": "ACHETER (75$)",
+    "hideDetails": "MASQUER DÉTAILS",
+    "showDetails": "AFFICHER DÉTAILS",
+    "keepItUp": "Continuez comme ça!",
+    "onFire": "Vous êtes en feu!",
+    "amazing": "Série incroyable!",
+    "unstoppable": "Inarrêtable!",
+    "legendary": "Légendaire!",
+    "milestone2x": "2x pièces",
+    "milestone3x": "3x pièces",
+    "milestoneBadge": "Badge spécial",
+    "milestoneLegend": "Statut légende"
+  },
+  "referral": {
+    "signInRequired": "CONNECTEZ-VOUS POUR LES PARRAINAGES",
+    "inviteFriends": "INVITER DES AMIS",
+    "shareAndEarn": "PARTAGEZ TYPEBIT8 ET GAGNEZ DES RÉCOMPENSES",
+    "yourCode": "VOTRE CODE DE PARRAINAGE",
+    "copyLink": "COPIER LE LIEN",
+    "howItWorks": "COMMENT ÇA MARCHE",
+    "step1": "UN AMI S'INSCRIT AVEC VOTRE CODE",
+    "step2": "IL OBTIENT 30% DE RÉDUCTION LE PREMIER MOIS",
+    "step3": "VOUS OBTENEZ 50% DE RÉDUCTION LE MOIS SUIVANT",
+    "referrals": "PARRAINAGES",
+    "creditsEarned": "CRÉDITS GAGNÉS",
+    "creditsPending": "{{percent}}% CRÉDITS EN ATTENTE!",
+    "appliedToNext": "APPLIQUÉ À VOTRE PROCHAINE FACTURE"
+  },
+  "premium": {
+    "title": "PREMIUM",
+    "back": "← RETOUR",
+    "friendDiscount": "RÉDUCTION AMI ACTIVE!",
+    "discountOff": "30% DE RÉDUCTION LE PREMIER MOIS",
+    "manageSubscription": "GÉRER ABONNEMENT",
+    "subscribe": "S'ABONNER",
+    "benefits": {
+      "allLevels": "TOUS LES 50+ NIVEAUX",
+      "noAds": "SANS PUBLICITÉ",
+      "themes": "THÈMES EXCLUSIFS",
+      "stats": "STATISTIQUES DÉTAILLÉES",
+      "support": "SUPPORT PRIORITAIRE"
+    }
+  },
+  "mobile": {
+    "title": "TYPEBIT8",
+    "subtitle": "MAÎTRISEZ LA FRAPPE TACTILE",
+    "keyboardRequired": "CLAVIER PHYSIQUE REQUIS",
+    "keyboardExplanation": "TYPEBIT8 EST CONÇU POUR LES CLAVIERS PHYSIQUES AFIN D'ENSEIGNER LA BONNE TECHNIQUE DE FRAPPE.",
+    "openOnDesktop": "OUVREZ SUR VOTRE ORDINATEUR",
+    "scanQR": "SCANNEZ POUR OUVRIR",
+    "copyLink": "COPIER LE LIEN",
+    "sendEmail": "ENVOYER PAR EMAIL"
+  },
+  "error": {
+    "title": "OUPS! QUELQUE CHOSE S'EST CASSÉ",
+    "message": "NE VOUS INQUIÉTEZ PAS, VOTRE PROGRESSION EST SAUVE.",
+    "instruction": "ESSAYEZ D'ACTUALISER OU CLIQUEZ SUR RÉESSAYER.",
+    "technicalDetails": "DÉTAILS TECHNIQUES",
+    "reportIssue": "SI LE PROBLÈME PERSISTE, VEUILLEZ",
+    "reportLink": "SIGNALER LE PROBLÈME"
+  },
+  "migration": {
+    "title": "DONNÉES TROUVÉES!",
+    "message": "NOUS AVONS TROUVÉ UNE PROGRESSION EXISTANTE SUR CET APPAREIL.",
+    "question": "VOULEZ-VOUS LA SYNCHRONISER AVEC VOTRE COMPTE?",
+    "syncIt": "SYNCHRONISER",
+    "startFresh": "RECOMMENCER À ZÉRO",
+    "noStats": "AUCUNE STATISTIQUE DISPONIBLE"
+  },
+  "speedTest": {
+    "title": "TEST DE VITESSE",
+    "subtitle": "30 SECONDES POUR MONTRER VOS COMPÉTENCES",
+    "detectKeyboard": "DÉTECTER VOTRE CLAVIER",
+    "measureSpeed": "MESURER VOTRE VITESSE",
+    "trackProgress": "SUIVRE VOS PROGRÈS",
+    "startTest": "DÉMARRER LE TEST",
+    "skipForNow": "PASSER POUR L'INSTANT",
+    "getReady": "PRÉPAREZ-VOUS...",
+    "detecting": "DÉTECTION DU CLAVIER...",
+    "detected": "{{layout}} DÉTECTÉ",
+    "checkingVariant": "VÉRIFICATION DE LA VARIANTE...",
+    "clickToFocus": "CLIQUEZ ICI OU COMMENCEZ À TAPER",
+    "phase2German": "PHASE 2: TEXTE ALLEMAND (DÉTECTION VARIANTE)",
+    "wpm": "MPM",
+    "accuracy": "PRÉCISION",
+    "seconds": "SECONDES",
+    "testComplete": "TEST TERMINÉ!",
+    "wordsPerMinute": "MOTS PAR MINUTE",
+    "selectLayout": "SÉLECTIONNEZ VOTRE CLAVIER:",
+    "detectedLayout": "DÉTECTÉ: {{layout}}",
+    "confirm": "CONFIRMER",
+    "retake": "REFAIRE",
+    "charsTyped": "CARACTÈRES TAPÉS",
+    "errors": "ERREURS",
+    "createFreeAccount": "CRÉER UN COMPTE GRATUIT",
+    "trackOverTime": "SUIVEZ VOS PROGRÈS ET GAGNEZ DES CRÉDITS POUR DE NOUVEAUX NIVEAUX",
+    "signUpFree": "INSCRIPTION GRATUITE",
+    "baselineSaved": "VOTRE BASE SERA SAUVEGARDÉE APRÈS CONFIRMATION",
+    "signUpToSave": "INSCRIVEZ-VOUS POUR SAUVEGARDER VOS PROGRÈS"
   }
 }

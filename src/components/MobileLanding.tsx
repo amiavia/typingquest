@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { KeyboardVerification } from './KeyboardVerification';
 
 interface MobileLandingProps {
@@ -14,6 +15,7 @@ interface MobileLandingProps {
  * 4. Verify external keyboard and proceed
  */
 export function MobileLanding({ onKeyboardVerified }: MobileLandingProps) {
+  const { t } = useTranslation();
   const [showKeyboardTest, setShowKeyboardTest] = useState(false);
   const [copied, setCopied] = useState(false);
 
@@ -93,7 +95,7 @@ export function MobileLanding({ onKeyboardVerified }: MobileLandingProps) {
             marginBottom: '32px',
           }}
         >
-          MASTER TOUCH TYPING
+          {t('mobile.subtitle')}
         </p>
 
         {/* Physical Keyboard Notice */}
@@ -113,7 +115,7 @@ export function MobileLanding({ onKeyboardVerified }: MobileLandingProps) {
               marginBottom: '12px',
             }}
           >
-            PHYSICAL KEYBOARD<br />REQUIRED
+            {t('mobile.keyboardRequired')}
           </h2>
           <p
             style={{
@@ -123,10 +125,7 @@ export function MobileLanding({ onKeyboardVerified }: MobileLandingProps) {
               lineHeight: '2.2',
             }}
           >
-            TYPEBIT8 TEACHES TOUCH<br />
-            TYPING ON PHYSICAL<br />
-            KEYBOARDS. OPEN ON YOUR<br />
-            DESKTOP TO GET STARTED.
+            {t('mobile.keyboardExplanation')}
           </p>
         </div>
 
@@ -140,7 +139,7 @@ export function MobileLanding({ onKeyboardVerified }: MobileLandingProps) {
               marginBottom: '12px',
             }}
           >
-            OPEN ON YOUR DESKTOP
+            {t('mobile.openOnDesktop')}
           </p>
           <div
             className="p-4"
@@ -168,7 +167,7 @@ export function MobileLanding({ onKeyboardVerified }: MobileLandingProps) {
               marginTop: '8px',
             }}
           >
-            TYPE THIS URL IN YOUR DESKTOP BROWSER
+            {t('mobile.typeUrlHint')}
           </p>
         </div>
 
@@ -187,7 +186,7 @@ export function MobileLanding({ onKeyboardVerified }: MobileLandingProps) {
               boxShadow: '0 4px 0 #0a8a54',
             }}
           >
-            🔖 REMEMBER FOR LATER
+            🔖 {t('mobile.rememberForLater')}
           </button>
 
           <button
@@ -202,7 +201,7 @@ export function MobileLanding({ onKeyboardVerified }: MobileLandingProps) {
               cursor: 'pointer',
             }}
           >
-            {copied ? '✓ COPIED!' : '📋 COPY LINK'}
+            {copied ? t('mobile.copied') : t('mobile.copyLink')}
           </button>
         </div>
 
@@ -220,7 +219,7 @@ export function MobileLanding({ onKeyboardVerified }: MobileLandingProps) {
               cursor: 'pointer',
             }}
           >
-            ⌨️ I HAVE A KEYBOARD CONNECTED
+            ⌨️ {t('mobile.haveKeyboard')}
           </button>
           <p
             style={{
@@ -231,8 +230,7 @@ export function MobileLanding({ onKeyboardVerified }: MobileLandingProps) {
               lineHeight: '1.8',
             }}
           >
-            USING BLUETOOTH OR USB?<br />
-            TAP TO VERIFY AND CONTINUE
+            {t('mobile.verifyHint')}
           </p>
         </div>
       </div>
@@ -247,8 +245,7 @@ export function MobileLanding({ onKeyboardVerified }: MobileLandingProps) {
             lineHeight: '2',
           }}
         >
-          FREE TYPING LESSONS FOR<br />
-          QWERTY, QWERTZ & AZERTY
+          {t('mobile.footerText')}
         </p>
       </footer>
     </div>

@@ -225,6 +225,81 @@ export const handlePaymentFailed = internalMutation({
 });
 
 /**
+ * Admin: Update subscription (for fixing account migration/sync issues)
+ */
+export const adminUpdateSubscription = internalMutation({
+  args: {
+    subscriptionId: v.string(),
+    newClerkId: v.optional(v.string()),
+    status: v.optional(v.string()),
+    cancelAtPeriodEnd: v.optional(v.boolean()),
+  },
+  handler: async (ctx, args) => {
+    const subscription = await ctx.db
+      .query("subscriptions")
+      .withIndex("by_stripe_subscription", (q) =>
+        q.eq("stripeSubscriptionId", args.subscriptionId)
+      )
+      .first();
+
+    if (!subscription) {
+      throw new Error("Subscription not found");
+    }
+
+    const updates: Record<string, unknown> = {};
+    if (args.newClerkId !== undefined) updates.clerkId = args.newClerkId;
+    if (args.status !== undefined) updates.status = args.status;
+    if (args.cancelAtPeriodEnd !== undefined) updates.cancelAtPeriodEnd = args.cancelAtPeriodEnd;
+
+    await ctx.db.patch(subscription._id, updates);
+
+    console.log("[Admin] Updated subscription:", {
+      subscriptionId: args.subscriptionId,
+      updates,
+    });
+
+    // Also update user's isPremium if status changed to canceled
+    if (args.status === "canceled" && subscription.clerkId) {
+      const user = await ctx.db
+        .query("users")
+        .withIndex("by_clerk_id", (q) => q.eq("clerkId", args.newClerkId || subscription.clerkId))
+        .first();
+      if (user) {
+        await ctx.db.patch(user._id, { isPremium: false });
+      }
+    }
+
+    return { success: true };
+  },
+});
+
+// Keep old function name for backwards compatibility
+export const adminUpdateSubscriptionClerkId = internalMutation({
+  args: {
+    subscriptionId: v.string(),
+    newClerkId: v.string(),
+  },
+  handler: async (ctx, args) => {
+    const subscription = await ctx.db
+      .query("subscriptions")
+      .withIndex("by_stripe_subscription", (q) =>
+        q.eq("stripeSubscriptionId", args.subscriptionId)
+      )
+      .first();
+
+    if (!subscription) {
+      throw new Error("Subscription not found");
+    }
+
+    await ctx.db.patch(subscription._id, {
+      clerkId: args.newClerkId,
+    });
+
+    return { success: true };
+  },
+});
+
+/**
  * Get clerkId from Stripe customer ID
  * Used when webhook doesn't include clerkId in metadata
  */

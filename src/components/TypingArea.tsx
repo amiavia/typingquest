@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { TypingStats } from '../types';
 
 interface TypingAreaProps {
@@ -10,6 +11,7 @@ interface TypingAreaProps {
 }
 
 export function TypingArea({ text: rawText, onComplete, onKeyPress, onComboChange, isActive = true }: TypingAreaProps) {
+  const { t } = useTranslation();
   // Normalize text to ensure consistent Unicode handling (important for special chars like ö, ñ, ç)
   const text = useMemo(() => rawText.normalize('NFC'), [rawText]);
   const [input, setInput] = useState('');
@@ -172,13 +174,13 @@ export function TypingArea({ text: rawText, onComplete, onKeyPress, onComboChang
       <div className="flex justify-between items-center pixel-box p-3">
         <div className="flex gap-6">
           <div className="text-center">
-            <div style={{ fontFamily: "'Press Start 2P'", fontSize: '8px', color: '#3bceac' }}>SPEED</div>
+            <div style={{ fontFamily: "'Press Start 2P'", fontSize: '8px', color: '#3bceac' }}>{t('typing.speed')}</div>
             <div style={{ fontFamily: "'Press Start 2P'", fontSize: '16px', color: '#ffd93d' }} className="text-glow-yellow">
               {stats.wpm}
             </div>
           </div>
           <div className="text-center">
-            <div style={{ fontFamily: "'Press Start 2P'", fontSize: '8px', color: '#3bceac' }}>ACCURACY</div>
+            <div style={{ fontFamily: "'Press Start 2P'", fontSize: '8px', color: '#3bceac' }}>{t('typing.accuracy')}</div>
             <div
               style={{
                 fontFamily: "'Press Start 2P'",
@@ -193,7 +195,7 @@ export function TypingArea({ text: rawText, onComplete, onKeyPress, onComboChang
 
         {/* Combo display */}
         <div className={`text-center ${showComboEffect ? 'animate-combo' : ''}`}>
-          <div style={{ fontFamily: "'Press Start 2P'", fontSize: '8px', color: '#ff6b9d' }}>COMBO</div>
+          <div style={{ fontFamily: "'Press Start 2P'", fontSize: '8px', color: '#ff6b9d' }}>{t('typing.combo')}</div>
           <div
             style={{
               fontFamily: "'Press Start 2P'",
@@ -233,7 +235,7 @@ export function TypingArea({ text: rawText, onComplete, onKeyPress, onComboChang
             className="mt-4 text-center animate-blink"
             style={{ fontFamily: "'Press Start 2P'", fontSize: '10px', color: '#4a4a6e' }}
           >
-            {'>>> PRESS ANY KEY TO START <<<'}
+            {t('typing.pressAnyKey')}
           </p>
         )}
       </div>

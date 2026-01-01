@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 interface RewardPopupProps {
   coins?: number;
@@ -23,6 +24,7 @@ export function RewardPopup({
   autoDismiss = true,
   autoDismissDelay = 3000,
 }: RewardPopupProps) {
+  const { t } = useTranslation();
   const [isVisible, setIsVisible] = useState(false);
   const [showCoins, setShowCoins] = useState(false);
   const [showXP, setShowXP] = useState(false);
@@ -141,7 +143,7 @@ export function RewardPopup({
               textShadow: `0 0 10px ${tier ? tierColors[tier] : "#ffd93d"}`,
             }}
           >
-            {message || "REWARDS!"}
+            {message || t('reward.title')}
           </h2>
         </div>
 
@@ -160,7 +162,7 @@ export function RewardPopup({
               <div className="flex items-center gap-3">
                 <span style={{ fontSize: "20px" }}>💰</span>
                 <span style={{ fontSize: "10px", color: "#eef5db" }}>
-                  COINS
+                  {t('reward.coins')}
                 </span>
               </div>
               <span
@@ -187,7 +189,7 @@ export function RewardPopup({
             >
               <div className="flex items-center gap-3">
                 <span style={{ fontSize: "20px" }}>⭐</span>
-                <span style={{ fontSize: "10px", color: "#eef5db" }}>XP</span>
+                <span style={{ fontSize: "10px", color: "#eef5db" }}>{t('reward.xp')}</span>
               </div>
               <span
                 style={{
@@ -214,7 +216,7 @@ export function RewardPopup({
               <div className="flex items-center gap-3">
                 <span style={{ fontSize: "20px" }}>🔥</span>
                 <span style={{ fontSize: "10px", color: "#eef5db" }}>
-                  STREAK
+                  {t('reward.streak')}
                 </span>
               </div>
               <span
@@ -224,7 +226,7 @@ export function RewardPopup({
                   textShadow: "0 0 10px #f97316",
                 }}
               >
-                {streak} DAYS
+                {t('reward.daysCount', { count: streak })}
               </span>
             </div>
           )}
@@ -242,7 +244,7 @@ export function RewardPopup({
               <div className="flex items-center gap-3 mb-2">
                 <span style={{ fontSize: "20px" }}>🎁</span>
                 <span style={{ fontSize: "10px", color: "#eef5db" }}>
-                  ITEMS
+                  {t('reward.items')}
                 </span>
               </div>
               <div className="flex flex-wrap gap-2">
@@ -268,7 +270,7 @@ export function RewardPopup({
           className="text-center mt-6"
           style={{ fontSize: "6px", color: "#4a4a6e" }}
         >
-          TAP ANYWHERE TO CONTINUE
+          {t('reward.tapToContinue')}
         </p>
       </div>
 

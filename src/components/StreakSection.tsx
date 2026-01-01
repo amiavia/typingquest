@@ -2,6 +2,7 @@ import { useQuery, useMutation } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import { useAuth } from "@clerk/clerk-react";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { StreakDisplay } from "./StreakDisplay";
 
 interface StreakSectionProps {
@@ -9,6 +10,7 @@ interface StreakSectionProps {
 }
 
 export function StreakSection({ onPurchaseFreeze }: StreakSectionProps) {
+  const { t } = useTranslation();
   const { userId } = useAuth();
   const [showDetails, setShowDetails] = useState(false);
 
@@ -36,24 +38,24 @@ export function StreakSection({ onPurchaseFreeze }: StreakSectionProps) {
   // Determine streak status message
   const getStreakMessage = () => {
     if (streak.currentStreak === 0) {
-      return "Start your streak today!";
+      return t('streak.startToday');
     }
     if (streak.isActiveToday) {
-      return `${streak.currentStreak} day streak! Keep it up!`;
+      return t('streak.keepItUp', { days: streak.currentStreak });
     }
     if (streak.isAtRisk) {
-      return "Practice today to keep your streak!";
+      return t('streak.practiceToday');
     }
-    return `${streak.currentStreak} day streak!`;
+    return t('streak.dayStreak', { days: streak.currentStreak });
   };
 
   // Calculate next milestone
   const getNextMilestone = () => {
     const current = streak.currentStreak;
-    if (current < 7) return { target: 7, reward: "2x coins" };
-    if (current < 30) return { target: 30, reward: "3x coins" };
-    if (current < 100) return { target: 100, reward: "Special badge" };
-    return { target: 365, reward: "Legend status" };
+    if (current < 7) return { target: 7, reward: t('streak.reward2xCoins') };
+    if (current < 30) return { target: 30, reward: t('streak.reward3xCoins') };
+    if (current < 100) return { target: 100, reward: t('streak.rewardBadge') };
+    return { target: 365, reward: t('streak.rewardLegend') };
   };
 
   const milestone = getNextMilestone();
@@ -85,7 +87,7 @@ export function StreakSection({ onPurchaseFreeze }: StreakSectionProps) {
           style={{ fontSize: "10px", color: "#eef5db" }}
         >
           <span>🔥</span>
-          <span>STREAK</span>
+          <span>{t('streak.title')}</span>
         </h3>
         <StreakDisplay
           streak={streak.currentStreak}
@@ -111,7 +113,7 @@ export function StreakSection({ onPurchaseFreeze }: StreakSectionProps) {
       <div className="mb-4">
         <div className="flex justify-between mb-2">
           <span style={{ fontSize: "6px", color: "#4a4a6e" }}>
-            NEXT: {milestone.target} DAYS
+            {t('streak.next')}: {milestone.target} {t('streak.days')}
           </span>
           <span style={{ fontSize: "6px", color: "#ffd93d" }}>
             {milestone.reward.toUpperCase()}
@@ -131,7 +133,7 @@ export function StreakSection({ onPurchaseFreeze }: StreakSectionProps) {
             {streak.currentStreak} / {milestone.target}
           </span>
           <span style={{ fontSize: "6px", color: "#4a4a6e" }}>
-            {milestone.target - streak.currentStreak} TO GO
+            {milestone.target - streak.currentStreak} {t('streak.toGo')}
           </span>
         </div>
       </div>
@@ -144,7 +146,7 @@ export function StreakSection({ onPurchaseFreeze }: StreakSectionProps) {
         <div className="flex items-center gap-2">
           <span>🧊</span>
           <span style={{ fontSize: "8px", color: "#eef5db" }}>
-            STREAK FREEZES: {streak.streakFreezeCount}
+            {t('streak.freezes')}: {streak.streakFreezeCount}
           </span>
         </div>
         <button
@@ -152,7 +154,7 @@ export function StreakSection({ onPurchaseFreeze }: StreakSectionProps) {
           className="px-2 py-1 border border-[#ffd93d] hover:bg-[#ffd93d] hover:text-[#1a1a2e] transition-colors"
           style={{ fontSize: "6px", color: "#ffd93d" }}
         >
-          BUY (75$)
+          {t('streak.buy')} (75$)
         </button>
       </div>
 
@@ -164,19 +166,19 @@ export function StreakSection({ onPurchaseFreeze }: StreakSectionProps) {
               <div style={{ fontSize: "12px", color: "#ffd93d" }}>
                 {streak.currentStreak}
               </div>
-              <div style={{ fontSize: "6px", color: "#4a4a6e" }}>CURRENT</div>
+              <div style={{ fontSize: "6px", color: "#4a4a6e" }}>{t('streak.current')}</div>
             </div>
             <div>
               <div style={{ fontSize: "12px", color: "#ff6b9d" }}>
                 {streak.longestStreak}
               </div>
-              <div style={{ fontSize: "6px", color: "#4a4a6e" }}>LONGEST</div>
+              <div style={{ fontSize: "6px", color: "#4a4a6e" }}>{t('streak.longest')}</div>
             </div>
             <div>
               <div style={{ fontSize: "12px", color: "#3bceac" }}>
                 {streak.totalDaysActive}
               </div>
-              <div style={{ fontSize: "6px", color: "#4a4a6e" }}>TOTAL</div>
+              <div style={{ fontSize: "6px", color: "#4a4a6e" }}>{t('streak.total')}</div>
             </div>
           </div>
         </div>
@@ -188,7 +190,7 @@ export function StreakSection({ onPurchaseFreeze }: StreakSectionProps) {
         className="w-full mt-3 text-center"
         style={{ fontSize: "6px", color: "#4a4a6e" }}
       >
-        {showDetails ? "HIDE DETAILS" : "SHOW DETAILS"}
+        {showDetails ? t('streak.hideDetails') : t('streak.showDetails')}
       </button>
     </section>
   );

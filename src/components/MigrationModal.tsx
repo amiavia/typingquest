@@ -1,6 +1,8 @@
+import { useTranslation } from 'react-i18next'
 import { useAuthContext } from '../contexts/AuthContext'
 
 export function MigrationModal() {
+  const { t } = useTranslation()
   const {
     hasLocalData,
     migrateLocalData,
@@ -51,7 +53,7 @@ export function MigrationModal() {
             marginBottom: '16px',
           }}
         >
-          SAVE DATA FOUND!
+          {t('migration.title')}
         </h2>
 
         {/* Description */}
@@ -64,9 +66,9 @@ export function MigrationModal() {
             marginBottom: '24px',
           }}
         >
-          WE FOUND EXISTING PROGRESS ON THIS DEVICE.
+          {t('migration.message')}
           <br />
-          WOULD YOU LIKE TO SYNC IT TO YOUR ACCOUNT?
+          {t('migration.question')}
         </p>
 
         {/* Stats preview */}
@@ -93,7 +95,7 @@ export function MigrationModal() {
               border: '3px solid #0ead69',
             }}
           >
-            SYNC IT
+            {t('migration.syncIt')}
           </button>
 
           <button
@@ -107,7 +109,7 @@ export function MigrationModal() {
               border: '3px solid #4a4a5a',
             }}
           >
-            START FRESH
+            {t('migration.startFresh')}
           </button>
         </div>
       </div>
@@ -117,6 +119,7 @@ export function MigrationModal() {
 
 // Preview component to show local data stats
 function LocalDataPreview() {
+  const { t } = useTranslation();
   try {
     const gameStateStr = localStorage.getItem('typingQuestGameState')
     const progressStr = localStorage.getItem('typingQuestProgress')
@@ -137,7 +140,7 @@ function LocalDataPreview() {
             color: '#9a9ab0',
           }}
         >
-          NO STATS AVAILABLE
+          {t('migration.noStats')}
         </span>
       )
     }

@@ -1,7 +1,9 @@
 import { SignInButton } from '@clerk/clerk-react'
+import { useTranslation } from 'react-i18next'
 import { useAuthContext } from '../contexts/AuthContext'
 
 export function GuestBanner() {
+  const { t } = useTranslation()
   const { isAuthenticated, isLoading } = useAuthContext()
 
   // Don't show banner if loading or authenticated
@@ -24,7 +26,7 @@ export function GuestBanner() {
           color: '#ffd93d',
         }}
       >
-        GUEST MODE - PROGRESS WON'T BE SAVED
+        {t('guest.mode')}
       </span>
 
       <SignInButton mode="modal">
@@ -39,7 +41,7 @@ export function GuestBanner() {
             borderRadius: '2px',
           }}
         >
-          SIGN IN TO SAVE
+          {t('guest.signInToSave')}
         </button>
       </SignInButton>
     </div>

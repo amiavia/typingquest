@@ -6,10 +6,12 @@
  */
 
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
 const CONSENT_KEY = 'typebit8_cookie_consent';
 
 export function CookieConsent() {
+  const { t } = useTranslation();
   const [showBanner, setShowBanner] = useState(false);
 
   useEffect(() => {
@@ -44,7 +46,7 @@ export function CookieConsent() {
           <span style={{ fontSize: '16px' }}>🍪</span>
           <div className="flex-1">
             <p style={{ fontSize: '7px', color: '#eef5db', lineHeight: '2', marginBottom: '12px' }}>
-              WE USE COOKIES TO IMPROVE YOUR EXPERIENCE AND ANALYZE SITE USAGE.
+              {t('cookie.message')}
             </p>
             <div className="flex gap-2">
               <button
@@ -57,7 +59,7 @@ export function CookieConsent() {
                   border: 'none',
                 }}
               >
-                GOT IT
+                {t('cookie.accept')}
               </button>
               <a
                 href="/privacy"
@@ -72,7 +74,7 @@ export function CookieConsent() {
                   alignItems: 'center',
                 }}
               >
-                LEARN MORE
+                {t('cookie.learnMore')}
               </a>
             </div>
           </div>

@@ -7,6 +7,7 @@ import {
   useUser,
 } from '@clerk/clerk-react';
 import { useQuery } from 'convex/react';
+import { useTranslation } from 'react-i18next';
 import { api } from '../../convex/_generated/api';
 import { useAuthContext } from '../contexts/AuthContext';
 import { usePremium } from '../hooks/usePremium';
@@ -21,6 +22,7 @@ interface UserButtonProps {
 }
 
 export function UserButton({ userLevel = 1, onOpenShop, onOpenPremium }: UserButtonProps) {
+  const { t } = useTranslation();
   const { hasLocalData, migrateLocalData, migrationStatus } = useAuthContext();
   const { signOut } = useClerk();
   const { isPremium } = usePremium();
@@ -57,7 +59,7 @@ export function UserButton({ userLevel = 1, onOpenShop, onOpenPremium }: UserBut
               border: '2px solid #3bceac',
             }}
           >
-            SIGN IN
+            {t('user.signIn')}
           </button>
         </SignInButton>
       </SignedOut>
@@ -76,7 +78,7 @@ export function UserButton({ userLevel = 1, onOpenShop, onOpenPremium }: UserBut
               border: '2px solid #ffd93d',
             }}
           >
-            SYNC DATA
+            {t('user.syncData')}
           </button>
         )}
 
@@ -88,7 +90,7 @@ export function UserButton({ userLevel = 1, onOpenShop, onOpenPremium }: UserBut
               color: '#ffd93d',
             }}
           >
-            SYNCING...
+            {t('user.syncing')}
           </span>
         )}
 
@@ -100,7 +102,7 @@ export function UserButton({ userLevel = 1, onOpenShop, onOpenPremium }: UserBut
               color: '#0ead69',
             }}
           >
-            SYNCED!
+            {t('user.synced')}
           </span>
         )}
 
@@ -112,7 +114,7 @@ export function UserButton({ userLevel = 1, onOpenShop, onOpenPremium }: UserBut
               color: '#ff6b6b',
             }}
           >
-            ERROR
+            {t('user.error')}
           </span>
         )}
 
@@ -147,7 +149,7 @@ export function UserButton({ userLevel = 1, onOpenShop, onOpenPremium }: UserBut
                     marginBottom: '4px',
                   }}
                 >
-                  {user?.username || user?.firstName || 'PLAYER'}
+                  {user?.username || user?.firstName || t('user.player')}
                 </p>
                 <p
                   style={{
@@ -173,7 +175,7 @@ export function UserButton({ userLevel = 1, onOpenShop, onOpenPremium }: UserBut
                   color: '#ffd93d',
                 }}
               >
-                <span>🎨</span> CHANGE AVATAR
+                <span>🎨</span> {t('user.changeAvatar')}
               </button>
 
               <button
@@ -188,7 +190,7 @@ export function UserButton({ userLevel = 1, onOpenShop, onOpenPremium }: UserBut
                   color: '#3bceac',
                 }}
               >
-                <span>✏️</span> EDIT NICKNAME
+                <span>✏️</span> {t('user.editNickname')}
               </button>
 
               {isPremium && (
@@ -205,7 +207,7 @@ export function UserButton({ userLevel = 1, onOpenShop, onOpenPremium }: UserBut
                     borderColor: '#2a2a3e',
                   }}
                 >
-                  <span>👑</span> MANAGE SUBSCRIPTION
+                  <span>👑</span> {t('user.manageSubscription')}
                 </button>
               )}
 
@@ -222,7 +224,7 @@ export function UserButton({ userLevel = 1, onOpenShop, onOpenPremium }: UserBut
                   borderColor: '#2a2a3e',
                 }}
               >
-                <span>🚪</span> SIGN OUT
+                <span>🚪</span> {t('user.signOut')}
               </button>
             </div>
           )}

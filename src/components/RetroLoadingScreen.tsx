@@ -1,42 +1,45 @@
-import { useState, useEffect } from 'react';
-
-const LOADING_MESSAGES = [
-  "WARMING UP FINGERS...",
-  "LOADING PIXELS...",
-  "CALIBRATING KEYBOARD...",
-  "PREPARING CHALLENGE...",
-  "POWERING UP...",
-  "INSERTING COIN...",
-  "LOADING LEVEL...",
-  "BUFFERING AWESOMENESS...",
-  "COMPILING FUN...",
-  "INITIALIZING TYPING MODE...",
-];
-
-const TIPS = [
-  "TIP: Keep your fingers on the home row!",
-  "TIP: Don't look at your keyboard!",
-  "TIP: Practice makes perfect!",
-  "TIP: Speed comes with accuracy!",
-  "TIP: Take breaks to avoid fatigue!",
-  "TIP: Use all 10 fingers for max speed!",
-  "FUN FACT: The average typing speed is 40 WPM",
-  "FUN FACT: The world record is 216 WPM!",
-  "PRO TIP: Rhythm is key to fast typing!",
-];
+import { useState, useEffect, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 
 interface RetroLoadingScreenProps {
   message?: string;
 }
 
 export function RetroLoadingScreen({ message }: RetroLoadingScreenProps) {
+  const { t } = useTranslation();
   const [progress, setProgress] = useState(0);
-  const [loadingMessage] = useState(() =>
-    message || LOADING_MESSAGES[Math.floor(Math.random() * LOADING_MESSAGES.length)]
-  );
-  const [tip] = useState(() =>
-    TIPS[Math.floor(Math.random() * TIPS.length)]
-  );
+
+  // Memoize the translated arrays to avoid re-renders
+  const loadingMessages = useMemo(() => [
+    t('loading.warmingUp'),
+    t('loading.loadingPixels'),
+    t('loading.calibrating'),
+    t('loading.preparingChallenge'),
+    t('loading.poweringUp'),
+    t('loading.insertingCoin'),
+    t('loading.loadingLevel'),
+    t('loading.bufferingAwesome'),
+    t('loading.compilingFun'),
+    t('loading.initTypingMode'),
+  ], [t]);
+
+  const tips = useMemo(() => [
+    t('tips.homeRow'),
+    t('tips.dontLook'),
+    t('tips.practice'),
+    t('tips.speedAccuracy'),
+    t('tips.takeBreaks'),
+    t('tips.allFingers'),
+    t('tips.avgSpeed'),
+    t('tips.worldRecord'),
+    t('tips.rhythm'),
+  ], [t]);
+
+  const [messageIndex] = useState(() => Math.floor(Math.random() * 10));
+  const [tipIndex] = useState(() => Math.floor(Math.random() * 9));
+
+  const loadingMessage = message || loadingMessages[messageIndex];
+  const tip = tips[tipIndex];
 
   // Animate progress bar
   useEffect(() => {

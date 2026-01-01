@@ -1,8 +1,175 @@
 {
-  "app": {
-    "title": "Type Quest",
-    "subtitle": "Meistere das Zehnfingersystem mit Retro-Charme",
-    "tagline": "Verbessere deine Tippfähigkeiten!"
+  "header": {
+    "title": "TYPEBIT8",
+    "subtitle": "TASTATUR MEISTERN",
+    "challenge": "CHALLENGE",
+    "premium": "PREMIUM",
+    "level": "LEVEL",
+    "xp": "XP"
+  },
+  "hero": {
+    "learnWith": "LERNE TIPPEN MIT",
+    "allFingers": "ALLEN 10 FINGERN",
+    "levels": "LEVEL",
+    "cleared": "BESTANDEN",
+    "bestCombo": "BESTE KOMBO"
+  },
+  "home": {
+    "selectLevel": "LEVEL AUSWÄHLEN",
+    "complete": "ABGESCHLOSSEN",
+    "allTiers": "ALLE STUFEN",
+    "yourProgress": "DEIN FORTSCHRITT",
+    "freeLevels": "GRATIS BASICS",
+    "premiumLevels": "PREMIUM LEVEL",
+    "themedLevels": "GEDANKENSCHNELLE",
+    "freeLabel": "GRATIS",
+    "premiumUnlocked": "PREMIUM FREIGESCHALTET"
+  },
+  "marketing": {
+    "learnTwoSkills": "LERNE ZWEI FÄHIGKEITEN GLEICHZEITIG",
+    "masterTypingWhile": "MEISTERE TIPPGESCHWINDIGKEIT BEIM LERNEN:",
+    "aiPrompting": "EXPERTEN KI-PROMPTING TECHNIKEN",
+    "codingPatterns": "PROFESSIONELLE CODING PATTERNS",
+    "businessComm": "GESCHÄFTSKOMMUNIKATION",
+    "tagline": "TIPPE ES. LERNE ES. VERGISS ES NIE.",
+    "unlockSpeed": "GEDANKENSCHNELLES TIPPEN FREISCHALTEN"
+  },
+  "howToPlay": {
+    "title": "SO GEHT'S",
+    "learn": "LERNEN",
+    "learnDesc": "JEDES LEVEL LEHRT NEUE TASTEN UND FINGERPOSITIONEN",
+    "battle": "KÄMPFEN",
+    "battleDesc": "TIPPE SCHNELL UND BAUE KOMBOS UM DEN BOSS ZU BESIEGEN",
+    "victory": "SIEG",
+    "victoryDesc": "VERDIENE XP, MÜNZEN UND SCHALTE NEUE LEVEL FREI"
+  },
+  "signup": {
+    "unlockLevels": "MEHR LEVEL FREISCHALTEN!",
+    "createFree": "ERSTELLE EIN KOSTENLOSES KONTO UM DEINE TIPP-REISE FORTZUSETZEN",
+    "signUpFree": "KOSTENLOS REGISTRIEREN",
+    "guestAccess": "GAST-ZUGANG: NUR LEVEL 1-2",
+    "signUpToUnlock": "REGISTRIEREN FÜR ALLE LEVEL",
+    "wantToTry": "ERST MAL TESTEN?",
+    "continueAsGuest": "ALS GAST FORTFAHREN",
+    "levelsOnly": "(NUR LEVEL 1-2)",
+    "keyboardSetupComplete": "TASTATUR-SETUP ABGESCHLOSSEN",
+    "createFreeAccount": "GRATIS KONTO ERSTELLEN",
+    "unlockFullExperience": "SCHALTE DAS VOLLE TIPP-ERLEBNIS FREI!",
+    "trackProgress": "VERFOLGE DEINEN FORTSCHRITT",
+    "levelsUnlocked": "30 LEVEL FREIGESCHALTET",
+    "competeLeaderboards": "KONKURRIERE IN RANGLISTEN",
+    "buildStreaks": "BAUE TÄGLICHE SERIEN"
+  },
+  "benefits": {
+    "levels": "30 LEVEL",
+    "trackProgress": "FORTSCHRITT VERFOLGEN",
+    "leaderboards": "RANGLISTEN",
+    "dailyStreaks": "TÄGLICHE SERIEN"
+  },
+  "footer": {
+    "copyright": "TYPEBIT8 © {{year}}",
+    "practiceDaily": "TÄGLICH ÜBEN FÜR BESTE ERGEBNISSE",
+    "impressum": "IMPRESSUM",
+    "privacy": "DATENSCHUTZ",
+    "terms": "AGB",
+    "feedback": "FEEDBACK ODER IDEEN?",
+    "feedbackDesc": "WIR FREUEN UNS VON DIR ZU HÖREN! SENDE UNS DEINE VORSCHLÄGE, FEHLERBERICHTE ODER FUNKTIONSWÜNSCHE.",
+    "operator": "BETRIEBEN VON STEININGER AG, ZUG, SCHWEIZ",
+    "learn": "LERNEN",
+    "tenFingerCourse": "10-FINGER-KURS",
+    "typingForDevs": "TIPPEN FÜR DEVS",
+    "gamesForKids": "SPIELE FÜR KINDER",
+    "tools": "TOOLS",
+    "speedTest": "GESCHWINDIGKEITSTEST",
+    "wpmCalculator": "WPM-RECHNER",
+    "company": "UNTERNEHMEN",
+    "aboutUs": "ÜBER UNS",
+    "home": "START",
+    "tagline": "TASTATUR MEISTERN MIT RETRO-GAMING-VIBES",
+    "levelUp": "LEVEL UP DEIN TIPPEN"
+  },
+  "keyboard": {
+    "title": "TASTATUR",
+    "change": "ÄNDERN",
+    "layout": "TASTATURLAYOUT",
+    "current": "AKTUELL:",
+    "selectRegion": "REGION WÄHLEN:",
+    "verified": "TASTATUR VERIFIZIERT!",
+    "verify": "TASTATUR VERIFIZIEREN",
+    "placeFingers": "LEGE DEINE FINGER AUF DIE GRUNDREIHE UND DRÜCKE:",
+    "selectLayout": "WÄHLE DEIN TASTATURLAYOUT:",
+    "startingSpeed": "STARTGESCHWINDIGKEIT",
+    "retake": "WIEDERHOLEN",
+    "detectKeyboard": "TASTATUR ERKENNEN",
+    "typeHomeRow": "TIPPE DIE GRUNDREIHE VON LINKS NACH RECHTS",
+    "placeMiddleRow": "LEGE DEINE FINGER AUF DIE MITTLERE REIHE UND TIPPE ALLE 10 TASTEN",
+    "typeHere": "HIER TIPPEN...",
+    "moreKeys": "{{count}} WEITERE TASTEN...",
+    "analyzing": "WIRD ANALYSIERT...",
+    "layoutDetected": "{{family}} ERKANNT!",
+    "whichLayout": "WELCHES LAYOUT?",
+    "selectVariant": "WÄHLE DEINE SPEZIFISCHE VARIANTE",
+    "multiplePossible": "WIR HABEN MEHRERE MÖGLICHE LAYOUTS ERKANNT",
+    "yourInput": "DEINE EINGABE: {{input}}",
+    "detected": "LAYOUT ERKANNT!",
+    "confirm": "BESTÄTIGEN"
+  },
+  "buttons": {
+    "startPracticing": "ÜBUNG STARTEN",
+    "back": "← ZURÜCK",
+    "close": "✕",
+    "save": "SPEICHERN",
+    "cancel": "ABBRECHEN",
+    "retry": "↻ NOCHMAL",
+    "refresh": "SEITE AKTUALISIEREN",
+    "copy": "KOPIEREN",
+    "copied": "KOPIERT!",
+    "share": "TEILEN",
+    "equip": "AUSRÜSTEN",
+    "equipped": "AUSGERÜSTET",
+    "owned": "BESITZT"
+  },
+  "loading": {
+    "returningToBase": "ZURÜCK ZUR BASIS...",
+    "loadingLevel": "LEVEL LADEN...",
+    "loadingDocs": "DOKUMENTE LADEN...",
+    "openingShop": "SHOP ÖFFNEN...",
+    "loadingPremium": "PREMIUM LADEN...",
+    "preparingChallenge": "CHALLENGE VORBEREITEN...",
+    "loading": "LADEN...",
+    "loadingTypebit8": "TYPEBIT8 LADEN...",
+    "sending": "SENDEN...",
+    "warmingUp": "FINGER AUFWÄRMEN...",
+    "loadingPixels": "PIXEL LADEN...",
+    "calibrating": "TASTATUR KALIBRIEREN...",
+    "poweringUp": "HOCHFAHREN...",
+    "insertingCoin": "MÜNZE EINWERFEN...",
+    "bufferingAwesome": "GROSSARTIGKEIT PUFFERN...",
+    "compilingFun": "SPASS KOMPILIEREN...",
+    "initTypingMode": "TIPP-MODUS INITIALISIEREN..."
+  },
+  "tips": {
+    "homeRow": "TIPP: Halte die Finger auf der Grundreihe!",
+    "dontLook": "TIPP: Schau nicht auf die Tastatur!",
+    "practice": "TIPP: Übung macht den Meister!",
+    "speedAccuracy": "TIPP: Tempo kommt mit Genauigkeit!",
+    "takeBreaks": "TIPP: Mach Pausen um Ermüdung zu vermeiden!",
+    "allFingers": "TIPP: Nutze alle 10 Finger für maximales Tempo!",
+    "avgSpeed": "FUN FACT: Die durchschnittliche Tippgeschwindigkeit ist 40 WPM",
+    "worldRecord": "FUN FACT: Der Weltrekord liegt bei 216 WPM!",
+    "rhythm": "PROFI-TIPP: Rhythmus ist der Schlüssel zum schnellen Tippen!"
+  },
+  "user": {
+    "signIn": "ANMELDEN",
+    "signOut": "ABMELDEN",
+    "syncData": "DATEN SYNC",
+    "syncing": "SYNC...",
+    "synced": "SYNCHRONISIERT!",
+    "error": "FEHLER",
+    "player": "SPIELER",
+    "changeAvatar": "AVATAR ÄNDERN",
+    "editNickname": "SPITZNAME BEARBEITEN",
+    "manageSubscription": "ABO VERWALTEN"
   },
   "nav": {
     "home": "Start",
@@ -23,28 +190,6 @@
     "save": "Speichern",
     "reset": "Zurücksetzen"
   },
-  "languages": {
-    "en": "Englisch",
-    "de": "Deutsch",
-    "fr": "Französisch",
-    "es": "Spanisch",
-    "pt": "Portugiesisch",
-    "it": "Italienisch",
-    "nl": "Niederländisch",
-    "sv": "Schwedisch",
-    "pl": "Polnisch",
-    "tr": "Türkisch"
-  },
-  "layouts": {
-    "qwerty-us": "QWERTY (US)",
-    "qwerty-uk": "QWERTY (UK)",
-    "qwertz-de": "QWERTZ (Deutsch)",
-    "qwertz-ch": "QWERTZ (Schweiz)",
-    "azerty-fr": "AZERTY (Französisch)",
-    "azerty-be": "AZERTY (Belgisch)",
-    "dvorak": "Dvorak",
-    "colemak": "Colemak"
-  },
   "lesson": {
     "title": "Lektion {{number}}",
     "start": "Lektion starten",
@@ -57,81 +202,8 @@
     "newKeys": "Neue Tasten",
     "targetWPM": "Ziel WPM",
     "targetAccuracy": "Ziel Genauigkeit",
-    "home_row_basic": {
-      "title": "Grundstellung",
-      "description": "Lerne die Grundtasten unter deinen Fingern",
-      "concept": "Lege deine Finger auf die Grundreihe. Deine linke Hand liegt auf A, S, D, F und deine rechte auf J, K, L, Ö. Die kleinen Erhebungen auf F und J helfen dir, diese Tasten zu finden."
-    },
-    "home_row_extended": {
-      "title": "Grundreihe erweitert",
-      "description": "Füge G und H hinzu",
-      "concept": "Die Tasten G und H werden mit deinen Zeigefingern getippt, indem du sie von F und J nach innen bewegst."
-    },
-    "top_row_vowels": {
-      "title": "Obere Reihe Vokale",
-      "description": "Lerne E und I - wichtige Vokale",
-      "concept": "E wird mit dem linken Mittelfinger von D nach oben getippt. I mit dem rechten Mittelfinger von K. Dies sind sehr häufige Buchstaben."
-    },
-    "top_row_index": {
-      "title": "Obere Reihe Zeigefinger",
-      "description": "Füge R und U hinzu",
-      "concept": "R und U werden mit den Zeigefingern nach oben getippt. R von der F-Position, U von der J-Position."
-    },
-    "top_row_ring": {
-      "title": "Obere Reihe Ringfinger",
-      "description": "Lerne W und O",
-      "concept": "W und O erfordern, dass deine Ringfinger von S und L nach oben greifen."
-    },
-    "top_row_pinky": {
-      "title": "Obere Reihe kleiner Finger",
-      "description": "Fordere deine kleinen Finger mit Q und P",
-      "concept": "Q und P sind Dehnungen für die kleinen Finger. Q von der A-Position, P von der Ö-Position."
-    },
-    "top_row_complete": {
-      "title": "Obere Reihe komplett",
-      "description": "Meistere T und Z",
-      "concept": "T und Z sind zentrale Tasten. T greift nach oben-rechts von F, Z nach oben-links von J. Du kennst jetzt die gesamte obere Reihe!"
-    },
-    "bottom_row_middle_index": {
-      "title": "Untere Reihe Start",
-      "description": "Beginne mit C und M",
-      "concept": "C und M führen in die untere Reihe ein. C wird mit dem linken Mittelfinger von D nach unten getippt."
-    },
-    "bottom_row_index": {
-      "title": "Untere Reihe Zeigefinger",
-      "description": "Füge V und N hinzu",
-      "concept": "V und N werden mit Zeigefingern nach unten getippt. V von der F-Position, N von der J-Position."
-    },
-    "bottom_row_ring": {
-      "title": "Untere Reihe Ringfinger",
-      "description": "Lerne X und Komma",
-      "concept": "X und Komma nutzen deine Ringfinger für eine längere Bewegung nach unten."
-    },
-    "bottom_row_pinky": {
-      "title": "Untere Reihe kleiner Finger",
-      "description": "Vervollständige mit Y und Punkt",
-      "concept": "Y und Punkt sind die letzten regulären Tasten. Y ist die ultimative Dehnung für den kleinen Finger."
-    },
-    "complete_keyboard": {
-      "title": "Komplette Tastatur",
-      "description": "Füge B hinzu und meistere die Leertaste",
-      "concept": "B wird mit dem linken Zeigefinger nach unten-rechts getippt. Die Leertaste sollte mit dem Daumen bedient werden."
-    },
-    "full_practice": {
-      "title": "Vollständige Übung",
-      "description": "Übe mit allen Tasten",
-      "concept": "Zeit, alles zusammenzuführen. Übe echte Wörter und Sätze mit jeder Taste, die du gelernt hast."
-    },
-    "speed_building": {
-      "title": "Geschwindigkeit aufbauen",
-      "description": "Erhöhe deine Tippgeschwindigkeit",
-      "concept": "Da die Genauigkeit stimmt, bauen wir jetzt Geschwindigkeit auf. Versuche schneller zu tippen bei mindestens 95% Genauigkeit."
-    },
-    "mastery": {
-      "title": "Meisterschaft",
-      "description": "Erreiche Tipp-Meisterschaft",
-      "concept": "Du hast alle Tasten gelernt. Übe weiter, um Muskelgedächtnis aufzubauen."
-    }
+    "stages": "STUFEN",
+    "level": "LEVEL"
   },
   "quiz": {
     "title": "Schnelltest",
@@ -145,12 +217,16 @@
   },
   "typing": {
     "start": "Klicke hier oder drücke eine Taste zum Starten",
+    "pressAnyKey": ">>> DRÜCKE EINE TASTE ZUM STARTEN <<<",
     "placeholder": "Tippe den Text oben...",
     "wpm": "WPM",
     "accuracy": "Genauigkeit",
     "time": "Zeit",
     "errors": "Fehler",
-    "progress": "Fortschritt"
+    "progress": "Fortschritt",
+    "speed": "TEMPO",
+    "combo": "KOMBO",
+    "hitRate": "TREFFERQUOTE"
   },
   "results": {
     "title": "Ergebnis",
@@ -162,77 +238,256 @@
     "newRecord": "Neuer Rekord!",
     "passed": "Lektion bestanden!",
     "failed": "Weiter üben",
-    "requirements": "Anforderungen"
-  },
-  "progress": {
-    "title": "Dein Fortschritt",
-    "level": "Level",
-    "xp": "XP",
-    "totalLessons": "Lektionen abgeschlossen",
-    "totalTime": "Gesamte Übungszeit",
-    "averageWPM": "Durchschnitt WPM",
-    "averageAccuracy": "Durchschnitt Genauigkeit"
-  },
-  "themes": {
-    "christmas": {
-      "name": "Weihnachten",
-      "description": "Festliche Wörter zur Weihnachtszeit"
-    },
-    "easter": {
-      "name": "Ostern",
-      "description": "Frühlingsvokabular zu Ostern"
-    },
-    "halloween": {
-      "name": "Halloween",
-      "description": "Gruselige Wörter"
-    },
-    "summer": {
-      "name": "Sommer",
-      "description": "Strand- und Urlaubsstimmung"
-    },
-    "vibe-coding": {
-      "name": "Vibe Coding",
-      "description": "Entwickler- und Programmierbegriffe"
-    },
-    "gaming": {
-      "name": "Gaming",
-      "description": "Videospiel-Vokabular"
-    },
-    "science": {
-      "name": "Wissenschaft",
-      "description": "MINT und wissenschaftliche Begriffe"
-    },
-    "nature": {
-      "name": "Natur",
-      "description": "Outdoor- und Tierwelt-Wörter"
-    },
-    "food": {
-      "name": "Essen",
-      "description": "Kulinarisches Vokabular"
-    },
-    "sports": {
-      "name": "Sport",
-      "description": "Sportliche Terminologie"
-    },
-    "music": {
-      "name": "Musik",
-      "description": "Musikalische Begriffe und Instrumente"
-    },
-    "travel": {
-      "name": "Reisen",
-      "description": "Abenteuer- und Entdeckungswörter"
-    }
+    "requirements": "Anforderungen",
+    "saved": "ERGEBNISSE GESPEICHERT!",
+    "checkEmail": "PRÜFE DEINE E-MAIL FÜR VERBESSERUNGSTIPPS"
   },
   "common": {
     "loading": "Laden...",
     "error": "Ein Fehler ist aufgetreten",
-    "retry": "Wiederholen",
+    "retry": "WIEDERHOLEN",
+    "refreshPage": "SEITE AKTUALISIEREN",
     "back": "Zurück",
     "next": "Weiter",
     "save": "Speichern",
     "cancel": "Abbrechen",
     "close": "Schließen",
     "yes": "Ja",
-    "no": "Nein"
+    "no": "Nein",
+    "you": "DU",
+    "free": "GRATIS",
+    "sale": "SALE",
+    "days": "TAGE",
+    "players": "SPIELER",
+    "coins": "MÜNZEN",
+    "items": "ITEMS",
+    "custom": "(EIGENER)"
+  },
+  "cookie": {
+    "message": "WIR VERWENDEN COOKIES UM DEIN ERLEBNIS ZU VERBESSERN UND DIE NUTZUNG ZU ANALYSIEREN.",
+    "accept": "VERSTANDEN",
+    "learnMore": "MEHR ERFAHREN"
+  },
+  "reward": {
+    "title": "BELOHNUNGEN!",
+    "coins": "MÜNZEN",
+    "xp": "XP",
+    "streak": "SERIE",
+    "daysCount": "{{count}} TAGE",
+    "items": "ITEMS",
+    "tapToContinue": "TIPPE IRGENDWO UM FORTZUFAHREN"
+  },
+  "email": {
+    "invalidEmail": "BITTE GÜLTIGE E-MAIL EINGEBEN",
+    "errorTryAgain": "ETWAS IST SCHIEF GELAUFEN. NOCHMAL VERSUCHEN.",
+    "getResults": "ERHALTE DEINE ERGEBNISSE + TIPPS",
+    "yourEmail": "DEINE E-MAIL",
+    "agreeToReceive": "ICH STIMME ZU, TIPPS UND UPDATES ZU ERHALTEN.",
+    "canUnsubscribe": "DU KANNST DICH JEDERZEIT ABMELDEN.",
+    "sendResults": "ERGEBNISSE SENDEN",
+    "neverSpam": "WIR SPAMMEN NIE. JEDERZEIT ABMELDEN."
+  },
+  "guest": {
+    "mode": "GASTMODUS - FORTSCHRITT WIRD NICHT GESPEICHERT",
+    "signInToSave": "ANMELDEN ZUM SPEICHERN"
+  },
+  "powerups": {
+    "xpBoost": "XP-BOOST",
+    "coinMagnet": "MÜNZMAGNET",
+    "hints": "HINWEISE",
+    "streakFreeze": "SERIEN-SCHUTZ",
+    "xpMultiplier": "XP x{{multiplier}}",
+    "coinMultiplier": "MÜNZEN x{{multiplier}}",
+    "xpBoostActive": "XP-Boost Aktiv (x{{multiplier}})",
+    "coinMagnetActive": "Münzmagnet Aktiv (x{{multiplier}})",
+    "hintTokens": "{{count}} Hinweis-Tokens",
+    "streakFreezeAvailable": "Serien-Schutz Verfügbar"
+  },
+  "leaderboard": {
+    "title": "RANGLISTE",
+    "global": "GLOBAL",
+    "level": "LEVEL",
+    "noScores": "NOCH KEINE PUNKTE",
+    "beFirst": "SEI DER ERSTE MIT EINEM REKORD!",
+    "showAll": "▼ ALLE {{count}} SPIELER ZEIGEN",
+    "showLess": "▲ WENIGER ZEIGEN",
+    "signInToJoin": "ANMELDEN UM DER RANGLISTE BEIZUTRETEN",
+    "showFullLeaderboard": "VOLLSTÄNDIGE RANGLISTE ZEIGEN"
+  },
+  "shop": {
+    "title": "SHOP",
+    "back": "← ZURÜCK",
+    "featured": "EMPFOHLEN",
+    "all": "ALLE",
+    "avatars": "AVATARE",
+    "themes": "THEMEN",
+    "skins": "SKINS",
+    "powerups": "POWER-UPS",
+    "rarity": "SELTENHEIT:",
+    "common": "GEWÖHNLICH",
+    "rare": "SELTEN",
+    "epic": "EPISCH",
+    "legendary": "LEGENDÄR",
+    "noItems": "KEINE ITEMS GEFUNDEN",
+    "seasonal": "Saisonal",
+    "topical": "Thematisch",
+    "purchased": "{{name}} gekauft!",
+    "purchaseFailed": "Kauf fehlgeschlagen",
+    "failed": "Fehlgeschlagen"
+  },
+  "levelGroup": {
+    "premiumLevels": "PREMIUM LEVEL {{range}}",
+    "themedLevels": "THEMEN-LEVEL {{range}}",
+    "locked": "GESPERRT",
+    "showAdvanced": "{{count}} FORTGESCHRITTENE LEVEL ZEIGEN",
+    "showThemed": "{{count}} THEMEN-LEVEL ZEIGEN",
+    "unlockAdvanced": "{{count}} FORTGESCHRITTENE LEVEL FREISCHALTEN",
+    "masterAdvanced": "Meistere fortgeschrittene Tipp-Muster und steigere deine Geschwindigkeit auf 80+ WPM",
+    "advancedFinger": "Fortgeschrittenes Fingertraining",
+    "speedBuilding": "Geschwindigkeitsübungen",
+    "realWorld": "Praxis mit echten Texten",
+    "accuracyChallenges": "Genauigkeits-Challenges",
+    "upgradeToPremium": "AUF PREMIUM UPGRADEN",
+    "speedOfThought": "MIT GEDANKENSCHNELLE TIPPEN",
+    "unlockSecrets": "Entdecke die Geheimnisse herausragender Prompts beim Aufbau blitzschneller Tippfähigkeiten. Lerne Experten-Techniken durch Muskelgedächtnis.",
+    "themeAI": "KI-PROMPTS",
+    "themeAIDesc": "Meistere ChatGPT & Claude Techniken",
+    "themeDev": "ENTWICKLER",
+    "themeDevDesc": "Code-Muster, Terminal-Fluenz",
+    "themeBusiness": "BUSINESS",
+    "themeBusinessDesc": "Professionelle Kommunikation",
+    "themeComingSoon": "BALD VERFÜGBAR",
+    "themeComingSoonDesc": "Recht, Medizin, Akademisch",
+    "tagline": "Tippe es. Lerne es. Vergiss es nie.",
+    "efficiency": "Ultimative Effizienz: Schnelleres Tippen + Bessere Prompts",
+    "includedPremium": "IN PREMIUM ENTHALTEN"
+  },
+  "challenge": {
+    "daily": "TÄGLICHE CHALLENGE",
+    "newToday": "NEU HEUTE",
+    "signInToSave": "ANMELDEN UM FORTSCHRITT ZU SPEICHERN",
+    "timeLeft": "{{time}} ÜBRIG",
+    "endsIn": "ENDET IN",
+    "progress": "FORTSCHRITT",
+    "rewards": "BELOHNUNGEN",
+    "bronze": "BRONZE",
+    "silver": "SILBER",
+    "gold": "GOLD"
+  },
+  "nickname": {
+    "edit": "SPITZNAME BEARBEITEN",
+    "current": "AKTUELLER NAME",
+    "new": "NEUER SPITZNAME",
+    "placeholder": "Spitzname eingeben...",
+    "maxChars": "(MAX 20 ZEICHEN)",
+    "resetToDefault": "AUF STANDARD ZURÜCKSETZEN"
+  },
+  "streak": {
+    "title": "SERIE",
+    "current": "AKTUELL",
+    "longest": "LÄNGSTE",
+    "total": "GESAMT",
+    "next": "NÄCHSTES: {{target}} TAGE",
+    "toGo": "{{count}} NOCH",
+    "freezes": "SERIEN-SCHUTZ: {{count}}",
+    "buyFreeze": "KAUFEN (75$)",
+    "hideDetails": "DETAILS VERBERGEN",
+    "showDetails": "DETAILS ZEIGEN",
+    "keepItUp": "Weiter so!",
+    "onFire": "Du bist on fire!",
+    "amazing": "Tolle Serie!",
+    "unstoppable": "Nicht zu stoppen!",
+    "legendary": "Legendär!",
+    "milestone2x": "2x Münzen",
+    "milestone3x": "3x Münzen",
+    "milestoneBadge": "Spezielles Abzeichen",
+    "milestoneLegend": "Legenden-Status"
+  },
+  "referral": {
+    "signInRequired": "ANMELDEN FÜR EMPFEHLUNGEN",
+    "inviteFriends": "FREUNDE EINLADEN",
+    "shareAndEarn": "TEILE TYPEBIT8 UND VERDIENE BELOHNUNGEN",
+    "yourCode": "DEIN EMPFEHLUNGSCODE",
+    "copyLink": "LINK KOPIEREN",
+    "howItWorks": "SO FUNKTIONIERT'S",
+    "step1": "FREUND REGISTRIERT SICH MIT DEINEM CODE",
+    "step2": "ER BEKOMMT 30% RABATT IM ERSTEN MONAT",
+    "step3": "DU BEKOMMST 50% RABATT IM NÄCHSTEN MONAT",
+    "referrals": "EMPFEHLUNGEN",
+    "creditsEarned": "GUTHABEN VERDIENT",
+    "creditsPending": "{{percent}}% GUTHABEN AUSSTEHEND!",
+    "appliedToNext": "WIRD AUF NÄCHSTE RECHNUNG ANGEWENDET"
+  },
+  "premium": {
+    "title": "PREMIUM",
+    "back": "← ZURÜCK",
+    "friendDiscount": "FREUNDES-RABATT AKTIV!",
+    "discountOff": "30% RABATT IM ERSTEN MONAT",
+    "manageSubscription": "ABO VERWALTEN",
+    "subscribe": "ABONNIEREN",
+    "benefits": {
+      "allLevels": "ALLE 50+ LEVEL",
+      "noAds": "WERBEFREI",
+      "themes": "EXKLUSIVE THEMEN",
+      "stats": "DETAILLIERTE STATISTIKEN",
+      "support": "PRIORITÄTS-SUPPORT"
+    }
+  },
+  "mobile": {
+    "title": "TYPEBIT8",
+    "subtitle": "MEISTERE DAS 10-FINGER-TIPPEN",
+    "keyboardRequired": "PHYSISCHE TASTATUR ERFORDERLICH",
+    "keyboardExplanation": "TYPEBIT8 IST FÜR PHYSISCHE TASTATUREN ENTWICKELT UM RICHTIGES 10-FINGER-TIPPEN ZU LEHREN.",
+    "openOnDesktop": "ÖFFNE AUF DEINEM DESKTOP",
+    "scanQR": "QR SCANNEN ZUM ÖFFNEN",
+    "copyLink": "LINK KOPIEREN",
+    "sendEmail": "PER E-MAIL SENDEN"
+  },
+  "error": {
+    "title": "HOPPLA! ETWAS IST KAPUTT",
+    "message": "KEINE SORGE, DEIN FORTSCHRITT IST SICHER.",
+    "instruction": "VERSUCHE ZU AKTUALISIEREN ODER KLICKE NOCHMAL.",
+    "technicalDetails": "TECHNISCHE DETAILS",
+    "reportIssue": "FALLS DIES WEITERHIN PASSIERT, BITTE",
+    "reportLink": "PROBLEM MELDEN"
+  },
+  "migration": {
+    "title": "SPEICHERDATEN GEFUNDEN!",
+    "message": "WIR HABEN BESTEHENDEN FORTSCHRITT AUF DIESEM GERÄT GEFUNDEN.",
+    "question": "MÖCHTEST DU IHN MIT DEINEM KONTO SYNCHRONISIEREN?",
+    "syncIt": "SYNCHRONISIEREN",
+    "startFresh": "NEU STARTEN",
+    "noStats": "KEINE STATISTIKEN VERFÜGBAR"
+  },
+  "speedTest": {
+    "title": "GESCHWINDIGKEITSTEST",
+    "subtitle": "30 SEKUNDEN UM DEIN KÖNNEN ZU ZEIGEN",
+    "detectKeyboard": "TASTATUR ERKENNEN",
+    "measureSpeed": "GESCHWINDIGKEIT MESSEN",
+    "trackProgress": "FORTSCHRITT VERFOLGEN",
+    "startTest": "TEST STARTEN",
+    "skipForNow": "VORERST ÜBERSPRINGEN",
+    "getReady": "MACH DICH BEREIT...",
+    "detecting": "TASTATURLAYOUT WIRD ERKANNT...",
+    "detected": "{{layout}} ERKANNT",
+    "checkingVariant": "VARIANTE WIRD GEPRÜFT...",
+    "clickToFocus": "HIER KLICKEN ODER TIPPEN STARTEN",
+    "phase2German": "PHASE 2: DEUTSCHER TEXT (VARIANTEN-ERKENNUNG)",
+    "wpm": "WPM",
+    "accuracy": "GENAUIGKEIT",
+    "seconds": "SEKUNDEN",
+    "testComplete": "TEST ABGESCHLOSSEN!",
+    "wordsPerMinute": "WÖRTER PRO MINUTE",
+    "selectLayout": "WÄHLE DEIN TASTATURLAYOUT:",
+    "detectedLayout": "ERKANNT: {{layout}}",
+    "confirm": "BESTÄTIGEN",
+    "retake": "WIEDERHOLEN",
+    "charsTyped": "ZEICHEN GETIPPT",
+    "errors": "FEHLER",
+    "createFreeAccount": "KOSTENLOSES KONTO ERSTELLEN",
+    "trackOverTime": "VERFOLGE DEINEN FORTSCHRITT UND VERDIENE CREDITS FÜR NEUE LEVELS",
+    "signUpFree": "KOSTENLOS REGISTRIEREN",
+    "baselineSaved": "DEIN BASISWERT WIRD NACH BESTÄTIGUNG GESPEICHERT",
+    "signUpToSave": "REGISTRIERE DICH UM DEINEN FORTSCHRITT ZU SPEICHERN"
   }
 }

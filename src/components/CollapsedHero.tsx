@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useKeyboardLayout } from '../providers/KeyboardLayoutProvider';
 import { KEYBOARD_LAYOUTS, type KeyboardLayoutType } from '../data/keyboardLayouts';
 
@@ -9,6 +10,7 @@ interface CollapsedHeroProps {
 }
 
 export function CollapsedHero({ initialWpm, onRetakeTest, onStartPracticing }: CollapsedHeroProps) {
+  const { t } = useTranslation();
   const { layout, lockLayout } = useKeyboardLayout();
   const [showLayoutPicker, setShowLayoutPicker] = useState(false);
 
@@ -17,8 +19,8 @@ export function CollapsedHero({ initialWpm, onRetakeTest, onStartPracticing }: C
   return (
     <section
       style={{
-        background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)',
-        border: '3px solid #3bceac',
+        background: 'var(--gradient-feature)',
+        border: '3px solid var(--border-color)',
         borderRadius: '16px',
         padding: '24px 32px',
         textAlign: 'center',
@@ -27,10 +29,10 @@ export function CollapsedHero({ initialWpm, onRetakeTest, onStartPracticing }: C
       }}
     >
       {/* Decorative pixel corners */}
-      <div style={{ position: 'absolute', top: '8px', left: '8px', width: '12px', height: '12px', borderTop: '3px solid #ffd93d', borderLeft: '3px solid #ffd93d' }} />
-      <div style={{ position: 'absolute', top: '8px', right: '8px', width: '12px', height: '12px', borderTop: '3px solid #ffd93d', borderRight: '3px solid #ffd93d' }} />
-      <div style={{ position: 'absolute', bottom: '8px', left: '8px', width: '12px', height: '12px', borderBottom: '3px solid #ffd93d', borderLeft: '3px solid #ffd93d' }} />
-      <div style={{ position: 'absolute', bottom: '8px', right: '8px', width: '12px', height: '12px', borderBottom: '3px solid #ffd93d', borderRight: '3px solid #ffd93d' }} />
+      <div style={{ position: 'absolute', top: '8px', left: '8px', width: '12px', height: '12px', borderTop: '3px solid var(--accent-yellow)', borderLeft: '3px solid var(--accent-yellow)' }} />
+      <div style={{ position: 'absolute', top: '8px', right: '8px', width: '12px', height: '12px', borderTop: '3px solid var(--accent-yellow)', borderRight: '3px solid var(--accent-yellow)' }} />
+      <div style={{ position: 'absolute', bottom: '8px', left: '8px', width: '12px', height: '12px', borderBottom: '3px solid var(--accent-yellow)', borderLeft: '3px solid var(--accent-yellow)' }} />
+      <div style={{ position: 'absolute', bottom: '8px', right: '8px', width: '12px', height: '12px', borderBottom: '3px solid var(--accent-yellow)', borderRight: '3px solid var(--accent-yellow)' }} />
 
       <div
         style={{
@@ -52,7 +54,7 @@ export function CollapsedHero({ initialWpm, onRetakeTest, onStartPracticing }: C
           <span
             style={{
               fontSize: '24px',
-              filter: 'drop-shadow(0 0 8px rgba(59, 206, 172, 0.5))',
+              filter: 'drop-shadow(0 0 8px var(--glow-cyan))',
             }}
           >
             ⌨️
@@ -62,17 +64,17 @@ export function CollapsedHero({ initialWpm, onRetakeTest, onStartPracticing }: C
               style={{
                 fontFamily: "'Press Start 2P', monospace",
                 fontSize: '10px',
-                color: '#6a6a8e',
+                color: 'var(--text-muted)',
                 marginBottom: '4px',
               }}
             >
-              KEYBOARD
+              {t('keyboard.title')}
             </div>
             <div
               style={{
                 fontFamily: "'Press Start 2P', monospace",
                 fontSize: '12px',
-                color: '#3bceac',
+                color: 'var(--accent-cyan)',
               }}
             >
               {layoutConfig?.name || layout.toUpperCase().replace('-', ' ')}
@@ -85,22 +87,22 @@ export function CollapsedHero({ initialWpm, onRetakeTest, onStartPracticing }: C
               fontSize: '7px',
               padding: '6px 10px',
               background: 'transparent',
-              border: '2px solid #6a6a8e',
+              border: '2px solid var(--text-muted)',
               borderRadius: '4px',
-              color: '#6a6a8e',
+              color: 'var(--text-muted)',
               cursor: 'pointer',
               transition: 'all 0.2s',
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.borderColor = '#3bceac';
-              e.currentTarget.style.color = '#3bceac';
+              e.currentTarget.style.borderColor = 'var(--accent-cyan)';
+              e.currentTarget.style.color = 'var(--accent-cyan)';
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.borderColor = '#6a6a8e';
-              e.currentTarget.style.color = '#6a6a8e';
+              e.currentTarget.style.borderColor = 'var(--text-muted)';
+              e.currentTarget.style.color = 'var(--text-muted)';
             }}
           >
-            CHANGE
+            {t('keyboard.change')}
           </button>
         </div>
 
@@ -109,7 +111,7 @@ export function CollapsedHero({ initialWpm, onRetakeTest, onStartPracticing }: C
           style={{
             width: '2px',
             height: '40px',
-            background: 'linear-gradient(to bottom, transparent, #3bceac, transparent)',
+            background: 'linear-gradient(to bottom, transparent, var(--accent-cyan), transparent)',
           }}
         />
 
@@ -126,7 +128,7 @@ export function CollapsedHero({ initialWpm, onRetakeTest, onStartPracticing }: C
               <span
                 style={{
                   fontSize: '24px',
-                  filter: 'drop-shadow(0 0 8px rgba(255, 217, 61, 0.5))',
+                  filter: 'drop-shadow(0 0 8px var(--glow-yellow))',
                 }}
               >
                 ⚡
@@ -136,17 +138,17 @@ export function CollapsedHero({ initialWpm, onRetakeTest, onStartPracticing }: C
                   style={{
                     fontFamily: "'Press Start 2P', monospace",
                     fontSize: '10px',
-                    color: '#6a6a8e',
+                    color: 'var(--text-muted)',
                     marginBottom: '4px',
                   }}
                 >
-                  STARTING SPEED
+                  {t('keyboard.startingSpeed')}
                 </div>
                 <div
                   style={{
                     fontFamily: "'Press Start 2P', monospace",
                     fontSize: '12px',
-                    color: '#ffd93d',
+                    color: 'var(--accent-yellow)',
                   }}
                 >
                   {initialWpm} WPM
@@ -159,22 +161,22 @@ export function CollapsedHero({ initialWpm, onRetakeTest, onStartPracticing }: C
                   fontSize: '7px',
                   padding: '6px 10px',
                   background: 'transparent',
-                  border: '2px solid #6a6a8e',
+                  border: '2px solid var(--text-muted)',
                   borderRadius: '4px',
-                  color: '#6a6a8e',
+                  color: 'var(--text-muted)',
                   cursor: 'pointer',
                   transition: 'all 0.2s',
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = '#ffd93d';
-                  e.currentTarget.style.color = '#ffd93d';
+                  e.currentTarget.style.borderColor = 'var(--accent-yellow)';
+                  e.currentTarget.style.color = 'var(--accent-yellow)';
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = '#6a6a8e';
-                  e.currentTarget.style.color = '#6a6a8e';
+                  e.currentTarget.style.borderColor = 'var(--text-muted)';
+                  e.currentTarget.style.color = 'var(--text-muted)';
                 }}
               >
-                RETAKE
+                {t('keyboard.retake')}
               </button>
             </div>
 
@@ -183,7 +185,7 @@ export function CollapsedHero({ initialWpm, onRetakeTest, onStartPracticing }: C
               style={{
                 width: '2px',
                 height: '40px',
-                background: 'linear-gradient(to bottom, transparent, #3bceac, transparent)',
+                background: 'linear-gradient(to bottom, transparent, var(--accent-cyan), transparent)',
               }}
             />
           </>
@@ -196,24 +198,22 @@ export function CollapsedHero({ initialWpm, onRetakeTest, onStartPracticing }: C
             fontFamily: "'Press Start 2P', monospace",
             fontSize: '12px',
             padding: '16px 32px',
-            background: 'linear-gradient(135deg, #0ead69 0%, #0a8c54 100%)',
+            background: 'var(--btn-primary-bg)',
             border: 'none',
             borderRadius: '8px',
-            color: '#0f0f1b',
+            color: 'var(--btn-primary-text)',
             cursor: 'pointer',
             transition: 'all 0.2s',
-            boxShadow: '0 4px 15px rgba(14, 173, 105, 0.4)',
+            boxShadow: '0 4px 15px var(--glow-cyan)',
           }}
           onMouseEnter={(e) => {
             e.currentTarget.style.transform = 'scale(1.05)';
-            e.currentTarget.style.boxShadow = '0 6px 20px rgba(14, 173, 105, 0.6)';
           }}
           onMouseLeave={(e) => {
             e.currentTarget.style.transform = 'scale(1)';
-            e.currentTarget.style.boxShadow = '0 4px 15px rgba(14, 173, 105, 0.4)';
           }}
         >
-          START PRACTICING
+          {t('buttons.startPracticing')}
         </button>
       </div>
 
@@ -223,20 +223,20 @@ export function CollapsedHero({ initialWpm, onRetakeTest, onStartPracticing }: C
           style={{
             marginTop: '20px',
             padding: '16px',
-            background: 'rgba(0, 0, 0, 0.3)',
+            background: 'var(--card-bg)',
             borderRadius: '8px',
-            border: '2px solid #3bceac',
+            border: '2px solid var(--border-color)',
           }}
         >
           <p
             style={{
               fontFamily: "'Press Start 2P', monospace",
               fontSize: '8px',
-              color: '#ffd93d',
+              color: 'var(--accent-yellow)',
               marginBottom: '12px',
             }}
           >
-            SELECT YOUR KEYBOARD LAYOUT:
+            {t('keyboard.selectLayout')}
           </p>
           <div
             style={{
@@ -257,22 +257,12 @@ export function CollapsedHero({ initialWpm, onRetakeTest, onStartPracticing }: C
                   fontFamily: "'Press Start 2P', monospace",
                   fontSize: '7px',
                   padding: '8px 12px',
-                  background: layout === layoutConfig.id ? '#0ead69' : 'transparent',
-                  border: `2px solid ${layout === layoutConfig.id ? '#0ead69' : '#3bceac'}`,
+                  background: layout === layoutConfig.id ? 'var(--accent-green)' : 'transparent',
+                  border: `2px solid ${layout === layoutConfig.id ? 'var(--accent-green)' : 'var(--accent-cyan)'}`,
                   borderRadius: '4px',
-                  color: layout === layoutConfig.id ? '#0f0f1b' : '#eef5db',
+                  color: layout === layoutConfig.id ? 'var(--bg-primary)' : 'var(--text-primary)',
                   cursor: 'pointer',
                   transition: 'all 0.2s',
-                }}
-                onMouseEnter={(e) => {
-                  if (layout !== layoutConfig.id) {
-                    e.currentTarget.style.background = 'rgba(59, 206, 172, 0.2)';
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  if (layout !== layoutConfig.id) {
-                    e.currentTarget.style.background = 'transparent';
-                  }
                 }}
               >
                 {layoutConfig.name}

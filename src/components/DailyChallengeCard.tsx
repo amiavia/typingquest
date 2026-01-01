@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
 interface DailyChallenge {
   _id?: string;
@@ -38,6 +39,7 @@ export function DailyChallengeCard({
   onClaim,
   compact = false,
 }: DailyChallengeCardProps) {
+  const { t } = useTranslation();
   const [timeRemaining, setTimeRemaining] = useState("");
 
   // Calculate time until midnight (UTC)
@@ -131,7 +133,7 @@ export function DailyChallengeCard({
             {challenge.title}
           </div>
           <div style={{ fontSize: "6px", color: "#3bceac" }}>
-            {timeRemaining} LEFT
+            {t('challenge.timeLeft', { time: timeRemaining })}
           </div>
         </div>
         {currentTier !== "not_started" && currentTier !== "pending" && (
@@ -165,14 +167,14 @@ export function DailyChallengeCard({
               {challenge.title}
             </h3>
             <p style={{ fontSize: "6px", color: "#3bceac" }}>
-              DAILY CHALLENGE
+              {t('challenge.daily')}
             </p>
           </div>
         </div>
 
         {/* Timer */}
         <div className="text-right">
-          <div style={{ fontSize: "6px", color: "#ff6b9d" }}>ENDS IN</div>
+          <div style={{ fontSize: "6px", color: "#ff6b9d" }}>{t('challenge.endsIn')}</div>
           <div style={{ fontSize: "10px", color: "#ff6b9d" }}>
             {timeRemaining}
           </div>
@@ -209,7 +211,7 @@ export function DailyChallengeCard({
       {/* Progress Bar */}
       <div className="mb-4">
         <div className="flex justify-between mb-2">
-          <span style={{ fontSize: "6px", color: "#3bceac" }}>PROGRESS</span>
+          <span style={{ fontSize: "6px", color: "#3bceac" }}>{t('challenge.progress')}</span>
           <span style={{ fontSize: "6px", color: "#eef5db" }}>
             {progress?.bestValue ?? 0} / {challenge.targetValue}
           </span>
@@ -252,9 +254,9 @@ export function DailyChallengeCard({
 
         {/* Tier labels */}
         <div className="flex justify-between mt-1">
-          <span style={{ fontSize: "6px", color: "#cd7f32" }}>BRONZE</span>
-          <span style={{ fontSize: "6px", color: "#c0c0c0" }}>SILVER</span>
-          <span style={{ fontSize: "6px", color: "#ffd93d" }}>GOLD</span>
+          <span style={{ fontSize: "6px", color: "#cd7f32" }}>{t('challenge.bronze')}</span>
+          <span style={{ fontSize: "6px", color: "#c0c0c0" }}>{t('challenge.silver')}</span>
+          <span style={{ fontSize: "6px", color: "#ffd93d" }}>{t('challenge.gold')}</span>
         </div>
       </div>
 
@@ -266,7 +268,7 @@ export function DailyChallengeCard({
           border: "2px solid #ffd93d",
         }}
       >
-        <span style={{ fontSize: "6px", color: "#ffd93d" }}>REWARDS</span>
+        <span style={{ fontSize: "6px", color: "#ffd93d" }}>{t('challenge.rewards')}</span>
         <div className="flex gap-4">
           <div className="text-center">
             <span
@@ -338,7 +340,7 @@ export function DailyChallengeCard({
             boxShadow: "0 0 20px #ffd93d",
           }}
         >
-          CLAIM REWARDS
+          {t('challenge.claimRewards')}
         </button>
       ) : (
         <button
@@ -351,7 +353,7 @@ export function DailyChallengeCard({
           `}
           style={{ fontSize: "10px", color: "#3bceac" }}
         >
-          {progress?.status === "not_started" ? "START CHALLENGE" : "CONTINUE"}
+          {progress?.status === "not_started" ? t('challenge.start') : t('challenge.continue')}
         </button>
       )}
     </div>
