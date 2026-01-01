@@ -254,6 +254,16 @@ export const addSpeedTest = mutation({
   },
 });
 
+/**
+ * Get all users (for admin/export)
+ */
+export const getAllUsers = query({
+  args: {},
+  handler: async (ctx) => {
+    return await ctx.db.query("users").collect();
+  },
+});
+
 // Get user's speed test data
 export const getSpeedTestData = query({
   args: {},

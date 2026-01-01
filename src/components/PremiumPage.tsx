@@ -1,17 +1,41 @@
 /**
  * PRP-048: Direct Stripe Premium Page
  * PRP-046: Regional Pricing Detection
+ * PRP-051: New Year 2025 Promotion
  *
  * Uses direct Stripe Checkout for subscriptions.
  * Subscription management through Stripe Customer Portal.
  */
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useAuth } from "@clerk/clerk-react";
 import { useAction } from "convex/react";
 import { api } from "../../convex/_generated/api";
 import { usePremium } from "../hooks/usePremium";
 import { useRegionalPricing } from "../hooks/useRegionalPricing";
+
+// PRP-051: New Year Promotion Configuration
+const PROMO_END_DATE = new Date('2025-01-14T23:59:59Z').getTime();
+const PROMO_START_DATE = new Date('2025-01-01T00:00:00Z').getTime();
+const PROMO_CODE = 'NEWYEAR25';
+const PROMO_DISCOUNT = 0.5; // 50% off
+
+function isPromoActive(): boolean {
+  const now = Date.now();
+  return now >= PROMO_START_DATE && now <= PROMO_END_DATE;
+}
+
+function calculateTimeLeft(): { days: number; hours: number; minutes: number } | null {
+  const now = Date.now();
+  if (now < PROMO_START_DATE || now > PROMO_END_DATE) return null;
+
+  const difference = PROMO_END_DATE - now;
+  return {
+    days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+    hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
+    minutes: Math.floor((difference / 1000 / 60) % 60),
+  };
+}
 
 // Price IDs - LIVE MODE
 const PRICE_IDS = {
@@ -53,6 +77,18 @@ export function PremiumPage({ onClose, referralDiscount }: PremiumPageProps) {
 
   const [checkoutLoading, setCheckoutLoading] = useState<"monthly" | "yearly" | null>(null);
   const [portalLoading, setPortalLoading] = useState(false);
+
+  // PRP-051: New Year Promotion State
+  const [promoActive, setPromoActive] = useState(isPromoActive());
+  const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setPromoActive(isPromoActive());
+      setTimeLeft(calculateTimeLeft());
+    }, 60000); // Update every minute
+    return () => clearInterval(timer);
+  }, []);
 
   const handleCheckout = async (interval: "monthly" | "yearly") => {
     if (!userId) return;
@@ -552,6 +588,36 @@ export function PremiumPage({ onClose, referralDiscount }: PremiumPageProps) {
             CHOOSE YOUR PLAN
           </h2>
 
+          {/* PRP-051: New Year Promotion Banner */}
+          {promoActive && timeLeft && (
+            <div
+              className="mb-6 p-4 text-center"
+              style={{
+                background: "linear-gradient(135deg, rgba(255,217,61,0.2) 0%, rgba(255,107,157,0.2) 100%)",
+                border: "3px solid #ffd93d",
+                boxShadow: "0 0 20px rgba(255,217,61,0.3)",
+                fontFamily: "'Press Start 2P'",
+              }}
+            >
+              <div className="flex items-center justify-center gap-3 mb-2">
+                <span style={{ fontSize: "20px" }}>🎉</span>
+                <p style={{ fontSize: "12px", color: "#ffd93d" }}>
+                  NEW YEAR SALE!
+                </p>
+                <span style={{ fontSize: "20px" }}>🎉</span>
+              </div>
+              <p style={{ fontSize: "10px", color: "#ff6b9d", marginBottom: "8px" }}>
+                50% OFF PREMIUM
+              </p>
+              <p style={{ fontSize: "7px", color: "#eef5db", marginBottom: "8px" }}>
+                USE CODE <span style={{ color: "#3bceac" }}>{PROMO_CODE}</span> AT CHECKOUT
+              </p>
+              <p style={{ fontSize: "6px", color: "#ffd93d" }}>
+                ⏰ ENDS IN {timeLeft.days}D {timeLeft.hours}H {timeLeft.minutes}M
+              </p>
+            </div>
+          )}
+
           {/* PRP-046: Emerging Market Pricing Banner */}
           {isEmergingMarket && (
             <div
@@ -586,10 +652,25 @@ export function PremiumPage({ onClose, referralDiscount }: PremiumPageProps) {
                 MONTHLY
               </h3>
               <div style={{ marginBottom: "16px" }}>
-                <span style={{ fontSize: "24px", color: "#eef5db" }}>
-                  {pricing.monthly.display}
+                {/* PRP-051: Show strike-through price during promo */}
+                {promoActive && (
+                  <div style={{ marginBottom: "4px" }}>
+                    <span style={{ fontSize: "14px", color: "#4a4a6e", textDecoration: "line-through" }}>
+                      {pricing.monthly.display}
+                    </span>
+                  </div>
+                )}
+                <span style={{ fontSize: "24px", color: promoActive ? "#0ead69" : "#eef5db" }}>
+                  {promoActive
+                    ? `$${(pricing.monthly.amount * PROMO_DISCOUNT).toFixed(2)}`
+                    : pricing.monthly.display}
                 </span>
                 <span style={{ fontSize: "8px", color: "#4a4a6e" }}>/MONTH</span>
+                {promoActive && (
+                  <span style={{ fontSize: "7px", color: "#ff6b9d", marginLeft: "8px" }}>
+                    -50%
+                  </span>
+                )}
               </div>
               <ul style={{ fontSize: "7px", color: "#eef5db", textAlign: "left", marginBottom: "20px", lineHeight: "2" }}>
                 <li>✓ ALL PREMIUM BENEFITS</li>
@@ -622,32 +703,47 @@ export function PremiumPage({ onClose, referralDiscount }: PremiumPageProps) {
                 borderWidth: "4px",
               }}
             >
-              {/* Best Value Badge */}
+              {/* Best Value Badge - Enhanced during promo */}
               <div
                 style={{
                   position: "absolute",
                   top: "-12px",
                   right: "20px",
-                  background: "#ffd93d",
+                  background: promoActive ? "#ff6b9d" : "#ffd93d",
                   color: "#1a1a2e",
                   padding: "4px 12px",
                   fontSize: "6px",
                   fontFamily: "'Press Start 2P'",
                 }}
               >
-                BEST VALUE
+                {promoActive ? "50% OFF!" : "BEST VALUE"}
               </div>
               <h3 style={{ fontSize: "12px", color: "#ffd93d", marginBottom: "16px" }}>
                 YEARLY
               </h3>
               <div style={{ marginBottom: "8px" }}>
-                <span style={{ fontSize: "24px", color: "#eef5db" }}>
-                  {pricing.yearly.display}
+                {/* PRP-051: Show strike-through price during promo */}
+                {promoActive && (
+                  <div style={{ marginBottom: "4px" }}>
+                    <span style={{ fontSize: "14px", color: "#4a4a6e", textDecoration: "line-through" }}>
+                      {pricing.yearly.display}
+                    </span>
+                  </div>
+                )}
+                <span style={{ fontSize: "24px", color: promoActive ? "#0ead69" : "#eef5db" }}>
+                  {promoActive
+                    ? `$${(pricing.yearly.amount * PROMO_DISCOUNT).toFixed(2)}`
+                    : pricing.yearly.display}
                 </span>
                 <span style={{ fontSize: "8px", color: "#4a4a6e" }}>/YEAR</span>
+                {promoActive && (
+                  <span style={{ fontSize: "7px", color: "#ff6b9d", marginLeft: "8px" }}>
+                    -50%
+                  </span>
+                )}
               </div>
               <p style={{ fontSize: "8px", color: "#0ead69", marginBottom: "16px" }}>
-                SAVE {pricing.yearly.savings}%
+                {promoActive ? "BEST DEAL OF THE YEAR!" : `SAVE ${pricing.yearly.savings}%`}
               </p>
               <ul style={{ fontSize: "7px", color: "#eef5db", textAlign: "left", marginBottom: "20px", lineHeight: "2" }}>
                 <li>✓ ALL PREMIUM BENEFITS</li>
@@ -684,9 +780,11 @@ export function PremiumPage({ onClose, referralDiscount }: PremiumPageProps) {
 
           <p
             className="text-center mt-4"
-            style={{ fontSize: "6px", color: "#4a4a6e" }}
+            style={{ fontSize: "6px", color: promoActive ? "#ffd93d" : "#4a4a6e" }}
           >
-            HAVE A PROMO CODE? ENTER IT AT CHECKOUT • SECURE PAYMENT POWERED BY STRIPE
+            {promoActive
+              ? `USE CODE ${PROMO_CODE} AT CHECKOUT FOR 50% OFF • SECURE PAYMENT BY STRIPE`
+              : "HAVE A PROMO CODE? ENTER IT AT CHECKOUT • SECURE PAYMENT POWERED BY STRIPE"}
           </p>
         </section>
       )}

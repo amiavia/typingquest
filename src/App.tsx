@@ -11,6 +11,7 @@ import { RetroLoadingScreen } from './components/RetroLoadingScreen';
 import { useKeyboardLayout } from './providers/KeyboardLayoutProvider';
 import { UserButton } from './components/UserButton';
 import { GuestBanner } from './components/GuestBanner';
+import { NewYearBanner } from './components/NewYearBanner';
 import { MigrationModal } from './components/MigrationModal';
 import { Leaderboard } from './components/Leaderboard';
 import { LegalPage } from './components/LegalPage';
@@ -382,6 +383,9 @@ function App() {
         schema={[schemas.softwareApplication, schemas.organization]}
       />
       <div className="min-h-screen">
+        {/* PRP-051: New Year Promotion Banner */}
+        <NewYearBanner />
+
         {/* Guest Banner */}
         <GuestBanner />
 

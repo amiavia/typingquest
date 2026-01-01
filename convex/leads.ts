@@ -153,6 +153,16 @@ export const unsubscribe = mutation({
 });
 
 /**
+ * Get all leads (for admin/export)
+ */
+export const getAllLeads = query({
+  args: {},
+  handler: async (ctx) => {
+    return await ctx.db.query("leads").collect();
+  },
+});
+
+/**
  * Get unsubscribe status for a lead
  */
 export const getUnsubscribeStatus = query({

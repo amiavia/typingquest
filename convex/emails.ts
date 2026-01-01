@@ -1,5 +1,6 @@
 /**
  * PRP-046: Email System via Resend
+ * PRP-051: New Year 2025 Promotion Emails
  *
  * Sends transactional emails for welcome, referral notifications, etc.
  * Uses Resend API for delivery.
@@ -836,5 +837,462 @@ export const getLeadsDueForNurture = internalQuery({
 
     // Filter to those who haven't completed sequence
     return leads.filter((lead) => (lead.emailSequenceStep ?? 0) < 5);
+  },
+});
+
+// ═══════════════════════════════════════════════════════════════════
+// PRP-051: NEW YEAR 2025 PROMOTION EMAILS
+// ═══════════════════════════════════════════════════════════════════
+
+const NEW_YEAR_PROMO_CODE = "NEWYEAR25";
+const NEW_YEAR_PROMO_END = "January 14, 2025";
+
+/**
+ * Email template: New Year Launch (Jan 1)
+ */
+function newYearLaunchTemplate(email: string): { subject: string; html: string; text: string } {
+  const unsubscribeUrl = `https://typebit8.com/unsubscribe?email=${encodeURIComponent(email)}`;
+  const subject = "🎉 2025 Deal: 50% Off TypeBit8 Premium";
+
+  const html = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body style="font-family: 'Courier New', monospace; background-color: #0f0f23; color: #eef5db; padding: 20px; margin: 0;">
+  <div style="max-width: 600px; margin: 0 auto; background-color: #1a1a2e; border: 2px solid #ffd93d; padding: 30px;">
+    <h1 style="color: #ffd93d; font-size: 24px; margin-bottom: 20px; text-align: center;">🎉 HAPPY NEW YEAR! 🎉</h1>
+
+    <div style="background-color: #ffd93d; color: #0f0f23; padding: 20px; margin-bottom: 20px; text-align: center;">
+      <p style="font-size: 24px; margin: 0; font-weight: bold;">50% OFF PREMIUM</p>
+      <p style="font-size: 14px; margin: 10px 0 0 0;">New Year Sale • Ends ${NEW_YEAR_PROMO_END}</p>
+    </div>
+
+    <p style="font-size: 14px; line-height: 1.8;">
+      Start 2025 with a superpower: <strong style="color: #3bceac;">touch typing</strong>.
+    </p>
+
+    <p style="font-size: 14px; line-height: 1.8;">
+      While everyone else is hunt-and-pecking their ChatGPT prompts, you could be typing at <strong style="color: #ffd93d;">80+ WPM</strong> — literally 2x faster.
+    </p>
+
+    <div style="background-color: #0f0f23; border: 2px solid #3bceac; padding: 20px; margin: 20px 0; text-align: center;">
+      <p style="font-size: 14px; color: #9a9ab0; margin: 0 0 10px 0;">Use code at checkout:</p>
+      <p style="font-size: 32px; color: #3bceac; margin: 0; font-weight: bold;">${NEW_YEAR_PROMO_CODE}</p>
+      <p style="font-size: 12px; color: #ffd93d; margin: 10px 0 0 0;">Yearly: $39.99 → $19.99</p>
+    </div>
+
+    <a href="https://typebit8.com/premium?utm_source=email&utm_medium=promo&utm_campaign=newyear2025_launch"
+       style="display: inline-block; background-color: #ffd93d; color: #0f0f23; padding: 15px 30px; text-decoration: none; font-weight: bold; margin: 20px 0; width: 100%; text-align: center; box-sizing: border-box;">
+      CLAIM 50% OFF →
+    </a>
+
+    <p style="font-size: 12px; color: #9a9ab0; margin-top: 30px; border-top: 1px solid #3bceac; padding-top: 20px;">
+      <a href="https://typebit8.com/privacy" style="color: #3bceac;">Privacy Policy</a> •
+      <a href="${unsubscribeUrl}" style="color: #3bceac;">Unsubscribe</a>
+    </p>
+  </div>
+</body>
+</html>`;
+
+  const text = `🎉 HAPPY NEW YEAR FROM TYPEBIT8!
+
+50% OFF PREMIUM
+New Year Sale • Ends ${NEW_YEAR_PROMO_END}
+
+Start 2025 with a superpower: touch typing.
+
+Use code: ${NEW_YEAR_PROMO_CODE}
+Yearly: $39.99 → $19.99
+
+Claim 50% off: https://typebit8.com/premium`;
+
+  return { subject, html, text };
+}
+
+/**
+ * Email template: Value proposition (Jan 4)
+ */
+function newYearValueTemplate(email: string): { subject: string; html: string; text: string } {
+  const unsubscribeUrl = `https://typebit8.com/unsubscribe?email=${encodeURIComponent(email)}`;
+  const subject = "⌨️ The one skill that will 2x your AI output in 2025";
+
+  const html = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body style="font-family: 'Courier New', monospace; background-color: #0f0f23; color: #eef5db; padding: 20px; margin: 0;">
+  <div style="max-width: 600px; margin: 0 auto; background-color: #1a1a2e; border: 2px solid #3bceac; padding: 30px;">
+    <h1 style="color: #ffd93d; font-size: 24px; margin-bottom: 20px;">🎮 TYPEBIT8</h1>
+
+    <h2 style="color: #3bceac; font-size: 18px;">The Math Is Simple</h2>
+
+    <p style="font-size: 14px; line-height: 1.8;">
+      You type prompts to ChatGPT, Claude, and Copilot every day. But here's what most people don't realize:
+    </p>
+
+    <div style="background-color: #0f0f23; border: 2px solid #ffd93d; padding: 20px; margin: 20px 0; text-align: center;">
+      <p style="font-size: 14px; color: #9a9ab0; margin: 0;">40 WPM → 80 WPM =</p>
+      <p style="font-size: 32px; color: #ffd93d; margin: 10px 0;">2X FASTER</p>
+      <p style="font-size: 12px; color: #3bceac; margin: 0;">at communicating with AI</p>
+    </div>
+
+    <p style="font-size: 14px; line-height: 1.8;">
+      Your <strong style="color: #ffd93d;">typing speed is your bottleneck</strong>. Every prompt, every refinement, every follow-up — faster typing means faster results.
+    </p>
+
+    <p style="font-size: 14px; line-height: 1.8;">
+      In 2025, the people who win are the ones who can <strong style="color: #3bceac;">think at the speed they type</strong>.
+    </p>
+
+    <div style="background-color: #0f0f23; border: 2px solid #3bceac; padding: 15px; margin: 20px 0; text-align: center;">
+      <p style="font-size: 12px; color: #9a9ab0; margin: 0;">New Year Sale: 50% OFF with code</p>
+      <p style="font-size: 18px; color: #3bceac; margin: 5px 0; font-weight: bold;">${NEW_YEAR_PROMO_CODE}</p>
+    </div>
+
+    <a href="https://typebit8.com/premium?utm_source=email&utm_medium=promo&utm_campaign=newyear2025_value"
+       style="display: inline-block; background-color: #3bceac; color: #0f0f23; padding: 15px 30px; text-decoration: none; font-weight: bold; margin: 20px 0;">
+      START TYPING FASTER →
+    </a>
+
+    <p style="font-size: 12px; color: #9a9ab0; margin-top: 30px; border-top: 1px solid #3bceac; padding-top: 20px;">
+      <a href="https://typebit8.com/privacy" style="color: #3bceac;">Privacy Policy</a> •
+      <a href="${unsubscribeUrl}" style="color: #3bceac;">Unsubscribe</a>
+    </p>
+  </div>
+</body>
+</html>`;
+
+  const text = `THE MATH IS SIMPLE
+
+You type prompts to ChatGPT and Claude every day.
+
+40 WPM → 80 WPM = 2X FASTER at communicating with AI
+
+Your typing speed is your bottleneck.
+
+New Year Sale: 50% OFF with code ${NEW_YEAR_PROMO_CODE}
+
+Start typing faster: https://typebit8.com/premium`;
+
+  return { subject, html, text };
+}
+
+/**
+ * Email template: 1 Week Left (Jan 7)
+ */
+function newYearWeekLeftTemplate(email: string): { subject: string; html: string; text: string } {
+  const unsubscribeUrl = `https://typebit8.com/unsubscribe?email=${encodeURIComponent(email)}`;
+  const subject = "⏰ 1 Week Left: 50% Off Premium";
+
+  const html = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body style="font-family: 'Courier New', monospace; background-color: #0f0f23; color: #eef5db; padding: 20px; margin: 0;">
+  <div style="max-width: 600px; margin: 0 auto; background-color: #1a1a2e; border: 2px solid #ff6b9d; padding: 30px;">
+    <h1 style="color: #ffd93d; font-size: 24px; margin-bottom: 20px;">🎮 TYPEBIT8</h1>
+
+    <div style="background-color: #ff6b9d; color: #0f0f23; padding: 15px; margin-bottom: 20px; text-align: center;">
+      <p style="font-size: 18px; margin: 0; font-weight: bold;">⏰ 1 WEEK LEFT</p>
+    </div>
+
+    <p style="font-size: 14px; line-height: 1.8;">
+      The New Year sale ends on <strong style="color: #ffd93d;">${NEW_YEAR_PROMO_END}</strong>.
+    </p>
+
+    <p style="font-size: 14px; line-height: 1.8;">
+      After that, Premium goes back to full price. This is your chance to lock in 50% off for the entire year.
+    </p>
+
+    <div style="background-color: #0f0f23; border: 2px solid #ffd93d; padding: 20px; margin: 20px 0; text-align: center;">
+      <p style="font-size: 14px; color: #9a9ab0; margin: 0 0 5px 0; text-decoration: line-through;">$39.99/year</p>
+      <p style="font-size: 32px; color: #0ead69; margin: 0;">$19.99/year</p>
+      <p style="font-size: 12px; color: #ff6b9d; margin: 10px 0 0 0;">Code: ${NEW_YEAR_PROMO_CODE}</p>
+    </div>
+
+    <a href="https://typebit8.com/premium?utm_source=email&utm_medium=promo&utm_campaign=newyear2025_week"
+       style="display: inline-block; background-color: #ffd93d; color: #0f0f23; padding: 15px 30px; text-decoration: none; font-weight: bold; margin: 20px 0; width: 100%; text-align: center; box-sizing: border-box;">
+      CLAIM 50% OFF →
+    </a>
+
+    <p style="font-size: 12px; color: #9a9ab0; margin-top: 30px; border-top: 1px solid #3bceac; padding-top: 20px;">
+      <a href="https://typebit8.com/privacy" style="color: #3bceac;">Privacy Policy</a> •
+      <a href="${unsubscribeUrl}" style="color: #3bceac;">Unsubscribe</a>
+    </p>
+  </div>
+</body>
+</html>`;
+
+  const text = `⏰ 1 WEEK LEFT
+
+The New Year sale ends on ${NEW_YEAR_PROMO_END}.
+
+$39.99/year → $19.99/year
+Code: ${NEW_YEAR_PROMO_CODE}
+
+Claim 50% off: https://typebit8.com/premium`;
+
+  return { subject, html, text };
+}
+
+/**
+ * Email template: 3 Days Left (Jan 11)
+ */
+function newYear3DaysTemplate(email: string): { subject: string; html: string; text: string } {
+  const unsubscribeUrl = `https://typebit8.com/unsubscribe?email=${encodeURIComponent(email)}`;
+  const subject = "⚡ 3 Days Left to Save 50%";
+
+  const html = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body style="font-family: 'Courier New', monospace; background-color: #0f0f23; color: #eef5db; padding: 20px; margin: 0;">
+  <div style="max-width: 600px; margin: 0 auto; background-color: #1a1a2e; border: 2px solid #f97316; padding: 30px;">
+    <h1 style="color: #ffd93d; font-size: 24px; margin-bottom: 20px;">🎮 TYPEBIT8</h1>
+
+    <div style="background-color: #f97316; color: #0f0f23; padding: 20px; margin-bottom: 20px; text-align: center;">
+      <p style="font-size: 24px; margin: 0; font-weight: bold;">3 DAYS LEFT</p>
+      <p style="font-size: 12px; margin: 5px 0 0 0;">Sale ends ${NEW_YEAR_PROMO_END} at midnight</p>
+    </div>
+
+    <p style="font-size: 14px; line-height: 1.8;">
+      This is it. 72 hours until the 50% discount disappears.
+    </p>
+
+    <p style="font-size: 14px; line-height: 1.8;">
+      <strong style="color: #ffd93d;">What you get with Premium:</strong>
+    </p>
+
+    <ul style="font-size: 12px; line-height: 2; color: #3bceac; margin: 15px 0;">
+      <li>50 total lessons (44 premium-exclusive)</li>
+      <li>AI prompt typing practice</li>
+      <li>Developer & business themes</li>
+      <li>2X coin earnings</li>
+      <li>Monthly streak freezes</li>
+    </ul>
+
+    <div style="background-color: #0f0f23; border: 2px solid #0ead69; padding: 15px; margin: 20px 0; text-align: center;">
+      <p style="font-size: 24px; color: #0ead69; margin: 0; font-weight: bold;">$19.99/year</p>
+      <p style="font-size: 12px; color: #9a9ab0; margin: 5px 0 0 0;">That's $1.67/month</p>
+    </div>
+
+    <a href="https://typebit8.com/premium?utm_source=email&utm_medium=promo&utm_campaign=newyear2025_3days"
+       style="display: inline-block; background-color: #f97316; color: #0f0f23; padding: 15px 30px; text-decoration: none; font-weight: bold; margin: 20px 0; width: 100%; text-align: center; box-sizing: border-box;">
+      GET 50% OFF NOW →
+    </a>
+
+    <p style="font-size: 10px; color: #9a9ab0; text-align: center; margin-top: 15px;">
+      Code: ${NEW_YEAR_PROMO_CODE}
+    </p>
+
+    <p style="font-size: 12px; color: #9a9ab0; margin-top: 30px; border-top: 1px solid #3bceac; padding-top: 20px;">
+      <a href="https://typebit8.com/privacy" style="color: #3bceac;">Privacy Policy</a> •
+      <a href="${unsubscribeUrl}" style="color: #3bceac;">Unsubscribe</a>
+    </p>
+  </div>
+</body>
+</html>`;
+
+  const text = `⚡ 3 DAYS LEFT
+
+Sale ends ${NEW_YEAR_PROMO_END} at midnight.
+
+WHAT YOU GET WITH PREMIUM:
+- 50 total lessons (44 premium-exclusive)
+- AI prompt typing practice
+- Developer & business themes
+- 2X coin earnings
+- Monthly streak freezes
+
+$19.99/year (that's $1.67/month)
+Code: ${NEW_YEAR_PROMO_CODE}
+
+Get 50% off: https://typebit8.com/premium`;
+
+  return { subject, html, text };
+}
+
+/**
+ * Email template: Last Day (Jan 13)
+ */
+function newYearLastDayTemplate(email: string): { subject: string; html: string; text: string } {
+  const unsubscribeUrl = `https://typebit8.com/unsubscribe?email=${encodeURIComponent(email)}`;
+  const subject = "⚠️ LAST DAY: 50% Off Ends Tomorrow";
+
+  const html = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body style="font-family: 'Courier New', monospace; background-color: #0f0f23; color: #eef5db; padding: 20px; margin: 0;">
+  <div style="max-width: 600px; margin: 0 auto; background-color: #1a1a2e; border: 3px solid #e63946; padding: 30px;">
+    <h1 style="color: #ffd93d; font-size: 24px; margin-bottom: 20px;">🎮 TYPEBIT8</h1>
+
+    <div style="background-color: #e63946; color: #eef5db; padding: 20px; margin-bottom: 20px; text-align: center;">
+      <p style="font-size: 24px; margin: 0; font-weight: bold;">⚠️ LAST DAY</p>
+      <p style="font-size: 14px; margin: 5px 0 0 0;">Sale ends tomorrow at midnight</p>
+    </div>
+
+    <p style="font-size: 16px; line-height: 1.8; text-align: center;">
+      After tomorrow, this deal is <strong style="color: #e63946;">gone</strong>.
+    </p>
+
+    <div style="background-color: #0f0f23; border: 2px solid #ffd93d; padding: 25px; margin: 25px 0; text-align: center;">
+      <p style="font-size: 18px; color: #9a9ab0; margin: 0 0 10px 0; text-decoration: line-through;">$39.99/year</p>
+      <p style="font-size: 48px; color: #0ead69; margin: 0; font-weight: bold;">$19.99</p>
+      <p style="font-size: 14px; color: #ffd93d; margin: 10px 0 0 0;">Code: ${NEW_YEAR_PROMO_CODE}</p>
+    </div>
+
+    <a href="https://typebit8.com/premium?utm_source=email&utm_medium=promo&utm_campaign=newyear2025_lastday"
+       style="display: inline-block; background-color: #e63946; color: #eef5db; padding: 20px 30px; text-decoration: none; font-weight: bold; margin: 20px 0; width: 100%; text-align: center; box-sizing: border-box; font-size: 16px;">
+      CLAIM 50% OFF BEFORE IT'S GONE →
+    </a>
+
+    <p style="font-size: 12px; color: #9a9ab0; margin-top: 30px; border-top: 1px solid #3bceac; padding-top: 20px;">
+      <a href="https://typebit8.com/privacy" style="color: #3bceac;">Privacy Policy</a> •
+      <a href="${unsubscribeUrl}" style="color: #3bceac;">Unsubscribe</a>
+    </p>
+  </div>
+</body>
+</html>`;
+
+  const text = `⚠️ LAST DAY - SALE ENDS TOMORROW
+
+After tomorrow, this deal is GONE.
+
+$39.99/year → $19.99/year
+Code: ${NEW_YEAR_PROMO_CODE}
+
+Claim 50% off: https://typebit8.com/premium`;
+
+  return { subject, html, text };
+}
+
+/**
+ * Email template: Final Hours (Jan 14)
+ */
+function newYearFinalHoursTemplate(email: string): { subject: string; html: string; text: string } {
+  const unsubscribeUrl = `https://typebit8.com/unsubscribe?email=${encodeURIComponent(email)}`;
+  const subject = "🚨 HOURS LEFT: Your 50% Discount Expires Tonight";
+
+  const html = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body style="font-family: 'Courier New', monospace; background-color: #0f0f23; color: #eef5db; padding: 20px; margin: 0;">
+  <div style="max-width: 600px; margin: 0 auto; background-color: #1a1a2e; border: 4px solid #e63946; padding: 30px;">
+    <div style="background-color: #e63946; color: #eef5db; padding: 25px; margin: -30px -30px 30px -30px; text-align: center;">
+      <p style="font-size: 28px; margin: 0; font-weight: bold;">🚨 FINAL HOURS 🚨</p>
+      <p style="font-size: 14px; margin: 10px 0 0 0;">Sale ends at midnight tonight</p>
+    </div>
+
+    <p style="font-size: 16px; line-height: 1.8; text-align: center;">
+      This is your <strong style="color: #ffd93d;">last chance</strong> to get TypeBit8 Premium at 50% off.
+    </p>
+
+    <p style="font-size: 14px; line-height: 1.8; text-align: center; color: #9a9ab0;">
+      At midnight, the price goes back up. No exceptions.
+    </p>
+
+    <div style="background-color: #0f0f23; border: 3px solid #0ead69; padding: 30px; margin: 25px 0; text-align: center;">
+      <p style="font-size: 14px; color: #9a9ab0; margin: 0 0 5px 0; text-decoration: line-through;">$39.99</p>
+      <p style="font-size: 56px; color: #0ead69; margin: 0; font-weight: bold;">$19.99</p>
+      <p style="font-size: 16px; color: #ffd93d; margin: 15px 0 0 0; font-weight: bold;">${NEW_YEAR_PROMO_CODE}</p>
+    </div>
+
+    <a href="https://typebit8.com/premium?utm_source=email&utm_medium=promo&utm_campaign=newyear2025_final"
+       style="display: inline-block; background-color: #0ead69; color: #0f0f23; padding: 20px 30px; text-decoration: none; font-weight: bold; margin: 20px 0; width: 100%; text-align: center; box-sizing: border-box; font-size: 18px;">
+      GET 50% OFF NOW →
+    </a>
+
+    <p style="font-size: 11px; color: #9a9ab0; text-align: center; margin-top: 20px;">
+      This is our final email about this sale. Good luck on your typing journey!
+    </p>
+
+    <p style="font-size: 12px; color: #9a9ab0; margin-top: 30px; border-top: 1px solid #3bceac; padding-top: 20px;">
+      <a href="https://typebit8.com/privacy" style="color: #3bceac;">Privacy Policy</a> •
+      <a href="${unsubscribeUrl}" style="color: #3bceac;">Unsubscribe</a>
+    </p>
+  </div>
+</body>
+</html>`;
+
+  const text = `🚨 FINAL HOURS - SALE ENDS TONIGHT
+
+This is your LAST CHANCE to get TypeBit8 Premium at 50% off.
+
+At midnight, the price goes back up. No exceptions.
+
+$39.99 → $19.99
+Code: ${NEW_YEAR_PROMO_CODE}
+
+Get 50% off: https://typebit8.com/premium`;
+
+  return { subject, html, text };
+}
+
+/**
+ * Get New Year promo template by campaign type
+ */
+export function getNewYearTemplate(
+  campaign: "launch" | "value" | "week" | "3days" | "lastday" | "final",
+  email: string
+): { subject: string; html: string; text: string } {
+  switch (campaign) {
+    case "launch":
+      return newYearLaunchTemplate(email);
+    case "value":
+      return newYearValueTemplate(email);
+    case "week":
+      return newYearWeekLeftTemplate(email);
+    case "3days":
+      return newYear3DaysTemplate(email);
+    case "lastday":
+      return newYearLastDayTemplate(email);
+    case "final":
+      return newYearFinalHoursTemplate(email);
+  }
+}
+
+/**
+ * Send New Year promo email
+ */
+export const sendNewYearPromoEmail = internalAction({
+  args: {
+    email: v.string(),
+    campaign: v.union(
+      v.literal("launch"),
+      v.literal("value"),
+      v.literal("week"),
+      v.literal("3days"),
+      v.literal("lastday"),
+      v.literal("final")
+    ),
+  },
+  handler: async (_, args) => {
+    const template = getNewYearTemplate(args.campaign, args.email);
+    return sendViaResend({
+      to: args.email,
+      subject: template.subject,
+      html: template.html,
+      text: template.text,
+    });
   },
 });
