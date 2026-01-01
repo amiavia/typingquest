@@ -70,6 +70,9 @@ function App() {
   const [expandPremiumLevels, setExpandPremiumLevels] = useState(false); // PRP-041: Collapsed premium levels
   const [expandThemedLevels, setExpandThemedLevels] = useState(false); // PRP-041: Collapsed themed levels
 
+  // Current year for copyright
+  const currentYear = new Date().getFullYear();
+
   // PRP-040: Mobile device detection and keyboard verification
   const deviceCapabilities = useDeviceDetection();
   const [mobileKeyboardVerified, setMobileKeyboardVerified] = useState(() => {
@@ -1394,10 +1397,10 @@ function App() {
 
       {/* Footer */}
       <footer className="p-8 text-center">
-        <p style={{ fontFamily: "'Press Start 2P'", fontSize: '8px', color: 'var(--text-muted)' }}>
-          {t('footer.copyright')}
+        <p style={{ fontFamily: "'Press Start 2P'", fontSize: '10px', color: 'var(--text-muted)' }}>
+          {t('footer.copyright', { year: currentYear })}
         </p>
-        <p style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: 'var(--text-muted)', marginTop: '8px' }}>
+        <p style={{ fontFamily: "'Press Start 2P'", fontSize: '10px', color: 'var(--text-muted)', marginTop: '8px' }}>
           {t('footer.practiceDaily')}
         </p>
 
@@ -1405,21 +1408,21 @@ function App() {
         <div className="mt-6 flex justify-center gap-6 flex-wrap">
           <button
             onClick={() => handleLegalPage('impressum')}
-            style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: 'var(--accent-cyan)' }}
+            style={{ fontFamily: "'Press Start 2P'", fontSize: '10px', color: 'var(--accent-cyan)' }}
             className="hover:underline cursor-pointer bg-transparent border-none"
           >
             {t('footer.impressum')}
           </button>
           <button
             onClick={() => handleLegalPage('privacy')}
-            style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: 'var(--accent-cyan)' }}
+            style={{ fontFamily: "'Press Start 2P'", fontSize: '10px', color: 'var(--accent-cyan)' }}
             className="hover:underline cursor-pointer bg-transparent border-none"
           >
             {t('footer.privacy')}
           </button>
           <button
             onClick={() => handleLegalPage('terms')}
-            style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: 'var(--accent-cyan)' }}
+            style={{ fontFamily: "'Press Start 2P'", fontSize: '10px', color: 'var(--accent-cyan)' }}
             className="hover:underline cursor-pointer bg-transparent border-none"
           >
             {t('footer.terms')}
@@ -1428,10 +1431,10 @@ function App() {
 
         {/* Feedback Section */}
         <div className="mt-8 pixel-box p-4 max-w-md mx-auto">
-          <p style={{ fontFamily: "'Press Start 2P'", fontSize: '8px', color: 'var(--accent-yellow)', marginBottom: '12px' }}>
+          <p style={{ fontFamily: "'Press Start 2P'", fontSize: '10px', color: 'var(--accent-yellow)', marginBottom: '12px' }}>
             {t('footer.feedback')}
           </p>
-          <p style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: 'var(--text-primary)', lineHeight: '2', marginBottom: '12px' }}>
+          <p style={{ fontFamily: "'Press Start 2P'", fontSize: '10px', color: 'var(--text-primary)', lineHeight: '2', marginBottom: '12px' }}>
             {t('footer.feedbackDesc')}
           </p>
           <a
@@ -1439,7 +1442,7 @@ function App() {
             className="inline-block px-4 py-3 border-2 transition-colors"
             style={{
               fontFamily: "'Press Start 2P'",
-              fontSize: '8px',
+              fontSize: '10px',
               color: 'var(--accent-cyan)',
               borderColor: 'var(--accent-cyan)',
             }}
@@ -1448,7 +1451,7 @@ function App() {
           </a>
         </div>
 
-        <p style={{ fontFamily: "'Press Start 2P'", fontSize: '5px', color: 'var(--text-muted)', marginTop: '16px' }}>
+        <p style={{ fontFamily: "'Press Start 2P'", fontSize: '10px', color: 'var(--text-muted)', marginTop: '16px' }}>
           {t('footer.operator')}
         </p>
       </footer>
