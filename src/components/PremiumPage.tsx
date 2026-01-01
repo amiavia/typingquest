@@ -662,7 +662,7 @@ export function PremiumPage({ onClose, referralDiscount }: PremiumPageProps) {
                 )}
                 <span style={{ fontSize: "24px", color: promoActive ? "#0ead69" : "#eef5db" }}>
                   {promoActive
-                    ? `$${(pricing.monthly.amount * PROMO_DISCOUNT).toFixed(2)}`
+                    ? `$${((pricing.monthly.amount / 100) * PROMO_DISCOUNT).toFixed(2)}`
                     : pricing.monthly.display}
                 </span>
                 <span style={{ fontSize: "8px", color: "#4a4a6e" }}>/MONTH</span>
@@ -732,7 +732,7 @@ export function PremiumPage({ onClose, referralDiscount }: PremiumPageProps) {
                 )}
                 <span style={{ fontSize: "24px", color: promoActive ? "#0ead69" : "#eef5db" }}>
                   {promoActive
-                    ? `$${(pricing.yearly.amount * PROMO_DISCOUNT).toFixed(2)}`
+                    ? `$${((pricing.yearly.amount / 100) * PROMO_DISCOUNT).toFixed(2)}`
                     : pricing.yearly.display}
                 </span>
                 <span style={{ fontSize: "8px", color: "#4a4a6e" }}>/YEAR</span>
@@ -743,11 +743,11 @@ export function PremiumPage({ onClose, referralDiscount }: PremiumPageProps) {
                 )}
               </div>
               <p style={{ fontSize: "8px", color: "#0ead69", marginBottom: "16px" }}>
-                {promoActive ? "BEST DEAL OF THE YEAR!" : `SAVE ${pricing.yearly.savings}%`}
+                {promoActive ? "BEST DEAL OF THE YEAR!" : pricing.yearly.savings.toUpperCase()}
               </p>
               <ul style={{ fontSize: "7px", color: "#eef5db", textAlign: "left", marginBottom: "20px", lineHeight: "2" }}>
                 <li>✓ ALL PREMIUM BENEFITS</li>
-                <li>✓ {pricing.yearly.savings}% DISCOUNT</li>
+                <li>✓ {pricing.yearly.savings.toUpperCase()}</li>
                 <li>✓ BEST FOR COMMITTED LEARNERS</li>
               </ul>
               <button

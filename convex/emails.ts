@@ -1,6 +1,6 @@
 /**
  * PRP-046: Email System via Resend
- * PRP-051: New Year 2025 Promotion Emails
+ * PRP-051: New Year 2026 Promotion Emails
  *
  * Sends transactional emails for welcome, referral notifications, etc.
  * Uses Resend API for delivery.
@@ -18,9 +18,8 @@ import { internal } from "./_generated/api";
 // Resend API endpoint
 const RESEND_API_URL = "https://api.resend.com/emails";
 
-// Using Resend test domain until typebit8.com is verified
-// Note: Test domain only sends to verified emails in Resend dashboard
-const FROM_EMAIL = "typebit8 <onboarding@resend.dev>";
+// Using typebit8.com domain (verified in Resend)
+const FROM_EMAIL = "typebit8 <hello@typebit8.com>";
 const REPLY_TO = "info@typebit8.com";
 
 interface ResendResponse {
@@ -841,18 +840,18 @@ export const getLeadsDueForNurture = internalQuery({
 });
 
 // ═══════════════════════════════════════════════════════════════════
-// PRP-051: NEW YEAR 2025 PROMOTION EMAILS
+// PRP-051: NEW YEAR 2026 PROMOTION EMAILS
 // ═══════════════════════════════════════════════════════════════════
 
-const NEW_YEAR_PROMO_CODE = "NEWYEAR25";
-const NEW_YEAR_PROMO_END = "January 14, 2025";
+const NEW_YEAR_PROMO_CODE = "NEWYEAR26";
+const NEW_YEAR_PROMO_END = "January 14, 2026";
 
 /**
  * Email template: New Year Launch (Jan 1)
  */
 function newYearLaunchTemplate(email: string): { subject: string; html: string; text: string } {
   const unsubscribeUrl = `https://typebit8.com/unsubscribe?email=${encodeURIComponent(email)}`;
-  const subject = "🎉 2025 Deal: 50% Off TypeBit8 Premium";
+  const subject = "🎉 2026 Deal: 50% Off TypeBit8 Premium";
 
   const html = `
 <!DOCTYPE html>
@@ -871,7 +870,7 @@ function newYearLaunchTemplate(email: string): { subject: string; html: string; 
     </div>
 
     <p style="font-size: 14px; line-height: 1.8;">
-      Start 2025 with a superpower: <strong style="color: #3bceac;">touch typing</strong>.
+      Start 2026 with a superpower: <strong style="color: #3bceac;">touch typing</strong>.
     </p>
 
     <p style="font-size: 14px; line-height: 1.8;">
@@ -902,7 +901,7 @@ function newYearLaunchTemplate(email: string): { subject: string; html: string; 
 50% OFF PREMIUM
 New Year Sale • Ends ${NEW_YEAR_PROMO_END}
 
-Start 2025 with a superpower: touch typing.
+Start 2026 with a superpower: touch typing.
 
 Use code: ${NEW_YEAR_PROMO_CODE}
 Yearly: $39.99 → $19.99
@@ -917,7 +916,7 @@ Claim 50% off: https://typebit8.com/premium`;
  */
 function newYearValueTemplate(email: string): { subject: string; html: string; text: string } {
   const unsubscribeUrl = `https://typebit8.com/unsubscribe?email=${encodeURIComponent(email)}`;
-  const subject = "⌨️ The one skill that will 2x your AI output in 2025";
+  const subject = "⌨️ The one skill that will 2x your AI output in 2026";
 
   const html = `
 <!DOCTYPE html>
@@ -947,7 +946,7 @@ function newYearValueTemplate(email: string): { subject: string; html: string; t
     </p>
 
     <p style="font-size: 14px; line-height: 1.8;">
-      In 2025, the people who win are the ones who can <strong style="color: #3bceac;">think at the speed they type</strong>.
+      In 2026, the people who win are the ones who can <strong style="color: #3bceac;">think at the speed they type</strong>.
     </p>
 
     <div style="background-color: #0f0f23; border: 2px solid #3bceac; padding: 15px; margin: 20px 0; text-align: center;">
@@ -1275,6 +1274,32 @@ export function getNewYearTemplate(
  * Send New Year promo email
  */
 export const sendNewYearPromoEmail = internalAction({
+  args: {
+    email: v.string(),
+    campaign: v.union(
+      v.literal("launch"),
+      v.literal("value"),
+      v.literal("week"),
+      v.literal("3days"),
+      v.literal("lastday"),
+      v.literal("final")
+    ),
+  },
+  handler: async (_, args) => {
+    const template = getNewYearTemplate(args.campaign, args.email);
+    return sendViaResend({
+      to: args.email,
+      subject: template.subject,
+      html: template.html,
+      text: template.text,
+    });
+  },
+});
+
+/**
+ * Public action to send New Year promo email (for CLI/dashboard use)
+ */
+export const sendNewYearPromo = action({
   args: {
     email: v.string(),
     campaign: v.union(
