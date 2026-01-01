@@ -1,7 +1,7 @@
-# New Year 2025 Promotion Campaign
+# New Year 2026 Promotion Campaign
 
-**Campaign Duration:** January 1-14, 2025
-**Offer:** 50% off Premium (code: NEWYEAR25)
+**Campaign Duration:** January 1-14, 2026
+**Offer:** 50% off Premium (code: NEWYEAR26)
 **Goal:** First 10+ paying customers
 
 ---
@@ -12,11 +12,11 @@
 
 **PIN THIS TWEET:**
 ```
-2025 goal: Type faster, think faster.
+2026 goal: Type faster, think faster.
 
 50% off TypeBit8 Premium until Jan 14.
 
-Code: NEWYEAR25
+Code: NEWYEAR26
 
 Your keyboard is the bottleneck between your brain and AI.
 
@@ -28,9 +28,9 @@ typebit8.com/premium
 The math:
 40 WPM → 80 WPM = 2x faster prompts to ChatGPT
 
-Start 2025 typing at the speed of thought.
+Start 2026 typing at the speed of thought.
 
-50% off Premium: NEWYEAR25
+50% off Premium: NEWYEAR26
 ```
 
 ---
@@ -39,7 +39,7 @@ Start 2025 typing at the speed of thought.
 
 **Poll:**
 ```
-What's your 2025 typing goal?
+What's your 2026 typing goal?
 
 🎯 60 WPM (comfortable)
 ⚡ 80 WPM (proficient)
@@ -63,7 +63,7 @@ At 40 WPM vs 80 WPM, you spend 2x longer on every:
 
 Over a year? That's 100+ hours lost.
 
-Touch typing isn't optional in 2025. It's a productivity multiplier.
+Touch typing isn't optional in 2026. It's a productivity multiplier.
 
 New Year Sale: 50% off → typebit8.com/premium
 ```
@@ -80,7 +80,7 @@ New Year Sale: 50% off → typebit8.com/premium
 
 After Jan 14, full price.
 
-NEWYEAR25
+NEWYEAR26
 
 Just saying.
 ```
@@ -96,9 +96,9 @@ Just saying.
 
 2 months of 15min/day practice.
 
-This could be you in 2025.
+This could be you in 2026.
 
-50% off ends in 4 days → NEWYEAR25
+50% off ends in 4 days → NEWYEAR26
 ```
 
 ---
@@ -109,7 +109,7 @@ This could be you in 2025.
 ```
 Tomorrow this deal dies.
 
-NEWYEAR25 = 50% off Premium
+NEWYEAR26 = 50% off Premium
 
 $39.99 → $19.99/year
 
@@ -130,7 +130,7 @@ FINAL HOURS
 
 If you've been thinking about it, this is it.
 
-NEWYEAR25
+NEWYEAR26
 
 typebit8.com/premium
 ```
@@ -141,13 +141,13 @@ typebit8.com/premium
 
 ### Day 1 - January 1 (Hook)
 
-**Video Concept:** "POV: You finally commit to learning touch typing in 2025"
+**Video Concept:** "POV: You finally commit to learning touch typing in 2026"
 
 **Script:**
 - Show hands hunt-and-pecking slowly
 - Cut to: hands flying across keyboard
 - Text overlay: "New Year, New Typing Speed"
-- End card: "50% off Premium - NEWYEAR25"
+- End card: "50% off Premium - NEWYEAR26"
 
 **Style:** SNES/Retro pixel art animation
 
@@ -217,7 +217,7 @@ typebit8.com/premium
 - Quick cuts of typing gameplay
 - Price slash animation: $39.99 → $19.99
 - Countdown timer
-- Text: "NEWYEAR25 expires tonight"
+- Text: "NEWYEAR26 expires tonight"
 
 **Style:** Fast-paced, urgent energy
 
@@ -228,7 +228,7 @@ typebit8.com/premium
 **Primary (use every post):**
 - #typing
 - #productivity
-- #2025goals
+- #2026goals
 
 **Secondary (rotate):**
 - #ChatGPT

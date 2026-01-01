@@ -1,8 +1,8 @@
-# PRP-051: New Year 2025 Promotion Strategy
+# PRP-051: New Year 2026 Promotion Strategy
 
 **Status:** IMPLEMENTED
-**Created:** January 1, 2025
-**Campaign Period:** January 1-14, 2025
+**Created:** January 1, 2026
+**Campaign Period:** January 1-14, 2026
 
 ---
 
@@ -23,8 +23,8 @@ A 14-day New Year promotion offering 50% off TypeBit8 Premium to drive first con
 | Attribute | Value |
 |-----------|-------|
 | Discount | 50% off first payment |
-| Code | `NEWYEAR25` |
-| Duration | January 1-14, 2025 |
+| Code | `NEWYEAR26` |
+| Duration | January 1-14, 2026 |
 | Applies to | Monthly and Yearly plans |
 
 ### Pricing During Promotion
@@ -41,14 +41,14 @@ A 14-day New Year promotion offering 50% off TypeBit8 Premium to drive first con
 ## Implementation Checklist
 
 ### Stripe Configuration
-- [x] Create coupon `NEWYEAR25` (50% off, once)
+- [ ] Create coupon `NEWYEAR26` (50% off, once)
 - [x] Coupon works for all price tiers
 - [x] `allow_promotion_codes: true` in checkout
 
 ### Website Components
 - [x] `NewYearBanner.tsx` - Announcement banner with countdown
 - [x] Banner dismissible with localStorage persistence
-- [x] Banner auto-hides after Jan 14, 2025
+- [x] Banner auto-hides after Jan 14, 2026
 - [x] PremiumPage promo banner with countdown
 - [x] Strike-through original prices during promo
 - [x] Discounted prices shown in green
@@ -57,7 +57,7 @@ A 14-day New Year promotion offering 50% off TypeBit8 Premium to drive first con
 
 ### Email Campaign
 - [x] 6 email templates created:
-  1. `launch` - Jan 1: Launch announcement
+  1. `launch` - Jan 1 2026: Launch announcement
   2. `value` - Jan 4: Value proposition (2x AI productivity)
   3. `week` - Jan 7: 1 week left reminder
   4. `3days` - Jan 11: 3 days left urgency
@@ -92,8 +92,8 @@ A 14-day New Year promotion offering 50% off TypeBit8 Premium to drive first con
 
 ```typescript
 // Promotion dates
-const PROMO_START_DATE = new Date('2025-01-01T00:00:00Z').getTime();
-const PROMO_END_DATE = new Date('2025-01-14T23:59:59Z').getTime();
+const PROMO_START_DATE = new Date('2026-01-01T00:00:00Z').getTime();
+const PROMO_END_DATE = new Date('2026-01-14T23:59:59Z').getTime();
 
 function isPromoActive(): boolean {
   const now = Date.now();
@@ -144,7 +144,7 @@ await ctx.runAction(internal.emails.sendNewYearPromoEmail, {
 
 ## Post-Campaign Tasks
 
-### January 15, 2025
+### January 15, 2026
 - [ ] Remove `NewYearBanner` from App.tsx (or let it auto-hide)
 - [ ] Clear localStorage `typebit8_newyear_banner_dismissed` keys
 - [ ] Document campaign results
