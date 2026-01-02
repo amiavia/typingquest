@@ -52,8 +52,8 @@ export function Leaderboard({
     <div
       className="pixel-box p-6"
       style={{
-        background: 'rgba(59, 206, 172, 0.05)',
-        border: '3px solid rgba(59, 206, 172, 0.3)',
+        background: 'var(--gradient-cyan-box)',
+        border: '3px solid var(--border-color-muted)',
       }}
     >
       {/* Header */}
@@ -62,7 +62,7 @@ export function Leaderboard({
           style={{
             fontFamily: "'Press Start 2P', monospace",
             fontSize: '12px',
-            color: '#ffd93d',
+            color: 'var(--accent-yellow)',
           }}
         >
           🏆 {lessonId ? t('leaderboard.level', { level: lessonId }) : t('leaderboard.global')} {t('leaderboard.title')}
@@ -73,7 +73,7 @@ export function Leaderboard({
             style={{
               fontFamily: "'Press Start 2P', monospace",
               fontSize: '7px',
-              color: '#9a9ab0',
+              color: 'var(--text-muted)',
             }}
           >
             {t('leaderboard.playersCount', { count: leaderboardStats.totalPlayers })}
@@ -104,7 +104,7 @@ export function Leaderboard({
             style={{
               fontFamily: "'Press Start 2P', monospace",
               fontSize: '8px',
-              color: '#9a9ab0',
+              color: 'var(--text-muted)',
             }}
           >
             {t('leaderboard.noScores')}
@@ -113,7 +113,7 @@ export function Leaderboard({
             style={{
               fontFamily: "'Press Start 2P', monospace",
               fontSize: '7px',
-              color: '#6a6a7a',
+              color: 'var(--text-muted)',
               marginTop: '8px',
             }}
           >
@@ -130,9 +130,9 @@ export function Leaderboard({
             style={{
               fontFamily: "'Press Start 2P', monospace",
               fontSize: '7px',
-              color: '#3bceac',
+              color: 'var(--accent-cyan)',
               background: 'transparent',
-              border: '2px solid #3bceac',
+              border: '2px solid var(--border-color)',
               padding: '8px 16px',
               cursor: 'pointer',
             }}
@@ -148,9 +148,9 @@ export function Leaderboard({
             style={{
               fontFamily: "'Press Start 2P', monospace",
               fontSize: '7px',
-              color: '#9a9ab0',
+              color: 'var(--text-muted)',
               background: 'transparent',
-              border: '2px solid #9a9ab0',
+              border: '2px solid var(--text-muted)',
               padding: '8px 16px',
               cursor: 'pointer',
             }}
@@ -164,7 +164,7 @@ export function Leaderboard({
       {userRank && userRank.rank > limit && (
         <div
           className="mt-4 pt-4"
-          style={{ borderTop: '2px dashed rgba(59, 206, 172, 0.3)' }}
+          style={{ borderTop: '2px dashed var(--border-color-muted)' }}
         >
           <LeaderboardEntry
             rank={userRank.rank}
@@ -180,13 +180,13 @@ export function Leaderboard({
       {!isAuthenticated && (
         <div
           className="mt-4 pt-4 text-center"
-          style={{ borderTop: '2px dashed rgba(255, 217, 61, 0.3)' }}
+          style={{ borderTop: '2px dashed var(--border-color-muted)' }}
         >
           <p
             style={{
               fontFamily: "'Press Start 2P', monospace",
               fontSize: '7px',
-              color: '#ffd93d',
+              color: 'var(--accent-yellow)',
             }}
           >
             {t('leaderboard.signInToJoin')}
@@ -219,10 +219,10 @@ function LeaderboardEntry({
   showLesson,
 }: LeaderboardEntryProps) {
   const getRankColor = (rank: number) => {
-    if (rank === 1) return '#ffd93d' // Gold
-    if (rank === 2) return '#c0c0c0' // Silver
-    if (rank === 3) return '#cd7f32' // Bronze
-    return '#9a9ab0'
+    if (rank === 1) return 'var(--accent-yellow)' // Gold
+    if (rank === 2) return 'var(--text-muted)' // Silver
+    if (rank === 3) return 'var(--accent-orange)' // Bronze
+    return 'var(--text-muted)'
   }
 
   const getRankEmoji = (rank: number) => {
@@ -237,9 +237,9 @@ function LeaderboardEntry({
       className="flex items-center gap-4 p-3"
       style={{
         background: isCurrentUser
-          ? 'rgba(59, 206, 172, 0.15)'
-          : 'rgba(255, 255, 255, 0.02)',
-        border: isCurrentUser ? '2px solid #3bceac' : '2px solid transparent',
+          ? 'rgba(var(--accent-cyan-rgb), 0.15)'
+          : 'var(--bg-secondary)',
+        border: isCurrentUser ? '2px solid var(--border-color)' : '2px solid transparent',
         borderRadius: '4px',
       }}
     >
@@ -264,7 +264,7 @@ function LeaderboardEntry({
         style={{
           fontFamily: "'Press Start 2P', monospace",
           fontSize: '8px',
-          color: isCurrentUser ? '#3bceac' : '#eef5db',
+          color: isCurrentUser ? 'var(--accent-cyan)' : 'var(--text-primary)',
         }}
       >
         {displayName}
