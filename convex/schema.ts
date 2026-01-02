@@ -300,4 +300,48 @@ export default defineSchema({
     .index("by_referee", ["refereeClerkId"])
     .index("by_code", ["referralCodeId"])
     .index("by_status", ["status"]),
+
+  // ═══════════════════════════════════════════════════════════════════
+  // PRP-053: CLAUDE CODE PLUGIN
+  // ═══════════════════════════════════════════════════════════════════
+
+  // Pending link codes for plugin authentication
+  pluginLinkCodes: defineTable({
+    linkCode: v.string(), // 6-character code (e.g., "ABC-123")
+    expiresAt: v.number(), // Unix timestamp
+    claimed: v.boolean(),
+    claimedAt: v.optional(v.number()),
+    claimedByClerkId: v.optional(v.string()),
+    createdAt: v.number(),
+  })
+    .index("by_link_code", ["linkCode"])
+    .index("by_claimed", ["claimed"]),
+
+  // API keys for plugin authentication
+  pluginApiKeys: defineTable({
+    userId: v.id("users"),
+    clerkId: v.string(),
+    apiKey: v.string(), // "tb8_xxxxx..."
+    createdAt: v.number(),
+    lastUsedAt: v.number(),
+    isActive: v.boolean(),
+  })
+    .index("by_api_key", ["apiKey"])
+    .index("by_user", ["userId"])
+    .index("by_clerk_id", ["clerkId"]),
+
+  // Test results from the plugin
+  pluginTestResults: defineTable({
+    userId: v.id("users"),
+    snippetId: v.string(),
+    wpm: v.number(),
+    accuracy: v.number(),
+    duration: v.number(), // seconds
+    characters: v.number(),
+    errors: v.number(),
+    source: v.string(), // "claude-plugin"
+    createdAt: v.number(),
+  })
+    .index("by_user", ["userId"])
+    .index("by_created", ["createdAt"]),
 });

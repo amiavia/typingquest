@@ -205,4 +205,201 @@ http.route({
   }),
 });
 
+// ═══════════════════════════════════════════════════════════════════
+// PRP-053: CLAUDE CODE PLUGIN API
+// ═══════════════════════════════════════════════════════════════════
+
+const CORS_HEADERS = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type, Authorization",
+  "Content-Type": "application/json",
+};
+
+// OPTIONS handler for CORS preflight
+http.route({
+  path: "/api/claude-plugin/auth/init",
+  method: "OPTIONS",
+  handler: httpAction(async () => {
+    return new Response(null, { status: 204, headers: CORS_HEADERS });
+  }),
+});
+
+// Initialize auth link
+http.route({
+  path: "/api/claude-plugin/auth/init",
+  method: "POST",
+  handler: httpAction(async (ctx) => {
+    try {
+      const result = await ctx.runMutation(api.claudePlugin.initAuthLink, {});
+      return new Response(JSON.stringify(result), {
+        status: 200,
+        headers: CORS_HEADERS,
+      });
+    } catch (e) {
+      return new Response(JSON.stringify({ error: String(e) }), {
+        status: 500,
+        headers: CORS_HEADERS,
+      });
+    }
+  }),
+});
+
+// Verify auth link (polled by plugin)
+http.route({
+  path: "/api/claude-plugin/auth/verify",
+  method: "OPTIONS",
+  handler: httpAction(async () => {
+    return new Response(null, { status: 204, headers: CORS_HEADERS });
+  }),
+});
+
+http.route({
+  path: "/api/claude-plugin/auth/verify",
+  method: "POST",
+  handler: httpAction(async (ctx, request) => {
+    try {
+      const body = await request.json() as { linkCode: string };
+      const result = await ctx.runQuery(api.claudePlugin.verifyLinkCode, {
+        linkCode: body.linkCode,
+      });
+      return new Response(JSON.stringify(result), {
+        status: 200,
+        headers: CORS_HEADERS,
+      });
+    } catch (e) {
+      return new Response(JSON.stringify({ error: String(e) }), {
+        status: 500,
+        headers: CORS_HEADERS,
+      });
+    }
+  }),
+});
+
+// Check premium status
+http.route({
+  path: "/api/claude-plugin/premium-status",
+  method: "GET",
+  handler: httpAction(async (ctx, request) => {
+    try {
+      const authHeader = request.headers.get("Authorization");
+      const apiKey = authHeader?.replace("Bearer ", "") || "";
+
+      const result = await ctx.runQuery(api.claudePlugin.checkPremiumByApiKey, {
+        apiKey,
+      });
+      return new Response(JSON.stringify(result), {
+        status: 200,
+        headers: CORS_HEADERS,
+      });
+    } catch (e) {
+      return new Response(JSON.stringify({ error: String(e) }), {
+        status: 500,
+        headers: CORS_HEADERS,
+      });
+    }
+  }),
+});
+
+// Get snippet
+http.route({
+  path: "/api/claude-plugin/snippet",
+  method: "GET",
+  handler: httpAction(async (ctx, request) => {
+    try {
+      const url = new URL(request.url);
+      const duration = parseInt(url.searchParams.get("duration") || "60");
+      const type = url.searchParams.get("type") || "code";
+      const language = url.searchParams.get("language") || undefined;
+
+      const result = await ctx.runQuery(api.claudePlugin.getSnippet, {
+        duration,
+        type,
+        language,
+      });
+      return new Response(JSON.stringify(result), {
+        status: 200,
+        headers: CORS_HEADERS,
+      });
+    } catch (e) {
+      return new Response(JSON.stringify({ error: String(e) }), {
+        status: 500,
+        headers: CORS_HEADERS,
+      });
+    }
+  }),
+});
+
+// Submit result
+http.route({
+  path: "/api/claude-plugin/result",
+  method: "OPTIONS",
+  handler: httpAction(async () => {
+    return new Response(null, { status: 204, headers: CORS_HEADERS });
+  }),
+});
+
+http.route({
+  path: "/api/claude-plugin/result",
+  method: "POST",
+  handler: httpAction(async (ctx, request) => {
+    try {
+      const authHeader = request.headers.get("Authorization");
+      const apiKey = authHeader?.replace("Bearer ", "") || "";
+      const body = await request.json() as {
+        snippetId: string;
+        wpm: number;
+        accuracy: number;
+        duration: number;
+        characters: number;
+        errors: number;
+      };
+
+      const result = await ctx.runMutation(api.claudePlugin.submitResult, {
+        apiKey,
+        snippetId: body.snippetId,
+        wpm: body.wpm,
+        accuracy: body.accuracy,
+        duration: body.duration,
+        characters: body.characters,
+        errors: body.errors,
+      });
+      return new Response(JSON.stringify(result), {
+        status: 200,
+        headers: CORS_HEADERS,
+      });
+    } catch (e) {
+      return new Response(JSON.stringify({ error: String(e) }), {
+        status: 500,
+        headers: CORS_HEADERS,
+      });
+    }
+  }),
+});
+
+// Get stats
+http.route({
+  path: "/api/claude-plugin/stats",
+  method: "GET",
+  handler: httpAction(async (ctx, request) => {
+    try {
+      const authHeader = request.headers.get("Authorization");
+      const apiKey = authHeader?.replace("Bearer ", "") || "";
+
+      const result = await ctx.runQuery(api.claudePlugin.getStats, {
+        apiKey,
+      });
+      return new Response(JSON.stringify(result), {
+        status: 200,
+        headers: CORS_HEADERS,
+      });
+    } catch (e) {
+      return new Response(JSON.stringify({ error: String(e) }), {
+        status: 500,
+        headers: CORS_HEADERS,
+      });
+    }
+  }),
+});
+
 export default http;

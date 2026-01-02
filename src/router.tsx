@@ -7,6 +7,7 @@ import { TypingGamesForKidsPage } from './pages/TypingGamesForKidsPage';
 import { WpmCalculatorPage } from './pages/WpmCalculatorPage';
 import { AboutPage } from './pages/AboutPage';
 import { PrivacyPage } from './pages/PrivacyPage';
+import { LinkClaudePage } from './pages/LinkClaudePage';
 import { Footer } from './components/Footer';
 
 function Layout() {
@@ -35,6 +36,7 @@ export function AppRouter() {
         <Route path="/wpm-calculator" element={<WpmCalculatorPage />} />
         <Route path="/about" element={<AboutPage />} />
         <Route path="/privacy" element={<PrivacyPage />} />
+        <Route path="/link-claude" element={<LinkClaudePage />} />
 
         {/* Fallback to main app for unmatched routes */}
         <Route path="*" element={<App />} />
