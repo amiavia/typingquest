@@ -16,6 +16,8 @@ import { useKeyboardLayout, getVariantForFamily } from '../providers/KeyboardLay
 import { KeyboardWithHands } from './KeyboardWithHands';
 import { KEYBOARD_LAYOUTS, type KeyboardLayoutType } from '../data/keyboardLayouts';
 import { useAuth, useClerk } from '@clerk/clerk-react';
+import { SpeedTestChart } from './SpeedTestChart';
+import { processKeystrokesForChart } from '../utils/speedTestAnalytics';
 
 // ==================== TEST SENTENCES ====================
 
@@ -58,6 +60,12 @@ interface SpeedTestResults {
   detectedLayout: KeyboardLayoutType;
   detectedFamily: LayoutFamily;
   testDurationMs: number;
+  // PRP-052: Chart data
+  consistency: number;
+  rawWpm: number;
+  peakWpm: number;
+  keystrokesData: KeystrokeEvent[];
+  startTime: number;
 }
 
 interface SpeedTestProps {
@@ -205,6 +213,13 @@ export function SpeedTest({ onComplete, onSkip }: SpeedTestProps) {
       detectedLayout = getVariantForFamily(family);
     }
 
+    // PRP-052: Process chart analytics
+    const chartAnalytics = processKeystrokesForChart(
+      keystrokes,
+      startTimeRef.current,
+      TEST_DURATION_MS / 1000
+    );
+
     return {
       wpm: Math.max(0, wpm),
       accuracy: Math.max(0, Math.min(100, accuracy)),
@@ -213,6 +228,12 @@ export function SpeedTest({ onComplete, onSkip }: SpeedTestProps) {
       detectedLayout,
       detectedFamily: family,
       testDurationMs: elapsedMs,
+      // PRP-052: Chart data
+      consistency: chartAnalytics.consistency,
+      rawWpm: chartAnalytics.averageWpm,
+      peakWpm: chartAnalytics.peakWpm,
+      keystrokesData: keystrokes,
+      startTime: startTimeRef.current,
     };
   }, [keystrokes, analyzeKeystrokes, detectQwertzVariant]);
 
@@ -384,14 +405,16 @@ export function SpeedTest({ onComplete, onSkip }: SpeedTestProps) {
   const renderTypedText = useMemo(() => {
     const chars = currentSentence.split('');
     return chars.map((char, idx) => {
-      let className = 'text-[#4a4a6e]'; // untyped
+      let style: React.CSSProperties = { color: 'var(--text-muted)' }; // untyped
       if (idx < inputText.length) {
-        className = inputText[idx] === char ? 'text-[#0ead69]' : 'text-[#ff6b6b] underline';
+        style = inputText[idx] === char
+          ? { color: 'var(--accent-green)' }
+          : { color: 'var(--accent-red)', textDecoration: 'underline' };
       } else if (idx === inputText.length) {
-        className = 'text-[#ffd93d] bg-[#ffd93d]/20';
+        style = { color: 'var(--accent-yellow)', background: 'rgba(var(--accent-yellow-rgb), 0.2)' };
       }
       return (
-        <span key={idx} className={className}>
+        <span key={idx} style={style}>
           {char}
         </span>
       );
@@ -407,13 +430,13 @@ export function SpeedTest({ onComplete, onSkip }: SpeedTestProps) {
         <div className="pixel-box p-8">
           <div className="text-5xl mb-6">⌨️</div>
           <h2
-            style={{ fontFamily: "'Press Start 2P'", fontSize: '16px', color: '#ffd93d' }}
+            style={{ fontFamily: "'Press Start 2P'", fontSize: '16px', color: 'var(--accent-yellow)' }}
             className="mb-4 text-glow-yellow"
           >
             {t('speedTest.title')}
           </h2>
           <p
-            style={{ fontFamily: "'Press Start 2P'", fontSize: '10px', color: '#3bceac' }}
+            style={{ fontFamily: "'Press Start 2P'", fontSize: '10px', color: 'var(--accent-cyan)' }}
             className="mb-8"
           >
             {t('speedTest.subtitle')}
@@ -422,19 +445,19 @@ export function SpeedTest({ onComplete, onSkip }: SpeedTestProps) {
           <div className="flex justify-center gap-8 mb-8">
             <div className="text-center">
               <div className="text-2xl mb-2">🎯</div>
-              <p style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: '#4a4a6e' }}>
+              <p style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: 'var(--text-muted)' }}>
                 {t('speedTest.detectKeyboard')}
               </p>
             </div>
             <div className="text-center">
               <div className="text-2xl mb-2">⚡</div>
-              <p style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: '#4a4a6e' }}>
+              <p style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: 'var(--text-muted)' }}>
                 {t('speedTest.measureSpeed')}
               </p>
             </div>
             <div className="text-center">
               <div className="text-2xl mb-2">📊</div>
-              <p style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: '#4a4a6e' }}>
+              <p style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: 'var(--text-muted)' }}>
                 {t('speedTest.trackProgress')}
               </p>
             </div>
@@ -442,13 +465,14 @@ export function SpeedTest({ onComplete, onSkip }: SpeedTestProps) {
 
           <button
             onClick={() => setPhase('countdown')}
-            className="px-8 py-4 text-[#0f0f1b] transition-transform hover:scale-105"
+            className="px-8 py-4 transition-transform hover:scale-105"
             style={{
               fontFamily: "'Press Start 2P'",
               fontSize: '12px',
-              background: 'linear-gradient(180deg, #ffd93d, #f4a261)',
+              background: 'var(--btn-secondary-bg)',
+              color: 'var(--btn-secondary-text)',
               border: 'none',
-              boxShadow: '0 4px 0 #c9a227',
+              boxShadow: '0 4px 0 var(--shadow-color)',
             }}
           >
             {t('speedTest.startTest')}
@@ -461,7 +485,7 @@ export function SpeedTest({ onComplete, onSkip }: SpeedTestProps) {
               style={{
                 fontFamily: "'Press Start 2P'",
                 fontSize: '8px',
-                color: '#4a4a6e',
+                color: 'var(--text-muted)',
                 background: 'none',
                 border: 'none',
                 cursor: 'pointer',
@@ -482,12 +506,12 @@ export function SpeedTest({ onComplete, onSkip }: SpeedTestProps) {
         <div className="pixel-box p-12">
           <div
             className="text-glow-yellow animate-pulse"
-            style={{ fontFamily: "'Press Start 2P'", fontSize: '72px', color: '#ffd93d' }}
+            style={{ fontFamily: "'Press Start 2P'", fontSize: '72px', color: 'var(--accent-yellow)' }}
           >
             {countdown}
           </div>
           <p
-            style={{ fontFamily: "'Press Start 2P'", fontSize: '12px', color: '#3bceac' }}
+            style={{ fontFamily: "'Press Start 2P'", fontSize: '12px', color: 'var(--accent-cyan)' }}
             className="mt-4"
           >
             {t('speedTest.getReady')}
@@ -506,9 +530,9 @@ export function SpeedTest({ onComplete, onSkip }: SpeedTestProps) {
           <div className="flex items-center justify-center gap-2 mb-4">
             <div
               className="w-2 h-2 rounded-full animate-pulse"
-              style={{ background: detectedFamily ? '#0ead69' : '#ffd93d' }}
+              style={{ background: detectedFamily ? 'var(--accent-green)' : 'var(--accent-yellow)' }}
             />
-            <span style={{ fontFamily: "'Press Start 2P'", fontSize: '8px', color: detectedFamily ? '#0ead69' : '#ffd93d' }}>
+            <span style={{ fontFamily: "'Press Start 2P'", fontSize: '8px', color: detectedFamily ? 'var(--accent-green)' : 'var(--accent-yellow)' }}>
               {detectedFamily
                 ? `${t('speedTest.detected', { layout: detectedFamily.toUpperCase() })}${isPhase2 ? ` - ${t('speedTest.checkingVariant')}` : ''}`
                 : t('speedTest.detecting')
@@ -521,8 +545,8 @@ export function SpeedTest({ onComplete, onSkip }: SpeedTestProps) {
             className="relative p-4 mb-4 text-left cursor-text"
             onClick={() => inputRef.current?.focus()}
             style={{
-              background: '#0d0d1a',
-              border: `2px solid ${isPhase2 ? '#ffd93d' : '#3bceac'}`,
+              background: 'var(--bg-primary)',
+              border: `2px solid ${isPhase2 ? 'var(--accent-yellow)' : 'var(--border-color)'}`,
               borderRadius: '8px',
             }}
           >
@@ -556,7 +580,7 @@ export function SpeedTest({ onComplete, onSkip }: SpeedTestProps) {
           <p
             onClick={() => inputRef.current?.focus()}
             className="text-center mb-4 cursor-pointer"
-            style={{ fontFamily: "'Press Start 2P'", fontSize: '8px', color: '#4a4a6e' }}
+            style={{ fontFamily: "'Press Start 2P'", fontSize: '8px', color: 'var(--text-muted)' }}
           >
             {isPhase2 ? t('speedTest.phase2German') : t('speedTest.clickToFocus')}
           </p>
@@ -566,44 +590,44 @@ export function SpeedTest({ onComplete, onSkip }: SpeedTestProps) {
             <div className="text-center">
               <div
                 className="text-glow-cyan"
-                style={{ fontFamily: "'Press Start 2P'", fontSize: '24px', color: '#3bceac' }}
+                style={{ fontFamily: "'Press Start 2P'", fontSize: '24px', color: 'var(--accent-cyan)' }}
               >
                 {currentStats.wpm}
               </div>
-              <div style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: '#4a4a6e' }}>
+              <div style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: 'var(--text-muted)' }}>
                 {t('speedTest.wpm')}
               </div>
             </div>
             <div className="text-center">
               <div
-                style={{ fontFamily: "'Press Start 2P'", fontSize: '24px', color: '#0ead69' }}
+                style={{ fontFamily: "'Press Start 2P'", fontSize: '24px', color: 'var(--accent-green)' }}
               >
                 {currentStats.accuracy}%
               </div>
-              <div style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: '#4a4a6e' }}>
+              <div style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: 'var(--text-muted)' }}>
                 {t('speedTest.accuracy')}
               </div>
             </div>
             <div className="text-center">
               <div
                 className="text-glow-yellow"
-                style={{ fontFamily: "'Press Start 2P'", fontSize: '24px', color: '#ffd93d' }}
+                style={{ fontFamily: "'Press Start 2P'", fontSize: '24px', color: 'var(--accent-yellow)' }}
               >
                 {timeLeft}
               </div>
-              <div style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: '#4a4a6e' }}>
+              <div style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: 'var(--text-muted)' }}>
                 {t('speedTest.seconds')}
               </div>
             </div>
           </div>
 
           {/* Progress bar */}
-          <div className="h-2 bg-[#0d0d1a] border border-[#2a2a3e] overflow-hidden">
+          <div className="h-2 overflow-hidden" style={{ background: 'var(--bg-primary)', border: '1px solid var(--bg-tertiary)' }}>
             <div
               className="h-full transition-all"
               style={{
                 width: `${((TEST_DURATION_MS / 1000 - timeLeft) / (TEST_DURATION_MS / 1000)) * 100}%`,
-                background: 'linear-gradient(90deg, #3bceac, #ffd93d)',
+                background: 'linear-gradient(90deg, var(--accent-cyan), var(--accent-yellow))',
               }}
             />
           </div>
@@ -627,46 +651,105 @@ export function SpeedTest({ onComplete, onSkip }: SpeedTestProps) {
   // Results
   if (phase === 'results' && results) {
     return (
-      <section className="p-4 md:p-8 max-w-2xl mx-auto">
-        <div className="pixel-box p-8 text-center">
+      <section className="p-4 md:p-8 max-w-3xl mx-auto">
+        <div className="pixel-box p-6 md:p-8 text-center">
           <h2
-            style={{ fontFamily: "'Press Start 2P'", fontSize: '14px', color: '#0ead69' }}
+            style={{ fontFamily: "'Press Start 2P'", fontSize: '14px', color: 'var(--accent-green)' }}
             className="mb-6"
           >
             {t('speedTest.testComplete')}
           </h2>
 
-          {/* Main results */}
+          {/* PRP-052: Main results + Chart layout */}
+          <div className="flex flex-col lg:flex-row gap-6 mb-6">
+            {/* Left: Big WPM and Accuracy display */}
+            <div
+              className="lg:w-1/3 p-6 flex flex-col justify-center"
+              style={{ background: 'var(--bg-primary)', border: '3px solid var(--accent-yellow)', borderRadius: '8px' }}
+            >
+              <div style={{ fontFamily: "'Press Start 2P'", fontSize: '10px', color: 'var(--text-muted)', marginBottom: '4px' }}>
+                wpm
+              </div>
+              <div
+                className="text-glow-yellow"
+                style={{ fontFamily: "'Press Start 2P'", fontSize: '48px', color: 'var(--accent-yellow)' }}
+              >
+                {results.wpm}
+              </div>
+              <div style={{ fontFamily: "'Press Start 2P'", fontSize: '10px', color: 'var(--text-muted)', marginTop: '16px', marginBottom: '4px' }}>
+                acc
+              </div>
+              <div
+                style={{ fontFamily: "'Press Start 2P'", fontSize: '32px', color: 'var(--accent-green)' }}
+              >
+                {results.accuracy}%
+              </div>
+            </div>
+
+            {/* Right: Performance Chart */}
+            <div className="lg:w-2/3">
+              <SpeedTestChart
+                keystrokes={results.keystrokesData}
+                startTime={results.startTime}
+                testDurationSec={30}
+              />
+            </div>
+          </div>
+
+          {/* PRP-052: Extended stats row (Monkeytype style) */}
           <div
-            className="p-6 mb-6"
-            style={{ background: '#0d0d1a', border: '3px solid #ffd93d' }}
+            className="flex flex-wrap justify-center gap-6 md:gap-10 p-4 mb-6"
+            style={{ background: 'var(--bg-primary)', border: '1px solid var(--bg-tertiary)', borderRadius: '8px' }}
           >
-            <div
-              className="text-glow-yellow"
-              style={{ fontFamily: "'Press Start 2P'", fontSize: '48px', color: '#ffd93d' }}
-            >
-              {results.wpm}
+            <div className="text-center">
+              <div style={{ fontFamily: "'Press Start 2P'", fontSize: '16px', color: 'var(--text-muted)' }}>
+                {results.rawWpm}
+              </div>
+              <div style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: 'var(--text-muted)', marginTop: '4px' }}>
+                raw
+              </div>
             </div>
-            <div style={{ fontFamily: "'Press Start 2P'", fontSize: '10px', color: '#3bceac' }}>
-              {t('speedTest.wordsPerMinute')}
+            <div className="text-center">
+              <div style={{ fontFamily: "'Press Start 2P'", fontSize: '16px' }}>
+                <span style={{ color: 'var(--accent-green)' }}>{results.charactersTyped}</span>
+                <span style={{ color: 'var(--text-muted)' }}>/</span>
+                <span style={{ color: 'var(--accent-red)' }}>{results.errors}</span>
+                <span style={{ color: 'var(--text-muted)' }}>/</span>
+                <span style={{ color: 'var(--accent-orange)' }}>0</span>
+                <span style={{ color: 'var(--text-muted)' }}>/</span>
+                <span style={{ color: 'var(--text-muted)' }}>0</span>
+              </div>
+              <div style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: 'var(--text-muted)', marginTop: '4px' }}>
+                characters
+              </div>
             </div>
-            <div
-              className="mt-4"
-              style={{ fontFamily: "'Press Start 2P'", fontSize: '14px', color: '#eef5db' }}
-            >
-              ACCURACY: {results.accuracy}%
+            <div className="text-center">
+              <div style={{ fontFamily: "'Press Start 2P'", fontSize: '16px', color: 'var(--accent-cyan)' }}>
+                {results.consistency}%
+              </div>
+              <div style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: 'var(--text-muted)', marginTop: '4px' }}>
+                consistency
+              </div>
+            </div>
+            <div className="text-center">
+              <div style={{ fontFamily: "'Press Start 2P'", fontSize: '16px', color: 'var(--text-primary)' }}>
+                30s
+              </div>
+              <div style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: 'var(--text-muted)', marginTop: '4px' }}>
+                time
+              </div>
             </div>
           </div>
 
           {/* Keyboard Selection */}
           <div
             className="p-4 mb-6"
-            style={{ background: 'rgba(255, 217, 61, 0.1)', border: '2px solid #ffd93d' }}
+            style={{ background: 'var(--gradient-yellow-box)', border: '2px solid var(--accent-yellow)', borderRadius: '8px' }}
           >
-            <p style={{ fontFamily: "'Press Start 2P'", fontSize: '8px', color: '#4a4a6e', marginBottom: '8px' }}>
+            <p style={{ fontFamily: "'Press Start 2P'", fontSize: '8px', color: 'var(--text-muted)', marginBottom: '8px' }}>
               {t('speedTest.selectLayout')}
             </p>
-            <p style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: '#3bceac', marginBottom: '16px' }}>
+            <p style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: 'var(--accent-cyan)', marginBottom: '16px' }}>
               {t('speedTest.detectedLayout', { layout: results.detectedLayout.toUpperCase().replace('-', ' ') })}
             </p>
 
@@ -680,10 +763,10 @@ export function SpeedTest({ onComplete, onSkip }: SpeedTestProps) {
                   style={{
                     fontFamily: "'Press Start 2P'",
                     fontSize: '7px',
-                    background: selectedLayout === layoutConfig.id ? '#ffd93d' : 'transparent',
-                    border: `2px solid ${selectedLayout === layoutConfig.id ? '#ffd93d' : '#3bceac'}`,
+                    background: selectedLayout === layoutConfig.id ? 'var(--btn-secondary-bg)' : 'transparent',
+                    border: `2px solid ${selectedLayout === layoutConfig.id ? 'var(--accent-yellow)' : 'var(--border-color)'}`,
                     borderRadius: '4px',
-                    color: selectedLayout === layoutConfig.id ? '#0f0f1b' : '#eef5db',
+                    color: selectedLayout === layoutConfig.id ? 'var(--btn-secondary-text)' : 'var(--text-primary)',
                     cursor: 'pointer',
                   }}
                 >
@@ -700,11 +783,11 @@ export function SpeedTest({ onComplete, onSkip }: SpeedTestProps) {
                 style={{
                   fontFamily: "'Press Start 2P'",
                   fontSize: '10px',
-                  background: 'linear-gradient(180deg, #0ead69, #0a8a54)',
-                  color: '#0f0f1b',
+                  background: 'var(--btn-primary-bg)',
+                  color: 'var(--btn-primary-text)',
                   border: 'none',
                   cursor: 'pointer',
-                  boxShadow: '0 4px 0 #0a8a54',
+                  boxShadow: '0 4px 0 var(--shadow-color)',
                 }}
               >
                 ✓ {t('speedTest.confirm')}
@@ -716,8 +799,8 @@ export function SpeedTest({ onComplete, onSkip }: SpeedTestProps) {
                   fontFamily: "'Press Start 2P'",
                   fontSize: '10px',
                   background: 'transparent',
-                  color: '#3bceac',
-                  border: '2px solid #3bceac',
+                  color: 'var(--accent-cyan)',
+                  border: '2px solid var(--border-color)',
                   cursor: 'pointer',
                 }}
               >
@@ -726,43 +809,23 @@ export function SpeedTest({ onComplete, onSkip }: SpeedTestProps) {
             </div>
           </div>
 
-          {/* Stats row */}
-          <div className="flex justify-center gap-8 mb-4">
-            <div className="text-center">
-              <div style={{ fontFamily: "'Press Start 2P'", fontSize: '20px', color: '#3bceac' }}>
-                {results.charactersTyped}
-              </div>
-              <div style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: '#4a4a6e' }}>
-                {t('speedTest.charsTyped')}
-              </div>
-            </div>
-            <div className="text-center">
-              <div style={{ fontFamily: "'Press Start 2P'", fontSize: '20px', color: '#ff6b6b' }}>
-                {results.errors}
-              </div>
-              <div style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: '#4a4a6e' }}>
-                {t('speedTest.errors')}
-              </div>
-            </div>
-          </div>
-
           {/* Sign-up CTA for guests */}
           {!isSignedIn && (
             <div
               className="mt-6 p-4"
               style={{
-                background: 'linear-gradient(135deg, rgba(59, 206, 172, 0.15), rgba(255, 217, 61, 0.15))',
-                border: '2px solid #3bceac',
+                background: 'var(--gradient-cyan-box)',
+                border: '2px solid var(--border-color)',
                 borderRadius: '8px',
               }}
             >
               <p
-                style={{ fontFamily: "'Press Start 2P'", fontSize: '10px', color: '#3bceac' }}
+                style={{ fontFamily: "'Press Start 2P'", fontSize: '10px', color: 'var(--accent-cyan)' }}
                 className="mb-3"
               >
                 {t('speedTest.createFreeAccount')}
               </p>
-              <p style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: '#eef5db', lineHeight: '2' }}>
+              <p style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: 'var(--text-primary)', lineHeight: '2' }}>
                 {t('speedTest.trackOverTime')}
               </p>
               <button
@@ -771,11 +834,11 @@ export function SpeedTest({ onComplete, onSkip }: SpeedTestProps) {
                 style={{
                   fontFamily: "'Press Start 2P'",
                   fontSize: '10px',
-                  background: 'linear-gradient(180deg, #3bceac, #0ead69)',
-                  color: '#0f0f1b',
+                  background: 'var(--btn-primary-bg)',
+                  color: 'var(--btn-primary-text)',
                   border: 'none',
                   cursor: 'pointer',
-                  boxShadow: '0 4px 0 #0a8a54',
+                  boxShadow: '0 4px 0 var(--shadow-color)',
                 }}
               >
                 {t('speedTest.signUpFree')}
@@ -783,7 +846,7 @@ export function SpeedTest({ onComplete, onSkip }: SpeedTestProps) {
             </div>
           )}
 
-          <p style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: '#4a4a6e', marginTop: '12px' }}>
+          <p style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: 'var(--text-muted)', marginTop: '12px' }}>
             {isSignedIn ? t('speedTest.baselineSaved') : t('speedTest.signUpToSave')}
           </p>
 

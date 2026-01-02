@@ -103,20 +103,16 @@ function clearInlineThemeStyles() {
 }
 
 function getInitialColorMode(): ColorMode {
-  // Check localStorage first
+  // Check localStorage first - only use saved preference if user explicitly set it
   if (typeof window !== "undefined") {
     const saved = localStorage.getItem(STORAGE_KEY) as ColorMode;
     if (saved === "dark" || saved === "light") {
       return saved;
     }
-
-    // Check system preference
-    if (window.matchMedia("(prefers-color-scheme: light)").matches) {
-      return "light";
-    }
   }
 
-  // Default to dark (original theme)
+  // Default to dark (original theme) - ignore system preference
+  // Users can manually switch to light mode if they prefer
   return "dark";
 }
 
@@ -138,21 +134,8 @@ export function ColorModeProvider({ children }: { children: ReactNode }) {
     }
   }, [colorMode]);
 
-  // Listen for system preference changes
-  useEffect(() => {
-    const mediaQuery = window.matchMedia("(prefers-color-scheme: light)");
-
-    const handleChange = (e: MediaQueryListEvent) => {
-      // Only auto-switch if user hasn't manually set a preference
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (!saved) {
-        setColorModeState(e.matches ? "light" : "dark");
-      }
-    };
-
-    mediaQuery.addEventListener("change", handleChange);
-    return () => mediaQuery.removeEventListener("change", handleChange);
-  }, []);
+  // Note: We no longer auto-switch based on system preference
+  // Dark mode is always the default, users must manually toggle to light mode
 
   const toggleColorMode = () => {
     setColorModeState((prev) => (prev === "dark" ? "light" : "dark"));

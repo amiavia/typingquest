@@ -77,21 +77,21 @@ export function LayoutDetector({ onLayoutDetected, onCancel }: LayoutDetectorPro
   if (phase === 'home-row') {
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-        <div className="absolute inset-0 bg-black/80" onClick={onCancel} />
+        <div className="absolute inset-0" style={{ background: 'rgba(var(--bg-primary-rgb), 0.9)' }} onClick={onCancel} />
 
         <div className="relative pixel-box p-6 max-w-lg w-full">
           <div className="text-center mb-6">
-            <h2 style={{ fontFamily: "'Press Start 2P'", fontSize: '14px', color: '#ffd93d' }}>
+            <h2 style={{ fontFamily: "'Press Start 2P'", fontSize: '14px', color: 'var(--accent-yellow)' }}>
               {t('keyboard.detectKeyboard')}
             </h2>
-            <p style={{ fontFamily: "'Press Start 2P'", fontSize: '8px', color: '#3bceac', marginTop: '12px', lineHeight: '2' }}>
+            <p style={{ fontFamily: "'Press Start 2P'", fontSize: '8px', color: 'var(--accent-cyan)', marginTop: '12px', lineHeight: '2' }}>
               {t('keyboard.typeHomeRow')}
             </p>
           </div>
 
           {/* Visual guide showing physical keyboard positions */}
           <div className="pixel-box pixel-box-yellow p-4 mb-6">
-            <p style={{ fontFamily: "'Press Start 2P'", fontSize: '8px', color: '#eef5db', textAlign: 'center', lineHeight: '2' }}>
+            <p style={{ fontFamily: "'Press Start 2P'", fontSize: '8px', color: 'var(--text-primary)', textAlign: 'center', lineHeight: '2' }}>
               {t('keyboard.placeMiddleRow')}
             </p>
             <div className="flex justify-center gap-1 mt-4">
@@ -102,10 +102,10 @@ export function LayoutDetector({ onLayoutDetected, onCancel }: LayoutDetectorPro
                   style={{
                     fontFamily: "'Press Start 2P'",
                     fontSize: '10px',
-                    borderColor: input.length > idx ? '#0ead69' : '#3bceac',
-                    backgroundColor: input.length > idx ? 'rgba(14, 173, 105, 0.3)' : 'rgba(59, 206, 172, 0.1)',
-                    color: input.length > idx ? '#0ead69' : '#eef5db',
-                    boxShadow: input.length === idx ? '0 0 10px #ffd93d' : 'none'
+                    borderColor: input.length > idx ? 'var(--accent-green)' : 'var(--border-color)',
+                    backgroundColor: input.length > idx ? 'rgba(var(--accent-green-rgb), 0.3)' : 'rgba(var(--accent-cyan-rgb), 0.1)',
+                    color: input.length > idx ? 'var(--accent-green)' : 'var(--text-primary)',
+                    boxShadow: input.length === idx ? '0 0 10px var(--accent-yellow)' : 'none'
                   }}
                 >
                   {input.length > idx ? input[idx].toUpperCase() : key}
@@ -121,12 +121,14 @@ export function LayoutDetector({ onLayoutDetected, onCancel }: LayoutDetectorPro
               type="text"
               value={input}
               onChange={handleInputChange}
-              className="w-full p-4 text-center border-4 border-[#3bceac] bg-[#1a1a2e] outline-none"
+              className="w-full p-4 text-center border-4 outline-none"
               style={{
                 fontFamily: "'Press Start 2P'",
                 fontSize: '16px',
-                color: '#eef5db',
-                letterSpacing: '4px'
+                color: 'var(--text-primary)',
+                letterSpacing: '4px',
+                borderColor: 'var(--border-color)',
+                background: 'var(--bg-secondary)'
               }}
               placeholder={t('keyboard.typeHere')}
               autoComplete="off"
@@ -137,7 +139,7 @@ export function LayoutDetector({ onLayoutDetected, onCancel }: LayoutDetectorPro
 
           <p
             className="mt-4 text-center animate-blink"
-            style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: '#4a4a6e' }}
+            style={{ fontFamily: "'Press Start 2P'", fontSize: '6px', color: 'var(--text-muted)' }}
           >
             {input.length < 10 ? t('keyboard.moreKeys', { count: 10 - input.length }) : t('keyboard.analyzing')}
           </p>
@@ -160,14 +162,14 @@ export function LayoutDetector({ onLayoutDetected, onCancel }: LayoutDetectorPro
   if (phase === 'disambiguation') {
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-        <div className="absolute inset-0 bg-black/80" onClick={onCancel} />
+        <div className="absolute inset-0" style={{ background: 'rgba(var(--bg-primary-rgb), 0.9)' }} onClick={onCancel} />
 
         <div className="relative pixel-box p-6 max-w-lg w-full">
           <div className="text-center mb-6">
-            <h2 style={{ fontFamily: "'Press Start 2P'", fontSize: '14px', color: '#ffd93d' }}>
+            <h2 style={{ fontFamily: "'Press Start 2P'", fontSize: '14px', color: 'var(--accent-yellow)' }}>
               {detectedFamily ? t('keyboard.layoutDetected', { family: detectedFamily.toUpperCase() }) : t('keyboard.whichLayout')}
             </h2>
-            <p style={{ fontFamily: "'Press Start 2P'", fontSize: '8px', color: '#3bceac', marginTop: '12px', lineHeight: '2' }}>
+            <p style={{ fontFamily: "'Press Start 2P'", fontSize: '8px', color: 'var(--accent-cyan)', marginTop: '12px', lineHeight: '2' }}>
               {detectedFamily
                 ? t('keyboard.selectVariant')
                 : t('keyboard.multiplePossible')}
@@ -176,7 +178,7 @@ export function LayoutDetector({ onLayoutDetected, onCancel }: LayoutDetectorPro
 
           {detectedFamily && (
             <div className="pixel-box pixel-box-green p-3 mb-4 text-center">
-              <p style={{ fontFamily: "'Press Start 2P'", fontSize: '8px', color: '#0ead69' }}>
+              <p style={{ fontFamily: "'Press Start 2P'", fontSize: '8px', color: 'var(--accent-green)' }}>
                 {t('keyboard.yourInput', { input: input.toUpperCase() })}
               </p>
             </div>
@@ -189,19 +191,23 @@ export function LayoutDetector({ onLayoutDetected, onCancel }: LayoutDetectorPro
                 <button
                   key={layoutId}
                   onClick={() => handleLayoutSelect(layoutId)}
-                  className="w-full p-4 text-left transition-all border-4 border-[#3bceac] bg-[#1a1a2e] hover:bg-[#3bceac]/10 hover:border-[#ffd93d]"
-                  style={{ boxShadow: '4px 4px 0 #0f0f1b' }}
+                  className="w-full p-4 text-left transition-all border-4"
+                  style={{
+                    borderColor: 'var(--border-color)',
+                    background: 'var(--bg-secondary)',
+                    boxShadow: '4px 4px 0 var(--bg-primary)'
+                  }}
                 >
                   <div className="flex items-center justify-between">
                     <div>
-                      <h3 style={{ fontFamily: "'Press Start 2P'", fontSize: '12px', color: '#eef5db' }}>
+                      <h3 style={{ fontFamily: "'Press Start 2P'", fontSize: '12px', color: 'var(--text-primary)' }}>
                         {layout.name}
                       </h3>
-                      <p style={{ fontFamily: "'Press Start 2P'", fontSize: '8px', color: '#3bceac', marginTop: '4px' }}>
+                      <p style={{ fontFamily: "'Press Start 2P'", fontSize: '8px', color: 'var(--accent-cyan)', marginTop: '4px' }}>
                         {layout.description}
                       </p>
                     </div>
-                    <span style={{ fontFamily: "'Press Start 2P'", fontSize: '16px', color: '#3bceac' }}>
+                    <span style={{ fontFamily: "'Press Start 2P'", fontSize: '16px', color: 'var(--accent-cyan)' }}>
                       →
                     </span>
                   </div>
@@ -211,12 +217,13 @@ export function LayoutDetector({ onLayoutDetected, onCancel }: LayoutDetectorPro
                     {layout.rows[1].map((key, idx) => (
                       <div
                         key={idx}
-                        className="w-6 h-6 flex items-center justify-center border-2 border-[#3bceac]"
+                        className="w-6 h-6 flex items-center justify-center border-2"
                         style={{
                           fontFamily: "'Press Start 2P'",
                           fontSize: '8px',
-                          backgroundColor: idx === 3 || idx === 6 ? 'rgba(255, 217, 61, 0.2)' : 'rgba(59, 206, 172, 0.1)',
-                          color: '#eef5db'
+                          borderColor: 'var(--border-color)',
+                          backgroundColor: idx === 3 || idx === 6 ? 'rgba(var(--accent-yellow-rgb), 0.2)' : 'rgba(var(--accent-cyan-rgb), 0.1)',
+                          color: 'var(--text-primary)'
                         }}
                       >
                         {key.toUpperCase()}
@@ -254,22 +261,22 @@ export function LayoutDetector({ onLayoutDetected, onCancel }: LayoutDetectorPro
     const layout = KEYBOARD_LAYOUTS[detectedLayout];
     return (
       <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-        <div className="absolute inset-0 bg-black/80" onClick={onCancel} />
+        <div className="absolute inset-0" style={{ background: 'rgba(var(--bg-primary-rgb), 0.9)' }} onClick={onCancel} />
 
         <div className="relative pixel-box pixel-box-green p-6 max-w-lg w-full">
           <div className="text-center mb-6">
             <div className="text-4xl mb-4">✓</div>
-            <h2 style={{ fontFamily: "'Press Start 2P'", fontSize: '14px', color: '#0ead69' }}>
+            <h2 style={{ fontFamily: "'Press Start 2P'", fontSize: '14px', color: 'var(--accent-green)' }}>
               {t('keyboard.detected')}
             </h2>
           </div>
 
           <div className="pixel-box p-4 mb-6">
             <div className="text-center">
-              <h3 style={{ fontFamily: "'Press Start 2P'", fontSize: '20px', color: '#ffd93d' }} className="text-glow-yellow">
+              <h3 style={{ fontFamily: "'Press Start 2P'", fontSize: '20px', color: 'var(--accent-yellow)' }} className="text-glow-yellow">
                 {layout.name}
               </h3>
-              <p style={{ fontFamily: "'Press Start 2P'", fontSize: '8px', color: '#3bceac', marginTop: '8px' }}>
+              <p style={{ fontFamily: "'Press Start 2P'", fontSize: '8px', color: 'var(--accent-cyan)', marginTop: '8px' }}>
                 {layout.description}
               </p>
             </div>
@@ -279,12 +286,13 @@ export function LayoutDetector({ onLayoutDetected, onCancel }: LayoutDetectorPro
               {layout.rows[1].map((key, idx) => (
                 <div
                   key={idx}
-                  className="w-7 h-7 flex items-center justify-center border-2 border-[#3bceac]"
+                  className="w-7 h-7 flex items-center justify-center border-2"
                   style={{
                     fontFamily: "'Press Start 2P'",
                     fontSize: '8px',
-                    backgroundColor: idx === 3 || idx === 6 ? 'rgba(255, 217, 61, 0.2)' : 'rgba(59, 206, 172, 0.1)',
-                    color: '#eef5db'
+                    borderColor: 'var(--border-color)',
+                    backgroundColor: idx === 3 || idx === 6 ? 'rgba(var(--accent-yellow-rgb), 0.2)' : 'rgba(var(--accent-cyan-rgb), 0.1)',
+                    color: 'var(--text-primary)'
                   }}
                 >
                   {key.toUpperCase()}
