@@ -6,8 +6,7 @@
  */
 
 import { v } from "convex/values";
-import { mutation, query, action, internalMutation } from "./_generated/server";
-import { internal } from "./_generated/api";
+import { mutation, query } from "./_generated/server";
 
 // ═══════════════════════════════════════════════════════════════════
 // TYPES
@@ -365,7 +364,7 @@ export const getSnippet = query({
     type: v.optional(v.string()),
     language: v.optional(v.string()),
   },
-  handler: async (ctx, { duration = 60, type = "code", language }) => {
+  handler: async (_ctx, { duration = 60, type: _type = "code", language }) => {
     // Filter snippets by language if specified
     let filtered = CODE_SNIPPETS;
     if (language) {
